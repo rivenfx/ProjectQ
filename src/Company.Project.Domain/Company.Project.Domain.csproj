@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Company.Project</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Riven.Modular" Version="0.0.2" />
+
+    <PackageReference Include="Riven.AspNetCore.Identity" Version="0.0.4" />
+    <PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="0.0.4" />
+    <PackageReference Include="Riven.AspNetCore.Uow" Version="0.0.4" />
+    <PackageReference Include="Riven.Domain" Version="0.0.4" />
+    
+    <PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.0.4" />
+  </ItemGroup>
+
+
+</Project>
