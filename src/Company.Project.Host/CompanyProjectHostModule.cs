@@ -29,24 +29,6 @@ namespace Company.Project
             context.Services.AddControllersWithViews();
             context.Services.AddHttpContextAccessor();
 
-
-            // riven 相关模块初始化
-            context.Services.AddRivenAspNetCoreSwashbuckle((options) =>
-            {
-                var apiInfo = new OpenApiInfo()
-                {
-                    Title = configuration["App:Name"],
-                    Version = configuration["App:Version"]
-                };
-                options.SwaggerDoc(apiInfo.Version, apiInfo);
-                options.DocInclusionPredicate((docName, description) => true);
-            });
-            context.Services.AddRivenAspNetCoreUow((uowAttr) =>
-            {
-
-            });
-            context.Services.AddRivenAspNetCore();
-
             // aspnet core 跨域
             context.Services.AddCors(options =>
             {
@@ -71,8 +53,28 @@ namespace Company.Project
             });
 
 
-            // 添加默认的UnitOfWork数据
-            context.Services.AddSingleton<UnitOfWorkAttribute>();
+            #region Riven - AspNetCore 服务注册和配置
+
+            // Riven - Swagger 和 动态WebApi
+            context.Services.AddRivenAspNetCoreSwashbuckle((options) =>
+            {
+                var apiInfo = new OpenApiInfo()
+                {
+                    Title = configuration["App:Name"],
+                    Version = configuration["App:Version"]
+                };
+                options.SwaggerDoc(apiInfo.Version, apiInfo);
+            });
+            // Riven - AspNetCore Uow实现
+            context.Services.AddRivenAspNetCoreUow();
+            // Riven - AspNetCore 基础服务相关
+            context.Services.AddRivenAspNetCore((options) =>
+            {
+                // 启用Uow
+                options.UnitOfWorkFilterEnable = true;
+            });
+
+            #endregion
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -85,13 +87,20 @@ namespace Company.Project
             app.UseRouting();
             app.UseCors(CorsPolicyName);
 
+
+            #region Riven - AspNetCore 服务启用和配置
+            
+            //  Riven - Swagger
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
             {
                 swaggerUiOption.SwaggerEndpoint(
                        $"/swagger/{configuration["App:Version"]}/swagger.json",
                        configuration["App:Name"]
                    );
-            }, true);
+            });
+
+            #endregion
+
 
             app.UseEndpoints(endpoints =>
             {
