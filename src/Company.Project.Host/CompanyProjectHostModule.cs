@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Company.Project.Wrappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Riven;
+using Riven.AspNetCore.Accessors;
 using Riven.AspNetCore.Mvc.Uow;
 using Riven.Modular;
 using Riven.Uow;
@@ -79,7 +79,7 @@ namespace Company.Project
         {
             var configuration = context.Configuration;
 
-            var app = context.ServiceProvider.GetService<ApplicationBuilderWrapper>().ApplicationBuilder;
+            var app = context.ServiceProvider.GetService<IApplicationBuilderAccessor>().ApplicationBuilder;
 
             app.UseStaticFiles();
             app.UseRouting();
