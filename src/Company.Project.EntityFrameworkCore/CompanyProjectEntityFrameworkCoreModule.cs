@@ -23,30 +23,53 @@ namespace Company.Project
     {
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
-            // 添加默认的数据库连接字符串
-            context.Services.AddDefaultConnectionString(context.Configuration["ConnectionStrings:Default"]);
-            // 添加其它连接字符串
-            //context.Services.AddConnectionString("TenantA", context.Configuration["ConnectionStrings:Default"]);
 
-            // 添加 efcore 工作单元和仓储实现
+            #region 添加默认的数据库连接字符串
+
+            context.Services.AddDefaultConnectionString(context.Configuration["ConnectionStrings:Default"]);
+
+            #endregion
+
+
+
+            #region 添加其它数据库连接字符串
+
+            //context.Services.AddConnectionString("TenantA", context.Configuration["ConnectionStrings:TenantA"]);
+
+            #endregion
+
+
+
+            #region 添加 efcore 工作单元和仓储实现
+
             context.Services.AddUnitOfWorkWithEntityFrameworkCore();
             context.Services.AddUnitOfWorkWithEntityFrameworkCoreRepository();
 
-            // 注册默认DbContext
-            context.Services.AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContext>((config) =>
-            {
-                // 这个在每次需要创建DbContext的时候执行
-                if (config.ExistingConnection != null)
-                {
-                    config.DbContextOptions.Configure(config.ExistingConnection);
-                }
-                else
-                {
-                    config.DbContextOptions.Configure(config.ConnectionString);
-                }
-            });
+            #endregion
 
-            //// 添加其它DbContext
+
+
+            #region 添加默认DbContext
+
+            context.Services.AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContext>((config) =>
+              {
+                  // 这个在每次需要创建DbContext的时候执行
+                  if (config.ExistingConnection != null)
+                  {
+                      config.DbContextOptions.Configure(config.ExistingConnection);
+                  }
+                  else
+                  {
+                      config.DbContextOptions.Configure(config.ConnectionString);
+                  }
+              });
+
+            #endregion
+
+
+
+            #region 添加其它DbContext
+
             //context.Services.AddUnitOfWorkWithEntityFrameworkCoreDbContext<AppDbContext>("other",(config) =>
             //{
             //    // 这个在每次需要创建DbContext的时候执行
@@ -58,12 +81,20 @@ namespace Company.Project
             //    {
             //        config.DbContextOptions.Configure(config.ConnectionString);
             //    }
-            //});
+            //}); 
+
+            #endregion
+
+
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            
+            #region 添加数据库连接字符串,在这里添加的优先级高于前面注册的
+
+            //context.ServiceProvider.AddConnectionString("TenantA", "null");
+
+            #endregion
         }
     }
 }
