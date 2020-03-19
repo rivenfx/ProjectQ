@@ -13,6 +13,7 @@ using Riven;
 using Riven.Modular;
 using Riven.Repositories;
 using Riven.Uow;
+using Company.Project.SeedData;
 
 namespace Company.Project
 {
@@ -86,6 +87,7 @@ namespace Company.Project
             #endregion
 
 
+            context.Services.AddTransient<ISeeder, Seeder>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -95,6 +97,8 @@ namespace Company.Project
             //context.ServiceProvider.AddConnectionString("TenantA", "null");
 
             #endregion
+
+            context.ServiceProvider.GetService<ISeeder>().Create();
         }
     }
 }

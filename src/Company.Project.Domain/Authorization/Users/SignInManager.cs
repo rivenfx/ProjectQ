@@ -82,6 +82,7 @@ namespace Company.Project.Authorization.Users
             var verificationResult = this.UserManager.PasswordHasher
                 .VerifyHashedPassword(user, user.PasswordHash, password);
 
+
             switch (verificationResult)
             {
                 case PasswordVerificationResult.Success:
@@ -122,7 +123,7 @@ namespace Company.Project.Authorization.Users
                 LoginResultType.Success,
                 user,
                 claimsPrincipal.Identity as ClaimsIdentity);
-        } 
+        }
 
         #endregion
 

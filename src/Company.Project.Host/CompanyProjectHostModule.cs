@@ -11,6 +11,9 @@ using Riven.AspNetCore.Accessors;
 using Riven.AspNetCore.Mvc.Uow;
 using Riven.Modular;
 using Riven.Uow;
+using Company.Project.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Company.Project
 {
@@ -52,6 +55,10 @@ namespace Company.Project
                 });
             });
 
+            // 认证配置
+            context.Services.IdentityRegister();
+            context.Services.IdentityConfiguration(configuration);
+
 
             #region Riven - AspNetCore 服务注册和配置
 
@@ -75,6 +82,8 @@ namespace Company.Project
             });
 
             #endregion
+
+
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -82,24 +91,21 @@ namespace Company.Project
             var configuration = context.Configuration;
 
             var app = context.ServiceProvider.GetService<IApplicationBuilderAccessor>().ApplicationBuilder;
+            var env = context.ServiceProvider.GetService<IWebHostEnvironment>();
+
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(CorsPolicyName);
 
 
-            #region Riven - AspNetCore 服务启用和配置
-            
-            //  Riven - Swagger
-            app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
-            {
-                swaggerUiOption.SwaggerEndpoint(
-                       $"/swagger/{configuration["App:Version"]}/swagger.json",
-                       configuration["App:Name"]
-                   );
-            });
-
-            #endregion
+            // 认证配置
+            app.UseAppAuthenticationAndAuthorization();
 
 
             app.UseEndpoints(endpoints =>
@@ -116,6 +122,21 @@ namespace Company.Project
                 // 自定义路由
 
             });
+
+
+            #region Riven - AspNetCore 服务启用和配置
+
+            //  Riven - Swagger
+            app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
+            {
+                swaggerUiOption.SwaggerEndpoint(
+                       $"/swagger/{configuration["App:Version"]}/swagger.json",
+                       configuration["App:Name"]
+                   );
+            });
+
+            #endregion
+
         }
     }
 }

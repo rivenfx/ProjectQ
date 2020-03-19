@@ -32,11 +32,6 @@ namespace Company.Project
             // Riven
             app.UseRivenAspNetCoreModule();
 
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
         }
 
     }

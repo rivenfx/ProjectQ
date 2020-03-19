@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Riven.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Company.Project.SampleEntitys
 {
@@ -27,7 +28,7 @@ namespace Company.Project.SampleEntitys
         public async Task<List<SampleEntity>> GetAll()
         {
             #region 切换数据库连接字符串/切换DbContext 用例
-            
+
             //var currentUnitOfWork = this._unitOfWorkManager.Current;
 
             // 切换数据库连接字符串
@@ -47,6 +48,7 @@ namespace Company.Project.SampleEntitys
             return await _repository.GetAll().ToListAsync();
         }
 
+        [Authorize]
         public async Task<bool> Create(string name)
         {
             await _repository.InsertAsync(new SampleEntity()
@@ -57,13 +59,12 @@ namespace Company.Project.SampleEntitys
             return true;
         }
 
+        [Authorize]
         public async Task<bool> Delete(long id)
         {
             await _repository.DeleteAsync(id);
 
             return true;
         }
-
-
     }
 }
