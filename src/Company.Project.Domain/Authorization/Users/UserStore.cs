@@ -202,7 +202,7 @@ namespace Company.Project.Authorization.Users
         public void Dispose()
         {
             _disposed = true;
-        } 
+        }
         #endregion
 
 
@@ -269,5 +269,25 @@ namespace Company.Project.Authorization.Users
 
         #endregion
 
+
+        #region IUserPasswordStore 实现
+
+        public Task SetPasswordHashAsync(User user, string passwordHash, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetPasswordHashAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> HasPasswordAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        #endregion
     }
 }
