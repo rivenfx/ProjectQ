@@ -10,6 +10,7 @@ using Riven;
 using Microsoft.EntityFrameworkCore;
 using Riven.Uow;
 using System.Security.Claims;
+using Riven.Extensions;
 
 namespace Company.Project.Authorization.Users
 {
@@ -35,9 +36,7 @@ namespace Company.Project.Authorization.Users
 
         protected IdentityErrorDescriber ErrorDescriber { get; }
 
-        public IQueryable<User> Users => _userRepo.GetAll().AsNoTracking();
 
-        public bool AutoSaveChanges { get; set; } = true;
 
         public UserStore(IUnitOfWorkManager unitOfWorkManager, IRepository<User> userRepo)
         {
@@ -46,6 +45,12 @@ namespace Company.Project.Authorization.Users
 
             ErrorDescriber = new IdentityErrorDescriber();
         }
+
+        protected DbContext GetDbContext => this._unitOfWorkManager.Current.GetDbContext();
+
+        public IQueryable<User> Users => _userRepo.GetAll().AsNoTracking();
+
+        public bool AutoSaveChanges { get; set; } = true;
 
         #region IUserStore 实现
 
@@ -177,22 +182,49 @@ namespace Company.Project.Authorization.Users
 
         public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            Check.NotNull(user, nameof(user));
+            Check.NotNull(login, nameof(login));
+
+            UserLogins.Add(CreateUserLogin(user, login));
+            return Task.FromResult(false);
         }
 
-        public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            Check.NotNull(user, nameof(user));
+
+            var entry = await FindUserLoginAsync(user.Id, loginProvider, providerKey, cancellationToken);
+            if (entry != null)
+            {
+                UserLogins.Remove(entry);
+            }
         }
 
-        public Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            Check.NotNull(user, nameof(user));
+
+            var userId = user.Id;
+            return await UserLogins.Where(l => l.UserId.Equals(userId))
+                .Select(l => new UserLoginInfo(l.LoginProvider, l.ProviderKey, l.ProviderDisplayName)).ToListAsync(cancellationToken);
         }
 
-        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            cancellationToken.ThrowIfCancellationRequested();
+            ThrowIfDisposed();
+            var userLogin = await FindUserLoginAsync(loginProvider, providerKey, cancellationToken);
+            if (userLogin != null)
+            {
+                return await FindUserAsync(userLogin.UserId, cancellationToken);
+            }
+            return null;
         }
 
         #endregion
