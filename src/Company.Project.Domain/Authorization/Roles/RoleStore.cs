@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,20 +23,25 @@ namespace Company.Project.Authorization.Roles
 
         protected readonly IUnitOfWorkManager _unitOfWorkManager;
         protected readonly IRepository<Role> _roleRepo;
+        protected readonly IRepository<RoleClaim, int> _roleClaimRepo;
+
+        public RoleStore(IUnitOfWorkManager unitOfWorkManager, IRepository<Role> roleRepo, IRepository<RoleClaim, int> roleClaimRepo)
+        {
+            _unitOfWorkManager = unitOfWorkManager;
+            _roleRepo = roleRepo;
+            _roleClaimRepo = roleClaimRepo;
+
+            ErrorDescriber = new IdentityErrorDescriber();
+
+        }
 
         protected IdentityErrorDescriber ErrorDescriber { get; }
 
         public IQueryable<Role> Roles => this._roleRepo.GetAll().AsNoTracking();
 
+        public IQueryable<RoleClaim> RoleClaims => this._roleClaimRepo.GetAll().AsNoTracking();
+
         public bool AutoSaveChanges { get; set; } = true;
-
-        public RoleStore(IUnitOfWorkManager unitOfWorkManager, IRepository<Role> roleRepo)
-        {
-            _unitOfWorkManager = unitOfWorkManager;
-            _roleRepo = roleRepo;
-
-            ErrorDescriber = new IdentityErrorDescriber();
-        }
 
         #region IRoleStore 实现
 
@@ -158,14 +164,61 @@ namespace Company.Project.Authorization.Roles
 
         #endregion
 
+        #region IRoleClaimStore 实现
+
+        public async Task<IList<Claim>> GetClaimsAsync(Role role, CancellationToken cancellationToken = default)
+        {
+            ThrowIfDisposed();
+            Check.NotNull(role, nameof(role));
+
+            return await RoleClaims.Where(rc => rc.RoleId.Equals(role.Id)).Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToListAsync(cancellationToken);
+        }
+
+        public Task AddClaimAsync(Role role, Claim claim, CancellationToken cancellationToken = default)
+        {
+            ThrowIfDisposed();
+            Check.NotNull(role, nameof(role));
+            Check.NotNull(claim, nameof(claim));
+
+            var roleClaim = CreateRoleClaim(role, claim);
+            this._roleClaimRepo.InsertAsync(roleClaim);
+
+            return Task.FromResult(false);
+        }
+
+        public async Task RemoveClaimAsync(Role role, Claim claim, CancellationToken cancellationToken = default)
+        {
+            ThrowIfDisposed();
+            Check.NotNull(role, nameof(role));
+            Check.NotNull(claim, nameof(claim));
+
+            var claims = await RoleClaims
+                .Where(rc => rc.RoleId.Equals(role.Id) 
+                    && rc.ClaimValue == claim.Value 
+                    && rc.ClaimType == claim.Type)
+                .ToListAsync(cancellationToken);
+            foreach (var c in claims)
+            {
+                await this._roleClaimRepo.DeleteAsync(c);
+            }
+        }
+
+
+        #endregion
+
+
+
+        #region 释放资源
 
         public void Dispose()
         {
             _disposed = true;
         }
 
+        #endregion
+
         #region 内部辅助函数
-        
+
         protected virtual void ThrowIfDisposed()
         {
             if (_disposed)
@@ -201,7 +254,10 @@ namespace Company.Project.Authorization.Roles
                 return default(long);
             }
             return (long)TypeDescriptor.GetConverter(typeof(long)).ConvertFromInvariantString(id);
-        } 
+        }
+
+        protected virtual RoleClaim CreateRoleClaim(Role role, Claim claim)
+           => new RoleClaim { RoleId = role.Id, ClaimType = claim.Type, ClaimValue = claim.Value };
 
         #endregion
     }
