@@ -34,7 +34,7 @@ namespace Company.Project.Authorization
                 .AddSignInManager<SignInManager>()
                 .AddRoleManager<RoleManager>()
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
-                .AddUserStore<UserStore>
+                .AddUserStore<UserStore>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
