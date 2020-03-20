@@ -171,13 +171,15 @@ namespace Company.Project.Authorization.Users
 
         #endregion
 
+        #region 释放资源
         public void Dispose()
         {
             _disposed = true;
-        }
+        } 
+        #endregion
 
         #region 内部辅助函数
-        
+
         protected virtual void ThrowIfDisposed()
         {
             if (_disposed)
