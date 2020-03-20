@@ -98,7 +98,7 @@ namespace Company.Project
 
             #endregion
 
-            context.ServiceProvider.GetService<ISeeder>().Create();
+            //context.ServiceProvider.GetService<ISeeder>().Create();
         }
     }
 }
