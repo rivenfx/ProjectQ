@@ -23,7 +23,7 @@ namespace Company.Project.Authorization
         public static IdentityBuilder IdentityRegister(this IServiceCollection services)
         {
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
-            services.AddTransient<IPasswordHasher<User>, UserPasswordHasher>();
+            services.AddTransient<UserPasswordHasher>();
 
             var identityBuilder = services.AddIdentity<User, Role>((options) =>
             {
@@ -31,11 +31,14 @@ namespace Company.Project.Authorization
             });
             identityBuilder
                 .AddUserManager<UserManager>()
-                .AddSignInManager<SignInManager>()
                 .AddRoleManager<RoleManager>()
+                .AddSignInManager<SignInManager>()
+                
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
+
                 .AddUserStore<UserStore>()
-                .AddEntityFrameworkStores<AppDbContext>()
+                .AddRoleStore<RoleStore>()
+                //.AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
             return identityBuilder;
