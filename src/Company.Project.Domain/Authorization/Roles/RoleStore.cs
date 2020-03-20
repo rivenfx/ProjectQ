@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleStore : IRoleStore<Role>, 
-        IQueryableRoleStore<Role>, 
+    public class RoleStore : IRoleStore<Role>,
+        IQueryableRoleStore<Role>,
         IRoleClaimStore<Role>
     {
         private bool _disposed;
@@ -27,6 +27,8 @@ namespace Company.Project.Authorization.Roles
 
         public IQueryable<Role> Roles => this._roleRepo.GetAll().AsNoTracking();
 
+        public bool AutoSaveChanges { get; set; } = true;
+
         public RoleStore(IUnitOfWorkManager unitOfWorkManager, IRepository<Role> roleRepo)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -34,6 +36,8 @@ namespace Company.Project.Authorization.Roles
 
             ErrorDescriber = new IdentityErrorDescriber();
         }
+
+        #region IRoleStore 实现
 
         public async Task<IdentityResult> CreateAsync(Role role, CancellationToken cancellationToken)
         {
@@ -150,11 +154,18 @@ namespace Company.Project.Authorization.Roles
             }
             return IdentityResult.Success;
         }
+
+
+        #endregion
+
+
         public void Dispose()
         {
             _disposed = true;
         }
 
+        #region 内部辅助函数
+        
         protected virtual void ThrowIfDisposed()
         {
             if (_disposed)
@@ -163,9 +174,15 @@ namespace Company.Project.Authorization.Roles
             }
         }
 
-        protected virtual async Task SaveChanges(CancellationToken cancellationToken)
+        protected virtual Task SaveChanges(CancellationToken cancellationToken)
         {
-            await this._unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
+            if (!AutoSaveChanges || _unitOfWorkManager.Current == null)
+            {
+                return Task.CompletedTask;
+            }
+
+
+            return this._unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
         }
 
         protected virtual string ConvertIdToString(long id)
@@ -184,6 +201,8 @@ namespace Company.Project.Authorization.Roles
                 return default(long);
             }
             return (long)TypeDescriptor.GetConverter(typeof(long)).ConvertFromInvariantString(id);
-        }
+        } 
+
+        #endregion
     }
 }

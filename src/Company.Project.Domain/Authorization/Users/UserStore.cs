@@ -12,7 +12,7 @@ using Riven.Uow;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserStore : IUserStore<User>, 
+    public class UserStore : IUserStore<User>,
         IUserLoginStore<User>,
         IUserClaimStore<User>,
         IUserPasswordStore<User>,
@@ -36,6 +36,8 @@ namespace Company.Project.Authorization.Users
 
         public IQueryable<User> Users => _userRepo.GetAll().AsNoTracking();
 
+        public bool AutoSaveChanges { get; set; } = true;
+
         public UserStore(IUnitOfWorkManager unitOfWorkManager, IRepository<User> userRepo)
         {
             _unitOfWorkManager = unitOfWorkManager;
@@ -43,6 +45,8 @@ namespace Company.Project.Authorization.Users
 
             ErrorDescriber = new IdentityErrorDescriber();
         }
+
+        #region IUserStore 实现
 
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
@@ -151,7 +155,7 @@ namespace Company.Project.Authorization.Users
             ThrowIfDisposed();
             Check.NotNull(user, nameof(user));
 
-            
+
             user.ConcurrencyStamp = Guid.NewGuid().ToString();
             await this._userRepo.UpdateAsync(user);
             try
@@ -165,11 +169,15 @@ namespace Company.Project.Authorization.Users
             return IdentityResult.Success;
         }
 
+        #endregion
+
         public void Dispose()
         {
             _disposed = true;
         }
 
+        #region 内部辅助函数
+        
         protected virtual void ThrowIfDisposed()
         {
             if (_disposed)
@@ -178,9 +186,15 @@ namespace Company.Project.Authorization.Users
             }
         }
 
-        protected virtual async Task SaveChanges(CancellationToken cancellationToken)
+        protected virtual Task SaveChanges(CancellationToken cancellationToken)
         {
-            await this._unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
+            if (!AutoSaveChanges || _unitOfWorkManager.Current == null)
+            {
+                return Task.CompletedTask;
+            }
+
+
+            return this._unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
         }
 
         protected virtual string ConvertIdToString(long id)
@@ -190,6 +204,8 @@ namespace Company.Project.Authorization.Users
                 return null;
             }
             return id.ToString();
-        }
+        } 
+
+        #endregion
     }
 }
