@@ -171,6 +171,32 @@ namespace Company.Project.Authorization.Users
 
         #endregion
 
+
+        #region IUserLoginStore
+
+        public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+
         #region 释放资源
         public void Dispose()
         {
@@ -206,8 +232,11 @@ namespace Company.Project.Authorization.Users
                 return null;
             }
             return id.ToString();
-        } 
+        }
 
         #endregion
+
+
+
     }
 }
