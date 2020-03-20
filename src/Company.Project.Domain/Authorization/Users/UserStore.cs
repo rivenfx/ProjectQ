@@ -9,6 +9,7 @@ using Riven.Repositories;
 using Riven;
 using Microsoft.EntityFrameworkCore;
 using Riven.Uow;
+using System.Security.Claims;
 
 namespace Company.Project.Authorization.Users
 {
@@ -204,6 +205,7 @@ namespace Company.Project.Authorization.Users
         } 
         #endregion
 
+
         #region 内部辅助函数
 
         protected virtual void ThrowIfDisposed()
@@ -234,9 +236,38 @@ namespace Company.Project.Authorization.Users
             return id.ToString();
         }
 
+
+
         #endregion
 
+        #region IUserClaimStore 实现
 
+        public Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ReplaceClaimAsync(User user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<User>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
     }
 }
