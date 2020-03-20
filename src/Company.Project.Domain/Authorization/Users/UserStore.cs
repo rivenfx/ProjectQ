@@ -173,7 +173,7 @@ namespace Company.Project.Authorization.Users
         #endregion
 
 
-        #region IUserLoginStore
+        #region IUserLoginStore 实现
 
         public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
         {
@@ -197,48 +197,6 @@ namespace Company.Project.Authorization.Users
 
         #endregion
 
-
-        #region 释放资源
-        public void Dispose()
-        {
-            _disposed = true;
-        }
-        #endregion
-
-
-        #region 内部辅助函数
-
-        protected virtual void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
-        }
-
-        protected virtual Task SaveChanges(CancellationToken cancellationToken)
-        {
-            if (!AutoSaveChanges || _unitOfWorkManager.Current == null)
-            {
-                return Task.CompletedTask;
-            }
-
-
-            return this._unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
-        }
-
-        protected virtual string ConvertIdToString(long id)
-        {
-            if (object.Equals(id, default(long)))
-            {
-                return null;
-            }
-            return id.ToString();
-        }
-
-
-
-        #endregion
 
         #region IUserClaimStore 实现
 
@@ -288,6 +246,261 @@ namespace Company.Project.Authorization.Users
         }
 
 
+
+
         #endregion
+
+
+        #region IUserSecurityStampStore 实现
+
+        public Task SetSecurityStampAsync(User user, string stamp, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        #endregion
+
+
+        #region IUserEmailStore 实现
+
+        public Task SetEmailAsync(User user, string email, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetNormalizedEmailAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetNormalizedEmailAsync(User user, string normalizedEmail, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        #endregion
+
+
+        #region IUserLockoutStore 实现
+
+        public Task<DateTimeOffset?> GetLockoutEndDateAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetLockoutEndDateAsync(User user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ResetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetAccessFailedCountAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetLockoutEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        #endregion
+
+
+        #region IUserPhoneNumberStore 实现
+
+        public Task SetPhoneNumberAsync(User user, string phoneNumber, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetPhoneNumberAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetPhoneNumberConfirmedAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetPhoneNumberConfirmedAsync(User user, bool confirmed, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+
+        #endregion
+
+
+        #region IUserTwoFactorStore 实现
+
+
+        public Task SetTwoFactorEnabledAsync(User user, bool enabled, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetTwoFactorEnabledAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        #endregion
+
+
+        #region IUserAuthenticationTokenStore 实现
+
+
+        public Task SetTokenAsync(User user, string loginProvider, string name, string value, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RemoveTokenAsync(User user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetTokenAsync(User user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+        #endregion
+
+
+        #region IUserAuthenticatorKeyStore 实现
+
+        public Task SetAuthenticatorKeyAsync(User user, string key, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetAuthenticatorKeyAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+        #endregion
+
+
+        #region IUserTwoFactorRecoveryCodeStore 实现
+
+        public Task ReplaceCodesAsync(User user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RedeemCodeAsync(User user, string code, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> CountCodesAsync(User user, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+
+
+        #region 释放资源
+        public void Dispose()
+        {
+            _disposed = true;
+        }
+        #endregion
+
+
+        #region 内部辅助函数
+
+        protected virtual void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
+        }
+
+        protected virtual Task SaveChanges(CancellationToken cancellationToken)
+        {
+            if (!AutoSaveChanges || _unitOfWorkManager.Current == null)
+            {
+                return Task.CompletedTask;
+            }
+
+
+            return this._unitOfWorkManager.Current.SaveChangesAsync(cancellationToken);
+        }
+
+        protected virtual string ConvertIdToString(long id)
+        {
+            if (object.Equals(id, default(long)))
+            {
+                return null;
+            }
+            return id.ToString();
+        }
+
+
+
+        #endregion
+
     }
 }
