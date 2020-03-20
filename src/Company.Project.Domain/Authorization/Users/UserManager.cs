@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Riven;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,8 @@ namespace Company.Project.Authorization.Users
         /// <returns></returns>
         public virtual async Task<User> FindByNameOrEmailOrPhoneNumberAsync(string userNameOrEmailOrPhoneNumber)
         {
+            Check.NotNullOrEmpty(userNameOrEmailOrPhoneNumber, nameof(userNameOrEmailOrPhoneNumber));
+
             var userName = this.NormalizeName(userNameOrEmailOrPhoneNumber);
             var email = this.NormalizeEmail(userNameOrEmailOrPhoneNumber);
 
@@ -56,6 +59,16 @@ namespace Company.Project.Authorization.Users
                                     || o.PhoneNumber == userNameOrEmailOrPhoneNumber);
 
             return user;
+        }
+
+        public override string NormalizeEmail(string email)
+        {
+            return email?.ToLower();
+        }
+
+        public override string NormalizeName(string name)
+        {
+            return name?.ToLower();
         }
     }
 }

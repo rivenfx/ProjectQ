@@ -12,7 +12,19 @@ using Riven.Uow;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserStore : IUserStore<User>
+    public class UserStore : IUserStore<User>, 
+        IUserLoginStore<User>,
+        IUserClaimStore<User>,
+        IUserPasswordStore<User>,
+        IUserSecurityStampStore<User>,
+        IUserEmailStore<User>,
+        IUserLockoutStore<User>,
+        IUserPhoneNumberStore<User>,
+        IQueryableUserStore<User>,
+        IUserTwoFactorStore<User>,
+        IUserAuthenticationTokenStore<User>,
+        IUserAuthenticatorKeyStore<User>,
+        IUserTwoFactorRecoveryCodeStore<User>
     {
         private bool _disposed;
 
@@ -21,6 +33,8 @@ namespace Company.Project.Authorization.Users
         protected readonly IRepository<User> _userRepo;
 
         protected IdentityErrorDescriber ErrorDescriber { get; }
+
+        public IQueryable<User> Users => _userRepo.GetAll().AsNoTracking();
 
         public UserStore(IUnitOfWorkManager unitOfWorkManager, IRepository<User> userRepo)
         {

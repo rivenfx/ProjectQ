@@ -6,13 +6,16 @@ using Riven.Uow;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleStore : IRoleStore<Role>
+    public class RoleStore : IRoleStore<Role>, 
+        IQueryableRoleStore<Role>, 
+        IRoleClaimStore<Role>
     {
         private bool _disposed;
 
@@ -21,6 +24,8 @@ namespace Company.Project.Authorization.Roles
         protected readonly IRepository<Role> _roleRepo;
 
         protected IdentityErrorDescriber ErrorDescriber { get; }
+
+        public IQueryable<Role> Roles => this._roleRepo.GetAll().AsNoTracking();
 
         public RoleStore(IUnitOfWorkManager unitOfWorkManager, IRepository<Role> roleRepo)
         {

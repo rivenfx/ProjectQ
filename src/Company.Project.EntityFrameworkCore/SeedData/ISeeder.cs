@@ -21,10 +21,10 @@ namespace Company.Project.SeedData
     {
         protected readonly IServiceProvider _serviceProvider;
         protected readonly IUnitOfWorkManager _unitOfWorkManager;
-        protected readonly IPasswordHasher<User> _passwordHasher;
+        protected readonly UserPasswordHasher _passwordHasher;
 
 
-        public Seeder(IServiceProvider serviceProvider, IUnitOfWorkManager unitOfWorkManager, IPasswordHasher<User> passwordHasher)
+        public Seeder(IServiceProvider serviceProvider, IUnitOfWorkManager unitOfWorkManager, UserPasswordHasher passwordHasher)
         {
             _serviceProvider = serviceProvider;
             _unitOfWorkManager = unitOfWorkManager;
@@ -35,25 +35,45 @@ namespace Company.Project.SeedData
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var userRepo = _serviceProvider.GetService<IRepository<User>>();
-                var adminUser = userRepo.GetAll().FirstOrDefault(o => o.UserName == "admin");
-                if (adminUser == null)
+                try
                 {
-                    adminUser = new User();
-
-                    adminUser.UserName = "admin";
-                    adminUser.PhoneNumber = "13028166007";
-                    adminUser.PhoneNumberConfirmed = true;
-                    adminUser.Email = "yi.hang@live.com";
-                    adminUser.EmailConfirmed = true;
-                    adminUser.LockoutEnabled = false;
-                    adminUser.TwoFactorEnabled = false;
+                    this.CreateUsers();
 
 
-                    adminUser.PasswordHash = this._passwordHasher.HashPassword(adminUser, "123qwe");
+                    uow.Complete();
                 }
-                uow.Complete();
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
+        }
+
+
+        protected void CreateUsers()
+        {
+            var userRepo = _serviceProvider.GetService<IRepository<User>>();
+            var adminUser = userRepo.GetAll().FirstOrDefault(o => o.UserName == "admin");
+            if (adminUser == null)
+            {
+                adminUser = new User();
+
+                adminUser.UserName = "admin";
+                adminUser.PhoneNumber = "13028166007";
+                adminUser.PhoneNumberConfirmed = true;
+                adminUser.Email = "yi.hang@live.com";
+                adminUser.EmailConfirmed = true;
+                adminUser.LockoutEnabled = false;
+                adminUser.TwoFactorEnabled = false;
+
+                adminUser.NormalizedUserName = adminUser.UserName.ToLower();
+                adminUser.NormalizedEmail = adminUser.Email.ToLower();
+
+
+                adminUser.PasswordHash = this._passwordHasher.HashPassword(adminUser, "123qwe");
+                userRepo.InsertAsync(adminUser);
+            }
+
         }
     }
 }

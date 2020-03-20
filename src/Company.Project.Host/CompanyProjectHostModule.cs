@@ -31,6 +31,7 @@ namespace Company.Project
             // aspnet core mvc
             context.Services.AddControllersWithViews();
             context.Services.AddHttpContextAccessor();
+            context.Services.AddHttpClient();
 
             // aspnet core 跨域
             context.Services.AddCors(options =>
