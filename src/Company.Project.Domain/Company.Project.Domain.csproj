@@ -7,12 +7,12 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Riven.AspNetCore.Identity" Version="0.0.5" />
-    <PackageReference Include="Riven.AspNetCore.Modular" Version="0.0.5" />
-    <PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="0.0.5" />
-    <PackageReference Include="Riven.AspNetCore.Uow" Version="0.0.5" />
-    <PackageReference Include="Riven.Domain" Version="0.0.5" />
-    <PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.0.5" />
+    <PackageReference Include="Riven.AspNetCore.Identity" Version="0.0.9" />
+    <PackageReference Include="Riven.AspNetCore.Modular" Version="0.0.9" />
+    <PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="0.0.9" />
+    <PackageReference Include="Riven.AspNetCore.Uow" Version="0.0.9" />
+    <PackageReference Include="Riven.Domain" Version="0.0.9" />
+    <PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.0.9" />
   </ItemGroup>
 
 
