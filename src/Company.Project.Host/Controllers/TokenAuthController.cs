@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -9,6 +9,7 @@ using Company.Project.Authenticate.Dtos;
 using Company.Project.Authorization.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Riven.Identity.Users;
 
 namespace Company.Project.Controllers
 {
@@ -32,6 +33,12 @@ namespace Company.Project.Controllers
         {
             await Task.Yield();
             var loginResult = await _signInManager.LoginAsync(input.Account, input.Password);
+
+            // 使mvc也登录
+            if (loginResult.Result == LoginResultType.Success)
+            {
+                await this._signInManager.SignInAsync(loginResult.User, false);
+            }
             return new AuthenticateResultDto()
             {
                 AccessToken = CreateAccessToken(loginResult.Identity.Claims)
