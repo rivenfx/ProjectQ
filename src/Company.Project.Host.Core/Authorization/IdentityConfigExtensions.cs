@@ -1,15 +1,14 @@
-﻿using Company.Project.Authorization.Roles;
-using Company.Project.Authorization.Users;
-using Company.Project.Database;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+using Company.Project.Database;
+using Company.Project.Authorization.Roles;
+using Company.Project.Authorization.Users;
+
 
 namespace Company.Project.Authorization
 {
@@ -36,8 +35,8 @@ namespace Company.Project.Authorization
                 
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
 
-                .AddUserStore<UserStore>()
-                .AddRoleStore<UserStore>()
+                .AddUserStore<UserStore<AppDbContext>>()
+                .AddRoleStore<RoleStore<AppDbContext>>()
                 .AddDefaultTokenProviders();
 
             return identityBuilder;
