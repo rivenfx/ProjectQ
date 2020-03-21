@@ -1,12 +1,13 @@
-﻿using Company.Project.Authorization.Users;
+using Company.Project.Authorization.Users;
 using Riven.Uow;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Company.Project.Authorization;
+using Riven.Dependency;
 
 namespace Company.Project.SeedData
 {
-    public class Seeder : ISeeder
+    public class Seeder : ISeeder, ITransientDependency
     {
         protected readonly IServiceProvider _serviceProvider;
         protected readonly IUnitOfWorkManager _unitOfWorkManager;
