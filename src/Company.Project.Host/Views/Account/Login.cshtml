@@ -1,0 +1,33 @@
+
+@{
+    Layout = "_Layout";
+}
+
+@section Styles{
+
+}
+
+@section Scripts{
+    <script src="~/views/account/login.js" asp-append-version="true"></script>
+}
+
+
+<div class="text-center">
+    <form id="login" class="form" method="post">
+        <fieldset>
+            <p>
+                <label for="account">账号(用户名/手机/邮箱)</label>
+                <br />
+                <input id="account" name="account" type="text">
+            </p>
+            <p>
+                <label for="password">密码</label>
+                <br />
+                <input id="password" type="password" name="password">
+            </p>
+            <p>
+                <input class="submit" type="submit" value="提交">
+            </p>
+        </fieldset>
+    </form>
+</div>

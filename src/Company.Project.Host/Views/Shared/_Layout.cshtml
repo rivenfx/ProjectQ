@@ -1,0 +1,46 @@
+@inject IWebHostEnvironment _env;
+@inject IConfiguration _configuration;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        @_configuration[AppConsts.AppNameKey] @ViewBag.Title
+    </title>
+    <link href="~/libs/bootstrap/4.4.1/dist/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+
+    @if (IsSectionDefined("Styles"))
+    {
+        RenderSection("Styles", required: false);
+    }
+
+</head>
+<body>
+
+    <div class="container">
+        @RenderBody()
+
+        <footer class="text-center mt-3  ">
+            <p>
+                Copyright &copy; @DateTime.Now.Year - 当前版本 @_configuration[AppConsts.AppVersionKey]
+                <a href="/" class="text-primary" target="_blank"> @_env.EnvironmentName </a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="~/libs/jquery/3.4.1/dist/jquery-3.4.1.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="~/libs/popper/1.16.0/dist/popper.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="~/libs/bootstrap/4.4.1/dist/bootstrap.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="~/libs/jquery-validation/1.19.1/dist/jquery.validate.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="~/scripts/form-extensions.js" type="text/javascript" asp-append-version="true"></script>
+
+    @if (IsSectionDefined("Scripts"))
+    {
+        RenderSection("Scripts", required: false);
+    }
+</body>
+</html>
