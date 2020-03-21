@@ -1,16 +1,16 @@
-﻿using Company.Project.Authorization.Users;
-using Company.Project.Database;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 using Riven.Extensions;
 using Riven.Identity.Roles;
 using Riven.Uow;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+using Company.Project.Authorization.Users;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleStore : AppRoleStore<Role, AppDbContext, long, UserRole, RoleClaim>
+    public class RoleStore<TDbContext> : AppRoleStore<Role, TDbContext, long, UserRole, RoleClaim>
+        where TDbContext : DbContext
     {
         protected readonly IUnitOfWorkManager _unitOfWorkManager;
 
@@ -20,6 +20,6 @@ namespace Company.Project.Authorization.Roles
             this._unitOfWorkManager = unitOfWorkManager;
         }
 
-        public override AppDbContext Context => _unitOfWorkManager.Current.GetDbContext() as AppDbContext;
+        public override TDbContext Context => _unitOfWorkManager.Current.GetDbContext() as TDbContext;
     }
 }
