@@ -42,32 +42,32 @@ namespace Company.Project.Database
         {
             builder.Entity<Role>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(Role));
+                entityBuilder.ToTable($"{nameof(Role)}s");
             });
             builder.Entity<RoleClaim>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(RoleClaim));
+                entityBuilder.ToTable($"{nameof(RoleClaim)}s");
             });
 
             builder.Entity<User>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(User));
+                entityBuilder.ToTable($"{nameof(User)}s");
             });
             builder.Entity<UserClaim>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(UserClaim));
+                entityBuilder.ToTable($"{nameof(UserClaim)}s");
             });
             builder.Entity<UserLogin>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(UserLogin));
+                entityBuilder.ToTable($"{nameof(UserLogin)}s");
             });
             builder.Entity<UserToken>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(UserToken));
+                entityBuilder.ToTable($"{nameof(UserToken)}s");
             });
             builder.Entity<UserRole>((entityBuilder) =>
             {
-                entityBuilder.ToTable(nameof(UserRole));
+                entityBuilder.ToTable($"{nameof(UserRole)}s");
             });
 
             return builder;
