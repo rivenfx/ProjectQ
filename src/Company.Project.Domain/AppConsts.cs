@@ -10,6 +10,17 @@ namespace Company.Project
     public static class AppConsts
     {
         /// <summary>
+        /// 应用名称键值
+        /// </summary>
+        public const string AppNameKey = "App:Name";
+
+        /// <summary>
+        /// 应用版本键值
+        /// </summary>
+        public const string AppVersionKey = "App:Version";
+
+
+        /// <summary>
         /// 数据库相关
         /// </summary>
         public static class Database
