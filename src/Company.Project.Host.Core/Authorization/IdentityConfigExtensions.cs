@@ -36,7 +36,8 @@ namespace Company.Project.Authorization
                 
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
 
-                .AddAppEntityFrameworkStores<AppDbContext>()
+                .AddUserStore<UserStore>()
+                .AddRoleStore<UserStore>()
                 .AddDefaultTokenProviders();
 
             return identityBuilder;
