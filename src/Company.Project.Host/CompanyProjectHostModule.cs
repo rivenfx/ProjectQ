@@ -14,6 +14,7 @@ using Riven.Uow;
 using Company.Project.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Riven.Extensions;
 
 namespace Company.Project
 {
@@ -33,8 +34,13 @@ namespace Company.Project
         {
             var configuration = context.Configuration;
 
+
             // aspnet core mvc
-            context.Services.AddControllersWithViews();
+            var mvcBuilder = context.Services.AddControllersWithViews();
+#if DEBUG
+            mvcBuilder.AddRazorRuntimeCompilation();
+#endif
+            // other
             context.Services.AddHttpContextAccessor();
             context.Services.AddHttpClient();
 
