@@ -14,6 +14,11 @@ namespace Company.Project
         )]
     public class CompanyProjectDomainModule : AppModule
     {
+        public override void OnPreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
+        }
+
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
             

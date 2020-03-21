@@ -22,6 +22,11 @@ namespace Company.Project
         )]
     public class CompanyProjectEntityFrameworkCoreModule : AppModule
     {
+        public override void OnPreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.RegisterAssemblyOf<CompanyProjectEntityFrameworkCoreModule>();
+        }
+
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
 
@@ -86,8 +91,6 @@ namespace Company.Project
 
             #endregion
 
-
-            context.Services.AddTransient<ISeeder, Seeder>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

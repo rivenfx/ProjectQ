@@ -24,6 +24,11 @@ namespace Company.Project
     {
         static string CorsPolicyName = "RivenDefaultCorsPolicy";
 
+        public override void OnPreConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.RegisterAssemblyOf<CompanyProjectHostModule>();
+        }
+
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Configuration;
