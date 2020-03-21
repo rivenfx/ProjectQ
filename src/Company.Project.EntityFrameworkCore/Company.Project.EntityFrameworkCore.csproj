@@ -6,13 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200221104228_InitDb.cs" />
-    <Compile Remove="Migrations\20200221104228_InitDb.Designer.cs" />
-    <Compile Remove="Migrations\20200221104416_InitDb1.cs" />
-    <Compile Remove="Migrations\20200221104416_InitDb1.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="3.1.1" />
