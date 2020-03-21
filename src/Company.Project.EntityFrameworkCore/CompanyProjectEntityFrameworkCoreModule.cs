@@ -32,7 +32,9 @@ namespace Company.Project
 
             #region 添加默认的数据库连接字符串
 
-            context.Services.AddDefaultConnectionString(context.Configuration["ConnectionStrings:Default"]);
+            context.Services.AddDefaultConnectionString(
+                    context.Configuration[AppConsts.Database.ConnectionStringKey]
+                );
 
             #endregion
 

@@ -17,7 +17,10 @@ namespace Company.Project.Database
             this DbContextOptionsBuilder builder,
             string connectionString)
         {
-            builder.UseSqlServer(connectionString);
+            builder.UseSqlServer(connectionString, (options) =>
+            {
+                options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
+            });
         }
 
         /// <summary>
@@ -29,7 +32,10 @@ namespace Company.Project.Database
             this DbContextOptionsBuilder builder,
             DbConnection connection)
         {
-            builder.UseSqlServer(connection);
+            builder.UseSqlServer(connection, (options) =>
+            {
+                options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
+            });
         }
     }
 }
