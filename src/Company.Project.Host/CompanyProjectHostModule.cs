@@ -73,8 +73,8 @@ namespace Company.Project
             {
                 var apiInfo = new OpenApiInfo()
                 {
-                    Title = configuration["App:Name"],
-                    Version = configuration["App:Version"]
+                    Title = configuration[AppConsts.AppNameKey],
+                    Version = configuration[AppConsts.AppVersionKey]
                 };
                 options.SwaggerDoc(apiInfo.Version, apiInfo);
             });
@@ -136,8 +136,8 @@ namespace Company.Project
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
             {
                 swaggerUiOption.SwaggerEndpoint(
-                       $"/swagger/{configuration["App:Version"]}/swagger.json",
-                       configuration["App:Name"]
+                       $"/swagger/{configuration[AppConsts.AppVersionKey]}/swagger.json",
+                       configuration[AppConsts.AppNameKey]
                    );
             });
 
