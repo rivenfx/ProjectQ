@@ -19,33 +19,37 @@ namespace Company.Project.SampleEntitys
         readonly IRepository<SampleEntity> _repository;
         readonly IUnitOfWorkManager _unitOfWorkManager;
 
+        IActiveUnitOfWork CurrentUnitOfWork => this._unitOfWorkManager.Current;
+
         public SampleEntityAppService(IRepository<SampleEntity> repository, IUnitOfWorkManager unitOfWorkManager)
         {
             _repository = repository;
             _unitOfWorkManager = unitOfWorkManager;
         }
 
+        //[UnitOfWork(ConnectionStringName = "TenantB")]
         public async Task<List<SampleEntity>> GetAll()
         {
             #region 切换数据库连接字符串/切换DbContext 用例
 
-            //var currentUnitOfWork = this._unitOfWorkManager.Current;
-
             // 切换数据库连接字符串
-            //using (currentUnitOfWork.SetConnectionStringName("TenantA"))
-            //{
-            //    var resultWithTenantA = await this._repository.GetAll().ToListAsync();
-            //}
+            using (CurrentUnitOfWork.SetConnectionStringName("TenantA"))
+            {
+                var resultWithTenantA = await this._repository.GetAll().ToListAsync();
+            }
 
             // 切换 DbContext
-            //using (currentUnitOfWork.SetDbContextProvider("TenantA"))
-            //{
-            //    var resultWithTenantA = await this._repository.GetAll().ToListAsync();
-            //} 
+            using (CurrentUnitOfWork.SetDbContextProvider("TenantA"))
+            {
+                var resultWithTenantA = await this._repository.GetAll().ToListAsync();
+            }
 
             #endregion
 
-            return await _repository.GetAll().ToListAsync();
+
+            var resultWithTenantB= await _repository.GetAll().ToListAsync();
+
+            return resultWithTenantB;
         }
 
         [Authorize]
