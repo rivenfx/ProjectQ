@@ -38,10 +38,15 @@ namespace Company.Project.Controllers
             if (loginResult.Result == LoginResultType.Success)
             {
                 await this._signInManager.SignInAsync(loginResult.User, false);
+                return new AuthenticateResultDto()
+                {
+                    AccessToken = CreateAccessToken(loginResult.Identity.Claims)
+                };
             }
+
             return new AuthenticateResultDto()
             {
-                AccessToken = CreateAccessToken(loginResult.Identity.Claims)
+                AccessToken = null
             };
         }
 
