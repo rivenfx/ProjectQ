@@ -15,6 +15,7 @@ using Company.Project.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Riven.Extensions;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Company.Project
 {
@@ -136,7 +137,7 @@ namespace Company.Project
             });
 
 
-            #region Riven - AspNetCore 服务启用和配置
+            #region Riven -启用并配置 Swagger 和 SwaggerUI
 
             //  Riven - Swagger
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
@@ -145,6 +146,8 @@ namespace Company.Project
                        $"/swagger/{configuration[AppConsts.AppVersionKey]}/swagger.json",
                        configuration[AppConsts.AppNameKey]
                    );
+                swaggerUiOption.EnableDeepLinking();
+                swaggerUiOption.DocExpansion(DocExpansion.None);
             });
 
             #endregion
