@@ -9,6 +9,10 @@ using Company.Project.Database;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using System;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Riven;
 
 namespace Company.Project.Authorization
 {
@@ -63,7 +67,7 @@ namespace Company.Project.Authorization
                 {
                     //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddCookie();
+                });//.AddCookie();
 
             authenticationBuilder.AddJwt(configuration);
 
@@ -95,7 +99,9 @@ namespace Company.Project.Authorization
         /// <returns></returns>
         public static IApplicationBuilder UseAppAuthenticationAndAuthorization(this IApplicationBuilder app)
         {
-            app.UseAuthentication();
+            app.UseDefaultAuthentication();
+
+            app.UseJwtAuthentication();
 
             app.UseAuthorization();
 
@@ -190,5 +196,59 @@ namespace Company.Project.Authorization
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// Jwt Authentication Middleware
+    /// </summary>
+    public class JwtAuthenticationMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly string _schema;
+
+        public JwtAuthenticationMiddleware(RequestDelegate next, string schema)
+        {
+            this._next = next;
+            this._schema = schema;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            if (context.User.Identity == null || context.User.Identity?.IsAuthenticated == true)
+            {
+                var result = await context.AuthenticateAsync(this._schema);
+                if (result.Succeeded && result.Principal != null)
+                {
+                    context.User = result.Principal;
+                }
+            }
+
+            await this._next(context);
+        }
+    }
+
+    public static class RivenIdentityAppBuilderExtensions
+    {
+        /// <summary>
+        /// Use default authentication
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseDefaultAuthentication(this IApplicationBuilder app)
+        {
+            return app.UseAuthentication();
+        }
+
+        /// <summary>
+        /// Use jwt authentication
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseJwtAuthentication(this IApplicationBuilder app, [NotNull]string schema = "Bearer")
+        {
+            Check.NotNullOrWhiteSpace(schema, nameof(schema));
+
+            return app.UseMiddleware<JwtAuthenticationMiddleware>(schema);
+        }
     }
 }
