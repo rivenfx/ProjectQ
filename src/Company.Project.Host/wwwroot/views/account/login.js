@@ -21,9 +21,14 @@ $(function () {
             success: function (result) {
                 debugger
                 console.log(result);//打印服务端返回的数据(调试用)
-                alert("登录成功,即将跳转到页面");
 
-                window.location.href = "/Home/Index";
+                if (result.accessToken) {
+                    alert("登录成功,即将跳转到页面");
+                    window.location.href = "/Home/Index";
+                } else {
+                    alert("登录失败");
+                }
+
             },
             error: function (e) {
                 debugger
