@@ -36,15 +36,27 @@ namespace Company.Project
             var configuration = context.Configuration;
 
 
+            #region AspNetCore - Mvc
+
             // aspnet core mvc
             var mvcBuilder = context.Services.AddControllersWithViews();
 #if DEBUG
             mvcBuilder.AddRazorRuntimeCompilation();
 #endif
-            // other
+
+            #endregion
+
+
+            #region AspNetCore - HttpContextAccessor / HttpClient
+            
             context.Services.AddHttpContextAccessor();
             context.Services.AddHttpClient();
 
+            #endregion
+
+
+            #region AspNetCore - Cors
+            
             // aspnet core 跨域
             context.Services.AddCors(options =>
             {
@@ -68,9 +80,23 @@ namespace Company.Project
                 });
             });
 
+            #endregion
+
+
+            #region AspNetCore - Identity And Auth
+            
             // 认证配置
             context.Services.IdentityRegister();
             context.Services.IdentityConfiguration(configuration);
+
+            #endregion
+
+
+            #region Riven - AspNetCore 请求本地化
+
+            context.Services.AddRivenRequestLocalization();
+
+            #endregion
 
 
             #region Riven - AspNetCore 服务注册和配置
@@ -85,8 +111,10 @@ namespace Company.Project
                 };
                 options.SwaggerDoc(apiInfo.Version, apiInfo);
             });
+            
             // Riven - AspNetCore Uow实现
             context.Services.AddRivenAspNetCoreUow();
+            
             // Riven - AspNetCore 基础服务相关
             context.Services.AddRivenAspNetCore((options) =>
             {
@@ -102,7 +130,6 @@ namespace Company.Project
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var configuration = context.Configuration;
-
             var app = context.ServiceProvider.GetService<IApplicationBuilderAccessor>().ApplicationBuilder;
             var env = context.ServiceProvider.GetService<IWebHostEnvironment>();
 
@@ -112,29 +139,49 @@ namespace Company.Project
                 app.UseDeveloperExceptionPage();
             }
 
+            #region AspNetCore - UseStaticFiles / UseRouting /UseCors
+            
+            
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(CorsPolicyName);
 
+            #endregion
 
+
+            #region App - AspNetCore Auth
+            
             // 认证配置
             app.UseAppAuthenticationAndAuthorization();
 
+            #endregion
 
+
+            #region Riven - AspNetCore 请求本地化
+
+            app.UseRivenRequestLocalization();
+
+            #endregion
+
+
+            #region AspNetCore - Endpoints
+            
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                        "defaultWithArea",
-                        "{area}/{controller=Home}/{action=Index}/{id?}"
-                    );
-                endpoints.MapControllerRoute(
-                        "default",
-                        "{controller=Home}/{action=Index}/{id?}"
-                    );
+               {
+                   endpoints.MapControllerRoute(
+                           "defaultWithArea",
+                           "{area}/{controller=Home}/{action=Index}/{id?}"
+                       );
+                   endpoints.MapControllerRoute(
+                           "default",
+                           "{controller=Home}/{action=Index}/{id?}"
+                       );
 
                 // 自定义路由
 
-            });
+            }); 
+
+            #endregion
 
 
             #region Riven -启用并配置 Swagger 和 SwaggerUI
