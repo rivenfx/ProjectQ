@@ -30,7 +30,7 @@ namespace Company.Project
         {
 
 
-            #region Riven - 初始化多语言
+            #region Riven - 初始化本地化
 
             this.InitLocalization(context);
 
@@ -40,6 +40,10 @@ namespace Company.Project
 
         #region 内部辅助函数
 
+        /// <summary>
+        /// 初始化本地化
+        /// </summary>
+        /// <param name="context"></param>
         protected void InitLocalization(ApplicationInitializationContext context)
         {
             var assemblyPath = Path.GetDirectoryName(this.GetType().Assembly.Location);
