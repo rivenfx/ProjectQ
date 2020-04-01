@@ -52,6 +52,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riven.UnitOfWork.Dapper", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riven.UnitOfWork.EntityFrameworkCore", "..\Framework\src\Riven.UnitOfWork.EntityFrameworkCore\Riven.UnitOfWork.EntityFrameworkCore.csproj", "{F5FC76F4-23CB-449E-9616-F85A3032E69A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Project.AngularUI", "src\Company.Project.AngularUI\Company.Project.AngularUI.csproj", "{06D29CF0-44F2-4BB2-881B-82C74515FAFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -134,6 +136,10 @@ Global
 		{F5FC76F4-23CB-449E-9616-F85A3032E69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5FC76F4-23CB-449E-9616-F85A3032E69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5FC76F4-23CB-449E-9616-F85A3032E69A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D29CF0-44F2-4BB2-881B-82C74515FAFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D29CF0-44F2-4BB2-881B-82C74515FAFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D29CF0-44F2-4BB2-881B-82C74515FAFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D29CF0-44F2-4BB2-881B-82C74515FAFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,6 +164,7 @@ Global
 		{9B528D70-6C3F-4CBC-8F9D-31E36327F374} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
 		{5AA43045-2265-49C9-AA20-E74F0AFC2159} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
 		{F5FC76F4-23CB-449E-9616-F85A3032E69A} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
+		{06D29CF0-44F2-4BB2-881B-82C74515FAFF} = {65AA0668-A884-461B-8BDF-757D8539A74C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EEDD240-EA84-4E40-8C5C-F7EB34BC22B3}
