@@ -70,5 +70,17 @@ namespace Company.Project.Authorization.Users
         {
             return name?.ToLower();
         }
+
+        public override Task<User> FindByNameAsync(string userName)
+        {
+            return FindByNameOrEmailOrPhoneNumberAsync(userName);
+            //return base.FindByNameAsync(userName);
+        }
+
+        public override Task<User> FindByEmailAsync(string email)
+        {
+            return FindByNameOrEmailOrPhoneNumberAsync(email);
+            //return base.FindByEmailAsync(email);
+        }
     }
 }
