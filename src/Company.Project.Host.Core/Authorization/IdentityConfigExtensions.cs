@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Riven;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Riven.Uow;
 
 namespace Company.Project.Authorization
 {
@@ -64,10 +65,7 @@ namespace Company.Project.Authorization
         public static AuthenticationBuilder IdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             var authenticationBuilder = services
-                .AddAuthentication((options) =>
-                {
-
-                });
+                .AddAuthentication();
 
             //authenticationBuilder.AddCookieWithCustom(configuration);
 
@@ -91,7 +89,6 @@ namespace Company.Project.Authorization
                     //options.Cookie.HttpOnly = true;
                     // options.SlidingExpiration = true;
                     options.ExpireTimeSpan = new TimeSpan(0, 0, 30);
-
                 });
             return authenticationBuilder;
         }
