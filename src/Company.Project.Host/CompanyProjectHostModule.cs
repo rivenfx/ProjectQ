@@ -16,9 +16,34 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Riven.Extensions;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using AspectCore;
+using AspectCore.Extensions;
+using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Configuration;
+using AspectCore.DynamicProxy;
 
 namespace Company.Project
 {
+    public class RivenUnitOfWorkInterceptor : AbstractInterceptor
+    {
+        public override async Task Invoke(AspectContext context, AspectDelegate next)
+        {
+            var unitOfWorkManager = context.ServiceProvider.GetService<IUnitOfWorkManager>();
+            if (unitOfWorkManager.Current != null)
+            {
+                await next(context);
+            }
+            else
+            {
+                using (var uow = unitOfWorkManager.Begin())
+                {
+                    await next(context);
+                    await uow.CompleteAsync();
+                }
+            }
+        }
+    }
+
     [DependsOn(
         typeof(CompanyProjectHostCoreModule)
         )]
@@ -48,7 +73,7 @@ namespace Company.Project
 
 
             #region AspNetCore - HttpContextAccessor / HttpClient
-            
+
             context.Services.AddHttpContextAccessor();
             context.Services.AddHttpClient();
 
@@ -56,7 +81,7 @@ namespace Company.Project
 
 
             #region AspNetCore - Cors
-            
+
             // aspnet core 跨域
             context.Services.AddCors(options =>
             {
@@ -84,7 +109,7 @@ namespace Company.Project
 
 
             #region AspNetCore - Identity And Auth
-            
+
             // 认证配置
             context.Services.IdentityRegister();
             context.Services.IdentityConfiguration(configuration);
@@ -111,10 +136,10 @@ namespace Company.Project
                 };
                 options.SwaggerDoc(apiInfo.Version, apiInfo);
             });
-            
+
             // Riven - AspNetCore Uow实现
             context.Services.AddRivenAspNetCoreUow();
-            
+
             // Riven - AspNetCore 基础服务相关
             context.Services.AddRivenAspNetCore((options) =>
             {
@@ -123,6 +148,26 @@ namespace Company.Project
             });
 
             #endregion
+
+            //context.Services.AddAspectServiceContext();
+            //context.Services.WeaveDynamicProxyService();
+
+            context.Services.ConfigureDynamicProxy((configuration) =>
+            {
+                configuration.Interceptors.AddTyped<RivenUnitOfWorkInterceptor>(method =>
+                {
+                    if (method.DeclaringType.BaseType != null)
+                    {
+
+                    }
+                    if (method.Name.Contains("HandleAuthenticate"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                });
+            });
 
 
         }
@@ -140,8 +185,8 @@ namespace Company.Project
             }
 
             #region AspNetCore - UseStaticFiles / UseRouting /UseCors
-            
-            
+
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(CorsPolicyName);
@@ -150,7 +195,7 @@ namespace Company.Project
 
 
             #region App - AspNetCore Auth
-            
+
             // 认证配置
             app.UseAppAuthenticationAndAuthorization();
 
@@ -165,7 +210,7 @@ namespace Company.Project
 
 
             #region AspNetCore - Endpoints
-            
+
             app.UseEndpoints(endpoints =>
                {
                    endpoints.MapControllerRoute(
@@ -177,9 +222,9 @@ namespace Company.Project
                            "{controller=Home}/{action=Index}/{id?}"
                        );
 
-                // 自定义路由
+                   // 自定义路由
 
-            }); 
+               });
 
             #endregion
 

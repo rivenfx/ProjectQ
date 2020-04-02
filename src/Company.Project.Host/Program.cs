@@ -51,8 +51,8 @@ namespace Company.Project
                             .ConfigureWebHostDefaults(webBuilder =>
                             {
                                 webBuilder.UseStartup<Startup>();
-                            });
-                             //.UseServiceContext();
+                            })
+                             .UseServiceContext();
             //.UseSerilog();
         }
 
