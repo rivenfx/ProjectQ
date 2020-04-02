@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Riven;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Company.Project.Authorization
 {
@@ -65,12 +66,33 @@ namespace Company.Project.Authorization
             var authenticationBuilder = services
                 .AddAuthentication((options) =>
                 {
-                    //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                });//.AddCookie();
+
+                });
+
+            //authenticationBuilder.AddCookieWithCustom(configuration);
 
             authenticationBuilder.AddJwt(configuration);
 
+            return authenticationBuilder;
+        }
+
+        /// <summary>
+        /// 添加Cookie认证
+        /// </summary>
+        /// <param name="authenticationBuilder"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static AuthenticationBuilder AddCookieWithCustom(this AuthenticationBuilder authenticationBuilder, IConfiguration configuration)
+        {
+            authenticationBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                (options) =>
+                {
+                    //options.Cookie.HttpOnly = true;
+                    // options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = new TimeSpan(0, 0, 30);
+
+                });
             return authenticationBuilder;
         }
 

@@ -14,6 +14,13 @@ namespace Company.Project.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly SignInManager _signInManager;
+
+        public AccountController(SignInManager signInManager)
+        {
+            _signInManager = signInManager;
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -27,8 +34,9 @@ namespace Company.Project.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
     }
