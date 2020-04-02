@@ -12,6 +12,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Framework\src\Riven.AspectCore\Riven.AspectCore.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Localization\Riven.AspNetCore.Localization.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Modular\Riven.AspNetCore.Modular.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Identity\Riven.AspNetCore.Identity.csproj" />
