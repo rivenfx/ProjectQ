@@ -4,30 +4,39 @@
 }
 
 @section Styles{
-
+    <link href="~/views/account/login.css" rel="stylesheet" asp-append-version="true" />
 }
 
 @section Scripts{
     <script src="~/views/account/login.js" asp-append-version="true"></script>
 }
 
+<form id="login" class="form-signin" method="post">
+    <h1 class="h3 mb-3 font-weight-normal">登录</h1>
 
-<div class="text-center">
-    <form id="login" class="form" method="post">
-        <fieldset>
-            <p>
-                <label for="account">账号(用户名/手机/邮箱)</label>
-                <br />
-                <input id="account" name="account" type="text">
-            </p>
-            <p>
-                <label for="password">密码</label>
-                <br />
-                <input id="password" type="password" name="password">
-            </p>
-            <p>
-                <input class="submit" type="submit" value="提交">
-            </p>
-        </fieldset>
-    </form>
-</div>
+    <label for="account" class="sr-only">账号(用户名/手机/邮箱)</label>
+    <input id="account" name="account"
+           type="text"
+           class="form-control"
+           required=""
+           autofocus=""
+           value="admin"
+           placeholder="账号(用户名/手机/邮箱)">
+
+    <label for="inputPassword" class="sr-only">密码</label>
+    <input id="password" name="password"
+           type="password"
+           class="form-control"
+           required=""
+           value="123qwe"
+           placeholder="密码">
+
+    <div class="checkbox mb-3">
+        <label style="float:left;">
+            <input id="rememberClient" name="rememberClient" type="checkbox" value="false"> 记住我
+        </label>
+    </div>
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+</form>
+
