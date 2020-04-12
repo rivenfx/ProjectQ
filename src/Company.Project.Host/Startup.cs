@@ -1,3 +1,5 @@
+using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,24 @@ namespace Company.Project
         {
             // Riven
             services.AddRivenAspNetCoreModule<CompanyProjectHostModule>(Configuration);
+
+
+            services.ConfigureDynamicProxy((configuration) =>
+            {
+                configuration.Interceptors.AddTyped<RivenUnitOfWorkInterceptor>(method =>
+                {
+                    if (method.DeclaringType.BaseType != null)
+                    {
+
+                    }
+                    if (method.Name.Contains("HandleAuthenticate"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

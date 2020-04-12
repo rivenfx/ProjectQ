@@ -148,28 +148,6 @@ namespace Company.Project
             });
 
             #endregion
-
-            //context.Services.AddAspectServiceContext();
-            //context.Services.WeaveDynamicProxyService();
-
-            context.Services.ConfigureDynamicProxy((configuration) =>
-            {
-                configuration.Interceptors.AddTyped<RivenUnitOfWorkInterceptor>(method =>
-                {
-                    if (method.DeclaringType.BaseType != null)
-                    {
-
-                    }
-                    if (method.Name.Contains("HandleAuthenticate"))
-                    {
-                        return true;
-                    }
-
-                    return false;
-                });
-            });
-
-
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
