@@ -209,6 +209,22 @@ namespace Company.Project
             #endregion
 
 
+            #region Riven -启用并配置 Swagger 和 SwaggerUI
+
+            //  Riven - Swagger
+            app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
+            {
+                swaggerUiOption.SwaggerEndpoint(
+                       $"/swagger/{configuration[AppConsts.AppVersionKey]}/swagger.json",
+                       configuration[AppConsts.AppNameKey]
+                   );
+                swaggerUiOption.EnableDeepLinking();
+                swaggerUiOption.DocExpansion(DocExpansion.None);
+            });
+
+            #endregion
+
+
             #region AspNetCore - Endpoints
 
             app.UseEndpoints(endpoints =>
@@ -225,22 +241,6 @@ namespace Company.Project
                    // 自定义路由
 
                });
-
-            #endregion
-
-
-            #region Riven -启用并配置 Swagger 和 SwaggerUI
-
-            //  Riven - Swagger
-            app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
-            {
-                swaggerUiOption.SwaggerEndpoint(
-                       $"/swagger/{configuration[AppConsts.AppVersionKey]}/swagger.json",
-                       configuration[AppConsts.AppNameKey]
-                   );
-                swaggerUiOption.EnableDeepLinking();
-                swaggerUiOption.DocExpansion(DocExpansion.None);
-            });
 
             #endregion
 
