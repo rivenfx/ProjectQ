@@ -6,44 +6,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Riven;
-using Riven.AspNetCore.Accessors;
-using Riven.AspNetCore.Mvc.Uow;
-using Riven.Modular;
-using Riven.Uow;
-using Company.Project.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Riven.Extensions;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using AspectCore;
-using AspectCore.Extensions;
-using AspectCore.Extensions.DependencyInjection;
-using AspectCore.Configuration;
-using AspectCore.DynamicProxy;
+using Riven;
+using Riven.AspNetCore.Accessors;
+using Riven.Modular;
+
+using Company.Project.Authorization;
 
 namespace Company.Project
 {
-    public class RivenUnitOfWorkInterceptor : AbstractInterceptor
-    {
-        public override async Task Invoke(AspectContext context, AspectDelegate next)
-        {
-            var unitOfWorkManager = context.ServiceProvider.GetService<IUnitOfWorkManager>();
-            if (unitOfWorkManager.Current != null)
-            {
-                await next(context);
-            }
-            else
-            {
-                using (var uow = unitOfWorkManager.Begin())
-                {
-                    await next(context);
-                    await uow.CompleteAsync();
-                }
-            }
-        }
-    }
-
     [DependsOn(
         typeof(CompanyProjectHostCoreModule)
         )]
