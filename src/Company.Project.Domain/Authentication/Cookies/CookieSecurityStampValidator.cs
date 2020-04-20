@@ -10,13 +10,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Company.Project.Authorization
+namespace Company.Project.Authentication.Cookies
 {
-    public class AppSecurityStampValidator : SecurityStampValidator<User>
+    public class CookieSecurityStampValidator : SecurityStampValidator<User>
     {
         readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public AppSecurityStampValidator(
+        public CookieSecurityStampValidator(
             IOptions<SecurityStampValidatorOptions> options,
             SignInManager signInManager,
             ISystemClock clock,

@@ -16,6 +16,7 @@ using Riven;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Riven.Uow;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Company.Project.Authentication.Cookies;
 
 namespace Company.Project.Authorization
 {
@@ -30,7 +31,6 @@ namespace Company.Project.Authorization
         {
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
             services.AddTransient<UserPasswordHasher>();
-            services.TryAddScoped<AppSecurityStampValidator>();
 
             var identityBuilder = services.AddIdentity<User, Role>((options) =>
             {
@@ -71,13 +71,16 @@ namespace Company.Project.Authorization
 
             #region 配置 Identity 默认自带的 cookie 校验器
 
+            // 自定义的校验器
+            services.TryAddScoped<CookieSecurityStampValidator>();
+            // 配置
             services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, (options) =>
             {
                 options.Events = new CookieAuthenticationEvents()
                 {
                     OnValidatePrincipal = async (context) =>
                     {
-                        var validator = context.HttpContext.RequestServices.GetService<AppSecurityStampValidator>();
+                        var validator = context.HttpContext.RequestServices.GetService<CookieSecurityStampValidator>();
                         await validator.ValidateAsync(context);
                     }
                 };
