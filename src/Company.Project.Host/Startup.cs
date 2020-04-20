@@ -23,13 +23,6 @@ namespace Company.Project
         {
             // Riven
             services.AddRivenAspNetCoreModule<CompanyProjectHostModule>(Configuration);
-
-            // Aop
-            services.ConfigureDynamicProxy((configuration) =>
-            {
-                configuration.AddRivenUnitOfWorkInterceptor();
-            });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

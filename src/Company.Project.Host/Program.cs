@@ -11,7 +11,6 @@ using WebHost = Microsoft.Extensions.Hosting.Host;
 
 using Serilog;
 using Serilog.Events;
-using AspectCore.Extensions.Hosting;
 
 namespace Company.Project
 {
@@ -51,9 +50,7 @@ namespace Company.Project
                             .ConfigureWebHostDefaults(webBuilder =>
                             {
                                 webBuilder.UseStartup<Startup>();
-                            })
-                             .UseServiceContext();
-            //.UseSerilog();
+                            });
         }
 
     }
