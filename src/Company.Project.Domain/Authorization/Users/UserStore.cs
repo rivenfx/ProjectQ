@@ -12,14 +12,14 @@ namespace Company.Project.Authorization.Users
     public class UserStore<TDbContext> : AppUserStore<User, Role, TDbContext, long, UserClaim, UserRole, UserLogin, UserToken, RoleClaim>
          where TDbContext : DbContext
     {
-        protected readonly IAppIdentityStoreSessionAccessor _identityStoreSessionAccessor;
+        protected readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public UserStore(IAppIdentityStoreSessionAccessor identityStoreSessionAccessor, IdentityErrorDescriber describer = null)
+        public UserStore(IUnitOfWorkManager unitOfWorkManager, IdentityErrorDescriber describer = null)
             : base()
         {
-            this._identityStoreSessionAccessor = identityStoreSessionAccessor;
+            this._unitOfWorkManager = unitOfWorkManager;
         }
 
-        public override TDbContext Context => this._identityStoreSessionAccessor.GetSession<TDbContext>();
+        public override TDbContext Context => this._unitOfWorkManager.Current.GetDbContext() as TDbContext;
     }
 }
