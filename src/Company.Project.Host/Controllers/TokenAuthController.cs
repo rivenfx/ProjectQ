@@ -39,12 +39,7 @@ namespace Company.Project.Controllers
             // 使mvc也登录
             if (loginResult.Result == LoginResultType.Success)
             {
-                var authenticationProperties = new AuthenticationProperties()
-                {
-                    IsPersistent = false,
-                };
-
-                await this._signInManager.SignInAsync(loginResult.User, authenticationProperties);
+                await this._signInManager.SignInAsync(loginResult.User, input.RememberClient);
                 return new AuthenticateResultDto()
                 {
                     AccessToken = CreateAccessToken(loginResult.Identity.Claims)
