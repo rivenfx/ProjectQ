@@ -15,6 +15,7 @@ using JetBrains.Annotations;
 using Riven;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Riven.Uow;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Company.Project.Authorization
 {
@@ -29,6 +30,7 @@ namespace Company.Project.Authorization
         {
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
             services.AddTransient<UserPasswordHasher>();
+            services.TryAddScoped<AppSecurityStampValidator>();
 
             var identityBuilder = services.AddIdentity<User, Role>((options) =>
             {
@@ -67,29 +69,24 @@ namespace Company.Project.Authorization
             var authenticationBuilder = services
                 .AddAuthentication();
 
-            //authenticationBuilder.AddCookieWithCustom(configuration);
+            #region 配置 Identity 默认自带的 cookie 校验器
+
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, (options) =>
+            {
+                options.Events = new CookieAuthenticationEvents()
+                {
+                    OnValidatePrincipal = async (context) =>
+                    {
+                        var validator = context.HttpContext.RequestServices.GetService<AppSecurityStampValidator>();
+                        await validator.ValidateAsync(context);
+                    }
+                };
+            });
+
+            #endregion
 
             authenticationBuilder.AddJwt(configuration);
 
-            return authenticationBuilder;
-        }
-
-        /// <summary>
-        /// 添加Cookie认证
-        /// </summary>
-        /// <param name="authenticationBuilder"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static AuthenticationBuilder AddCookieWithCustom(this AuthenticationBuilder authenticationBuilder, IConfiguration configuration)
-        {
-            authenticationBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                (options) =>
-                {
-                    //options.Cookie.HttpOnly = true;
-                    // options.SlidingExpiration = true;
-                    options.ExpireTimeSpan = new TimeSpan(0, 0, 30);
-                });
             return authenticationBuilder;
         }
 
