@@ -10,6 +10,11 @@ namespace Company.Project
     public static class AppConsts
     {
         /// <summary>
+        /// 默认语言
+        /// </summary>
+        public const string DefaultLanguage = "zh-Hans";
+
+        /// <summary>
         /// 应用名称键值
         /// </summary>
         public const string AppNameKey = "App:Name";

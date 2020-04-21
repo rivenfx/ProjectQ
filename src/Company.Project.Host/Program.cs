@@ -12,7 +12,6 @@ using WebHost = Microsoft.Extensions.Hosting.Host;
 using Serilog;
 using Serilog.Events;
 
-
 namespace Company.Project
 {
     public class Program
@@ -52,7 +51,6 @@ namespace Company.Project
                             {
                                 webBuilder.UseStartup<Startup>();
                             });
-                            //.UseSerilog();
         }
 
     }

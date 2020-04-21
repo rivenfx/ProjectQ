@@ -20,6 +20,6 @@ namespace Company.Project.Authorization.Roles
             this._unitOfWorkManager = unitOfWorkManager;
         }
 
-        public override TDbContext Context => _unitOfWorkManager.Current.GetDbContext() as TDbContext;
+        public override TDbContext Context => this._unitOfWorkManager.Current.GetDbContext() as TDbContext;
     }
 }

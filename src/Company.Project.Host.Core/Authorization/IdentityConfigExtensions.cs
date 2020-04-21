@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Riven;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Riven.Uow;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Company.Project.Authentication.Cookies;
 
 namespace Company.Project.Authorization
 {
@@ -63,11 +67,26 @@ namespace Company.Project.Authorization
         public static AuthenticationBuilder IdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             var authenticationBuilder = services
-                .AddAuthentication((options) =>
+                .AddAuthentication();
+
+            #region 配置 Identity 默认自带的 cookie 校验器
+
+            // 自定义的校验器
+            services.TryAddScoped<CookieSecurityStampValidator>();
+            // 配置
+            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, (options) =>
+            {
+                options.Events = new CookieAuthenticationEvents()
                 {
-                    //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                });//.AddCookie();
+                    OnValidatePrincipal = async (context) =>
+                    {
+                        var validator = context.HttpContext.RequestServices.GetService<CookieSecurityStampValidator>();
+                        await validator.ValidateAsync(context);
+                    }
+                };
+            });
+
+            #endregion
 
             authenticationBuilder.AddJwt(configuration);
 
@@ -196,59 +215,5 @@ namespace Company.Project.Authorization
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Jwt Authentication Middleware
-    /// </summary>
-    public class JwtAuthenticationMiddleware
-    {
-        private readonly RequestDelegate _next;
-        private readonly string _schema;
-
-        public JwtAuthenticationMiddleware(RequestDelegate next, string schema)
-        {
-            this._next = next;
-            this._schema = schema;
-        }
-
-        public async Task Invoke(HttpContext context)
-        {
-            if (context.User.Identity == null || context.User.Identity?.IsAuthenticated == true)
-            {
-                var result = await context.AuthenticateAsync(this._schema);
-                if (result.Succeeded && result.Principal != null)
-                {
-                    context.User = result.Principal;
-                }
-            }
-
-            await this._next(context);
-        }
-    }
-
-    public static class RivenIdentityAppBuilderExtensions
-    {
-        /// <summary>
-        /// Use default authentication
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseDefaultAuthentication(this IApplicationBuilder app)
-        {
-            return app.UseAuthentication();
-        }
-
-        /// <summary>
-        /// Use jwt authentication
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseJwtAuthentication(this IApplicationBuilder app, [NotNull]string schema = "Bearer")
-        {
-            Check.NotNullOrWhiteSpace(schema, nameof(schema));
-
-            return app.UseMiddleware<JwtAuthenticationMiddleware>(schema);
-        }
     }
 }

@@ -14,12 +14,12 @@ namespace Company.Project.Authorization.Users
     {
         protected readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public UserStore(IUnitOfWorkManager unitOfWorkManager,IdentityErrorDescriber describer=null)
-            :base()
+        public UserStore(IUnitOfWorkManager unitOfWorkManager, IdentityErrorDescriber describer = null)
+            : base()
         {
             this._unitOfWorkManager = unitOfWorkManager;
         }
 
-        public override TDbContext Context => _unitOfWorkManager.Current.GetDbContext() as TDbContext;
+        public override TDbContext Context => this._unitOfWorkManager.Current.GetDbContext() as TDbContext;
     }
 }

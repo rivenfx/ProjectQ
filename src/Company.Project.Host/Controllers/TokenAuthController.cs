@@ -7,6 +7,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Company.Project.Authenticate.Dtos;
 using Company.Project.Authorization.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Riven.Identity.Users;
@@ -37,7 +39,7 @@ namespace Company.Project.Controllers
             // 使mvc也登录
             if (loginResult.Result == LoginResultType.Success)
             {
-                await this._signInManager.SignInAsync(loginResult.User, false);
+                await this._signInManager.SignInAsync(loginResult.User, input.RememberClient);
                 return new AuthenticateResultDto()
                 {
                     AccessToken = CreateAccessToken(loginResult.Identity.Claims)
