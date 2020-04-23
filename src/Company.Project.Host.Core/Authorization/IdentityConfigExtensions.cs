@@ -34,22 +34,19 @@ namespace Company.Project.Authorization
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
             services.AddTransient<UserPasswordHasher>();
 
-            var identityBuilder = services.AddRivenIdentity<User, Role, UserManager, RoleManager, SignInManager>((options) =>
-            {
-                options.ConfigurationUser()
-                    .ConfigurationPassword()
-                    .ConfigurationSignIn()
-                    .ConfigurationLockout()
-                    .ConfigurationToken()
-                    .ConfigurationClaimsIdentity();
-            });
+            // 使用 Riven 的扩展函数添加 Identity
+            var identityBuilder = services.AddRivenIdentity<User, Role, UserManager, RoleManager, UserStore<AppDbContext>, RoleStore<AppDbContext>, SignInManager>((options) =>
+             {
+                 options.ConfigurationUser()
+                     .ConfigurationPassword()
+                     .ConfigurationSignIn()
+                     .ConfigurationLockout()
+                     .ConfigurationToken()
+                     .ConfigurationClaimsIdentity();
+             });
 
             identityBuilder
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
-
-                .AddUserStore<UserStore<AppDbContext>>()
-                .AddRoleStore<RoleStore<AppDbContext>>()
-
                 .AddDefaultTokenProviders();
 
             return identityBuilder;
