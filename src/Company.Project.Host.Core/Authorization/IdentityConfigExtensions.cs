@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Riven.Uow;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Company.Project.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Riven.Identity.Authorization;
 
 namespace Company.Project.Authorization
 {
@@ -32,22 +34,17 @@ namespace Company.Project.Authorization
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
             services.AddTransient<UserPasswordHasher>();
 
-            var identityBuilder = services.AddIdentity<User, Role>((options) =>
+            var identityBuilder = services.AddRivenIdentity<User, Role, UserManager, RoleManager, SignInManager>((options) =>
             {
                 options.ConfigurationUser()
-                       .ConfigurationPassword()
-                       .ConfigurationSignIn()
-                       .ConfigurationLockout()
-                       .ConfigurationToken()
-                       .ConfigurationClaimsIdentity();
-
+                    .ConfigurationPassword()
+                    .ConfigurationSignIn()
+                    .ConfigurationLockout()
+                    .ConfigurationToken()
+                    .ConfigurationClaimsIdentity();
             });
 
             identityBuilder
-                .AddUserManager<UserManager>()
-                .AddRoleManager<RoleManager>()
-                .AddSignInManager<SignInManager>()
-
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
 
                 .AddUserStore<UserStore<AppDbContext>>()
@@ -66,6 +63,9 @@ namespace Company.Project.Authorization
         /// <returns></returns>
         public static AuthenticationBuilder IdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<IAuthorizationPolicyProvider, RoleClaimAuthorizationPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, RoleClaimAuthorizationRequirement>();
+
             var authenticationBuilder = services
                 .AddAuthentication();
 
@@ -123,6 +123,12 @@ namespace Company.Project.Authorization
             app.UseJwtAuthentication();
 
             app.UseAuthorization();
+
+            //app.UseCookiePolicy(new CookiePolicyOptions()
+            //{
+            //    CheckConsentNeeded = context => true,
+            //    MinimumSameSitePolicy = SameSiteMode.None,
+            //});
 
             return app;
         }

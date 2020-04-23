@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Riven.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Riven.Identity.Authorization;
 
 namespace Company.Project.SampleEntitys
 {
@@ -47,12 +48,12 @@ namespace Company.Project.SampleEntitys
             #endregion
 
 
-            var resultWithTenantB= await _repository.GetAll().ToListAsync();
+            var resultWithTenantB = await _repository.GetAll().ToListAsync();
 
             return resultWithTenantB;
         }
 
-        [Authorize]
+        [RoleClaim("SampleEntity.Create")]
         public async Task<bool> Create(string name)
         {
             await _repository.InsertAsync(new SampleEntity()

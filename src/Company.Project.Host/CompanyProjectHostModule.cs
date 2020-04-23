@@ -22,7 +22,7 @@ namespace Company.Project
         )]
     public class CompanyProjectHostModule : AppModule
     {
-        static string CorsPolicyName = "RivenDefaultCorsPolicy";
+        // static string CorsPolicyName = "RivenDefaultCorsPolicy";
 
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
@@ -56,27 +56,27 @@ namespace Company.Project
             #region AspNetCore - Cors
 
             // aspnet core 跨域
-            context.Services.AddCors(options =>
-            {
-                options.AddPolicy(CorsPolicyName, builder =>
-                {
-                    // 配置跨域
-                    var corsOrigins = configuration["App:CorsOrigins"]
-                                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(o => o.TrimEnd('/'))
-                                        .Where(o => o != "*")
-                                        .ToArray();
-
-                    builder
-                        .WithOrigins(
-                            corsOrigins
-                        )
-                        .SetIsOriginAllowedToAllowWildcardSubdomains()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            // context.Services.AddCors(options =>
+            // {
+            //     options.AddPolicy(CorsPolicyName, builder =>
+            //     {
+            //         // 配置跨域
+            //         var corsOrigins = configuration["App:CorsOrigins"]
+            //                             .Split(",", StringSplitOptions.RemoveEmptyEntries)
+            //                             .Select(o => o.TrimEnd('/'))
+            //                             .Where(o => o != "*")
+            //                             .ToArray();
+            //
+            //         builder
+            //             .WithOrigins(
+            //                 corsOrigins
+            //             )
+            //             .SetIsOriginAllowedToAllowWildcardSubdomains()
+            //             .AllowAnyHeader()
+            //             .AllowAnyMethod()
+            //             .AllowCredentials();
+            //     });
+            // });
 
             #endregion
 
@@ -140,7 +140,7 @@ namespace Company.Project
 
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors(CorsPolicyName);
+            // app.UseCors(CorsPolicyName);
 
             #endregion
 
