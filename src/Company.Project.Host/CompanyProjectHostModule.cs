@@ -112,24 +112,17 @@ namespace Company.Project
 
 
 
-            // Riven - AspNetCore 基础服务相关
+            // Riven - AspNetCore 基础服务与配置
             context.Services.AddRivenAspNetCore((options) =>
             {
-                // 启用 Uow
-                options.UnitOfWorkEnable = true;
-                // 启用 Authorization
-                options.AuthorizationEnable = true;
-                // 启用 响应包装
-                options.ResultWrapEnable = true;
-                // 启用 异常处理
-                options.ExceptionHandlingEnable = true;
+
             });
+
+            // Riven - AspNetCore 过滤器
+            context.Services.AddRivenAspNetCoreFilters();
 
             // Riven - AspNetCore Uow实现
             context.Services.AddRivenAspNetCoreUow();
-
-            // Riven - AspNetCore Claims Authorization实现
-            context.Services.AddRivenAspNetCoreClaimsAuthorization();
 
             #endregion
         }

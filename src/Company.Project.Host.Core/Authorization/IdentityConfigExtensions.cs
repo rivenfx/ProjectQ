@@ -112,13 +112,6 @@ namespace Company.Project.Authorization
 
             app.UseAuthorization();
 
-            app.UseCookiePolicy(new CookiePolicyOptions()
-            {
-                CheckConsentNeeded = context => true,
-                MinimumSameSitePolicy = SameSiteMode.None,
-                HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always
-            });
-
             return app;
         }
 
