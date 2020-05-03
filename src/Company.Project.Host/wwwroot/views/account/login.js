@@ -18,9 +18,9 @@ $(function () {
             contentType: "application/json; charset=utf-8",
             url: "/api/TokenAuth/Authenticate",//url
             data: $loginForm.serializeObjectStr(),
-            success: function (result) {
-                debugger
-                console.log(result);//打印服务端返回的数据(调试用)
+            success: function (response) {
+                console.log(response);//打印服务端返回的数据(调试用)
+                var result = response.result;
 
                 if (result.accessToken) {
                     alert("登录成功,即将跳转到页面");
