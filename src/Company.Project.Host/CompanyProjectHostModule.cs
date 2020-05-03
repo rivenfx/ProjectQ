@@ -110,15 +110,22 @@ namespace Company.Project
                 options.SwaggerDoc(apiInfo.Version, apiInfo);
             });
 
-            // Riven - AspNetCore Uow实现
-            context.Services.AddRivenAspNetCoreUow();
+
 
             // Riven - AspNetCore 基础服务相关
             context.Services.AddRivenAspNetCore((options) =>
             {
-                // 启用Uow
+                // 启用 Uow
                 options.UnitOfWorkFilterEnable = true;
+                // 启用 Authorization
+                options.AuthorizationFilterEnable = true;
             });
+
+            // Riven - AspNetCore Uow实现
+            context.Services.AddRivenAspNetCoreUow();
+
+            // Riven - AspNetCore Claims Authorization实现
+            context.Services.AddRivenAspNetCoreClaimsAuthorization();
 
             #endregion
         }
