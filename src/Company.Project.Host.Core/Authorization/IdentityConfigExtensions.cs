@@ -48,7 +48,7 @@ namespace Company.Project.Authorization
             // 添加 Riven.Identity ClaimAccessor
             services.AddRivenIdentityClaimAccesssor<RoleManager, UserManager>();
 
-            // 添加 Claims 认证
+            // 添加 Claims 授权方式
             services.AddRivenAspNetCoreClaimsAuthorization();
 
             return identityBuilder;
