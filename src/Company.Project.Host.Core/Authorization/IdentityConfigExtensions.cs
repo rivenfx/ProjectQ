@@ -10,15 +10,12 @@ using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using System;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Riven;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Riven.Uow;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Company.Project.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Riven.Identity.Authorization;
+
+using Riven;
+using Riven.Extensions;
+
 
 namespace Company.Project.Authorization
 {
@@ -35,8 +32,9 @@ namespace Company.Project.Authorization
             services.AddTransient<UserPasswordHasher>();
 
             // 添加 Identity
-            var identityBuilder = services.AddIdentity<User, Role>((options)=> { 
-            
+            var identityBuilder = services.AddIdentity<User, Role>((options) =>
+            {
+
             });
             identityBuilder
                 .AddUserManager<UserManager>()
@@ -49,6 +47,9 @@ namespace Company.Project.Authorization
 
             // 添加 Riven.Identity ClaimAccessor
             services.AddRivenIdentityClaimAccesssor<RoleManager, UserManager>();
+
+            // 添加 Claims 认证
+            services.AddRivenAspNetCoreClaimsAuthorization();
 
             return identityBuilder;
         }
@@ -66,19 +67,11 @@ namespace Company.Project.Authorization
 
             #region 配置 Identity 默认自带的 cookie 校验器
 
-            // 自定义的校验器
-            services.TryAddScoped<CookieSecurityStampValidator>();
             // 修改 asp.net core identity 默认的 cookies 认证配置
             services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, (options) =>
             {
-                options.Events = new CookieAuthenticationEvents()
-                {
-                    OnValidatePrincipal = async (context) =>
-                    {
-                        var validator = context.HttpContext.RequestServices.GetService<CookieSecurityStampValidator>();
-                        await validator.ValidateAsync(context);
-                    }
-                };
+                options.ExpireTimeSpan = new TimeSpan(0, 30, 0);
+                options.SlidingExpiration = true;
             });
 
             #endregion
@@ -119,11 +112,12 @@ namespace Company.Project.Authorization
 
             app.UseAuthorization();
 
-            //app.UseCookiePolicy(new CookiePolicyOptions()
-            //{
-            //    CheckConsentNeeded = context => true,
-            //    MinimumSameSitePolicy = SameSiteMode.None,
-            //});
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                CheckConsentNeeded = context => true,
+                MinimumSameSitePolicy = SameSiteMode.None,
+                HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always
+            });
 
             return app;
         }

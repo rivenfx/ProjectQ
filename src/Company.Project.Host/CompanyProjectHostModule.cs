@@ -116,9 +116,13 @@ namespace Company.Project
             context.Services.AddRivenAspNetCore((options) =>
             {
                 // 启用 Uow
-                options.UnitOfWorkFilterEnable = true;
+                options.UnitOfWorkEnable = true;
                 // 启用 Authorization
-                options.AuthorizationFilterEnable = true;
+                options.AuthorizationEnable = true;
+                // 启用 响应包装
+                options.ResultWrapEnable = true;
+                // 启用 异常处理
+                options.ExceptionHandlingEnable = true;
             });
 
             // Riven - AspNetCore Uow实现
@@ -142,6 +146,8 @@ namespace Company.Project
                 app.UseDeveloperExceptionPage();
             }
 
+
+
             #region AspNetCore - UseStaticFiles / UseRouting /UseCors
 
 
@@ -152,6 +158,22 @@ namespace Company.Project
             #endregion
 
 
+
+            #region Riven - AspNetCore  ExceptionHandling / Uow / RequestLocalization
+
+            // ExceptionHandling
+            app.UseRivenAspNetCoreExceptionHandling();
+
+            // Uow
+            app.UseRivenAspnetCoreUow();
+
+            // RequestLocalization
+            app.UseRivenRequestLocalization();
+
+            #endregion
+
+
+
             #region App - AspNetCore Auth
 
             // 认证配置
@@ -159,12 +181,6 @@ namespace Company.Project
 
             #endregion
 
-
-            #region Riven - AspNetCore 请求本地化
-
-            app.UseRivenRequestLocalization();
-
-            #endregion
 
 
             #region Riven -启用并配置 Swagger 和 SwaggerUI
@@ -181,6 +197,7 @@ namespace Company.Project
             });
 
             #endregion
+
 
 
             #region AspNetCore - Endpoints

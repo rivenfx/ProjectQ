@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Company.Project.Models;
 using Microsoft.AspNetCore.Authorization;
+using Riven.Identity.Authorization;
 
 namespace Company.Project.Controllers
 {
+    [ClaimsAuthorize]
     public class HomeController : Controller
     {
         public HomeController()
@@ -17,13 +19,11 @@ namespace Company.Project.Controllers
 
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize]
         public IActionResult Swagger()
         {
             return Redirect("/swagger");
