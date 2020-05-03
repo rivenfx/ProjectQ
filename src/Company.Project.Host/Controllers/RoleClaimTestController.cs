@@ -32,7 +32,7 @@ namespace Company.Project.Controllers
         }
 
         [HttpPost]
-        [RoleClaim("HelloWord")]
+        [ClaimsAuthorize("HelloWord")]
         public async Task<string> Authenticate(string input)
         {
             await Task.Yield();

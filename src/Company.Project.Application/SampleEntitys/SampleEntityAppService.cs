@@ -53,7 +53,7 @@ namespace Company.Project.SampleEntitys
             return resultWithTenantB;
         }
 
-        [RoleClaim("SampleEntity.Create")]
+        [ClaimsAuthorize("SampleEntity.Create")]
         public async Task<bool> Create(string name)
         {
             await _repository.InsertAsync(new SampleEntity()
