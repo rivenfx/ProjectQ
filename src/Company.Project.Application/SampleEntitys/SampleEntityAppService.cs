@@ -31,21 +31,21 @@ namespace Company.Project.SampleEntitys
         //[UnitOfWork(ConnectionStringName = "TenantB")]
         public async Task<List<SampleEntity>> GetAll()
         {
-            #region 切换数据库连接字符串/切换DbContext 用例
+            //#region 切换数据库连接字符串/切换DbContext 用例
 
-            // 切换数据库连接字符串
-            using (CurrentUnitOfWork.SetConnectionStringName("TenantA"))
-            {
-                var resultWithTenantA = await this._repository.GetAll().ToListAsync();
-            }
+            //// 切换数据库连接字符串
+            //using (CurrentUnitOfWork.SetConnectionStringName("TenantA"))
+            //{
+            //    var resultWithTenantA = await this._repository.GetAll().ToListAsync();
+            //}
 
-            // 切换 DbContext
-            using (CurrentUnitOfWork.SetDbContextProvider("TenantA"))
-            {
-                var resultWithTenantA = await this._repository.GetAll().ToListAsync();
-            }
+            //// 切换 DbContext
+            //using (CurrentUnitOfWork.SetDbContextProvider("TenantA"))
+            //{
+            //    var resultWithTenantA = await this._repository.GetAll().ToListAsync();
+            //}
 
-            #endregion
+            //#endregion
 
 
             var resultWithTenantB = await _repository.GetAll().ToListAsync();
