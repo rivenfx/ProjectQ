@@ -1,11 +1,14 @@
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Riven;
+using Riven.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +17,7 @@ namespace Company.Project.Authorization.Users
     /// <summary>
     /// 用户管理器
     /// </summary>
-    public class UserManager : UserManager<User>
+    public class UserManager : UserManager<User>, IUserRoleClaimAccessor
     {
         public IQueryable<User> Query => this.Users;
 
@@ -38,7 +41,7 @@ namespace Company.Project.Authorization.Users
                 services,
                 logger)
         {
-
+            
         }
 
         /// <summary>
@@ -80,7 +83,42 @@ namespace Company.Project.Authorization.Users
         public override Task<User> FindByEmailAsync(string email)
         {
             return FindByNameOrEmailOrPhoneNumberAsync(email);
-            //return base.FindByEmailAsync(email);
+        }
+
+        public async Task<IList<Claim>> GetClaimsByUserIdAsync([NotNull] string userId)
+        {
+            Check.NotNullOrWhiteSpace(userId, nameof(userId));
+
+            var user = await this.FindByIdAsync(userId);
+
+            return await this.GetClaimsAsync(user);
+        }
+
+        public async Task<IList<Claim>> GetClaimsByUserNameAsync([NotNull] string userName)
+        {
+            Check.NotNullOrWhiteSpace(userName, nameof(userName));
+
+            var user = await this.FindByNameAsync(userName);
+
+            return await this.GetClaimsAsync(user);
+        }
+
+        public async Task<IList<string>> GetRolesByUserIdAsync([NotNull] string userId)
+        {
+            Check.NotNullOrWhiteSpace(userId, nameof(userId));
+
+            var user = await this.FindByIdAsync(userId);
+
+            return await this.GetRolesAsync(user);
+        }
+
+        public async Task<IList<string>> GetRolesByUserNameAsync([NotNull] string userName)
+        {
+            Check.NotNullOrWhiteSpace(userName, nameof(userName));
+
+            var user = await this.FindByNameAsync(userName);
+
+            return await this.GetRolesAsync(user);
         }
     }
 }
