@@ -90,6 +90,13 @@ namespace Company.Project
             #endregion
 
 
+        }
+
+        public override void OnPostConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Configuration;
+
+
             #region Riven - AspNetCore 请求本地化
 
             context.Services.AddRivenRequestLocalization();
