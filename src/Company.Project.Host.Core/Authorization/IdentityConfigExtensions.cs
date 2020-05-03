@@ -34,20 +34,21 @@ namespace Company.Project.Authorization
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
             services.AddTransient<UserPasswordHasher>();
 
-            // 使用 Riven 的扩展函数添加 Identity
-            var identityBuilder = services.AddRivenIdentity<User, Role, UserManager, RoleManager, UserStore<AppDbContext>, RoleStore<AppDbContext>, SignInManager>((options) =>
-             {
-                 options.ConfigurationUser()
-                     .ConfigurationPassword()
-                     .ConfigurationSignIn()
-                     .ConfigurationLockout()
-                     .ConfigurationToken()
-                     .ConfigurationClaimsIdentity();
-             });
-
+            // 添加 Identity
+            var identityBuilder = services.AddIdentity<User, Role>((options)=> { 
+            
+            });
             identityBuilder
+                .AddUserManager<UserManager>()
+                .AddRoleManager<RoleManager>()
+                .AddUserStore<UserStore<AppDbContext>>()
+                .AddRoleStore<RoleStore<AppDbContext>>()
+                .AddSignInManager<SignInManager>()
                 .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
                 .AddDefaultTokenProviders();
+
+            // 添加 Riven.Identity ClaimAccessor
+            services.AddRivenIdentityClaimAccesssor<RoleManager, UserManager>();
 
             return identityBuilder;
         }
@@ -60,9 +61,6 @@ namespace Company.Project.Authorization
         /// <returns></returns>
         public static AuthenticationBuilder IdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IAuthorizationPolicyProvider, RoleClaimAuthorizationPolicyProvider>();
-            services.AddSingleton<IAuthorizationHandler, RoleClaimAuthorizationRequirement>();
-
             var authenticationBuilder = services
                 .AddAuthentication();
 
@@ -70,7 +68,7 @@ namespace Company.Project.Authorization
 
             // 自定义的校验器
             services.TryAddScoped<CookieSecurityStampValidator>();
-            // 配置
+            // 修改 asp.net core identity 默认的 cookies 认证配置
             services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, (options) =>
             {
                 options.Events = new CookieAuthenticationEvents()
