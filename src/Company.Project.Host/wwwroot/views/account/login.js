@@ -32,7 +32,13 @@ $(function () {
             },
             error: function (e) {
                 debugger
-                alert("异常！");
+                if (e.responseJSON && e.responseJSON.result) {
+                    var result = e.responseJSON.result;
+                    alert("登录失败,错误消息: " + result.message + "  详情: " + result.details);
+                } else {
+                    alert("登录异常!");
+                }
+
             }
         });
 
