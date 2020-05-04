@@ -11,6 +11,7 @@ using WebHost = Microsoft.Extensions.Hosting.Host;
 
 using Serilog;
 using Serilog.Events;
+using System.IO;
 
 namespace Company.Project
 {
@@ -26,7 +27,11 @@ namespace Company.Project
 #endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                .WriteTo.File("Logs/logs.txt")
+                // 配置日志输出到控制台
+                .WriteTo.Console()
+                // 配置日志输出到文件，文件输出到当前项目的 logs 目录下
+                // 日记的生成周期为每小时
+                .WriteTo.File(Path.Join("logs", "log.txt"), rollingInterval: RollingInterval.Hour)
                 .CreateLogger();
 
             try
@@ -50,7 +55,8 @@ namespace Company.Project
                             .ConfigureWebHostDefaults(webBuilder =>
                             {
                                 webBuilder.UseStartup<Startup>();
-                            });
+                            })
+                            .UseSerilog();
         }
 
     }
