@@ -33,23 +33,28 @@ namespace Company.Project.Controllers
         [HttpPost]
         public async Task<AuthenticateResultDto> Authenticate([FromBody]AuthenticateModelInput input)
         {
-            await Task.Yield();
             var loginResult = await _signInManager.LoginAsync(input.Account, input.Password);
 
-            // 使mvc也登录
-            if (loginResult.Result == LoginResultType.Success)
+
+            if (loginResult.Result != LoginResultType.Success)
             {
-                await this._signInManager.SignInAsync(loginResult.User, input.RememberClient);
-                return new AuthenticateResultDto()
-                {
-                    AccessToken = CreateAccessToken(loginResult.Identity.Claims)
-                };
+                throw new Exception("登录失败! 用户名或密码错误");
             }
 
-            return new AuthenticateResultDto()
+            var result = new AuthenticateResultDto();
+
+            // 使mvc也登录
+            if (input.UseCookie)
             {
-                AccessToken = null
-            };
+                await this._signInManager.SignInAsync(loginResult.User, input.RememberClient);
+
+            }
+            if (input.UseToken)
+            {
+                result.AccessToken = CreateAccessToken(loginResult.Identity.Claims);
+            }
+
+            return result;
         }
 
 
