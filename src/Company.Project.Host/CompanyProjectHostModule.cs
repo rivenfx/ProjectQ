@@ -38,6 +38,10 @@ namespace Company.Project
 
             // aspnet core mvc
             var mvcBuilder = context.Services.AddControllersWithViews();
+            mvcBuilder.AddNewtonsoftJson((options) =>
+            {
+
+            });
 #if DEBUG
             mvcBuilder.AddRazorRuntimeCompilation();
 #endif
@@ -122,7 +126,10 @@ namespace Company.Project
             // Riven - AspNetCore 基础服务与配置
             context.Services.AddRivenAspNetCore((options) =>
             {
-
+#if DEBUG
+                // 发送所有异常数据到客户端
+                options.SendAllExceptionToClient = true;
+#endif
             });
 
             // Riven - AspNetCore 过滤器
