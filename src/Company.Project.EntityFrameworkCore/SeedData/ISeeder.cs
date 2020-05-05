@@ -9,6 +9,6 @@ namespace Company.Project.SeedData
 {
     public interface ISeeder
     {
-        void Create();
+        Task Create();
     }
 }

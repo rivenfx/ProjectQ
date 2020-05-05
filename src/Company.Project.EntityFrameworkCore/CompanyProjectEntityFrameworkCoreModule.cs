@@ -14,6 +14,7 @@ using Riven.Modular;
 using Riven.Repositories;
 using Riven.Uow;
 using Company.Project.SeedData;
+using Riven.Threading;
 
 namespace Company.Project
 {
@@ -103,7 +104,12 @@ namespace Company.Project
 
             #endregion
 
-            context.ServiceProvider.GetService<ISeeder>().Create();
+            AsyncHelper.RunSync(() =>
+            {
+                return context.ServiceProvider.GetService<ISeeder>().Create();
+            });
+
+
         }
     }
 }
