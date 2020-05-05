@@ -40,5 +40,10 @@ namespace Company.Project
             /// </summary>
             public const string MigrationsHistoryTableName = "EFCoreMigrationsHistory";
         }
+
+        public static class Identity
+        {
+            public const string Issuer = "ProjectQ";
+        }
     }
 }

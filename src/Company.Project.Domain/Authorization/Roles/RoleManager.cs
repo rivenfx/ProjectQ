@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using Riven;
 using Riven.Authorization;
 using System;
@@ -34,13 +35,93 @@ namespace Company.Project.Authorization.Roles
 
         }
 
+        /// <summary>
+        /// 给角色添加 identity 的 claims
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="claims"></param>
+        /// <returns></returns>
+        public async Task AddIdentityClaimsAsync(Role role, params string[] claims)
+        {
+            if (role == null || claims == null || claims.Length == 0)
+            {
+                return;
+            }
+
+            foreach (var claim in CreateIdentityClaims(claims))
+            {
+                await this.AddClaimAsync(role, claim);
+            }
+        }
+
+        /// <summary>
+        /// 修改角色拥有的 claims
+        /// </summary>
+        /// <param name="role"></param>
+        /// <param name="claims"></param>
+        /// <returns></returns>
+        public async Task ChangeIdentityClaimsAsync(Role role, params string[] claims)
+        {
+            if (role == null)
+            {
+                return;
+            }
+
+
+            // 输入的cliams为空, 移除角色当前拥有的 identity claims
+            if (claims == null || claims.Length == 0)
+            {
+                await this.ClearIdentityClaimsAsync(role);
+
+                return;
+            }
+
+            // 移除角色当前拥有的 identity claims
+            await this.ClearIdentityClaimsAsync(role);
+
+            // 添加角色拥有的 identity claims
+            await this.AddIdentityClaimsAsync(role, claims);
+
+        }
+
+        /// <summary>
+        /// 移除角色拥有的所有 Identity Claims
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public async Task ClearIdentityClaimsAsync(Role role)
+        {
+            Check.NotNull(role, nameof(role));
+
+
+            // 角色当前拥有的 claims
+            var currentlyHasClaims = await this.GetIdentityClaimsAsync(role);
+
+            if (currentlyHasClaims == null || currentlyHasClaims.Count == 0)
+            {
+                return;
+            }
+
+
+            foreach (var claim in currentlyHasClaims)
+            {
+                await this.RemoveClaimAsync(role, claim);
+            }
+        }
+
+        public async Task<IList<Claim>> GetIdentityClaimsAsync(Role role)
+        {
+            var claims = await this.GetClaimsAsync(role);
+            return claims?.Where(o => o.Issuer == AppConsts.Identity.Issuer)?.ToList();
+        }
+
         public async Task<IList<Claim>> GetClaimsByRoleIdAsync([NotNull] string roleId)
         {
             Check.NotNullOrWhiteSpace(roleId, nameof(roleId));
 
             var role = await this.FindByIdAsync(roleId);
 
-            return await this.GetClaimsAsync(role);
+            return await this.GetIdentityClaimsAsync(role);
 
         }
 
@@ -50,7 +131,7 @@ namespace Company.Project.Authorization.Roles
 
             var role = await this.FindByNameAsync(roleName);
 
-            return await this.GetClaimsAsync(role);
+            return await this.GetIdentityClaimsAsync(role);
         }
 
         public async Task<IList<Claim>> GetClaimsByRoleNamesAsync([NotNull] string[] roleNames)
@@ -73,6 +154,19 @@ namespace Company.Project.Authorization.Roles
             }
 
             return result;
+        }
+
+        public Claim CreateIdentityClaim(string cliam)
+        {
+            return new Claim(cliam, cliam, "string", AppConsts.Identity.Issuer);
+        }
+
+        public IEnumerable<Claim> CreateIdentityClaims(string[] claims)
+        {
+            foreach (var claim in claims)
+            {
+                yield return new Claim(claim, claim, "string", AppConsts.Identity.Issuer);
+            }
         }
     }
 }
