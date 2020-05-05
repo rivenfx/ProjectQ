@@ -34,7 +34,12 @@ namespace Company.Project.Authorization
             // 添加 Identity
             var identityBuilder = services.AddIdentity<User, Role>((options) =>
             {
-
+                options.ConfigurationClaimsIdentity();
+                options.ConfigurationLockout();
+                options.ConfigurationPassword();
+                options.ConfigurationSignIn();
+                options.ConfigurationToken();
+                options.ConfigurationUser();
             });
             identityBuilder
                 .AddUserManager<UserManager>()
