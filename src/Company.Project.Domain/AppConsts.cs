@@ -40,5 +40,25 @@ namespace Company.Project
             /// </summary>
             public const string MigrationsHistoryTableName = "EFCoreMigrationsHistory";
         }
+
+        public static class Authorization
+        {
+            /// <summary>
+            /// 系统管理员用户账号
+            /// </summary>
+            public const string SystemUserName = "admin";
+            /// <summary>
+            /// 系统管理员用户密码
+            /// </summary>
+            public const string SystemUserPassword = "123qwe";
+            /// <summary>
+            /// 系统管理员角色
+            /// </summary>
+            public const string SystemRoleName = "admin";
+            /// <summary>
+            /// 系统管理员显示名称
+            /// </summary>
+            public const string SystemRoleDisplayName = "Administrator";
+        }
     }
 }

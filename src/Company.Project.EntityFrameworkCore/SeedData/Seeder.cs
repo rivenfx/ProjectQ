@@ -49,17 +49,22 @@ namespace Company.Project.SeedData
         }
 
 
+        /// <summary>
+        /// 创建管理员用户和角色
+        /// </summary>
+        /// <param name="scopeServiceProvider"></param>
+        /// <returns></returns>
         protected async Task CreateAdminUserAndRole(IServiceProvider scopeServiceProvider)
         {
             // 管理员角色
             var roleManager = scopeServiceProvider.GetService<RoleManager>();
-            var adminRole = await roleManager.FindByNameAsync("admin");
+            var adminRole = await roleManager.FindByNameAsync(AppConsts.Authorization.SystemRoleName);
             if (adminRole == null)
             {
                 adminRole = await roleManager.CreateAsync(
-                        "admin",
-                        "Administrator",
-                        "应用程序系统管理员",
+                        AppConsts.Authorization.SystemRoleName,
+                        AppConsts.Authorization.SystemRoleDisplayName,
+                        AppConsts.Authorization.SystemRoleDisplayName,
 
                         AppClaimsConsts.User.Create,
                         AppClaimsConsts.User.Edit,
@@ -73,16 +78,16 @@ namespace Company.Project.SeedData
 
             var userManager = scopeServiceProvider.GetService<UserManager>();
             // 管理员用户
-            var adminUser = await userManager.FindByNameOrEmailOrPhoneNumberAsync("admin");
+            var adminUser = await userManager.FindByNameOrEmailOrPhoneNumberAsync(AppConsts.Authorization.SystemUserName);
             if (adminUser == null)
             {
                 adminUser = await userManager.CreateAsync(
-                        "admin",
-                        "123qwe",
-                        "管理员",
-                        "13028166007",
+                        AppConsts.Authorization.SystemUserName,
+                        AppConsts.Authorization.SystemUserPassword,
+                        AppConsts.Authorization.SystemUserName,
+                        "13000000007",
                         true,
-                        "yi.hang@live.com",
+                        "msmadaoe@msn.com",
                         true,
                         false,
                         true

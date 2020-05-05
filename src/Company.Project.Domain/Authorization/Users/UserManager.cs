@@ -259,6 +259,11 @@ namespace Company.Project.Authorization.Users
 
             foreach (var user in users)
             {
+                if (user.IsSystem)
+                {
+                    throw new UserFriendlyException("不能删除系统用户!");
+                }
+
                 var identityResult = await this.DeleteAsync(user);
                 if (!identityResult.Succeeded)
                 {
