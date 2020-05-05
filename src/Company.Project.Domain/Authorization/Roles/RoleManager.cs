@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Riven;
 using Riven.Authorization;
+using Riven.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,80 @@ namespace Company.Project.Authorization.Roles
         {
 
         }
+
+        /// <summary>
+        /// 创建角色
+        /// </summary>
+        /// <param name="name">角色名称(唯一编码)</param>
+        /// <param name="displayName">显示名称</param>
+        /// <param name="description">描述</param>
+        /// <param name="claims">角色拥有的claim集合</param>
+        /// <returns></returns>
+        public async Task<Role> CreateAsync([NotNull]string name, [NotNull]string displayName, string description, List<string> claims)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+            Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
+
+            var role = new Role()
+            {
+                Name = name,
+                DispayName = displayName,
+                Description = description ?? string.Empty
+            };
+            var result = await this.CreateAsync(role);
+            if (!result.Succeeded)
+            {
+                var detiles = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    detiles.AppendLine($"{error.Code}: {error.Description}");
+                }
+                throw new UserFriendlyException("创建角色时发生错误", detiles.ToString());
+            }
+
+            await this.AddIdentityClaimsAsync(role, claims.ToArray());
+
+            return role;
+        }
+
+        /// <summary>
+        /// 更新角色
+        /// </summary>
+        /// <param name="id">角色id</param>
+        /// <param name="displayName">显示名称</param>
+        /// <param name="description">描述</param>
+        /// <param name="claims">角色拥有的claim集合</param>
+        /// <returns></returns>
+        public async Task<Role> UpdateAsync(long? id, [NotNull]string displayName, string description, List<string> claims)
+        {
+            Check.NotNull(id, nameof(id));
+            Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
+
+            var role = await this.FindByIdAsync(id.Value.ToString());
+            if (role == null)
+            {
+                throw new UserFriendlyException($"未找到角色: {displayName}");
+            }
+
+            role.DispayName = displayName;
+            role.Description = description ?? string.Empty;
+
+            var result = await this.UpdateAsync(role);
+            if (!result.Succeeded)
+            {
+                var detiles = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    detiles.AppendLine($"{error.Code}: {error.Description}");
+                }
+                throw new UserFriendlyException("创建角色时发生错误", detiles.ToString());
+            }
+
+            await this.AddIdentityClaimsAsync(role, claims.ToArray());
+
+            return role;
+        }
+
 
         /// <summary>
         /// 给角色添加 identity 的 claims
@@ -67,21 +142,16 @@ namespace Company.Project.Authorization.Roles
                 return;
             }
 
-
-            // 输入的cliams为空, 移除角色当前拥有的 identity claims
-            if (claims == null || claims.Length == 0)
-            {
-                await this.ClearIdentityClaimsAsync(role);
-
-                return;
-            }
-
             // 移除角色当前拥有的 identity claims
             await this.ClearIdentityClaimsAsync(role);
 
-            // 添加角色拥有的 identity claims
-            await this.AddIdentityClaimsAsync(role, claims);
 
+            // 输入的cliams为空, 移除角色当前拥有的 identity claims
+            if (claims != null && claims.Length > 0)
+            {
+                // 添加角色拥有的 identity claims
+                await this.AddIdentityClaimsAsync(role, claims);
+            }
         }
 
         /// <summary>
@@ -111,8 +181,7 @@ namespace Company.Project.Authorization.Roles
 
         public async Task<IList<Claim>> GetIdentityClaimsAsync(Role role)
         {
-            var claims = await this.GetClaimsAsync(role);
-            return claims?.Where(o => o.Issuer == AppConsts.Identity.Issuer)?.ToList();
+            return await this.GetClaimsAsync(role);
         }
 
         public async Task<IList<Claim>> GetClaimsByRoleIdAsync([NotNull] string roleId)
@@ -158,14 +227,14 @@ namespace Company.Project.Authorization.Roles
 
         public Claim CreateIdentityClaim(string cliam)
         {
-            return new Claim(cliam, cliam, "string", AppConsts.Identity.Issuer);
+            return new Claim(cliam, cliam);
         }
 
         public IEnumerable<Claim> CreateIdentityClaims(string[] claims)
         {
             foreach (var claim in claims)
             {
-                yield return new Claim(claim, claim, "string", AppConsts.Identity.Issuer);
+                yield return new Claim(claim, claim);
             }
         }
     }

@@ -22,12 +22,14 @@ namespace Company.Project.Authorization
 
         public override Task<ClaimsPrincipal> CreateAsync(User user)
         {
-            return base.CreateAsync(user);
+            var claimsPrincipal = base.CreateAsync(user);
+            return claimsPrincipal;
         }
 
         protected override Task<ClaimsIdentity> GenerateClaimsAsync(User user)
         {
-            return base.GenerateClaimsAsync(user);
+            var claimsPrincipal = base.GenerateClaimsAsync(user);
+            return claimsPrincipal;
         }
     }
 }

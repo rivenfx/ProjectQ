@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Riven;
 using Riven.Authorization;
+using Riven.Exceptions;
+using Riven.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +43,112 @@ namespace Company.Project.Authorization.Users
                 services,
                 logger)
         {
-            
+
         }
+
+        /// <summary>
+        /// 创建用户
+        /// </summary>
+        /// <param name="userName">用户账号</param>
+        /// <param name="password">密码</param>
+        /// <param name="nickname">昵称</param>
+        /// <param name="phoneNumber">手机号</param>
+        /// <param name="phoneNumberConfirmed">手机号已确认</param>
+        /// <param name="email">邮箱</param>
+        /// <param name="emailConfirmed">邮箱已确认</param>
+        /// <param name="lockoutEnabled">是否启用锁定</param>
+        /// <param name="isActive">是否激活</param>
+        /// <param name="twoFactorEnabled">是否启用双重验证,默认为false</param>
+        /// <returns></returns>
+        public virtual async Task<User> CreateAsync([NotNull]string userName, [NotNull]string password, [NotNull]string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool twoFactorEnabled = false)
+        {
+            Check.NotNullOrWhiteSpace(userName, nameof(userName));
+            Check.NotNullOrWhiteSpace(password, nameof(password));
+
+            var user = new User()
+            {
+                UserName = userName,
+                Nickname = nickname,
+                PhoneNumber = phoneNumber,
+                PhoneNumberConfirmed = phoneNumberConfirmed,
+                Email = email,
+                EmailConfirmed = emailConfirmed,
+                LockoutEnabled = lockoutEnabled,
+                IsActive = isActive,
+                TwoFactorEnabled = twoFactorEnabled,
+                Code = Guid.NewGuid().ToString()
+            };
+
+            var result = await this.CreateAsync(user, password);
+            if (!result.Succeeded)
+            {
+                var detiles = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    detiles.AppendLine($"{error.Code}: {error.Description}");
+                }
+                throw new UserFriendlyException("创建用户时发生错误", detiles.ToString());
+            }
+
+            return user;
+        }
+
+        /// <summary>
+        /// 更新用户
+        /// </summary>
+        /// <param name="id">用户id</param>
+        /// <param name="password">密码</param>
+        /// <param name="nickname">昵称</param>
+        /// <param name="phoneNumber">手机号</param>
+        /// <param name="phoneNumberConfirmed">手机号已确认</param>
+        /// <param name="email">邮箱</param>
+        /// <param name="emailConfirmed">邮箱已确认</param>
+        /// <param name="lockoutEnabled">是否启用锁定</param>
+        /// <param name="isActive">是否激活</param>
+        /// <param name="twoFactorEnabled">是否启用双重验证,默认为false</param>
+        /// <returns></returns>
+        public virtual async Task<User> UpdateAsync(long? id, string password, [NotNull]string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool twoFactorEnabled = false)
+        {
+            Check.NotNull(id, nameof(id));
+            Check.NotNull(nickname, nameof(nickname));
+
+            var user = await this.FindByIdAsync(id.Value.ToString());
+            if (user == null)
+            {
+                throw new UserFriendlyException($"未找到用户: {nickname}");
+            }
+
+
+
+            user.Nickname = nickname;
+            user.PhoneNumber = phoneNumber;
+            user.PhoneNumberConfirmed = phoneNumberConfirmed;
+            user.Email = email;
+            user.EmailConfirmed = emailConfirmed;
+            user.LockoutEnabled = lockoutEnabled;
+            user.IsActive = isActive;
+            user.TwoFactorEnabled = twoFactorEnabled;
+
+
+            if (!password.IsNullOrWhiteSpace())
+            {
+                user.PasswordHash = this.PasswordHasher.HashPassword(user, password);
+            }
+
+            var result = await this.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                var detiles = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    detiles.AppendLine($"{error.Code}: {error.Description}");
+                }
+                throw new UserFriendlyException("修改用户时发生错误", detiles.ToString());
+            }
+
+            return user;
+        }
+
 
         /// <summary>
         /// 根据用户名/邮箱/手机号码查找用户
