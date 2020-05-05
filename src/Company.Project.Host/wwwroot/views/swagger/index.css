@@ -1,0 +1,68 @@
+﻿.swagger-ui .opblock-tag {
+    padding: 0px !important;
+}
+
+.swagger-ui .opblock {
+    margin: 0 0 2px !important;
+}
+
+    .swagger-ui .opblock.opblock-post .opblock-summary {
+        border-color: transparent !important;
+    }
+
+    .swagger-ui .opblock .opblock-summary {
+        padding: 0px !important;
+    }
+
+    .swagger-ui .opblock .opblock-summary-method {
+        min-width: 70px;
+        border-radius: unset !important;
+    }
+
+    .swagger-ui .opblock .opblock-section-header {
+        padding: 4px 20px !important;
+        min-height: 0px !important;
+    }
+
+.swagger-ui .btn {
+    padding: 4px 23px !important;
+}
+
+
+.swagger-ui .execute-wrapper {
+    padding: 0px 20px 5px 20px !important;
+}
+
+.swagger-ui .opblock-description-wrapper {
+    margin: 0px !important;
+    padding: 0px 20px !important;
+}
+
+    .swagger-ui .opblock-description-wrapper > p {
+        padding: 10px 0px !important;
+    }
+
+
+
+.swagger-ui .responses-inner {
+    padding: 5px 20px !important;
+}
+
+.renderedMarkdown > p {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+.swagger-ui section.models .model-container:first-of-type {
+    margin: 0 20px 5px !important;
+    padding: 0px 20px !important;
+}
+
+.swagger-ui section.models .model-container {
+    margin: 0 20px 5px !important;
+    padding: 0px 20px !important;
+}
+
+.swagger-ui .model-box{
+    padding:5px !important;
+}

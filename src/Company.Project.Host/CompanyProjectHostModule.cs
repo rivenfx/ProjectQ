@@ -14,6 +14,8 @@ using Riven.AspNetCore.Accessors;
 using Riven.Modular;
 
 using Company.Project.Authorization;
+using Riven.Extensions;
+using System.IO;
 
 namespace Company.Project
 {
@@ -111,15 +113,27 @@ namespace Company.Project
             #region Riven - AspNetCore 服务注册和配置
 
             // Riven - Swagger 和 动态WebApi
-            context.Services.AddRivenAspNetCoreSwashbuckle((options) =>
-            {
-                var apiInfo = new OpenApiInfo()
+            context.Services.AddRivenAspNetCoreSwashbuckle(
+                (options) =>
                 {
-                    Title = configuration[AppConsts.AppNameKey],
-                    Version = configuration[AppConsts.AppVersionKey]
-                };
-                options.SwaggerDoc(apiInfo.Version, apiInfo);
-            });
+                    var apiInfo = new OpenApiInfo()
+                    {
+                        Title = configuration[AppConsts.AppNameKey],
+                        Version = configuration[AppConsts.AppVersionKey]
+                    };
+                    options.SwaggerDoc(apiInfo.Version, apiInfo);
+                },
+                (options) =>
+                {
+                    // 不删除结尾
+                    options.RemoveActionPostfixes.Clear();
+                    // 处理ActionName
+                    options.GetRestFulActionName = (actionName) => actionName;
+                    // 指定默认的 api 前缀
+                    options.DefaultApiPrefix = "apis";
+                    // 注册指定程序集对应的 url 和 http 请求方式
+                    options.AddAssemblyOptions(typeof(CompanyProjectApplicationModule).Assembly, options.DefaultApiPrefix, "POST");
+                });
 
 
 
@@ -201,6 +215,11 @@ namespace Company.Project
                    );
                 swaggerUiOption.EnableDeepLinking();
                 swaggerUiOption.DocExpansion(DocExpansion.None);
+
+                swaggerUiOption.InjectStylesheet(
+                    "/views/swagger/index.css"
+                    );
+
             });
 
             #endregion
