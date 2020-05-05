@@ -58,10 +58,10 @@ namespace Company.Project.SeedData
         {
             // 管理员角色
             var roleManager = scopeServiceProvider.GetService<RoleManager>();
-            var adminRole = await roleManager.FindByNameAsync(AppConsts.Authorization.SystemRoleName);
-            if (adminRole == null)
+            var systemRole = await roleManager.FindByNameAsync(AppConsts.Authorization.SystemRoleName);
+            if (systemRole == null)
             {
-                adminRole = await roleManager.CreateAsync(
+                systemRole = await roleManager.CreateAsync(
                         AppConsts.Authorization.SystemRoleName,
                         AppConsts.Authorization.SystemRoleDisplayName,
                         AppConsts.Authorization.SystemRoleDisplayName,
@@ -78,10 +78,10 @@ namespace Company.Project.SeedData
 
             var userManager = scopeServiceProvider.GetService<UserManager>();
             // 管理员用户
-            var adminUser = await userManager.FindByNameOrEmailOrPhoneNumberAsync(AppConsts.Authorization.SystemUserName);
-            if (adminUser == null)
+            var systemUser = await userManager.FindByNameOrEmailOrPhoneNumberAsync(AppConsts.Authorization.SystemUserName);
+            if (systemUser == null)
             {
-                adminUser = await userManager.CreateAsync(
+                systemUser = await userManager.CreateAsync(
                         AppConsts.Authorization.SystemUserName,
                         AppConsts.Authorization.SystemUserPassword,
                         AppConsts.Authorization.SystemUserName,
@@ -95,10 +95,10 @@ namespace Company.Project.SeedData
             }
 
             // 用户添加角色
-            var roles = await userManager.GetRolesAsync(adminUser);
-            if (!roles.Any(o => o == adminRole.Name))
+            var roles = await userManager.GetRolesAsync(systemUser);
+            if (!roles.Any(o => o == systemRole.Name))
             {
-                await userManager.AddToRolesAsync(adminUser, adminRole.Name);
+                await userManager.AddToRolesAsync(systemUser, systemRole.Name);
             }
 
 
