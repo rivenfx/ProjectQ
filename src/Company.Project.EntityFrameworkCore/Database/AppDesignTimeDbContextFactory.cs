@@ -10,7 +10,7 @@ namespace Company.Project.Database
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            var connectionString = "server=(localdb)\\MSSQLLocalDB;database=RivenTest;uid=sa;pwd=123;";
+            var connectionString = "server=(localdb)\\MSSQLLocalDB;database=RivenProjectQ;uid=sa;pwd=123;";
 
 
             var builder = new DbContextOptionsBuilder<AppDbContext>();

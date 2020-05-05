@@ -1,13 +1,17 @@
+using Company.Project.Authorization.Extenstions;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Riven;
 using Riven.Authorization;
 using Riven.Exceptions;
+using Riven.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +23,8 @@ namespace Company.Project.Authorization.Roles
         static IList<Claim> _nullRoleClaims = new List<Claim>();
 
 
-        public IQueryable<Role> Query => this.Roles;
+        public IQueryable<Role> Query => this.Roles.AsNoTracking();
+        public IQueryable<Role> QueryAsNoTracking => this.Roles.AsNoTracking();
 
         public RoleManager(
             IRoleStore<Role> store,
@@ -44,7 +49,7 @@ namespace Company.Project.Authorization.Roles
         /// <param name="description">描述</param>
         /// <param name="claims">角色拥有的claim集合</param>
         /// <returns></returns>
-        public async Task<Role> CreateAsync([NotNull]string name, [NotNull]string displayName, string description, List<string> claims)
+        public async Task<Role> CreateAsync([NotNull]string name, [NotNull]string displayName, string description, params string[] claims)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -79,7 +84,7 @@ namespace Company.Project.Authorization.Roles
         /// <param name="description">描述</param>
         /// <param name="claims">角色拥有的claim集合</param>
         /// <returns></returns>
-        public async Task<Role> UpdateAsync(long? id, [NotNull]string displayName, string description, List<string> claims)
+        public async Task<Role> UpdateAsync(long? id, [NotNull]string displayName, string description, params string[] claims)
         {
             Check.NotNull(id, nameof(id));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -93,11 +98,11 @@ namespace Company.Project.Authorization.Roles
             role.DispayName = displayName;
             role.Description = description ?? string.Empty;
 
-            var result = await this.UpdateAsync(role);
-            if (!result.Succeeded)
+            var identityResult = await this.UpdateAsync(role);
+            if (!identityResult.Succeeded)
             {
                 var detiles = new StringBuilder();
-                foreach (var error in result.Errors)
+                foreach (var error in identityResult.Errors)
                 {
                     detiles.AppendLine($"{error.Code}: {error.Description}");
                 }
@@ -109,6 +114,38 @@ namespace Company.Project.Authorization.Roles
             return role;
         }
 
+
+        /// <summary>
+        /// 根据条件删除用户
+        /// </summary>
+        /// <param name="predicate">条件表达式</param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<Role>> DeleteAsync([NotNull]Expression<Func<Role, bool>> predicate)
+        {
+            Check.NotNull(predicate, nameof(predicate));
+
+            var roles = this.Roles.AsNoTracking().Where(predicate);
+            if ((await roles.CountAsync()) == 0)
+            {
+                return roles;
+            }
+
+            foreach (var role in roles)
+            {
+                var identityResult = await this.DeleteAsync(role);
+                if (!identityResult.Succeeded)
+                {
+                    var detiles = new StringBuilder();
+                    foreach (var error in identityResult.Errors)
+                    {
+                        detiles.AppendLine($"{error.Code}: {error.Description}");
+                    }
+                    throw new UserFriendlyException("删除角色失败!", detiles.ToString());
+                }
+            }
+
+            return roles;
+        }
 
         /// <summary>
         /// 给角色添加 identity 的 claims
@@ -123,9 +160,24 @@ namespace Company.Project.Authorization.Roles
                 return;
             }
 
-            foreach (var claim in CreateIdentityClaims(claims))
+            var claimsDistinct = claims.Distinct().Where(o => !o.IsNullOrWhiteSpace());
+            if (claimsDistinct.Count() == 0)
             {
-                await this.AddClaimAsync(role, claim);
+                return;
+            }
+
+            foreach (var claim in claimsDistinct.ToClaims())
+            {
+                var identityResult = await this.AddClaimAsync(role, claim);
+                if (!identityResult.Succeeded)
+                {
+                    var detiles = new StringBuilder();
+                    foreach (var error in identityResult.Errors)
+                    {
+                        detiles.AppendLine($"{error.Code}: {error.Description}");
+                    }
+                    throw new UserFriendlyException("角色添加权限失败!", detiles.ToString());
+                }
             }
         }
 
@@ -225,17 +277,9 @@ namespace Company.Project.Authorization.Roles
             return result;
         }
 
-        public Claim CreateIdentityClaim(string cliam)
+        public override string NormalizeKey(string key)
         {
-            return new Claim(cliam, cliam);
-        }
-
-        public IEnumerable<Claim> CreateIdentityClaims(string[] claims)
-        {
-            foreach (var claim in claims)
-            {
-                yield return new Claim(claim, claim);
-            }
+            return key?.ToLower();
         }
     }
 }

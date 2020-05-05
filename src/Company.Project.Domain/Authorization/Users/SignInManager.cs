@@ -119,13 +119,40 @@ namespace Company.Project.Authorization.Users
 
             var claimsPrincipal = await ClaimsFactory.CreateAsync(user);
 
-            return new LoginResult(
-                LoginResultType.Success,
-                user,
-                claimsPrincipal.Identity as ClaimsIdentity);
+            return new LoginResult(LoginResultType.Success, user, claimsPrincipal);
         }
 
         #endregion
+
+        /// <summary>
+        /// Signs in the specified <paramref name="userPrincipal"/>.
+        /// </summary>
+        /// <param name="userPrincipal">The userPrincipal to sign-in.</param>
+        /// <param name="isPersistent">Flag indicating whether the sign-in cookie should persist after the browser is closed.</param>
+        /// <param name="authenticationMethod">Name of the method used to authenticate the user.</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        public virtual Task SignInWithClaimsIdentityAsync(ClaimsPrincipal userPrincipal, bool isPersistent, string authenticationMethod = null)
+        {
+            return this.SignInWithClaimsIdentityAsync(
+                userPrincipal,
+                new AuthenticationProperties() { IsPersistent = isPersistent },
+                authenticationMethod
+                );
+        }
+
+        /// <summary>
+        /// Signs in the specified <paramref name="userPrincipal"/>.
+        /// </summary>
+        /// <param name="userPrincipal">The userPrincipal to sign-in.</param>
+        /// <param name="authenticationProperties">Properties applied to the login and authentication cookie.</param>
+        /// <param name="authenticationMethod">Name of the method used to authenticate the user.</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        public virtual async Task SignInWithClaimsIdentityAsync(ClaimsPrincipal userPrincipal, AuthenticationProperties authenticationProperties, string authenticationMethod = null)
+        {
+            await Context.SignInAsync(IdentityConstants.ApplicationScheme,
+                userPrincipal,
+                authenticationProperties ?? new AuthenticationProperties());
+        }
 
 
     }
