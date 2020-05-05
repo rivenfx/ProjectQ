@@ -52,6 +52,8 @@ namespace Company.Project.Database
             builder.Entity<User>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(User)}s");
+                entityBuilder.HasIndex(o => o.Nickname)
+                        .IsUnique();
             });
             builder.Entity<UserClaim>((entityBuilder) =>
             {
