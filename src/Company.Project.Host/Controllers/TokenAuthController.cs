@@ -46,8 +46,7 @@ namespace Company.Project.Controllers
             // 使mvc也登录
             if (input.UseCookie)
             {
-                await this._signInManager.SignInAsync(loginResult.User, input.RememberClient);
-
+                await this._signInManager.SignInWithClaimsIdentityAsync(loginResult.ClaimsPrincipal, input.RememberClient);
             }
             if (input.UseToken)
             {
