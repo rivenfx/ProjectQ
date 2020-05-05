@@ -26,10 +26,21 @@ namespace Company.Project.Authorization
             return claimsPrincipal;
         }
 
-        protected override Task<ClaimsIdentity> GenerateClaimsAsync(User user)
+        protected override async Task<ClaimsIdentity> GenerateClaimsAsync(User user)
         {
-            var claimsPrincipal = base.GenerateClaimsAsync(user);
-            return claimsPrincipal;
+            var userId = await UserManager.GetUserIdAsync(user);
+            var userName = await UserManager.GetUserNameAsync(user);
+            var id = new ClaimsIdentity("Identity.Application", // REVIEW: Used to match Application scheme
+                Options.ClaimsIdentity.UserNameClaimType,
+                Options.ClaimsIdentity.RoleClaimType);
+            id.AddClaim(new Claim(Options.ClaimsIdentity.UserIdClaimType, userId));
+            id.AddClaim(new Claim(Options.ClaimsIdentity.UserNameClaimType, userName));
+            if (UserManager.SupportsUserSecurityStamp)
+            {
+                id.AddClaim(new Claim(Options.ClaimsIdentity.SecurityStampClaimType,
+                    await UserManager.GetSecurityStampAsync(user)));
+            }
+            return id;
         }
     }
 }
