@@ -6,7 +6,7 @@ namespace Company.Project.Authorization.Users.Dtos
 {
     public class CreateOrEditUserInput
     {
-        public UserEditDto EntityDto { get; set; }
+        public UserDto EntityDto { get; set; }
 
         public string Password { get; set; }
     }

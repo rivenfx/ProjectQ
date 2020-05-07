@@ -6,7 +6,7 @@ namespace Company.Project.Authorization.Roles.Dtos
 {
     public class CreateOrUpdateRoleInput
     {
-        public RoleEditDto EntityDto { get; set; }
+        public RoleDto EntityDto { get; set; }
 
         public List<string> Claims { get; set; }
     }

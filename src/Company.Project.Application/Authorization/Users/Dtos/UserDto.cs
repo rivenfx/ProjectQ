@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users.Dtos
 {
-    public class UserEditDto : EntityDto<long?>
+    public class UserDto : EntityDto<long?>
     {
         /// <summary>
         /// 用户账号
