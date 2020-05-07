@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Riven.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Company.Project.Authorization.Roles.Dtos
 {
-    public class RoleEditDto
+    public class RoleEditDto : EntityDto<long?>
     {
-        public virtual long? Id { get; set; }
 
         /// <summary>
         /// 名称(编码)-不可被修改

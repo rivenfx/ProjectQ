@@ -1,17 +1,12 @@
-﻿using System;
+﻿using Riven.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Company.Project.Authorization.Users.Dtos
 {
-    public class UserEditDto
+    public class UserEditDto : EntityDto<long?>
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public virtual long? Id { get; set; }
-
-
         /// <summary>
         /// 用户账号
         /// </summary>
