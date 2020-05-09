@@ -89,9 +89,10 @@ namespace Company.Project
 
             #region AspNetCore - Identity And Auth
 
-            // 认证配置
+            // 注册 asp.net core identity
             context.Services.IdentityRegister();
-            context.Services.IdentityConfiguration(configuration);
+            // 配置校验
+            context.Services.AuthenticationConfiguration(configuration);
 
             #endregion
 

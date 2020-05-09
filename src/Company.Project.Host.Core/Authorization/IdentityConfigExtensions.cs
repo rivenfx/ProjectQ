@@ -59,66 +59,9 @@ namespace Company.Project.Authorization
             return identityBuilder;
         }
 
-        /// <summary>
-        /// 配置认证处理程序
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static AuthenticationBuilder IdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            var authenticationBuilder = services
-                .AddAuthentication();
+      
 
-            #region 配置 Identity 默认自带的 cookie 校验器
-
-            // 修改 asp.net core identity 默认的 cookies 认证配置
-            services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, (options) =>
-            {
-                options.ExpireTimeSpan = new TimeSpan(0, 30, 0);
-                options.SlidingExpiration = true;
-            });
-
-            #endregion
-
-            authenticationBuilder.AddJwt(configuration);
-
-            return authenticationBuilder;
-        }
-
-        /// <summary>
-        /// 添加jwt认证
-        /// </summary>
-        /// <param name="authenticationBuilder"></param>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static AuthenticationBuilder AddJwt(this AuthenticationBuilder authenticationBuilder, IConfiguration configuration)
-        {
-            authenticationBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, (options) =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.Audience = configuration["Authentication:JwtBearer:Audience"];
-                options.Authority = configuration["Authentication:JwtBearer:Authority"];
-            });
-
-            return authenticationBuilder;
-        }
-
-        /// <summary>
-        /// 启用系统的Authentication和Authorization
-        /// </summary>
-        /// <param name="app"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseAppAuthenticationAndAuthorization(this IApplicationBuilder app)
-        {
-            app.UseDefaultAuthentication();
-
-            app.UseJwtAuthentication();
-
-            app.UseAuthorization();
-
-            return app;
-        }
+      
 
 
 
