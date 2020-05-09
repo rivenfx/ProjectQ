@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 using Riven;
 using Riven.Extensions;
-
+using Riven.Authorization;
 
 namespace Company.Project.Authorization
 {
@@ -47,7 +47,7 @@ namespace Company.Project.Authorization
                 .AddUserStore<UserStore<AppDbContext>>()
                 .AddRoleStore<RoleStore<AppDbContext>>()
                 .AddSignInManager<SignInManager>()
-                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
+                .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role>>()
                 .AddDefaultTokenProviders();
 
             // 添加 Riven.Identity ClaimAccessor
