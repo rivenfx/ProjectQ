@@ -9,20 +9,13 @@ namespace Company.Project
     /// </summary>
     public static class AppConsts
     {
-        /// <summary>
-        /// 默认语言
-        /// </summary>
-        public const string DefaultLanguage = "zh-Hans";
-
-        /// <summary>
-        /// 应用名称键值
-        /// </summary>
-        public const string AppNameKey = "App:Name";
-
-        /// <summary>
-        /// 应用版本键值
-        /// </summary>
-        public const string AppVersionKey = "App:Version";
+        public static class Settings
+        {
+            /// <summary>
+            /// 默认语言
+            /// </summary>
+            public const string DefaultLanguage = "zh-Hans";
+        }
 
 
         /// <summary>
@@ -30,11 +23,6 @@ namespace Company.Project
         /// </summary>
         public static class Database
         {
-            /// <summary>
-            /// 数据库连接字符串键值
-            /// </summary>
-            public const string ConnectionStringKey = "ConnectionStrings:Default";
-
             /// <summary>
             /// EFCore 迁移记录表名
             /// </summary>

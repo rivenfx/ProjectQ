@@ -15,6 +15,7 @@ using Riven.Repositories;
 using Riven.Uow;
 using Company.Project.SeedData;
 using Riven.Threading;
+using Company.Project.Configuration;
 
 namespace Company.Project
 {
@@ -31,10 +32,11 @@ namespace Company.Project
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
 
+
             #region 添加默认的数据库连接字符串
 
             context.Services.AddDefaultConnectionString(
-                    context.Configuration[AppConsts.Database.ConnectionStringKey]
+                    context.Configuration.GetDefaultDatabaseConnectionString()
                 );
 
             #endregion

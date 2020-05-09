@@ -58,7 +58,7 @@ namespace Company.Project
                 throw new ArgumentException($"启用语言数量为0");
             }
 
-            languageManager.ChangeDefaultLanguage(AppConsts.DefaultLanguage);
+            languageManager.ChangeDefaultLanguage(AppConsts.Settings.DefaultLanguage);
         } 
 
         #endregion

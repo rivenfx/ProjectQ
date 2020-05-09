@@ -16,6 +16,7 @@ using Riven.Modular;
 using Company.Project.Authorization;
 using Riven.Extensions;
 using System.IO;
+using Company.Project.Configuration;
 
 namespace Company.Project
 {
@@ -103,6 +104,7 @@ namespace Company.Project
         {
             var configuration = context.Configuration;
 
+            var appInfo = configuration.GetAppInfo();
 
             #region Riven - AspNetCore 请求本地化
 
@@ -117,10 +119,11 @@ namespace Company.Project
             context.Services.AddRivenAspNetCoreSwashbuckle(
                 (options) =>
                 {
+
                     var apiInfo = new OpenApiInfo()
                     {
-                        Title = configuration[AppConsts.AppNameKey],
-                        Version = configuration[AppConsts.AppVersionKey]
+                        Title = appInfo.Name,
+                        Version = appInfo.Version
                     };
                     options.SwaggerDoc(apiInfo.Version, apiInfo);
                 },
@@ -162,6 +165,7 @@ namespace Company.Project
             var app = context.ServiceProvider.GetService<IApplicationBuilderAccessor>().ApplicationBuilder;
             var env = context.ServiceProvider.GetService<IWebHostEnvironment>();
 
+            var appInfo = configuration.GetAppInfo();
 
             if (env.IsDevelopment())
             {
@@ -211,8 +215,8 @@ namespace Company.Project
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
             {
                 swaggerUiOption.SwaggerEndpoint(
-                       $"/swagger/{configuration[AppConsts.AppVersionKey]}/swagger.json",
-                       configuration[AppConsts.AppNameKey]
+                       $"/swagger/{appInfo.Version}/swagger.json",
+                       appInfo.Name
                    );
                 swaggerUiOption.EnableDeepLinking();
                 swaggerUiOption.DocExpansion(DocExpansion.None);
