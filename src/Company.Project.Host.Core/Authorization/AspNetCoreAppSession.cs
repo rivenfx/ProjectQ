@@ -18,11 +18,11 @@ namespace Company.Project.Authorization
 
         public LanguageInfo CurrentLanguage => _currentLanguage.GetCurrentLanguage();
 
-        readonly HttpContextAccessor _httpContextAccessor;
+        readonly IHttpContextAccessor _httpContextAccessor;
         readonly IOptions<IdentityOptions> _options;
         readonly ICurrentLanguage _currentLanguage;
 
-        public AspNetCoreAppSession(HttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage)
+        public AspNetCoreAppSession(IHttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage)
         {
             _httpContextAccessor = httpContextAccessor;
             _options = options;
