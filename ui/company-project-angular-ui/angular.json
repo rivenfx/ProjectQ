@@ -169,8 +169,9 @@
     "@schematics/angular:component": {
       "spec": false,
       "flat": false,
-      "inlineStyle": true,
-      "inlineTemplate": false
+      "inlineStyle": false,
+      "inlineTemplate": false,
+      "style": "less"
     },
     "@schematics/angular:directive": {
       "spec": false

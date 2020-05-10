@@ -10,6 +10,7 @@ import { default as ngLang } from '@angular/common/locales/zh';
 import { DELON_LOCALE, zh_CN as delonLang } from '@delon/theme';
 import { zhCN as dateLang } from 'date-fns/locale';
 import { NZ_DATE_LOCALE, NZ_I18N, zh_CN as zorroLang } from 'ng-zorro-antd/i18n';
+
 const LANG = {
   abbr: 'zh',
   ng: ngLang,
@@ -19,6 +20,7 @@ const LANG = {
 };
 // register angular
 import { registerLocaleData } from '@angular/common';
+
 registerLocaleData(LANG.ng, LANG.abbr);
 const LANG_PROVIDES = [
   { provide: LOCALE_ID, useValue: LANG.abbr },
@@ -42,19 +44,20 @@ const I18NSERVICE_MODULES = [
     loader: {
       provide: TranslateLoader,
       useFactory: I18nHttpLoaderFactory,
-      deps: [HttpClient]
-    }
-  })
+      deps: [HttpClient],
+    },
+  }),
 ];
 
 const I18NSERVICE_PROVIDES = [
-  { provide: ALAIN_I18N_TOKEN, useClass: I18NService, multi: false }
+  { provide: ALAIN_I18N_TOKEN, useClass: I18NService, multi: false },
 ];
 // #region
 
 // #region JSON Schema form (using @delon/form)
-import { JsonSchemaModule } from '@shared';
-const FORM_MODULES = [ JsonSchemaModule ];
+import { AppConsts, JsonSchemaModule } from '@shared';
+
+const FORM_MODULES = [JsonSchemaModule];
 // #endregion
 
 
@@ -62,30 +65,32 @@ const FORM_MODULES = [ JsonSchemaModule ];
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DefaultInterceptor } from '@core';
 import { SimpleInterceptor } from '@delon/auth';
+
 const INTERCEPTOR_PROVIDES = [
-  { provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true},
-  { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true}
+  // { provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true },
+  // { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
 ];
 // #endregion
 
 // #region global third module
-const GLOBAL_THIRD_MODULES = [
-];
+const GLOBAL_THIRD_MODULES = [];
 // #endregion
 
 // #region Startup Service
 import { StartupService } from '@core';
+
 export function StartupServiceFactory(startupService: StartupService) {
   return () => startupService.load();
 }
+
 const APPINIT_PROVIDES = [
   StartupService,
   {
     provide: APP_INITIALIZER,
     useFactory: StartupServiceFactory,
     deps: [StartupService],
-    multi: true
-  }
+    multi: true,
+  },
 ];
 // #endregion
 
@@ -93,13 +98,18 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { GlobalConfigModule } from './global-config.module';
 import { LayoutModule } from './layout/layout.module';
-import { RoutesModule } from './routes/routes.module';
-import { SharedModule } from './shared/shared.module';
+// import { RoutesModule } from './routes/routes.module';
+import { SharedModule } from '@shared';
 import { STWidgetModule } from './shared/st-widget/st-widget.module';
+import { AppRoutingModule } from './app-routing.module';
+import { API_BASE_URL, ServiceProxyModule } from './service-proxies';
+import { RivenModule } from './shared/riven';
+
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,20 +117,29 @@ import { STWidgetModule } from './shared/st-widget/st-widget.module';
     HttpClientModule,
     GlobalConfigModule.forRoot(),
     CoreModule,
+
     SharedModule,
     LayoutModule,
-    RoutesModule,
+    // RoutesModule,
     STWidgetModule,
+    //
+    AppRoutingModule,
+    //
+    ServiceProxyModule,
+    RivenModule.forRoot(),
+    //
     ...I18NSERVICE_MODULES,
     ...FORM_MODULES,
-    ...GLOBAL_THIRD_MODULES
+    ...GLOBAL_THIRD_MODULES,
   ],
   providers: [
+    { provide: API_BASE_URL, useFactory: () => AppConsts.remoteServiceUrl },
     ...LANG_PROVIDES,
     ...INTERCEPTOR_PROVIDES,
     ...I18NSERVICE_PROVIDES,
-    ...APPINIT_PROVIDES
+    ...APPINIT_PROVIDES,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

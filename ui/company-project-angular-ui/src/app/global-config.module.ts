@@ -16,39 +16,38 @@ const alainConfig: AlainConfig = {
     license: `A59B099A586B3851E0F0D7FDBF37B603`,
     licenseA: `C94CEE276DB2187AE6B65D56B3FC2848`,
   },
-  auth: { login_url: '/passport/login' },
+  auth: {
+    login_url: '/account/login', // 登录页面
+    store_key: 'riven_token',    // 存储token的键值
+    token_send_place: 'header',  // 附加token的位置
+    token_send_key: 'token',     // 替换模板的名称
+    token_send_template: 'Bearer ${token}', // 模板
+    ignores: [/.*?Token\/.*/, /.*?assets\//], // 忽略的地址
+  },
+  acl: {
+
+  },
 };
 
-const alainModules = [AlainThemeModule.forRoot(), DelonACLModule.forRoot(), DelonMockModule.forRoot()];
-const alainProvides = [{ provide: ALAIN_CONFIG, useValue: alainConfig }];
+const alainModules = [
+  AlainThemeModule.forRoot(),
+  DelonACLModule.forRoot(),
+  DelonMockModule.forRoot()
+];
+const alainProvides = [
+  { provide: ALAIN_CONFIG, useValue: alainConfig }
+  ];
 
-// mock
-import { environment } from '@env/environment';
-import * as MOCKDATA from '../../_mock';
-if (!environment.production) {
-  alainConfig.mock = { data: MOCKDATA };
-}
 
 // #region reuse-tab
-/**
- * 若需要[路由复用](https://ng-alain.com/components/reuse-tab)需要：
- * 1、在 `shared-delon.module.ts` 导入 `ReuseTabModule` 模块
- * 2、注册 `RouteReuseStrategy`
- * 3、在 `src/app/layout/default/default.component.html` 修改：
- *  ```html
- *  <section class="alain-default__content">
- *    <reuse-tab #reuseTab></reuse-tab>
- *    <router-outlet (activate)="reuseTab.activate($event)"></router-outlet>
- *  </section>
- *  ```
- */
-// import { RouteReuseStrategy } from '@angular/router';
-// import { ReuseTabService, ReuseTabStrategy } from '@delon/abc/reuse-tab';
-// alainProvides.push({
-//   provide: RouteReuseStrategy,
-//   useClass: ReuseTabStrategy,
-//   deps: [ReuseTabService],
-// } as any);
+import { RouteReuseStrategy } from '@angular/router';
+import { ReuseTabService, ReuseTabStrategy } from '@delon/abc/reuse-tab';
+
+alainProvides.push({
+  provide: RouteReuseStrategy,
+  useClass: ReuseTabStrategy,
+  deps: [ReuseTabService],
+} as any);
 
 // #endregion
 
