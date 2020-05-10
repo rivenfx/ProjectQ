@@ -4,6 +4,8 @@
   "icon": "famfamfam-flags us",
   "enabled": true,
   "texts": {
-
+    "NotLoggedIn": "未登录系统-en",
+    "SomeClaimDoNotExist": "某些Claim不存在-en",
+    "WithoutAnyClaim": "没有任何Claim-en"
   }
 }

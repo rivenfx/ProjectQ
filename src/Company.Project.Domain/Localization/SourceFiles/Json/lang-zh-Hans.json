@@ -1,9 +1,11 @@
 {
   "culture": "zh-Hans",
-  "displayName": "���ļ���",
+  "displayName": "中文简体",
   "icon": "famfamfam-flags cn",
   "enabled": true,
   "texts": {
-
+    "NotLoggedIn": "未登录系统",
+    "SomeClaimDoNotExist": "某些Claim不存在",
+    "WithoutAnyClaim": "没有任何Claim",
   }
 }
