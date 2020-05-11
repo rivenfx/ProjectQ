@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Riven.Uow;
 using Riven;
+using Company.Project.Authorization;
 
 namespace Company.Project
 {
@@ -18,6 +19,7 @@ namespace Company.Project
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.RegisterAssemblyOf<CompanyProjectHostCoreModule>();
+            context.Services.AddTransient<IAppSession, AspNetCoreAppSession>();
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)

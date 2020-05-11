@@ -10,7 +10,7 @@ using Riven.Localization;
 
 namespace Company.Project.Authorization
 {
-    public class AspNetCoreAppSession : IAppSession, ITransientDependency
+    public class AspNetCoreAppSession : IAppSession
     {
         public long? UserId => this.GetUserId();
 
