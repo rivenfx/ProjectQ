@@ -22,7 +22,7 @@ const alainConfig: AlainConfig = {
     token_send_place: 'header',  // 附加token的位置
     token_send_key: 'token',     // 替换模板的名称
     token_send_template: 'Bearer ${token}', // 模板
-    ignores: [/.*?Token\/.*/, /.*?assets\//], // 忽略的地址
+    ignores: [/.*/, /.*?assets\//], // 忽略的地址
   },
   acl: {
 

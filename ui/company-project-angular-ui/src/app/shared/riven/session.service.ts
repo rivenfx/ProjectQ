@@ -12,7 +12,7 @@ export class SessionService {
   }
 
   constructor(
-    private sessionSrv: SessionServiceProxy,
+    private sessionSrv: SessionServiceProxy
   ) {
   }
 

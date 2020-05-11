@@ -115,12 +115,13 @@ import { RivenModule } from './shared/riven';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+
+    //
     GlobalConfigModule.forRoot(),
     CoreModule,
-
     SharedModule,
     LayoutModule,
-    // RoutesModule,
+    //
     STWidgetModule,
     //
     AppRoutingModule,

@@ -1,14 +1,20 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { SessionService } from './session.service';
+import { APIS, APIS_HTTP_INTERCEPTORS, ServiceProxyModule, SessionServiceProxy } from '../../service-proxies';
 
-@NgModule({})
+@NgModule({
+  providers:[
+    SessionService
+  ]
+})
 export class RivenModule {
 
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: RivenModule,
       providers: [
-        SessionService,
+        ...APIS,
+        ...APIS_HTTP_INTERCEPTORS
       ],
     };
   }
