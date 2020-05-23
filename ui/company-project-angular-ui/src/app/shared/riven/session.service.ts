@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { forwardRef, Inject, Injectable } from '@angular/core';
 import { ICurrentUserInfo } from './interfaces';
 import { SessionDto, SessionServiceProxy } from '../../service-proxies';
 import { catchError, finalize } from 'rxjs/operators';
@@ -12,7 +12,7 @@ export class SessionService {
   }
 
   constructor(
-    private sessionSrv: SessionServiceProxy
+    private sessionSrv: SessionServiceProxy,
   ) {
   }
 
@@ -20,18 +20,16 @@ export class SessionService {
   /**
    * 加载或更新AppInfo
    */
-  loadOrUpdateAppInfo(callback?: (state: boolean) => void) {
+  loadOrUpdateAppInfo(callback?: (state: boolean, data: SessionDto | any) => void) {
     this.sessionSrv.getCurrentSession()
-      .pipe(catchError(err => {
-        return err;
-      }))
-      .subscribe((res) => {
-        if (res instanceof SessionDto) {
+      .subscribe({
+        next: (res) => {
           this._session = res;
-          callback(true);
-        } else {
-          callback(false);
-        }
+          callback(true, this.session);
+        },
+        error: (error) => {
+          callback(true, error);
+        },
       });
   }
 }

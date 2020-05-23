@@ -9,6 +9,7 @@ export const APIS = [
   ServiceProxies.TokenAuthServiceProxy,
   ServiceProxies.UserServiceProxy,
   ServiceProxies.RoleServiceProxy,
+  ServiceProxies.SessionServiceProxy,
 ];
 
 export const APIS_HTTP_INTERCEPTORS = [

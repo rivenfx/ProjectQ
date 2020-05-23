@@ -127,7 +127,7 @@ import { RivenModule } from './shared/riven';
     AppRoutingModule,
     //
     ServiceProxyModule,
-    RivenModule.forRoot(),
+    RivenModule,
     //
     ...I18NSERVICE_MODULES,
     ...FORM_MODULES,

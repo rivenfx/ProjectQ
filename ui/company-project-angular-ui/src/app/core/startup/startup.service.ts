@@ -14,6 +14,7 @@ import { ICONS } from '../../../style-icons';
 import { ICONS_AUTO } from '../../../style-icons-auto';
 import { SessionService } from '../../shared/riven';
 import { AppConsts } from '@shared';
+import { SessionDto } from '../../service-proxies';
 
 /**
  * Used for application startup
@@ -64,19 +65,16 @@ export class StartupService {
         },
         (e) => {
           reject(e);
-        },
-        () => {
-          resolve(null);
         });
   }
 
   private getAppSession(resolve: any, reject: any) {
     var sessionSer = this.injector.get(SessionService);
-    sessionSer.loadOrUpdateAppInfo((state) => {
+    sessionSer.loadOrUpdateAppInfo((state, data: SessionDto | any) => {
       if (state) {
         resolve(null);
       } else {
-        reject('init session info error');
+        reject('init session info error' + data);
       }
     });
   }
