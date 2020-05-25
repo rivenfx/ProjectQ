@@ -1,40 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SFSchema } from '@delon/form';
+import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '../../service-proxies';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styles: [],
+  styleUrls:['./login.component.less']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
 
-  schema: SFSchema = {
-    properties: {
-      email: {
-        type: 'string',
-        title: '账号',
-        format: 'email',
-        maxLength: 32,
-        minLength: 3,
-      },
-      name: {
-        type: 'string',
-        title: '密码',
-        minLength: 6,
-      },
-    },
-  };
+  input = new AuthenticateModelInput();
 
-  constructor() {
-    debugger
+  constructor(
+    public tokenAuthSer: TokenAuthServiceProxy,
+  ) {
+    this.input.useToken = true;
   }
 
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit(): void {
+
   }
 
 
-  submit(value: any) {
+  submitForm() {
+    debugger
+    this.tokenAuthSer.authenticate(this.input)
+      .subscribe((result) => {
 
+      });
   }
+
 
 }

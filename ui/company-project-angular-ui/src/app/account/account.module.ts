@@ -6,6 +6,7 @@ import { AccountLayoutComponent } from './account-layout';
 import { JsonSchemaModule, SharedModule } from '@shared';
 import { DelonFormModule } from '@delon/form';
 import { LoginComponent } from './login';
+import { RivenModule } from '../shared/riven';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { LoginComponent } from './login';
   imports: [
     CommonModule,
     AccountRoutingModule,
-    SharedModule
+    SharedModule,
+    RivenModule
   ],
 })
 export class AccountModule {
