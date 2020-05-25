@@ -3,6 +3,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SimpleInterceptor } from '@delon/auth';
 
 import * as ServiceProxies from './service-proxies';
+import { DefaultInterceptor } from './default-interceptor';
 
 
 export const APIS = [
@@ -13,7 +14,7 @@ export const APIS = [
 ];
 
 export const APIS_HTTP_INTERCEPTORS = [
-  { provide: HTTP_INTERCEPTORS, useClass: SimpleInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
 ];
 
 @NgModule({
