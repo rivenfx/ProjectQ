@@ -19,11 +19,10 @@ export class ValidationMessagesComponent
   @Input() customErrors: IErrorDef[];
 
   /** 所有的错误 */
-  errorDefsInternal: IErrorDef[];
+  errorDefsInternal: IErrorDef[] = standartErrors;
 
 
   constructor() {
-
   }
 
   ngOnChanges(changes: { [P in keyof this]?: import('@angular/core').SimpleChange } & import('@angular/core').SimpleChanges) {
