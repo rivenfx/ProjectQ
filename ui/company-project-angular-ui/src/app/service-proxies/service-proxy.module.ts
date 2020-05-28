@@ -3,7 +3,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SimpleInterceptor } from '@delon/auth';
 
 import * as ServiceProxies from './service-proxies';
-import { DefaultInterceptor } from './default-interceptor';
+import { DefaultInterceptor } from './interceptor';
 
 
 export const APIS = [

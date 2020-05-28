@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 
 import {
@@ -12,51 +12,11 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
+import { IAjaxResponse, IErrorInfo } from './interfaces';
 
-export interface IValidationErrorInfo {
-
-  message: string;
-
-  members: string[];
-
-}
-
-export interface IErrorInfo {
-
-  code: number;
-
-  message: string;
-
-  details: string;
-
-  validationErrors: IValidationErrorInfo[];
-
-}
-
-export interface IAjaxResponse {
-
-  success: boolean;
-
-  result?: any;
-
-  targetUrl?: string;
-
-  error?: IErrorInfo;
-
-  unAuthorizedRequest: boolean;
-
-  __abp: boolean;
-
-}
 
 // @Injectable()
 export class AbpHttpConfiguration {
-
-  // constructor(
-  //   private _messageService: MessageService,
-  //   private _logService: LogService) {
-  //
-  // }
 
   defaultError = <IErrorInfo>{
     message: 'An error has occurred!',
@@ -132,8 +92,8 @@ export class AbpHttpConfiguration {
     }
   }
 
-  handleAbpResponse(response: HttpResponse<any>, ajaxResponse: IAjaxResponse): HttpResponse<any> {
-    var newResponse: HttpResponse<any>;
+  handleAjaxResponse(response: HttpResponse<any>, ajaxResponse: IAjaxResponse): HttpResponse<any> {
+    let newResponse: HttpResponse<any>;
 
     if (ajaxResponse.success) {
 
@@ -143,7 +103,6 @@ export class AbpHttpConfiguration {
 
       if (ajaxResponse.targetUrl) {
         this.handleTargetUrl(ajaxResponse.targetUrl);
-        ;
       }
     } else {
 
@@ -166,12 +125,12 @@ export class AbpHttpConfiguration {
     return newResponse;
   }
 
-  getAbpAjaxResponseOrNull(response: HttpResponse<any>): IAjaxResponse | null {
+  getAjaxResponseOrNull(response: HttpResponse<any>): IAjaxResponse | null {
     if (!response || !response.headers) {
       return null;
     }
 
-    var contentType = response.headers.get('Content-Type');
+    const contentType = response.headers.get('Content-Type');
     if (!contentType) {
       console.warn('Content-Type is not sent!');
       return null;
@@ -182,21 +141,21 @@ export class AbpHttpConfiguration {
       return null;
     }
 
-    var responseObj = JSON.parse(JSON.stringify(response.body));
-    if (!responseObj.__abp) {
-      return null;
-    }
+    const responseObj = JSON.parse(JSON.stringify(response.body));
+    // if (!responseObj.__abp) {
+    //   return null;
+    // }
 
     return responseObj as IAjaxResponse;
   }
 
   handleResponse(response: HttpResponse<any>): HttpResponse<any> {
-    var ajaxResponse = this.getAbpAjaxResponseOrNull(response);
+    let ajaxResponse = this.getAjaxResponseOrNull(response);
     if (ajaxResponse == null) {
       return response;
     }
 
-    return this.handleAbpResponse(response, ajaxResponse);
+    return this.handleAjaxResponse(response, ajaxResponse);
   }
 
   blobToText(blob: any): Observable<string> {
@@ -216,16 +175,14 @@ export class AbpHttpConfiguration {
   }
 }
 
+
+
 @Injectable()
 export class DefaultInterceptor implements HttpInterceptor {
 
-  protected configuration=new  AbpHttpConfiguration;
-  // private _tokenService: TokenService = new TokenService();
-  // private _utilsService: UtilsService = new UtilsService();
-  // private _logService: LogService = new LogService();
+  protected configuration = new AbpHttpConfiguration;
 
   constructor(
-    // configuration: AbpHttpConfiguration,
     @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,
   ) {
     // this.configuration = configuration;
@@ -233,8 +190,8 @@ export class DefaultInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    var interceptObservable = new Subject<HttpEvent<any>>();
-    var modifiedRequest = this.normalizeRequestHeaders(request);
+    let interceptObservable = new Subject<HttpEvent<any>>();
+    let modifiedRequest = this.normalizeRequestHeaders(request);
 
     next.handle(modifiedRequest)
       .subscribe((event: HttpEvent<any>) => {
@@ -247,7 +204,7 @@ export class DefaultInterceptor implements HttpInterceptor {
   }
 
   protected normalizeRequestHeaders(request: HttpRequest<any>): HttpRequest<any> {
-    var modifiedHeaders = new HttpHeaders();
+    let modifiedHeaders = new HttpHeaders();
     modifiedHeaders = request.headers.set('Pragma', 'no-cache')
       .set('Cache-Control', 'no-cache')
       .set('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT');
@@ -263,6 +220,10 @@ export class DefaultInterceptor implements HttpInterceptor {
     });
   }
 
+  /**
+   * 请求头添加 ajax 标识
+   * @param headers
+   */
   protected addXRequestedWithHeader(headers: HttpHeaders): HttpHeaders {
     if (headers) {
       headers = headers.set('X-Requested-With', 'XMLHttpRequest');
@@ -271,6 +232,10 @@ export class DefaultInterceptor implements HttpInterceptor {
     return headers;
   }
 
+  /**
+   * 请求头添加 asp.net core 国际化标识
+   * @param headers
+   */
   protected addAspNetCoreCultureHeader(headers: HttpHeaders): HttpHeaders {
     // let cookieLangValue = this._utilsService.getCookieValue("Abp.Localization.CultureName");
     // if (cookieLangValue && headers && !headers.has('.AspNetCore.Culture')) {
@@ -280,6 +245,10 @@ export class DefaultInterceptor implements HttpInterceptor {
     return headers;
   }
 
+  /**
+   * 请求头添加 Accept-Language 国际化标识
+   * @param headers
+   */
   protected addAcceptLanguageHeader(headers: HttpHeaders): HttpHeaders {
     // let cookieLangValue = this._utilsService.getCookieValue("Abp.Localization.CultureName");
     // if (cookieLangValue && headers && !headers.has('Accept-Language')) {
@@ -298,15 +267,17 @@ export class DefaultInterceptor implements HttpInterceptor {
     return headers;
   }
 
+  /**
+   * 请求头添加 Authorization
+   * @param headers
+   */
   protected addAuthorizationHeaders(headers: HttpHeaders): HttpHeaders {
     let authorizationHeaders = headers ? headers.getAll('Authorization') : null;
     if (!authorizationHeaders) {
       authorizationHeaders = [];
     }
-    debugger
     if (!this.itemExists(authorizationHeaders, (item: string) => item.indexOf('Bearer ') == 0)) {
       let token = this.tokenService.get().token;
-      debugger
       if (headers && token) {
         headers = headers.set('Authorization', 'Bearer ' + token);
       }
@@ -315,17 +286,21 @@ export class DefaultInterceptor implements HttpInterceptor {
     return headers;
   }
 
+  /**
+   * 处理成功的响应
+   * @param event
+   * @param interceptObservable
+   */
   protected handleSuccessResponse(event: HttpEvent<any>, interceptObservable: Subject<HttpEvent<any>>): void {
-    var self = this;
-
+    const self = this;
     if (event instanceof HttpResponse) {
       if (event.body instanceof Blob && event.body.type && event.body.type.indexOf('application/json') >= 0) {
-        var clonedResponse = event.clone();
+        const clonedResponse = event.clone();
 
         self.configuration.blobToText(event.body).subscribe(json => {
           const responseBody = json == 'null' ? {} : JSON.parse(json);
 
-          var modifiedResponse = self.configuration.handleResponse(event.clone({
+          const modifiedResponse = self.configuration.handleResponse(event.clone({
             body: responseBody,
           }));
 
@@ -344,8 +319,13 @@ export class DefaultInterceptor implements HttpInterceptor {
     }
   }
 
+  /**
+   * 处理异常的响应
+   * @param error
+   * @param interceptObservable
+   */
   protected handleErrorResponse(error: any, interceptObservable: Subject<HttpEvent<any>>): Observable<any> {
-    var errorObservable = new Subject<any>();
+    const errorObservable = new Subject<any>();
 
     if (!(error.error instanceof Blob)) {
       interceptObservable.error(error);
@@ -361,10 +341,10 @@ export class DefaultInterceptor implements HttpInterceptor {
         body: errorBody,
       });
 
-      var ajaxResponse = this.configuration.getAbpAjaxResponseOrNull(errorResponse);
+      const ajaxResponse = this.configuration.getAjaxResponseOrNull(errorResponse);
 
       if (ajaxResponse != null) {
-        this.configuration.handleAbpResponse(errorResponse, ajaxResponse);
+        this.configuration.handleResponse(errorResponse);
       } else {
         this.configuration.handleNonAbpErrorResponse(errorResponse);
       }
