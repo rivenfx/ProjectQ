@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Riven;
 using Riven.Extensions;
 using Riven.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Company.Project.Authorization
 {
@@ -130,8 +131,7 @@ namespace Company.Project.Authorization
         /// <returns></returns>
         private static IdentityOptions ConfigurationClaimsIdentity(this IdentityOptions options)
         {
-            //options.ClaimsIdentity
-
+            options.ClaimsIdentity.UserIdClaimType = JwtRegisteredClaimNames.Sub;
             return options;
         }
 

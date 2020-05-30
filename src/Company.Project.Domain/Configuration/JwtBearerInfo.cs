@@ -5,8 +5,20 @@
     /// </summary>
     public class JwtBearerInfo
     {
-        public string Audience { get; set; }
+        public JwtBearerInfo(string audience, string authority, string issuer, string securityKey)
+        {
+            Audience = audience;
+            Authority = authority;
+            Issuer = issuer;
+            SecurityKey = securityKey;
+        }
 
-        public string Authority { get; set; }
+        public string Audience { get; }
+
+        public string Authority { get; }
+
+        public string Issuer { get; }
+
+        public string SecurityKey { get; }
     }
 }

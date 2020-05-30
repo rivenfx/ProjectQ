@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +19,8 @@ namespace Company.Project.Configuration
 
             public const string AuthenticationJwtBearerAudience = "Authentication:JwtBearer:Audience";
             public const string AuthenticationJwtBearerAuthority = "Authentication:JwtBearer:Authority";
+            public const string AuthenticationJwtBearerIssuer = "Authentication:JwtBearer:Issuer";
+            public const string AuthenticationJwtBearerSecurityKey = "Authentication:JwtBearer:SecurityKey";
 
         }
 
@@ -66,11 +69,12 @@ namespace Company.Project.Configuration
         /// <returns></returns>
         public static JwtBearerInfo GetJwtBearerInfo(this IConfiguration configuration)
         {
-            return new JwtBearerInfo()
-            {
-                Audience = configuration[AppConfigurationConsts.AuthenticationJwtBearerAudience],
-                Authority = configuration[AppConfigurationConsts.AuthenticationJwtBearerAuthority],
-            };
+            return new JwtBearerInfo(
+                configuration[AppConfigurationConsts.AuthenticationJwtBearerAudience],
+                configuration[AppConfigurationConsts.AuthenticationJwtBearerAuthority],
+                configuration[AppConfigurationConsts.AuthenticationJwtBearerIssuer],
+                configuration[AppConfigurationConsts.AuthenticationJwtBearerSecurityKey]
+                );
         }
 
     }
