@@ -1,9 +1,11 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { SimpleInterceptor } from '@delon/auth';
 
 import * as ServiceProxies from './service-proxies';
 import { DefaultInterceptor } from './interceptor';
+import { API_BASE_URL } from './service-proxies';
+import { AppConsts } from '@shared';
+import { throwIfAlreadyLoaded } from '@core';
 
 
 export const APIS = [
@@ -20,9 +22,22 @@ export const APIS_HTTP_INTERCEPTORS = [
 @NgModule({
   providers: [
     ...APIS,
-    ...APIS_HTTP_INTERCEPTORS
+    ...APIS_HTTP_INTERCEPTORS,
   ],
 })
 export class ServiceProxyModule {
+
+  constructor(@Optional() @SkipSelf() parentModule: ServiceProxyModule) {
+    throwIfAlreadyLoaded(parentModule, 'ServiceProxyModule');
+  }
+
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: ServiceProxyModule,
+      providers: [
+        { provide: API_BASE_URL, useFactory: () => AppConsts.remoteServiceUrl },
+      ],
+    };
+  }
 
 }

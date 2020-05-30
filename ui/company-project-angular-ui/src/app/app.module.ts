@@ -106,7 +106,6 @@ import { API_BASE_URL, ServiceProxyModule } from './service-proxies';
 import { RivenModule } from './shared/riven';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -126,15 +125,14 @@ import { RivenModule } from './shared/riven';
     //
     AppRoutingModule,
     //
-    ServiceProxyModule,
-    RivenModule,
+    ServiceProxyModule.forRoot(),
+    RivenModule.forRoot(),
     //
     ...I18NSERVICE_MODULES,
     ...FORM_MODULES,
     ...GLOBAL_THIRD_MODULES,
   ],
   providers: [
-    { provide: API_BASE_URL, useFactory: () => AppConsts.remoteServiceUrl },
     ...LANG_PROVIDES,
     ...INTERCEPTOR_PROVIDES,
     ...I18NSERVICE_PROVIDES,

@@ -35,6 +35,9 @@ export class StartupService {
     private injector: Injector,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
+
+    const aaa = i18n;
+    debugger
   }
 
   load(): Promise<any> {
@@ -46,6 +49,7 @@ export class StartupService {
   }
 
 
+  /** 加载前端 appsettings.json 配置 */
   private getAppSettings(resolve: any, reject: any) {
     this.httpClient.get('assets/appsettings.json')
       .subscribe(
@@ -61,13 +65,18 @@ export class StartupService {
         });
   }
 
+  /** 加载会话信息 */
   private getAppSession(resolve: any, reject: any) {
-    var sessionSer = this.injector.get(SessionService);
+    const sessionSer = this.injector.get(SessionService);
     sessionSer.loadOrUpdateAppInfo((state, data: SessionDto | any) => {
       if (state) {
-        resolve(null);
+        if (resolve) {
+          resolve(null);
+        }
       } else {
-        reject('init session info error' + data);
+        if (reject) {
+          reject('init session info error' + data);
+        }
       }
     });
   }

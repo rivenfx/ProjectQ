@@ -28,7 +28,7 @@ export class SessionService {
           callback(true, this.session);
         },
         error: (error) => {
-          callback(true, error);
+          callback(false, error);
         },
       });
   }

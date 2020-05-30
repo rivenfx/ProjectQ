@@ -18,7 +18,7 @@ import { RivenModule } from '../shared/riven';
     CommonModule,
     AccountRoutingModule,
     SharedModule,
-    RivenModule
+    RivenModule.forChild()
   ],
 })
 export class AccountModule {

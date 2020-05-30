@@ -3,6 +3,7 @@ import { SFSchema } from '@delon/form';
 import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '../../service-proxies';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { Router } from '@angular/router';
+import { SessionService } from '../../shared/riven';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +18,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,
     public tokenAuthSer: TokenAuthServiceProxy,
     public router: Router,
+    public sessionSer: SessionService,
   ) {
     this.input.useToken = true;
+    this.input.useCookie = false;
   }
 
   ngOnInit(): void {
@@ -26,20 +29,26 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
+    this.tokenService.clear();
   }
 
 
   submitForm() {
-    debugger
     this.tokenAuthSer.authenticate(this.input)
       .subscribe((result) => {
         this.tokenService.set({
           token: result.accessToken,
         });
-        this.router.navigateByUrl('/admin/dashboard').then(r => {
-          debugger
+
+        this.sessionSer.loadOrUpdateAppInfo((state, data) => {
+          if (state) {
+            this.router.navigateByUrl('/admin/dashboard')
+              .then(r => {
+
+              });
+          }
         });
+
       });
   }
 
