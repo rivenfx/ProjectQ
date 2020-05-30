@@ -35,7 +35,6 @@ export class SessionService {
 
   /** 加载本地化资源 */
   loadLocalization(lang?: string): Observable<{ [key: string]: string }> {
-    debugger
     return new Observable<{ [key: string]: string }>((obs) => {
       if (this.session
         && this.session.localization

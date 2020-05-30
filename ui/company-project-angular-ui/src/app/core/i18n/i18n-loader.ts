@@ -12,7 +12,6 @@ export class I18nLoader extends TranslateLoader {
 
 
   getTranslation(lang: string): Observable<any> {
-    debugger
     return this.sessionSer.loadLocalization();
   }
 

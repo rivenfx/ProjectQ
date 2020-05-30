@@ -95,7 +95,6 @@ export class I18NService implements AlainI18NService {
 
   /** 修改使用的语言 */
   use(lang: string): void {
-    debugger
     lang = lang || this.translate.getDefaultLang();
     if (this.currentLang === lang) {
       return;
