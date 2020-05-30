@@ -178,7 +178,7 @@ export class AbpHttpConfiguration {
 
 
 @Injectable()
-export class DefaultInterceptor implements HttpInterceptor {
+export class ServiceProxiesInterceptor implements HttpInterceptor {
 
   protected configuration = new AbpHttpConfiguration;
 

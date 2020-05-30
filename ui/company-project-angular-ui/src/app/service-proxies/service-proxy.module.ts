@@ -2,7 +2,7 @@ import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import * as ServiceProxies from './service-proxies';
-import { DefaultInterceptor } from './interceptor';
+import { ServiceProxiesInterceptor } from './interceptor';
 import { API_BASE_URL } from './service-proxies';
 import { AppConsts } from '@shared';
 import { throwIfAlreadyLoaded } from '../core/module-import-guard';
@@ -16,7 +16,7 @@ export const APIS = [
 ];
 
 export const APIS_HTTP_INTERCEPTORS = [
-  { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: ServiceProxiesInterceptor, multi: true },
 ];
 
 @NgModule({

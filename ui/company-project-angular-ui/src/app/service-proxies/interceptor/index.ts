@@ -1,1 +1,1 @@
-export * from './default-interceptor';
+export * from './service-proxies-interceptor';
