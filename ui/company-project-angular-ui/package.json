@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run color-less && ng s -o --port 22305 --proxy-config proxy.conf.json",
+    "start": "npm run color-less && ng s -o --port 22305",
+    "startProxy": "npm run color-less && ng s -o --port 22305 --proxy-config proxy.conf.json",
     "build": "npm run color-less && node --max_old_space_size=5120 ./node_modules/@angular/cli/bin/ng build --prod",
     "test": "ng test",
     "lint": "npm run lint:ts && npm run lint:style",
