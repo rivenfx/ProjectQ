@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AccountLayoutComponent } from './account-layout';
 import { LoginComponent } from './login';
-import { DashboardComponent } from '../admin/dashboard';
+import { LayoutAccountComponent } from '../layout/account';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: AccountLayoutComponent,
+    component: LayoutAccountComponent,
     children: [
       {
         path: 'login',

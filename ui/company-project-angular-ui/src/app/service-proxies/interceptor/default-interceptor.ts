@@ -13,6 +13,7 @@ import {
 } from '@angular/common/http';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { IAjaxResponse, IErrorInfo } from './interfaces';
+import { SettingsService } from '@delon/theme';
 
 
 // @Injectable()
@@ -176,7 +177,6 @@ export class AbpHttpConfiguration {
 }
 
 
-
 @Injectable()
 export class DefaultInterceptor implements HttpInterceptor {
 
@@ -184,6 +184,7 @@ export class DefaultInterceptor implements HttpInterceptor {
 
   constructor(
     @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,
+    private settings: SettingsService,
   ) {
     // this.configuration = configuration;
   }
@@ -237,10 +238,10 @@ export class DefaultInterceptor implements HttpInterceptor {
    * @param headers
    */
   protected addAspNetCoreCultureHeader(headers: HttpHeaders): HttpHeaders {
-    // let cookieLangValue = this._utilsService.getCookieValue("Abp.Localization.CultureName");
-    // if (cookieLangValue && headers && !headers.has('.AspNetCore.Culture')) {
-    //   headers = headers.set('.AspNetCore.Culture', cookieLangValue);
-    // }
+    const lang = this.settings.layout.lang;
+    if (lang && headers && !headers.has('.AspNetCore.Culture')) {
+      headers = headers.set('.AspNetCore.Culture', lang);
+    }
 
     return headers;
   }
@@ -250,11 +251,10 @@ export class DefaultInterceptor implements HttpInterceptor {
    * @param headers
    */
   protected addAcceptLanguageHeader(headers: HttpHeaders): HttpHeaders {
-    // let cookieLangValue = this._utilsService.getCookieValue("Abp.Localization.CultureName");
-    // if (cookieLangValue && headers && !headers.has('Accept-Language')) {
-    //   headers = headers.set('Accept-Language', cookieLangValue);
-    // }
-
+    const lang = this.settings.layout.lang;
+    if (lang && headers && !headers.has('Accept-Language')) {
+      headers = headers.set('Accept-Language', lang);
+    }
     return headers;
   }
 

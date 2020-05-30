@@ -422,6 +422,108 @@ export class SessionServiceProxy {
         }
         return _observableOf<SessionDto>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    getLocalization(): Observable<LocalizationDto> {
+        let url_ = this.baseUrl + "/apis/Session/GetLocalization";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetLocalization(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetLocalization(<any>response_);
+                } catch (e) {
+                    return <Observable<LocalizationDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<LocalizationDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetLocalization(response: HttpResponseBase): Observable<LocalizationDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = LocalizationDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<LocalizationDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getClaims(): Observable<ClaimsDto> {
+        let url_ = this.baseUrl + "/apis/Session/GetClaims";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetClaims(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetClaims(<any>response_);
+                } catch (e) {
+                    return <Observable<ClaimsDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ClaimsDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetClaims(response: HttpResponseBase): Observable<ClaimsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ClaimsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ClaimsDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -952,6 +1054,7 @@ export interface ILanguageInfoDto {
 }
 
 export class LocalizationDto implements ILocalizationDto {
+    default: LanguageInfoDto;
     current: LanguageInfoDto;
     languages: LanguageInfoDto[] | undefined;
 
@@ -966,6 +1069,7 @@ export class LocalizationDto implements ILocalizationDto {
 
     init(_data?: any) {
         if (_data) {
+            this.default = _data["default"] ? LanguageInfoDto.fromJS(_data["default"]) : <any>undefined;
             this.current = _data["current"] ? LanguageInfoDto.fromJS(_data["current"]) : <any>undefined;
             if (Array.isArray(_data["languages"])) {
                 this.languages = [] as any;
@@ -984,6 +1088,7 @@ export class LocalizationDto implements ILocalizationDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["default"] = this.default ? this.default.toJSON() : <any>undefined;
         data["current"] = this.current ? this.current.toJSON() : <any>undefined;
         if (Array.isArray(this.languages)) {
             data["languages"] = [];
@@ -1002,6 +1107,7 @@ export class LocalizationDto implements ILocalizationDto {
 }
 
 export interface ILocalizationDto {
+    default: LanguageInfoDto;
     current: LanguageInfoDto;
     languages: LanguageInfoDto[] | undefined;
 }

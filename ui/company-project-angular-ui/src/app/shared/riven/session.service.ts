@@ -1,7 +1,7 @@
-import { forwardRef, Inject, Injectable } from '@angular/core';
-import { ICurrentUserInfo } from './interfaces';
-import { SessionDto, SessionServiceProxy } from '../../service-proxies';
-import { catchError, finalize } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { LocalizationDto, SessionDto, SessionServiceProxy } from '../../service-proxies';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class SessionService {
@@ -31,5 +31,28 @@ export class SessionService {
           callback(false, error);
         },
       });
+  }
+
+  /** 加载本地化资源 */
+  loadLocalization(lang?: string): Observable<{ [key: string]: string }> {
+    debugger
+    return new Observable<{ [key: string]: string }>((obs) => {
+      if (this.session
+        && this.session.localization
+        && this.session.localization.current
+        && this.session.localization.current.culture === lang) {
+        obs.next(this.session.localization.current.texts);
+        obs.complete();
+      } else {
+        this.sessionSrv.getLocalization()
+          .pipe(finalize(() => {
+            obs.complete();
+          }))
+          .subscribe((res) => {
+            this._session.localization = res;
+            obs.next(this.session.localization.current.texts);
+          });
+      }
+    });
   }
 }

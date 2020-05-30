@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-account-layout',
-  templateUrl: './account-layout.component.html',
-  styleUrls:['./account-layout.component.less']
+  selector: 'layout-account',
+  templateUrl: './account.component.html',
+  styleUrls:['./account.component.less']
 })
-export class AccountLayoutComponent implements OnInit {
+export class LayoutAccountComponent implements OnInit {
 
   links = [
     {

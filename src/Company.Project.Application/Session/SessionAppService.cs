@@ -5,11 +5,15 @@ using Company.Project.Authorization.Users;
 using Company.Project.Configuration;
 using Company.Project.Localization.Dtos;
 using Company.Project.Session.Dtos;
+
 using Microsoft.Extensions.Configuration;
+
 using Nito.AsyncEx;
+
 using Riven;
 using Riven.Application;
 using Riven.Localization;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,9 +57,12 @@ namespace Company.Project.Session
             };
         }
 
-        LocalizationDto GetLocalization()
+        public LocalizationDto GetLocalization()
         {
             var localzation = new LocalizationDto();
+
+            localzation.Default = this._languageManager.GetDefaultLanguage().MapTo<LanguageInfoDto>();
+            localzation.Default.Texts = null;
             localzation.Current = _appSession.CurrentLanguage.MapTo<LanguageInfoDto>();
             localzation.Languages = this._languageManager.GetEnabledLanguages()
                 .Where(o => o.Culture != localzation.Current.Culture)
@@ -74,7 +81,7 @@ namespace Company.Project.Session
             return localzation;
         }
 
-        async Task<ClaimsDto> GetClaims()
+        public async Task<ClaimsDto> GetClaims()
         {
             var claimsDto = new ClaimsDto();
             claimsDto.AllClaims = this._claimsManager.GetAll().ToList();

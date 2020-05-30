@@ -1,11 +1,8 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { SessionService } from './session.service';
 import { PermissionCheckerService } from './permission-checker.service';
-import { AuthService } from './auth.service';
-import { AppInfoService } from './app-info.service';
 import { ValidationMessagesComponent } from './components/validation-messages';
-import { CommonModule } from '@angular/common';
-import { throwIfAlreadyLoaded } from '@core';
 
 const COMPONENTS = [
   ValidationMessagesComponent,
@@ -36,8 +33,6 @@ export class RivenModule {
       providers: [
         SessionService,
         PermissionCheckerService,
-        AuthService,
-        AppInfoService,
       ],
     };
   }

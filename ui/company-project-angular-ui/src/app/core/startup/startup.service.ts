@@ -35,9 +35,6 @@ export class StartupService {
     private injector: Injector,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
-
-    const aaa = i18n;
-    debugger
   }
 
   load(): Promise<any> {
@@ -70,6 +67,8 @@ export class StartupService {
     const sessionSer = this.injector.get(SessionService);
     sessionSer.loadOrUpdateAppInfo((state, data: SessionDto | any) => {
       if (state) {
+        this.i18n.init(data.localization);
+
         if (resolve) {
           resolve(null);
         }

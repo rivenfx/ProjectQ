@@ -5,7 +5,7 @@ import * as ServiceProxies from './service-proxies';
 import { DefaultInterceptor } from './interceptor';
 import { API_BASE_URL } from './service-proxies';
 import { AppConsts } from '@shared';
-import { throwIfAlreadyLoaded } from '@core';
+import { throwIfAlreadyLoaded } from '../core/module-import-guard';
 
 
 export const APIS = [

@@ -36,10 +36,10 @@ const HEADERCOMPONENTS = [
   HeaderUserComponent
 ];
 
-// passport
-import { LayoutPassportComponent } from './passport/passport.component';
-const PASSPORT = [
-  LayoutPassportComponent
+// account
+import { LayoutAccountComponent } from './account';
+const ACCOUNT = [
+  LayoutAccountComponent
 ];
 
 @NgModule({
@@ -47,11 +47,11 @@ const PASSPORT = [
   declarations: [
     ...COMPONENTS,
     ...HEADERCOMPONENTS,
-    ...PASSPORT
+    ...ACCOUNT
   ],
   exports: [
     ...COMPONENTS,
-    ...PASSPORT
+    ...ACCOUNT
   ]
 })
 export class LayoutModule { }

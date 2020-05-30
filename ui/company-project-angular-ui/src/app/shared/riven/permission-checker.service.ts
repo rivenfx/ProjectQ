@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AppInfoService } from './app-info.service';
 import { ACLService } from '@delon/acl';
 import { IAppInfo, IClaims } from './interfaces';
 

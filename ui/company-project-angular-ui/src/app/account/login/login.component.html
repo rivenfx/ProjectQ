@@ -27,7 +27,7 @@
                  [(ngModel)]="input.account"
                  name="accountInput"
                  type="text"
-                 placeholder="Username"
+                 [placeholder]=" 'Account' | translate"
                  required
                  minlength="3"
                  maxlength="32"/>

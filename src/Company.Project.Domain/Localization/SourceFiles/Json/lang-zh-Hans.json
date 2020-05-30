@@ -7,5 +7,6 @@
     "NotLoggedIn": "未登录系统",
     "SomeClaimDoNotExist": "某些Claim不存在",
     "WithoutAnyClaim": "没有任何Claim",
+    "Account": "账号"
   }
 }
