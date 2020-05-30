@@ -30,7 +30,7 @@ import { AppConsts } from '@shared';
           [nzSelected]="item.code === curLangCode"
           (click)="change(item.code)"
         >
-          <span role="img" [attr.aria-label]="item.text" class="pr-xs">{{ item.abbr }}</span>
+          <!-- <span role="img" [attr.aria-label]="item.text" class="pr-xs">{{ item.abbr }}</span>-->
           {{ item.text }}
         </li>
       </ul>
@@ -54,7 +54,6 @@ export class HeaderI18nComponent {
     private settings: SettingsService,
     @Inject(ALAIN_I18N_TOKEN) private i18n: I18NService,
     @Inject(DOCUMENT) private doc: any,
-    private cdr: ChangeDetectorRef,
   ) {
 
   }
@@ -66,7 +65,7 @@ export class HeaderI18nComponent {
     this.doc.body.appendChild(spinEl);
 
     this.i18n.use(lang);
-    this.settings.setLayout(AppConsts.settings.lang, lang);
+
     setTimeout(() => this.doc.location.reload());
   }
 }

@@ -9,3 +9,4 @@ export * from './json-schema/json-schema.module';
 
 
 export * from './app-consts';
+export * from './common';

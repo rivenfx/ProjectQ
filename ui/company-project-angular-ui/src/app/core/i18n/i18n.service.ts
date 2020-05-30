@@ -16,6 +16,7 @@ import { filter } from 'rxjs/operators';
 import { I18nCommon } from './i18n-common';
 import { ILang } from './interfaces';
 import { LocalizationDto } from '../../service-proxies';
+import { AppConsts } from '@shared';
 
 
 @Injectable({ providedIn: 'root' })
@@ -95,12 +96,16 @@ export class I18NService implements AlainI18NService {
 
   /** 修改使用的语言 */
   use(lang: string): void {
+    this.settings.setLayout(AppConsts.settings.lang, lang);
+
     lang = lang || this.translate.getDefaultLang();
     if (this.currentLang === lang) {
       return;
     }
     this.updateLangData(lang);
-    this.translate.use(lang).subscribe(() => this.change$.next(lang));
+    this.translate.use(lang).subscribe(() => {
+      this.change$.next(lang);
+    });
   }
 
   /** 获取语言列表 */

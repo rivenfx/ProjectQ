@@ -43,7 +43,7 @@
                  [(ngModel)]="input.password"
                  name="passwordInput"
                  type="password"
-                 placeholder="Password"
+                 [placeholder]=" 'Password' | translate"
                  required
                  minlength="6"
                  maxlength="32"/>
