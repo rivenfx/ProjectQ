@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Injector } from '@angular/core';
 import * as screenfull from 'screenfull';
+import { SampleComponentBase } from '@shared';
 
 @Component({
   selector: 'header-fullscreen',
   template: `
     <i nz-icon [nzType]="status ? 'fullscreen-exit' : 'fullscreen'"></i>
-    {{ (status ? 'menu.fullscreen.exit' : 'menu.fullscreen') | translate }}
+    {{ l(status ? 'menu.fullscreen.exit' : 'menu.fullscreen') }}
   `,
   // tslint:disable-next-line: no-host-metadata-property
   host: {
@@ -13,10 +14,17 @@ import * as screenfull from 'screenfull';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderFullScreenComponent {
+export class HeaderFullScreenComponent extends SampleComponentBase {
   status = false;
+
   private get sf(): screenfull.Screenfull {
     return screenfull as screenfull.Screenfull;
+  }
+
+  constructor(
+    injector: Injector,
+  ) {
+    super(injector);
   }
 
   @HostListener('window:resize')

@@ -55,8 +55,12 @@ export class HeaderI18nComponent extends SampleComponentBase {
     private settings: SettingsService,
     @Inject(ALAIN_I18N_TOKEN) private i18n: I18nService,
     @Inject(DOCUMENT) private doc: any,
+    private cdr: ChangeDetectorRef,
   ) {
     super(injector);
+    this.i18n.change.subscribe((lang) => {
+      this.cdr.detectChanges();
+    });
   }
 
   change(lang: string) {

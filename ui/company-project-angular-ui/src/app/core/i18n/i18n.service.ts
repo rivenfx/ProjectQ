@@ -56,6 +56,7 @@ export class I18nService implements AlainI18NService {
     this.sessionSer.loadLocalization()
       .subscribe(() => {
         this.updateLangData(lang);
+        this.change$.next(lang);
       });
   }
 

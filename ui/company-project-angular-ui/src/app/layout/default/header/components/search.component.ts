@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostBinding,
+  Injector,
+  Input,
+} from '@angular/core';
+import { SampleComponentBase } from '@shared';
 
 @Component({
   selector: 'header-search',
@@ -9,13 +18,14 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBind
         [(ngModel)]="q"
         (focus)="qFocus()"
         (blur)="qBlur()"
-        [placeholder]="'menu.search.placeholder' | translate"
+        [placeholder]="l('menu.search.placeholder')"
       />
     </nz-input-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderSearchComponent implements AfterViewInit {
+export class HeaderSearchComponent extends SampleComponentBase
+  implements AfterViewInit {
   q: string;
 
   qIpt: HTMLInputElement;
@@ -36,7 +46,12 @@ export class HeaderSearchComponent implements AfterViewInit {
     setTimeout(() => this.qIpt.focus(), 300);
   }
 
-  constructor(private el: ElementRef) {}
+  constructor(
+    injector: Injector,
+    private el: ElementRef,
+  ) {
+    super(injector);
+  }
 
   ngAfterViewInit() {
     this.qIpt = (this.el.nativeElement as HTMLElement).querySelector('.ant-input') as HTMLInputElement;

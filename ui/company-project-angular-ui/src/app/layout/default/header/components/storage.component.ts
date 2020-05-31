@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Injector } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { SampleComponentBase } from '@shared';
 
 @Component({
   selector: 'header-storage',
   template: `
     <i nz-icon nzType="tool"></i>
-    {{ 'menu.clear.local.storage' | translate }}
+    {{ l('menu.clear.local.storage') }}
   `,
   // tslint:disable-next-line: no-host-metadata-property
   host: {
@@ -14,8 +15,14 @@ import { NzModalService } from 'ng-zorro-antd/modal';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderStorageComponent {
-  constructor(private modalSrv: NzModalService, private messageSrv: NzMessageService) {}
+export class HeaderStorageComponent extends SampleComponentBase {
+  constructor(
+    injector: Injector,
+    private modalSrv: NzModalService,
+    private messageSrv: NzMessageService,
+  ) {
+    super(injector);
+  }
 
   @HostListener('click')
   _click() {
