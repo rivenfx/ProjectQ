@@ -5,7 +5,7 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { Router } from '@angular/router';
 import { SessionService } from '../../shared/riven';
 import { ALAIN_I18N_TOKEN, TitleService } from '@delon/theme';
-import { I18NService } from '@core';
+import { I18nService } from '@core';
 import { AppComponentBase } from '@shared';
 
 @Component({

@@ -1,17 +1,17 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector, Input } from '@angular/core';
 import { ALAIN_I18N_TOKEN, SettingsService } from '@delon/theme';
 import { InputBoolean } from '@delon/util';
 
-import { I18NService } from '@core';
-import { AppConsts } from '@shared';
+import { I18nService } from '@core';
+import { AppConsts, SampleComponentBase } from '@shared';
 
 @Component({
   selector: 'header-i18n',
   template: `
     <div *ngIf="showLangText" nz-dropdown [nzDropdownMenu]="langMenu" nzPlacement="bottomRight">
       <i nz-icon nzType="global"></i>
-      {{ 'menu.lang' | translate }}
+      {{ l('menu.lang') }}
       <i nz-icon nzType="down"></i>
     </div>
     <i
@@ -27,18 +27,18 @@ import { AppConsts } from '@shared';
         <li
           nz-menu-item
           *ngFor="let item of langs"
-          [nzSelected]="item.code === curLangCode"
-          (click)="change(item.code)"
+          [nzSelected]="item.culture === curLangCode"
+          (click)="change(item.culture)"
         >
           <!-- <span role="img" [attr.aria-label]="item.text" class="pr-xs">{{ item.abbr }}</span>-->
-          {{ item.text }}
+          {{ item.displayName }}
         </li>
       </ul>
     </nz-dropdown-menu>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderI18nComponent {
+export class HeaderI18nComponent extends SampleComponentBase {
   /** Whether to display language text */
   @Input() @InputBoolean() showLangText = true;
 
@@ -51,21 +51,15 @@ export class HeaderI18nComponent {
   }
 
   constructor(
+    injector: Injector,
     private settings: SettingsService,
-    @Inject(ALAIN_I18N_TOKEN) private i18n: I18NService,
+    @Inject(ALAIN_I18N_TOKEN) private i18n: I18nService,
     @Inject(DOCUMENT) private doc: any,
   ) {
-
+    super(injector);
   }
 
   change(lang: string) {
-    const spinEl = this.doc.createElement('div');
-    spinEl.setAttribute('class', `page-loading ant-spin ant-spin-lg ant-spin-spinning`);
-    spinEl.innerHTML = `<span class="ant-spin-dot ant-spin-dot-spin"><i></i><i></i><i></i><i></i></span>`;
-    this.doc.body.appendChild(spinEl);
-
     this.i18n.use(lang);
-
-    setTimeout(() => this.doc.location.reload());
   }
 }

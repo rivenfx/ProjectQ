@@ -5,7 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 
 //
-import { StartupService, I18nCommon, I18NService, I18nLoader } from '@core';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { StartupService, I18nCommon, I18nService, I18nModule } from '@core';
 
 //
 import { AppComponent } from './app.component';
@@ -23,13 +24,13 @@ import { RivenModule } from './shared/riven';
 
 registerLocaleData(I18nCommon.DEFAULT_LANG.ng, I18nCommon.DEFAULT_LANG.abbr);
 const I18N_SERVICE_PROVIDES = [
-  { provide: ALAIN_I18N_TOKEN, useClass: I18NService, multi: false },
+  { provide: ALAIN_I18N_TOKEN, useClass: I18nService, multi: false },
 ];
 // #region
 
 // #region JSON Schema form (using @delon/form)
 import { JsonSchemaModule } from '@shared';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+
 
 const FORM_MODULES = [JsonSchemaModule];
 
@@ -68,6 +69,7 @@ const APPINIT_PROVIDES = [
     HttpClientModule,
     //
     GlobalConfigModule.forRoot(),
+    I18nModule.forRoot(),
     CoreModule,
     SharedModule,
     LayoutModule,
@@ -76,7 +78,6 @@ const APPINIT_PROVIDES = [
     //
     AppRoutingModule,
     //
-    ...I18nCommon.I18NSERVICE_MODULES,
     ...FORM_MODULES,
     ...GLOBAL_THIRD_MODULES,
   ],
