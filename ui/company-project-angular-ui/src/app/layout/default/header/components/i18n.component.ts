@@ -9,10 +9,10 @@ import { AppConsts, SampleComponentBase } from '@shared';
 @Component({
   selector: 'header-i18n',
   template: `
-    <div *ngIf="showLangText" nz-dropdown [nzDropdownMenu]="langMenu" nzPlacement="bottomRight">
-      <i nz-icon nzType="global"></i>
-      {{ l('menu.lang') }}
-      <i nz-icon nzType="down"></i>
+    <div *ngIf="showLangText" nz-dropdown [nzDropdownMenu]="langMenu" nzPlacement="bottomRight" class="alain-default__nav-item">
+      <i nz-icon nzType="global" class="alain-default__nav-item-icon"></i>
+<!--      {{ curLang.displayName }}-->
+<!--      <i nz-icon nzType="down"></i>-->
     </div>
     <i
       *ngIf="!showLangText"
@@ -27,7 +27,7 @@ import { AppConsts, SampleComponentBase } from '@shared';
         <li
           nz-menu-item
           *ngFor="let item of langs"
-          [nzSelected]="item.culture === curLangCode"
+          [nzSelected]="item.culture === curLangCulture"
           (click)="change(item.culture)"
         >
           <!-- <span role="img" [attr.aria-label]="item.text" class="pr-xs">{{ item.abbr }}</span>-->
@@ -43,27 +43,28 @@ export class HeaderI18nComponent extends SampleComponentBase {
   @Input() @InputBoolean() showLangText = true;
 
   get langs() {
-    return this.i18n.getLangs();
+    return this.i18nSer.getLangs();
   }
 
-  get curLangCode() {
-    return this.settings.layout.lang;
+  get curLangCulture() {
+    return this.curLang.culture;
+  }
+
+  get curLang(){
+   return  this.i18nSer.curLang;
   }
 
   constructor(
     injector: Injector,
-    private settings: SettingsService,
-    @Inject(ALAIN_I18N_TOKEN) private i18n: I18nService,
-    @Inject(DOCUMENT) private doc: any,
     private cdr: ChangeDetectorRef,
   ) {
     super(injector);
-    this.i18n.change.subscribe((lang) => {
+    this.i18nSer.change.subscribe((lang) => {
       this.cdr.detectChanges();
     });
   }
 
   change(lang: string) {
-    this.i18n.use(lang);
+    this.i18nSer.use(lang);
   }
 }

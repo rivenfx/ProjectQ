@@ -1054,8 +1054,8 @@ export interface ILanguageInfoDto {
 }
 
 export class LocalizationDto implements ILocalizationDto {
-    default: LanguageInfoDto;
-    current: LanguageInfoDto;
+    defaultCulture: string | undefined;
+    currentCulture: string | undefined;
     languages: LanguageInfoDto[] | undefined;
 
     constructor(data?: ILocalizationDto) {
@@ -1069,8 +1069,8 @@ export class LocalizationDto implements ILocalizationDto {
 
     init(_data?: any) {
         if (_data) {
-            this.default = _data["default"] ? LanguageInfoDto.fromJS(_data["default"]) : <any>undefined;
-            this.current = _data["current"] ? LanguageInfoDto.fromJS(_data["current"]) : <any>undefined;
+            this.defaultCulture = _data["defaultCulture"];
+            this.currentCulture = _data["currentCulture"];
             if (Array.isArray(_data["languages"])) {
                 this.languages = [] as any;
                 for (let item of _data["languages"])
@@ -1088,8 +1088,8 @@ export class LocalizationDto implements ILocalizationDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["default"] = this.default ? this.default.toJSON() : <any>undefined;
-        data["current"] = this.current ? this.current.toJSON() : <any>undefined;
+        data["defaultCulture"] = this.defaultCulture;
+        data["currentCulture"] = this.currentCulture;
         if (Array.isArray(this.languages)) {
             data["languages"] = [];
             for (let item of this.languages)
@@ -1107,8 +1107,8 @@ export class LocalizationDto implements ILocalizationDto {
 }
 
 export interface ILocalizationDto {
-    default: LanguageInfoDto;
-    current: LanguageInfoDto;
+    defaultCulture: string | undefined;
+    currentCulture: string | undefined;
     languages: LanguageInfoDto[] | undefined;
 }
 

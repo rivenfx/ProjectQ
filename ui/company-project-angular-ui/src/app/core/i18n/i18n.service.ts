@@ -6,12 +6,13 @@ import {
   DelonLocaleService,
   SettingsService,
 } from '@delon/theme';
+import { AppConsts } from '@shared';
 import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { I18nCommon } from './i18n-common';
-import { AppConsts } from '@shared';
+import { LanguageInfoDto, LocalizationDto } from '../../service-proxies';
 import { SessionService } from '../../shared/riven';
+import { I18nCommon } from './i18n-common';
 
 
 @Injectable({ providedIn: 'root' })
@@ -21,7 +22,10 @@ export class I18nService implements AlainI18NService {
   private _replaceValue = '\\$&';
   private _relaceFlags = 'g';
 
+
   private change$ = new BehaviorSubject<string | null>(null);
+  private _localization: LocalizationDto;
+  private _curLang: LanguageInfoDto;
 
   constructor(
     private settings: SettingsService,
@@ -29,7 +33,13 @@ export class I18nService implements AlainI18NService {
     private delonLocaleService: DelonLocaleService,
     private sessionSer: SessionService,
   ) {
-
+    this.sessionSer.localizationChange
+      .subscribe((result) => {
+        if(result){
+          this._localization = result;
+          this._curLang = result.languages.find(o => o.culture === result.currentCulture);
+        }
+      });
   }
 
   /** 更新语言数据 */
@@ -46,23 +56,31 @@ export class I18nService implements AlainI18NService {
     return this.change$.asObservable().pipe(filter((w) => w != null)) as Observable<string>;
   }
 
+  /** 获取当前语言 */
+  get curLang() {
+    return this._curLang;
+  }
+
+  /** 获取语言列表 */
+  getLangs() {
+    if(!this._localization){
+      return  [];
+    }
+    return this._localization.languages;
+  }
+
   /** 修改使用的语言 */
   use(lang: string): void {
-    if (lang === this.sessionSer.session.localization.current.culture) {
+    this.settings.setLayout(AppConsts.settings.lang, lang);
+    if (lang === this._localization.currentCulture) {
       return;
     }
 
-    this.settings.setLayout(AppConsts.settings.lang, lang);
     this.sessionSer.loadLocalization()
       .subscribe(() => {
         this.updateLangData(lang);
         this.change$.next(lang);
       });
-  }
-
-  /** 获取语言列表 */
-  getLangs() {
-    return this.sessionSer.session.localization.languages;
   }
 
   /**
@@ -71,15 +89,12 @@ export class I18nService implements AlainI18NService {
    * @param interpolateParams 模板参数
    */
   fanyi(key: string, interpolateParams?: {}) {
-    if (!this.sessionSer.session
-      || !this.sessionSer.session.localization
-      || !this.sessionSer.session.localization.current
-      || !this.sessionSer.session.localization.current.texts) {
+    if (!this._localization) {
       return key;
     }
 
 
-    let value = this.sessionSer.session.localization.current.texts[key];
+    let value = this.curLang.texts[key];
     if (!value) {
       return key;
     }
@@ -93,8 +108,8 @@ export class I18nService implements AlainI18NService {
 
   /**
    * 格式化本地化文字
-   * @param inputStr
-   * @param args
+   * @param inputStr 要格式化的文字
+   * @param args 格式化的参数
    */
   private formatString(inputStr: string, args: any[]) {
     if (!args || args.length < 1) {
@@ -110,4 +125,5 @@ export class I18nService implements AlainI18NService {
 
     return inputStr;
   }
+
 }

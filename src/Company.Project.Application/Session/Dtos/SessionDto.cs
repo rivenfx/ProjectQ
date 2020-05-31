@@ -28,10 +28,9 @@ namespace Company.Project.Session.Dtos
 
     public class LocalizationDto
     {
-        public LanguageInfoDto Default { get; set; }
+        public string DefaultCulture { get; set; }
 
-        public LanguageInfoDto Current { get; set; }
-      
+        public string CurrentCulture { get; set; }
 
         public List<LanguageInfoDto> Languages { get; set; }
 

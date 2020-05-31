@@ -1,21 +1,29 @@
 import { Injectable } from '@angular/core';
-import { LocalizationDto, SessionDto, SessionServiceProxy } from '../../service-proxies';
-import { Observable } from 'rxjs';
+import { LanguageInfoDto, LocalizationDto, SessionDto, SessionServiceProxy } from '../../service-proxies';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 @Injectable()
 export class SessionService {
+
+  private localizationChange$ = new BehaviorSubject<LocalizationDto | null>(null);
+
   private _session: SessionDto;
 
-  get session(): SessionDto {
-    return this._session;
-  }
 
   constructor(
     private sessionSrv: SessionServiceProxy,
   ) {
   }
 
+
+  get session(): SessionDto {
+    return this._session;
+  }
+
+  get localizationChange(): Observable<LocalizationDto | null> {
+    return this.localizationChange$.asObservable();
+  }
 
   /**
    * 加载或更新AppInfo
@@ -25,6 +33,7 @@ export class SessionService {
       .subscribe({
         next: (res) => {
           this._session = res;
+          this.localizationChange$.next(this._session.localization);
           callback(true, this.session);
         },
         error: (error) => {
@@ -34,13 +43,14 @@ export class SessionService {
   }
 
   /** 加载本地化资源 */
-  loadLocalization(lang?: string): Observable<{ [key: string]: string }> {
-    return new Observable<{ [key: string]: string }>((obs) => {
+  loadLocalization(culture?: string): Observable<LocalizationDto | null> {
+    return new Observable<LocalizationDto | null>((obs) => {
       if (this.session
         && this.session.localization
-        && this.session.localization.current
-        && this.session.localization.current.culture === lang) {
-        obs.next(this.session.localization.current.texts);
+        && this.session.localization.currentCulture
+        && this.session.localization.currentCulture === culture) {
+        this.localizationChange$.next(this.session.localization);
+        obs.next(this.session.localization);
         obs.complete();
       } else {
         this.sessionSrv.getLocalization()
@@ -48,8 +58,9 @@ export class SessionService {
             obs.complete();
           }))
           .subscribe((res) => {
-            this._session.localization = res;
-            obs.next(this.session.localization.current.texts);
+            this.session.localization = res;
+            this.localizationChange$.next(this.session.localization);
+            obs.next(this.session.localization);
           });
       }
     });

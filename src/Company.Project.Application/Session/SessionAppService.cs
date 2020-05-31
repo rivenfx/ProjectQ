@@ -61,21 +61,20 @@ namespace Company.Project.Session
         {
             var localzation = new LocalizationDto();
 
-            localzation.Default = this._languageManager.GetDefaultLanguage().MapTo<LanguageInfoDto>();
-            localzation.Default.Texts = null;
-            localzation.Current = _appSession.CurrentLanguage.MapTo<LanguageInfoDto>();
+            localzation.DefaultCulture = this._languageManager.GetDefaultLanguage().Culture;
+            localzation.CurrentCulture = _appSession.CurrentLanguage.Culture;
+
             localzation.Languages = this._languageManager.GetEnabledLanguages()
-                .Where(o => o.Culture != localzation.Current.Culture)
                 .Select(o =>
                 {
-                    return new LanguageInfoDto
+                    var dto = o.MapTo<LanguageInfoDto>();
+                    if (localzation.CurrentCulture != dto.Culture)
                     {
-                        Culture = o.Culture,
-                        DisplayName = o.DisplayName,
-                        Extra = o.Extra,
-                        Icon = o.Icon,
-                        Texts = null
-                    };
+                        dto.Texts = null;
+                    }
+
+                    return dto;
+
                 }).ToList();
 
             return localzation;
