@@ -12,181 +12,22 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
-import { IAjaxResponse, IErrorInfo } from './interfaces';
 import { SettingsService } from '@delon/theme';
+import { ServiceProxiesInterceptorConfiguration } from './service-proxies-interceptor-configuration';
 
 
-// @Injectable()
-export class AbpHttpConfiguration {
-
-  defaultError = <IErrorInfo>{
-    message: 'An error has occurred!',
-    details: 'Error details were not sent by server.',
-  };
-
-  defaultError401 = <IErrorInfo>{
-    message: 'You are not authenticated!',
-    details: 'You should be authenticated (sign in) in order to perform this operation.',
-  };
-
-  defaultError403 = <IErrorInfo>{
-    message: 'You are not authorized!',
-    details: 'You are not allowed to perform this operation.',
-  };
-
-  defaultError404 = <IErrorInfo>{
-    message: 'Resource not found!',
-    details: 'The resource requested could not be found on the server.',
-  };
-
-  logError(error: IErrorInfo): void {
-    console.error(error);
-  }
-
-  showError(error: IErrorInfo): any {
-    if (error.details) {
-      return alert(error.details + (error.message || this.defaultError.message));
-    } else {
-      return alert(error.message || this.defaultError.message);
-    }
-  }
-
-  handleTargetUrl(targetUrl: string): void {
-    if (!targetUrl) {
-      location.href = '/';
-    } else {
-      location.href = targetUrl;
-    }
-  }
-
-  handleUnAuthorizedRequest(messagePromise: any, targetUrl?: string) {
-    const self = this;
-
-    if (messagePromise) {
-      messagePromise.done(() => {
-        this.handleTargetUrl(targetUrl || '/');
-      });
-    } else {
-      self.handleTargetUrl(targetUrl || '/');
-    }
-  }
-
-  handleNonAbpErrorResponse(response: HttpResponse<any>) {
-    const self = this;
-
-    switch (response.status) {
-      case 401:
-        self.handleUnAuthorizedRequest(
-          self.showError(self.defaultError401),
-          '/',
-        );
-        break;
-      case 403:
-        self.showError(self.defaultError403);
-        break;
-      case 404:
-        self.showError(self.defaultError404);
-        break;
-      default:
-        self.showError(self.defaultError);
-        break;
-    }
-  }
-
-  handleAjaxResponse(response: HttpResponse<any>, ajaxResponse: IAjaxResponse): HttpResponse<any> {
-    let newResponse: HttpResponse<any>;
-
-    if (ajaxResponse.success) {
-
-      newResponse = response.clone({
-        body: ajaxResponse.result,
-      });
-
-      if (ajaxResponse.targetUrl) {
-        this.handleTargetUrl(ajaxResponse.targetUrl);
-      }
-    } else {
-
-      newResponse = response.clone({
-        body: ajaxResponse.result,
-      });
-
-      if (!ajaxResponse.error) {
-        ajaxResponse.error = this.defaultError;
-      }
-
-      this.logError(ajaxResponse.error);
-      this.showError(ajaxResponse.error);
-
-      if (response.status === 401) {
-        this.handleUnAuthorizedRequest(null, ajaxResponse.targetUrl);
-      }
-    }
-
-    return newResponse;
-  }
-
-  getAjaxResponseOrNull(response: HttpResponse<any>): IAjaxResponse | null {
-    if (!response || !response.headers) {
-      return null;
-    }
-
-    const contentType = response.headers.get('Content-Type');
-    if (!contentType) {
-      console.warn('Content-Type is not sent!');
-      return null;
-    }
-
-    if (contentType.indexOf('application/json') < 0) {
-      console.warn('Content-Type is not application/json: ' + contentType);
-      return null;
-    }
-
-    const responseObj = JSON.parse(JSON.stringify(response.body));
-    // if (!responseObj.__abp) {
-    //   return null;
-    // }
-
-    return responseObj as IAjaxResponse;
-  }
-
-  handleResponse(response: HttpResponse<any>): HttpResponse<any> {
-    let ajaxResponse = this.getAjaxResponseOrNull(response);
-    if (ajaxResponse == null) {
-      return response;
-    }
-
-    return this.handleAjaxResponse(response, ajaxResponse);
-  }
-
-  blobToText(blob: any): Observable<string> {
-    return new Observable<string>((observer: any) => {
-      if (!blob) {
-        observer.next('');
-        observer.complete();
-      } else {
-        let reader = new FileReader();
-        reader.onload = function() {
-          observer.next(this.result);
-          observer.complete();
-        };
-        reader.readAsText(blob);
-      }
-    });
-  }
-}
-
-
+/**
+ * 代理类http请求拦截器
+ */
 @Injectable()
 export class ServiceProxiesInterceptor implements HttpInterceptor {
 
-  protected configuration = new AbpHttpConfiguration;
+  protected configuration = new ServiceProxiesInterceptorConfiguration();
 
   constructor(
     @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,
     private settings: SettingsService,
   ) {
-    // this.configuration = configuration;
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -346,7 +187,7 @@ export class ServiceProxiesInterceptor implements HttpInterceptor {
       if (ajaxResponse != null) {
         this.configuration.handleResponse(errorResponse);
       } else {
-        this.configuration.handleNonAbpErrorResponse(errorResponse);
+        this.configuration.handleNonWrapErrorResponse(errorResponse);
       }
 
       errorObservable.complete();

@@ -29,4 +29,6 @@ export interface IAjaxResponse {
   error?: IErrorInfo;
 
   unAuthorizedRequest: boolean;
+
+  __wrap: boolean;
 }
