@@ -16,6 +16,7 @@ using Riven.Localization;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,12 +49,15 @@ namespace Company.Project.Session
 
 
 
+
+
             return new SessionDto()
             {
                 Name = appInfo.Name,
                 Version = appInfo.Version,
                 Auth = await this.GetClaims(),
                 Localization = this.GetLocalization(),
+                Menu = this.GetMenu()
             };
         }
 
@@ -106,6 +110,12 @@ namespace Company.Project.Session
             }
 
             return claimsDto;
+        }
+
+
+        protected virtual string GetMenu()
+        {
+            return File.ReadAllText("./Menus/menus.json", Encoding.UTF8);
         }
     }
 }

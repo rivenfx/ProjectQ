@@ -83,6 +83,10 @@ namespace Company.Project.Controllers
              */
 
             var claimsList = claims.ToList();
+
+            //var defaultNameIdentifier = claimsList.First(o => o.Type == ClaimTypes.NameIdentifier);
+
+            //claimsList.Add(new Claim(JwtRegisteredClaimNames.Sub, defaultNameIdentifier.Value));
             claimsList.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claimsList.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.Now.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64));
 

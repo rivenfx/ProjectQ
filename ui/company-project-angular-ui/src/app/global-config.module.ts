@@ -19,12 +19,11 @@ const alainConfig: AlainConfig = {
   auth: {
     login_url: '/account/login', // 登录页面
     store_key: 'riven_token',    // 存储token的键值
-    token_send_place: 'header',  // 附加token的位置
-    token_send_key: 'token',     // 替换模板的名称
-    token_send_template: 'Bearer ${token}', // 模板
     ignores: [/.*/, /.*?assets\//], // 忽略的地址
   },
-  acl: {},
+  acl: {
+    guard_url: '/admin/dashboard',
+  },
 };
 
 const alainModules = [

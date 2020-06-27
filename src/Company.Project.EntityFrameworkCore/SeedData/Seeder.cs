@@ -64,18 +64,21 @@ namespace Company.Project.SeedData
                 systemRole = await roleManager.CreateAsync(
                         AppConsts.Authorization.SystemRoleName,
                         AppConsts.Authorization.SystemRoleDisplayName,
-                        AppConsts.Authorization.SystemRoleDisplayName,
-
-                        AppClaimsConsts.User.Query,
-                        AppClaimsConsts.User.Create,
-                        AppClaimsConsts.User.Edit,
-                        AppClaimsConsts.User.Delete,
-
-                        AppClaimsConsts.Role.Query,
-                        AppClaimsConsts.Role.Edit,
-                        AppClaimsConsts.Role.Delete
+                        AppConsts.Authorization.SystemRoleDisplayName
                     );
             }
+
+            // 附加权限
+            await roleManager.ChangeIdentityClaimsAsync(systemRole,
+                          AppClaimsConsts.User.Query,
+                          AppClaimsConsts.User.Create,
+                          AppClaimsConsts.User.Edit,
+                          AppClaimsConsts.User.Delete,
+
+                          AppClaimsConsts.Role.Query,
+                          AppClaimsConsts.Role.Edit,
+                          AppClaimsConsts.Role.Delete
+                          );
 
             var userManager = scopeServiceProvider.GetService<UserManager>();
             // 管理员用户

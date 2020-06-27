@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+
 using Riven.Dependency;
 using Riven.Extensions;
 using Riven.Localization;
@@ -31,15 +34,21 @@ namespace Company.Project.Authorization
 
         long? GetUserId()
         {
-            long? userId = null;
-
             var userIdString = _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
             if (!userIdString.IsNullOrWhiteSpace())
             {
-                userId = long.Parse(userIdString);
+                return long.Parse(userIdString);
             }
 
-            return userId;
+            userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!userIdString.IsNullOrWhiteSpace())
+            {
+                return long.Parse(userIdString);
+            }
+
+
+            return null;
         }
     }
 }

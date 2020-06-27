@@ -37,6 +37,25 @@ namespace Company.Project
 
 
         /// <summary>
+        /// 所有的claims
+        /// </summary>
+        /// <returns></returns>
+        public static string[] GetClaims()
+        {
+            return new string[]
+            {
+                 AppClaimsConsts.User.Query,
+                 AppClaimsConsts.User.Create,
+                 AppClaimsConsts.User.Edit,
+                 AppClaimsConsts.User.Delete,
+
+                 AppClaimsConsts.Role.Query,
+                 AppClaimsConsts.Role.Edit,
+                 AppClaimsConsts.Role.Delete
+            };
+        }
+
+        /// <summary>
         /// 注册 claims
         /// </summary>
         /// <param name="serviceProvider">注入容器</param>
@@ -45,14 +64,7 @@ namespace Company.Project
         {
             var claimsManager = serviceProvider.GetRequiredService<IClaimsManager>();
             claimsManager.Add(
-                    AppClaimsConsts.User.Query,
-                    AppClaimsConsts.User.Create,
-                    AppClaimsConsts.User.Edit,
-                    AppClaimsConsts.User.Delete,
-
-                    AppClaimsConsts.Role.Query,
-                    AppClaimsConsts.Role.Edit,
-                    AppClaimsConsts.Role.Delete
+                    AppClaimsConsts.GetClaims()
                 );
 
             return serviceProvider;

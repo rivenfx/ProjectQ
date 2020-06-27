@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { SimpleGuard } from '@delon/auth';
+import { ACLGuard } from '@delon/acl';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
-import { SimpleGuard } from '@delon/auth';
+import { RoleComponent } from './role';
+import { UserComponent } from './user';
+import { ClaimsGuard } from '../shared/riven';
 
 
 const routes: Routes = [
@@ -10,10 +14,21 @@ const routes: Routes = [
     path: '',
     component: LayoutDefaultComponent,
     canActivate: [SimpleGuard],
+    canActivateChild: [ClaimsGuard],
     children: [
       {
         path: 'dashboard',
         component: DashboardComponent,
+      },
+      {
+        path: 'role',
+        component: RoleComponent,
+        data: { claims: ['role.query'] },
+      },
+      {
+        path: 'user',
+        component: UserComponent,
+        data: { claims: 'user.query' },
       },
       {
         path: '**',

@@ -17,6 +17,73 @@ import * as moment from 'moment';
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
+export class ClaimsServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAllClaims(): Observable<string[]> {
+        let url_ = this.baseUrl + "/apis/Claims/GetAllClaims";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllClaims(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllClaims(<any>response_);
+                } catch (e) {
+                    return <Observable<string[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllClaims(response: HttpResponseBase): Observable<string[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string[]>(<any>null);
+    }
+}
+
+@Injectable()
 export class RoleServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1114,9 +1181,11 @@ export interface ILocalizationDto {
 
 export class SessionDto implements ISessionDto {
     name: string | undefined;
+    displayName: string | undefined;
     version: string | undefined;
     auth: ClaimsDto;
     localization: LocalizationDto;
+    menu: string | undefined;
 
     constructor(data?: ISessionDto) {
         if (data) {
@@ -1130,9 +1199,11 @@ export class SessionDto implements ISessionDto {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.displayName = _data["displayName"];
             this.version = _data["version"];
             this.auth = _data["auth"] ? ClaimsDto.fromJS(_data["auth"]) : <any>undefined;
             this.localization = _data["localization"] ? LocalizationDto.fromJS(_data["localization"]) : <any>undefined;
+            this.menu = _data["menu"];
         }
     }
 
@@ -1146,9 +1217,11 @@ export class SessionDto implements ISessionDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["displayName"] = this.displayName;
         data["version"] = this.version;
         data["auth"] = this.auth ? this.auth.toJSON() : <any>undefined;
         data["localization"] = this.localization ? this.localization.toJSON() : <any>undefined;
+        data["menu"] = this.menu;
         return data; 
     }
 
@@ -1162,9 +1235,11 @@ export class SessionDto implements ISessionDto {
 
 export interface ISessionDto {
     name: string | undefined;
+    displayName: string | undefined;
     version: string | undefined;
     auth: ClaimsDto;
     localization: LocalizationDto;
+    menu: string | undefined;
 }
 
 export class AuthenticateModelInput implements IAuthenticateModelInput {
