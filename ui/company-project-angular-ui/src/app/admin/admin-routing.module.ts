@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SimpleGuard } from '@delon/auth';
-import { ACLGuard } from '@delon/acl';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
 import { RoleComponent } from './role';
 import { UserComponent } from './user';
-import { ClaimsGuard } from '../shared/riven';
+import { ClaimsGuard } from '@shared';
 
 
 const routes: Routes = [

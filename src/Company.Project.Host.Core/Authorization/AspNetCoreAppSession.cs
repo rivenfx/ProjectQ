@@ -17,9 +17,13 @@ namespace Company.Project.Authorization
     {
         public long? UserId => this.GetUserId();
 
+        public string UserIdString => this.GetUserIdString();
+
         public string UserName => _httpContextAccessor?.HttpContext?.User.GetUserName(_options.Value);
 
         public LanguageInfo CurrentLanguage => _currentLanguage.GetCurrentLanguage();
+
+
 
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly IOptions<IdentityOptions> _options;
@@ -34,17 +38,29 @@ namespace Company.Project.Authorization
 
         long? GetUserId()
         {
-            var userIdString = _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
+            var userIdString = this.GetUserIdString();
             if (!userIdString.IsNullOrWhiteSpace())
             {
                 return long.Parse(userIdString);
+            }
+
+
+            return null;
+        }
+
+        string GetUserIdString()
+        {
+            var userIdString = _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
+            if (!userIdString.IsNullOrWhiteSpace())
+            {
+                return userIdString;
             }
 
             userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!userIdString.IsNullOrWhiteSpace())
             {
-                return long.Parse(userIdString);
+                return userIdString;
             }
 
 

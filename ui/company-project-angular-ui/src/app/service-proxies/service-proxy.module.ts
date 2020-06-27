@@ -4,7 +4,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import * as ServiceProxies from './service-proxies';
 import { ServiceProxiesInterceptor } from './interceptor';
 import { API_BASE_URL } from './service-proxies';
-import { AppConsts } from '@shared';
+import { AppConsts } from '@shared/app-consts';
 import { throwIfAlreadyLoaded } from '../core/module-import-guard';
 
 

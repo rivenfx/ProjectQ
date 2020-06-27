@@ -11,6 +11,7 @@ import { ICONS_AUTO } from '../../../style-icons-auto';
 import { SessionService } from '../../shared/riven';
 import { AppConsts } from '@shared';
 import { SessionDto } from '../../service-proxies';
+import { Router } from '@angular/router';
 
 /**
  * Used for application startup
@@ -28,6 +29,7 @@ export class StartupService {
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
     private httpClient: HttpClient,
     private injector: Injector,
+    private router: Router,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
   }
@@ -60,20 +62,32 @@ export class StartupService {
   /** 加载会话信息 */
   private getAppSession(resolve: any, reject: any) {
     const sessionSer = this.injector.get(SessionService);
+
+    // 订阅会话数据更改
+    sessionSer.sessionChange.subscribe((data) => {
+      if (data) {
+        const token = this.tokenService.get().token;
+        if (token && !data.userId) {
+          this.tokenService.clear();
+          this.router.navigateByUrl(this.tokenService.login_url);
+          resolve({});
+          return;
+        }
+
+        this.initAppInfo(data);
+
+        this.initAclInfo(data);
+
+        this.initUserInfo(data);
+
+        this.initMenuInfo(data);
+      }
+    });
+
+    // 立即加载会话数据
     sessionSer.loadOrUpdateAppInfo((state, data: SessionDto | any) => {
       if (state) {
-        if (resolve) {
-          this.initAppInfo(data);
-
-          this.initAclInfo(data);
-
-          this.initUserInfo(data);
-
-          this.initMenuInfo(data);
-
-
-          resolve({});
-        }
+        resolve({});
       } else {
         if (reject) {
           reject('init session info error' + data);
@@ -95,7 +109,7 @@ export class StartupService {
   /** 初始化权限信息 */
   private initAclInfo(input: SessionDto) {
     // 权限
-    this.aclService.attachRole(input.auth.grantedClaims);
+    this.aclService.setRole(input.auth.grantedClaims);
   }
 
   /** 初始化用户信息 */

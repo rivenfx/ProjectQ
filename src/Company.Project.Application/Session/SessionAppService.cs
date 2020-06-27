@@ -57,7 +57,8 @@ namespace Company.Project.Session
                 Version = appInfo.Version,
                 Auth = await this.GetClaims(),
                 Localization = this.GetLocalization(),
-                Menu = this.GetMenu()
+                Menu = this.GetMenu(),
+                UserId = _appSession.UserIdString
             };
         }
 

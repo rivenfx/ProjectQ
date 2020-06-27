@@ -28,6 +28,11 @@ namespace Company.Project.Session.Dtos
         public string Version { get; set; }
 
         /// <summary>
+        /// 当前登录用户id
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
         /// 权限
         /// </summary>
         public ClaimsDto Auth { get; set; }

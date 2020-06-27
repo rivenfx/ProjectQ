@@ -6,7 +6,9 @@ import { finalize } from 'rxjs/operators';
 @Injectable()
 export class SessionService {
 
+  private _sessionChange$ = new BehaviorSubject<SessionDto | null>(null);
   private localizationChange$ = new BehaviorSubject<LocalizationDto | null>(null);
+
 
   private _session: SessionDto;
 
@@ -19,6 +21,10 @@ export class SessionService {
 
   get session(): SessionDto {
     return this._session;
+  }
+
+  get sessionChange(): Observable<SessionDto> {
+    return this._sessionChange$.asObservable();
   }
 
   get localizationChange(): Observable<LocalizationDto | null> {
@@ -34,7 +40,8 @@ export class SessionService {
         next: (res) => {
           this._session = res;
           this.localizationChange$.next(this._session.localization);
-          callback(true, this.session);
+          this._sessionChange$.next(this._session);
+          callback(true, this._session);
         },
         error: (error) => {
           callback(false, error);

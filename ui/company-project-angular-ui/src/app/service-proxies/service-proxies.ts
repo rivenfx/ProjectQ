@@ -1183,6 +1183,7 @@ export class SessionDto implements ISessionDto {
     name: string | undefined;
     displayName: string | undefined;
     version: string | undefined;
+    userId: string | undefined;
     auth: ClaimsDto;
     localization: LocalizationDto;
     menu: string | undefined;
@@ -1201,6 +1202,7 @@ export class SessionDto implements ISessionDto {
             this.name = _data["name"];
             this.displayName = _data["displayName"];
             this.version = _data["version"];
+            this.userId = _data["userId"];
             this.auth = _data["auth"] ? ClaimsDto.fromJS(_data["auth"]) : <any>undefined;
             this.localization = _data["localization"] ? LocalizationDto.fromJS(_data["localization"]) : <any>undefined;
             this.menu = _data["menu"];
@@ -1219,6 +1221,7 @@ export class SessionDto implements ISessionDto {
         data["name"] = this.name;
         data["displayName"] = this.displayName;
         data["version"] = this.version;
+        data["userId"] = this.userId;
         data["auth"] = this.auth ? this.auth.toJSON() : <any>undefined;
         data["localization"] = this.localization ? this.localization.toJSON() : <any>undefined;
         data["menu"] = this.menu;
@@ -1237,6 +1240,7 @@ export interface ISessionDto {
     name: string | undefined;
     displayName: string | undefined;
     version: string | undefined;
+    userId: string | undefined;
     auth: ClaimsDto;
     localization: LocalizationDto;
     menu: string | undefined;

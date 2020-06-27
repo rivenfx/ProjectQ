@@ -13,11 +13,9 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { GlobalConfigModule } from './global-config.module';
 import { LayoutModule } from './layout/layout.module';
-import { SharedModule } from '@shared';
-import { STWidgetModule } from './shared/st-widget/st-widget.module';
+import { SharedModule, STWidgetModule, RivenModule, JsonSchemaModule } from '@shared';
 import { AppRoutingModule } from './app-routing.module';
 import { ServiceProxyModule } from './service-proxies';
-import { RivenModule } from './shared/riven';
 
 
 // #region default language
@@ -29,7 +27,6 @@ const I18N_SERVICE_PROVIDES = [
 // #region
 
 // #region JSON Schema form (using @delon/form)
-import { JsonSchemaModule } from '@shared';
 
 
 const FORM_MODULES = [JsonSchemaModule];

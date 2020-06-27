@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Riven.Dependency;
 using Riven.Localization;
 
@@ -12,6 +13,11 @@ namespace Company.Project.Authorization
         /// 用户ID
         /// </summary>
         long? UserId { get; }
+
+        /// <summary>
+        /// 用户ID - 字符串类型
+        /// </summary>
+        string UserIdString { get; }
 
         /// <summary>
         /// 用户账号

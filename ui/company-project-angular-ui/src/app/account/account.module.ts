@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AccountRoutingModule } from './account-routing.module';
-import { SharedModule } from '@shared';
+import { SharedModule, RivenModule } from '@shared';
 import { LoginComponent } from './login';
-import { RivenModule } from '../shared/riven';
 import { I18nModule } from '@core';
 
 
@@ -17,7 +16,7 @@ import { I18nModule } from '@core';
     I18nModule,
     AccountRoutingModule,
     SharedModule,
-    RivenModule.forChild()
+    RivenModule.forChild(),
   ],
 })
 export class AccountModule {

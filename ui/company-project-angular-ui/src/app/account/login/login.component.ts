@@ -7,6 +7,8 @@ import { SessionService } from '../../shared/riven';
 import { ALAIN_I18N_TOKEN, TitleService } from '@delon/theme';
 import { I18nService } from '@core';
 import { AppComponentBase } from '@shared';
+import { NgForm } from '@angular/forms';
+import { ACLService } from '@delon/acl';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +34,7 @@ export class LoginComponent extends AppComponentBase
     public tokenAuthSer: TokenAuthServiceProxy,
     public router: Router,
     public sessionSer: SessionService,
+    private aclService: ACLService,
   ) {
     super(injector);
 

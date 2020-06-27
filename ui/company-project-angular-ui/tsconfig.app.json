@@ -6,6 +6,14 @@
       "node"
     ]
   },
+  "paths": {
+    "@shared": [
+      "src/app/shared"
+    ],
+    "@shared/*": [
+      "src/app/shared/*"
+    ]
+  },
   "files": [
     "src/main.ts",
     "src/polyfills.ts"

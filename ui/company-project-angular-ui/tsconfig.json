@@ -17,7 +17,10 @@
     ],
     "paths": {
       "@shared": [
-        "src/app/shared/index"
+        "src/app/shared"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
       ],
       "@core": [
         "src/app/core/index"
