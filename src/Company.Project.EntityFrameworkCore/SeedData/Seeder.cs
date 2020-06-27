@@ -66,11 +66,12 @@ namespace Company.Project.SeedData
                         AppConsts.Authorization.SystemRoleDisplayName,
                         AppConsts.Authorization.SystemRoleDisplayName,
 
+                        AppClaimsConsts.User.Query,
                         AppClaimsConsts.User.Create,
                         AppClaimsConsts.User.Edit,
                         AppClaimsConsts.User.Delete,
 
-                        AppClaimsConsts.Role.Create,
+                        AppClaimsConsts.Role.Query,
                         AppClaimsConsts.Role.Edit,
                         AppClaimsConsts.Role.Delete
                     );

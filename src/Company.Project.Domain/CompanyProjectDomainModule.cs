@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
+using Company.Project.Authorization.AppClaims;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -24,6 +27,11 @@ namespace Company.Project
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
 
+        }
+
+        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context.ServiceProvider.RegisterBasicClaims();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -59,7 +67,7 @@ namespace Company.Project
             }
 
             languageManager.ChangeDefaultLanguage(AppConsts.Settings.DefaultLanguage);
-        } 
+        }
 
         #endregion
     }
