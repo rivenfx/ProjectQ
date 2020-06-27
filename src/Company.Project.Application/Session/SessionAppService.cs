@@ -87,7 +87,7 @@ namespace Company.Project.Session
         public async Task<ClaimsDto> GetClaims()
         {
             var claimsDto = new ClaimsDto();
-            claimsDto.AllClaims = this._claimsManager.GetAll().ToList();
+            //claimsDto.AllClaims = this._claimsManager.GetAll().ToList();
 
             // 已登录
             if (_appSession.UserId.HasValue)
