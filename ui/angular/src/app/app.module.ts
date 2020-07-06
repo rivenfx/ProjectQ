@@ -6,7 +6,9 @@ import { registerLocaleData } from '@angular/common';
 
 //
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
-import { StartupService, I18nCommon, I18nService, I18nModule } from '@core';
+import { StartupService } from '@core/startup';
+import { I18nCommon, I18nService, I18nModule } from '@core/i18n';
+
 
 //
 import { AppComponent } from './app.component';

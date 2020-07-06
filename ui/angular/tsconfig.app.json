@@ -7,11 +7,23 @@
     ]
   },
   "paths": {
+    "@core": [
+      "src/app/core"
+    ],
+    "@core/*": [
+      "src/app/core/*"
+    ],
     "@shared": [
       "src/app/shared"
     ],
     "@shared/*": [
       "src/app/shared/*"
+    ],
+    "@service-proxies": [
+      "src/app/service-proxies"
+    ],
+    "@service-proxies/*": [
+      "src/app/service-proxies/*"
     ]
   },
   "files": [

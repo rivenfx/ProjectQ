@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LanguageInfoDto, LocalizationDto, SessionDto, SessionServiceProxy } from '../../service-proxies';
+import {
+  LanguageInfoDto,
+  LocalizationDto,
+  SessionDto,
+  SessionServiceProxy,
+} from '../../service-proxies/service-proxies';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 

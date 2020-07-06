@@ -1,4 +1,4 @@
-import { I18nService } from '@core';
+import { I18nService } from '@core/i18n';
 import { Injector } from '@angular/core';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { SessionService } from './session.service';
 import { PermissionCheckerService } from './permission-checker.service';
 import { ValidationMessagesComponent } from './components/validation-messages';
+import { MessageService } from './message.service';
+import { NotifyService } from './notify.service';
 
 const COMPONENTS = [
   ValidationMessagesComponent,
@@ -33,6 +35,8 @@ export class RivenModule {
       providers: [
         SessionService,
         PermissionCheckerService,
+        MessageService,
+        NotifyService,
       ],
     };
   }

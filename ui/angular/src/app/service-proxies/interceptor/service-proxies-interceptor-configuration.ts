@@ -1,6 +1,7 @@
 import { IAjaxResponse, IErrorInfo } from './interfaces';
 import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { MessageService } from '@shared/riven';
 
 /**
  * 代理类http请求拦截器配置
@@ -31,17 +32,22 @@ export class ServiceProxiesInterceptorConfiguration {
     details: 'The resource requested could not be found on the server.',
   };
 
+  constructor(
+    public messageSer: MessageService,
+  ) {
+  }
+
   /** 日志 - 错误 */
   logError(error: IErrorInfo): void {
     console.error(error);
   }
 
   /** 提示 - 错误 */
-  showError(error: IErrorInfo): any {
+  showError(error: IErrorInfo) {
     if (error.details) {
-      return alert(error.details + (error.message || this.defaultError.message));
+      this.messageSer.error(error.details,error.message||this.defaultError.message);
     } else {
-      return alert(error.message || this.defaultError.message);
+      this.messageSer.error(error.message || this.defaultError.message);
     }
   }
 
@@ -104,17 +110,16 @@ export class ServiceProxiesInterceptorConfiguration {
         this.handleTargetUrl(ajaxResponse.targetUrl);
       }
     } else {
-
       newResponse = response.clone({
         body: ajaxResponse.result,
       });
 
-      if (!ajaxResponse.error) {
-        ajaxResponse.error = this.defaultError;
+      if (!ajaxResponse.result) {
+        ajaxResponse.result = this.defaultError;
       }
 
-      this.logError(ajaxResponse.error);
-      this.showError(ajaxResponse.error);
+      this.logError(ajaxResponse.result);
+      this.showError(ajaxResponse.result);
 
       if (response.status === 401) {
         this.handleUnAuthorizedRequest(null, ajaxResponse.targetUrl);
@@ -126,6 +131,7 @@ export class ServiceProxiesInterceptorConfiguration {
 
   /** 获取ajax响应或非ajax响应 */
   getAjaxResponseOrNull(response: HttpResponse<any>): IAjaxResponse | null {
+    debugger
     if (!response || !response.headers) {
       return null;
     }

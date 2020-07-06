@@ -14,6 +14,7 @@ import {
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
 import { ServiceProxiesInterceptorConfiguration } from './service-proxies-interceptor-configuration';
+import { MessageService } from '@shared';
 
 
 /**
@@ -22,12 +23,14 @@ import { ServiceProxiesInterceptorConfiguration } from './service-proxies-interc
 @Injectable()
 export class ServiceProxiesInterceptor implements HttpInterceptor {
 
-  protected configuration = new ServiceProxiesInterceptorConfiguration();
+  protected configuration: ServiceProxiesInterceptorConfiguration;
 
   constructor(
     @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,
     private settings: SettingsService,
+    public messageSer: MessageService,
   ) {
+    this.configuration = new ServiceProxiesInterceptorConfiguration(messageSer);
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -140,7 +143,7 @@ export class ServiceProxiesInterceptor implements HttpInterceptor {
 
         self.configuration.blobToText(event.body).subscribe(json => {
           const responseBody = json == 'null' ? {} : JSON.parse(json);
-
+          debugger
           const modifiedResponse = self.configuration.handleResponse(event.clone({
             body: responseBody,
           }));

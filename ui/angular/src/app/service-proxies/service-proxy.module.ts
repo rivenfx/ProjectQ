@@ -5,7 +5,7 @@ import * as ServiceProxies from './service-proxies';
 import { ServiceProxiesInterceptor } from './interceptor';
 import { API_BASE_URL } from './service-proxies';
 import { AppConsts } from '@shared/app-consts';
-import { throwIfAlreadyLoaded } from '../core/module-import-guard';
+import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
 
 export const APIS = [
@@ -20,6 +20,8 @@ export const APIS_HTTP_INTERCEPTORS = [
 ];
 
 @NgModule({
+  imports: [
+  ],
   providers: [
     ...APIS,
     ...APIS_HTTP_INTERCEPTORS,

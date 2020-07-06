@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injector
 import { ALAIN_I18N_TOKEN, SettingsService } from '@delon/theme';
 import { InputBoolean } from '@delon/util';
 
-import { I18nService } from '@core';
+import { I18nService } from '@core/i18n';
 import { AppConsts, SampleComponentBase } from '@shared';
 
 @Component({

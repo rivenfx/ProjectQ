@@ -6,12 +6,13 @@ import {
   DelonLocaleService,
   SettingsService,
 } from '@delon/theme';
-import { AppConsts } from '@shared';
+
 import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LanguageInfoDto, LocalizationDto } from '../../service-proxies';
-import { SessionService } from '../../shared/riven';
+import { AppConsts } from '@shared/app-consts';
+import { SessionService } from '@shared/riven/session.service';
 import { I18nCommon } from './i18n-common';
 
 
