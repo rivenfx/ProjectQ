@@ -1,0 +1,30 @@
+{
+  "id": "1927014",
+  "name": "ProjectQ",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "742818",
+      "name": "user",
+      "font_class": "-user",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "2284769",
+      "name": "organization_icon",
+      "font_class": "-organization",
+      "unicode": "e6b6",
+      "unicode_decimal": 59062
+    },
+    {
+      "icon_id": "5262062",
+      "name": "role_icon",
+      "font_class": "-role",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    }
+  ]
+}
