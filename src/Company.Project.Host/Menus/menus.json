@@ -16,7 +16,7 @@
         "text": "角色",
         "i18n": "menu.role",
         "link": "/admin/role",
-        "icon": "anticon-role",
+        "icon": "icon iconfont icon-role",
         "acl": "role.query",
         "hideInBreadcrumb": true
       },
@@ -24,7 +24,7 @@
         "text": "用户",
         "i18n": "menu.user",
         "link": "/admin/user",
-        "icon": "anticon-user",
+        "icon": "icon iconfont icon-user",
         "acl": "user.query",
         "hideInBreadcrumb": true
       }
