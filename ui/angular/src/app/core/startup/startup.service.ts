@@ -99,8 +99,8 @@ export class StartupService {
   /** 初始化应用信息 */
   private initAppInfo(input: SessionDto) {
     const app: any = {
-      name: `ng-alain`,
-      description: `Ng-zorro admin panel front-end framework`,
+      name: `ProjectQ`,
+      description: `ProjectQ admin panel front-end framework`,
     };
     this.settingService.setApp(app);
     this.titleService.suffix = this.settingService.app.name;

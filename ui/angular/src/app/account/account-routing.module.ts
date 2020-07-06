@@ -12,6 +12,7 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
+        data: { title: '登录', titleI18n: 'app.login.login' }
       },
       {
         path: '',
