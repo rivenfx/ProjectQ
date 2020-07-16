@@ -6,6 +6,8 @@ import { AppConsts } from '@shared/app-consts';
 
 export abstract class AppComponentBase extends SampleComponentBase {
 
+  loading: boolean;
+
   titleSer: TitleService;
 
   appConsts = AppConsts;
