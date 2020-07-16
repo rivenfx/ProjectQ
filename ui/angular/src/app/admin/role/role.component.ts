@@ -32,7 +32,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
         this.loading = false;
       }))
       .subscribe((res) => {
-        this.viewData = res.items;
+        this.viewRecord = res.items;
         callback(res.total);
       });
   }

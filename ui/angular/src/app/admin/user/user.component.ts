@@ -32,7 +32,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
         this.loading = false;
       }))
       .subscribe((res) => {
-        this.viewData = res.items;
+        this.viewRecord = res.items;
         callback(res.total);
       });
   }

@@ -1,13 +1,22 @@
-<page-header [title]="l('menu.user')" [breadcrumb]="breadcrumb">
+<page-header [title]="l('menu.user')"
+             [breadcrumb]="breadcrumb"
+             [action]="action">
   <ng-template #breadcrumb></ng-template>
+  <ng-template #action>
+    <button nz-button (click)="refresh()" [title]="l('refresh')">
+      <i class="icon iconfont icon-refresh"></i>
+    </button>
+  </ng-template>
 </page-header>
 
-<nz-table #pageTable [nzData]="viewData"
+<nz-table #pageTable
+          nzTableLayout="fixed"
+          [nzData]="viewRecord"
           [nzBordered]="true"
           [nzFrontPagination]="false"
           [nzHideOnSinglePage]="false"
-          nzTableLayout="fixed"
-          [nzTotal]="total"
+          [nzLoading]="loading"
+          [nzTotal]="totalRecord"
           [nzPageIndex]="pageInfo.index"
           [nzPageSize]="pageInfo.size"
           (nzPageIndexChange)="onPageIndexChange($event)"
@@ -23,7 +32,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let data of viewData">
+  <tr *ngFor="let data of viewRecord">
     <td nzEllipsis [title]="data.userName">{{ data.userName }}</td>
     <td nzEllipsis [title]="data.nickname">{{ data.nickname }}</td>
     <td nzEllipsis [title]="data.isActive">{{ data.isActive }}</td>
