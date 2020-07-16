@@ -1,0 +1,37 @@
+<page-header [title]="l('menu.user')" [breadcrumb]="breadcrumb">
+  <ng-template #breadcrumb></ng-template>
+</page-header>
+
+<nz-table #pageTable [nzData]="viewData"
+          [nzBordered]="true"
+          [nzFrontPagination]="false"
+          [nzHideOnSinglePage]="false"
+          nzTableLayout="fixed"
+          [nzTotal]="total"
+          [nzPageIndex]="pageInfo.index"
+          [nzPageSize]="pageInfo.size"
+          (nzPageIndexChange)="onPageIndexChange($event)"
+          (nzPageSizeChange)="onPageSizeChange($event)"
+          [nzScroll]="tableScroll"
+>
+  <thead>
+  <tr>
+    <th nzEllipsis [title]="l('user.userName')">{{l('user.userName')}}</th>
+    <th nzEllipsis [title]="l('user.nickName')">{{l('user.nickName')}}</th>
+    <th nzEllipsis [title]="l('user.isActive')">{{l('user.isActive')}}</th>
+    <th nzEllipsis [title]="l('action')">{{l('action')}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of viewData">
+    <td nzEllipsis [title]="data.userName">{{ data.userName }}</td>
+    <td nzEllipsis [title]="data.nickname">{{ data.nickname }}</td>
+    <td nzEllipsis [title]="data.isActive">{{ data.isActive }}</td>
+    <td nzEllipsis>
+      <a>{{l('action.edit')}}</a>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a>{{l('action.delete')}}</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>
