@@ -22,33 +22,42 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   implements OnInit {
 
   /** 视图数据 */
-  private _viewData: T[];
+  private _viewRecord: T[];
 
   /** 数据总量 */
-  private _total: number = 0;
+  private _totalRecord: number = 0;
 
   /** 视图数据 */
-  get viewData(): T[] {
-    return this._viewData;
+  get viewRecord(): T[] {
+    return this._viewRecord;
   }
 
   /** 视图数据 */
-  set viewData(input) {
+  set viewRecord(input) {
     if (Array.isArray(input)) {
-      this._viewData = input;
+      this._viewRecord = input;
     } else {
-      this._viewData = [];
+      this._viewRecord = [];
     }
   }
 
   /** 数据总量 */
-  get total(): number {
-    return this._total;
+  get totalRecord(): number {
+    return this._totalRecord;
+  }
+
+  /** 总页数 */
+  get totalPage(): number {
+    if (this.total <= 0) {
+      return 0;
+    } else {
+      return (this.totalRecord + this.pageInfo.pageSize - 1) / this.pageInfo.pageSize;
+    }
   }
 
   /** 页面信息 */
   pageInfo: IPageInfo = {
-    index: 0,
+    index: 1,
     size: 20,
   };
 
@@ -85,15 +94,15 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   refresh(gotoFirstPage: boolean = false) {
     this.loading = true;
     if (gotoFirstPage) {
-      this.pageInfo.index = 0;
+      this.pageInfo.index = 1;
     }
 
-    const skipCount = this.pageInfo.index * this.pageInfo.size;
-    this.fetchData(skipCount, this.pageInfo.size, (total) => {
-      this._total = total;
+    const skipCount = (this.pageInfo.index - 1) * this.pageInfo.size;
+    this.fetchData(skipCount, this.pageInfo.size, (totalRecord) => {
+      this._totalRecord = totalRecord;
     });
   }
 
   /** 加载数据 */
-  abstract fetchData(skipCount: number, pageSize: number, callback: (total: number) => void);
+  abstract fetchData(skipCount: number, pageSize: number, callback: (totalRecord: number) => void);
 }
