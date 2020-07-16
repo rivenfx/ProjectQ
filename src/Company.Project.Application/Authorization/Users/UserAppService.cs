@@ -9,9 +9,12 @@ using Company.Project.Authorization.Users.Dtos;
 using Riven.Exceptions;
 using Riven.Extensions;
 using Riven.Identity.Authorization;
+using Company.Project.Dtos;
+using Mapster;
 
 namespace Company.Project.Authorization.Users
 {
+    [ClaimsAuthorize]
     public class UserAppService : IApplicationService
     {
         readonly UserManager _userManager;
@@ -19,6 +22,27 @@ namespace Company.Project.Authorization.Users
         public UserAppService(UserManager userManager)
         {
             _userManager = userManager;
+        }
+
+        /// <summary>
+        /// 查询所有用户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
+        public virtual async Task<PageResultDto<UserDto>> GetAll(QueryInput input)
+        {
+            var query = _userManager.QueryAsNoTracking
+                .Skip(input.SkipCount)
+                .Take(input.PageSize);
+
+            var total = await query.LongCountAsync();
+
+            var userList = await query
+                .ProjectToType<UserDto>()
+                .ToListAsync();
+
+            return new PageResultDto<UserDto>(userList, total);
         }
 
         /// <summary>
