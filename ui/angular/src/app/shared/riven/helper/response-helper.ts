@@ -40,7 +40,7 @@ export class ResponseHelper {
   };
 
   /** 初始化 ResponseHelper */
-  static inite(messageSer: MessageService) {
+  static init(messageSer: MessageService) {
     if (ResponseHelper.inited) {
       return;
     }

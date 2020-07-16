@@ -1,15 +1,11 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 import {
-  HttpClient,
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
   HttpEvent,
-  HttpResponse,
-  HttpErrorResponse,
-  HttpHeaders,
 } from '@angular/common/http';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
@@ -29,7 +25,7 @@ export class ServiceProxiesInterceptor implements HttpInterceptor {
     public messageSer: MessageService,
   ) {
     RequestHelper.init(tokenSer, settingsSer);
-    ResponseHelper.inite(messageSer);
+    ResponseHelper.init(messageSer);
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
