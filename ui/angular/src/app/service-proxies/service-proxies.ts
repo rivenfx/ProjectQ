@@ -676,6 +676,62 @@ export class UserServiceProxy {
      * @param body (optional) 
      * @return Success
      */
+    getAll(body: QueryInput | undefined): Observable<UserDtoPageResultDto> {
+        let url_ = this.baseUrl + "/apis/User/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<UserDtoPageResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserDtoPageResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<UserDtoPageResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserDtoPageResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserDtoPageResultDto>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     create(body: CreateOrEditUserInput | undefined): Observable<void> {
         let url_ = this.baseUrl + "/apis/User/Create";
         url_ = url_.replace(/[?&]$/, "");
@@ -1384,6 +1440,53 @@ export interface IAuthenticateResultDto {
     waitingForActivation: boolean;
 }
 
+export class QueryInput implements IQueryInput {
+    pageSize: number;
+    skipCount: number;
+
+    constructor(data?: IQueryInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageSize = _data["pageSize"];
+            this.skipCount = _data["skipCount"];
+        }
+    }
+
+    static fromJS(data: any): QueryInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new QueryInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageSize"] = this.pageSize;
+        data["skipCount"] = this.skipCount;
+        return data; 
+    }
+
+    clone(): QueryInput {
+        const json = this.toJSON();
+        let result = new QueryInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IQueryInput {
+    pageSize: number;
+    skipCount: number;
+}
+
 export class UserDto implements IUserDto {
     userName: string | undefined;
     nickname: string | undefined;
@@ -1461,6 +1564,61 @@ export interface IUserDto {
     isActive: boolean;
     twoFactorEnabled: boolean;
     id: number | undefined;
+}
+
+export class UserDtoPageResultDto implements IUserDtoPageResultDto {
+    items: UserDto[] | undefined;
+    total: number;
+
+    constructor(data?: IUserDtoPageResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(UserDto.fromJS(item));
+            }
+            this.total = _data["total"];
+        }
+    }
+
+    static fromJS(data: any): UserDtoPageResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserDtoPageResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["total"] = this.total;
+        return data; 
+    }
+
+    clone(): UserDtoPageResultDto {
+        const json = this.toJSON();
+        let result = new UserDtoPageResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserDtoPageResultDto {
+    items: UserDto[] | undefined;
+    total: number;
 }
 
 export class CreateOrEditUserInput implements ICreateOrEditUserInput {
