@@ -59,10 +59,14 @@ export class LoginComponent extends AppComponentBase
 
         this.sessionSer.loadOrUpdateAppInfo((state, data) => {
           if (state) {
-            this.router.navigateByUrl('/admin/dashboard')
-              .then(r => {
+            if (result.returnUrl) {
+              window.location.href = result.returnUrl;
+            } else {
+              this.router.navigateByUrl(this.appConsts.urls.mainPage)
+                .then(r => {
 
-              });
+                });
+            }
           }
         });
 
