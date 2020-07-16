@@ -1,13 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
+import { ListViewComponentBase } from '@shared/common';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.less']
+  styleUrls: ['./user.component.less'],
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends ListViewComponentBase
+  implements OnInit {
 
-  constructor() { }
+  constructor(
+    injector: Injector,
+  ) {
+    super(injector);
+  }
 
   ngOnInit(): void {
   }

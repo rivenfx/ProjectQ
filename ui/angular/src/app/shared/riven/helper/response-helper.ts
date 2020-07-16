@@ -1,4 +1,4 @@
-import { MessageService } from '@shared';
+import { MessageService } from '@shared/riven';
 import { IAjaxResponse, IErrorInfo } from '@service-proxies/interceptor/interfaces';
 import { Observable, of, Subject } from 'rxjs';
 import { HttpEvent, HttpResponse } from '@angular/common/http';

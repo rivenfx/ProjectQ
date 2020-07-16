@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/c
 import { Router } from '@angular/router';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
-import { SampleComponentBase } from '@shared';
+import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'header-user',

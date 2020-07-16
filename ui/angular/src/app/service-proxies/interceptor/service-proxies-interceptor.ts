@@ -9,7 +9,7 @@ import {
 } from '@angular/common/http';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
-import { MessageService } from '@shared';
+import { MessageService } from '@shared/riven';
 import { RequestHelper, ResponseHelper } from '@shared/riven/helper';
 
 

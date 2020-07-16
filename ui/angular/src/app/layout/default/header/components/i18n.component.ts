@@ -4,15 +4,17 @@ import { ALAIN_I18N_TOKEN, SettingsService } from '@delon/theme';
 import { InputBoolean } from '@delon/util';
 
 import { I18nService } from '@core/i18n';
-import { AppConsts, SampleComponentBase } from '@shared';
+import { AppConsts } from '@shared';
+import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'header-i18n',
   template: `
-    <div *ngIf="showLangText" nz-dropdown [nzDropdownMenu]="langMenu" nzPlacement="bottomRight" class="alain-default__nav-item">
+    <div *ngIf="showLangText" nz-dropdown [nzDropdownMenu]="langMenu" nzPlacement="bottomRight"
+         class="alain-default__nav-item">
       <i nz-icon nzType="global" class="alain-default__nav-item-icon"></i>
-<!--      {{ curLang.displayName }}-->
-<!--      <i nz-icon nzType="down"></i>-->
+      <!--      {{ curLang.displayName }}-->
+      <!--      <i nz-icon nzType="down"></i>-->
     </div>
     <i
       *ngIf="!showLangText"
@@ -50,8 +52,8 @@ export class HeaderI18nComponent extends SampleComponentBase {
     return this.curLang.culture;
   }
 
-  get curLang(){
-   return  this.i18nSer.curLang;
+  get curLang() {
+    return this.i18nSer.curLang;
   }
 
   constructor(

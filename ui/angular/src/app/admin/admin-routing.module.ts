@@ -5,7 +5,7 @@ import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
 import { RoleComponent } from './role';
 import { UserComponent } from './user';
-import { ClaimsGuard } from '@shared';
+import { ClaimsGuard } from '@shared/riven';
 
 
 const routes: Routes = [

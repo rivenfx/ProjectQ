@@ -12,12 +12,13 @@ import { I18nCommon, I18nService, I18nModule } from '@core/i18n';
 
 //
 import { AppComponent } from './app.component';
-import { CoreModule } from './core/core.module';
+import { CoreModule } from '@core/core.module';
 import { GlobalConfigModule } from './global-config.module';
 import { LayoutModule } from './layout/layout.module';
-import { SharedModule, STWidgetModule, RivenModule, JsonSchemaModule } from '@shared';
+import { SharedModule, STWidgetModule, JsonSchemaModule } from '@shared';
+import { RivenModule } from '@shared/riven';
 import { AppRoutingModule } from './app-routing.module';
-import { ServiceProxyModule } from './service-proxies';
+import { ServiceProxyModule } from '@service-proxies';
 
 
 // #region default language

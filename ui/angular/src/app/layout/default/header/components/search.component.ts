@@ -7,7 +7,7 @@ import {
   Injector,
   Input,
 } from '@angular/core';
-import { SampleComponentBase } from '@shared';
+import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'header-search',

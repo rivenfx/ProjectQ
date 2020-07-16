@@ -8,9 +8,9 @@ import { I18nService } from '../i18n';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { ICONS } from '../../../style-icons';
 import { ICONS_AUTO } from '../../../style-icons-auto';
-import { SessionService } from '../../shared/riven';
+import { SessionService } from '@shared/riven';
 import { AppConsts } from '@shared';
-import { SessionDto } from '../../service-proxies';
+import { SessionDto } from '@service-proxies';
 import { Router } from '@angular/router';
 
 /**

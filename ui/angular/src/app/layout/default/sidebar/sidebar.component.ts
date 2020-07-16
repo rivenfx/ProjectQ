@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 import { SettingsService } from '@delon/theme';
-import { SampleComponentBase } from '@shared';
+import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'layout-sidebar',

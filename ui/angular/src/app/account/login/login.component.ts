@@ -3,10 +3,10 @@ import { SFSchema } from '@delon/form';
 import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '../../service-proxies';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { Router } from '@angular/router';
-import { SessionService } from '../../shared/riven';
+import { SessionService } from '@shared/riven';
 import { ALAIN_I18N_TOKEN, TitleService } from '@delon/theme';
 import { I18nService } from '@core/i18n';
-import { AppComponentBase } from '@shared';
+import { AppComponentBase } from '@shared/common';
 import { NgForm } from '@angular/forms';
 import { ACLService } from '@delon/acl';
 
