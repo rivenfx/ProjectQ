@@ -36,13 +36,13 @@ namespace Company.Project.Authorization.Users
                 .Skip(input.SkipCount)
                 .Take(input.PageSize);
 
-            var total = await query.LongCountAsync();
+            var entityTotal = await query.LongCountAsync();
 
-            var userList = await query
+            var entityList = await query
                 .ProjectToType<UserDto>()
                 .ToListAsync();
 
-            return new PageResultDto<UserDto>(userList, total);
+            return new PageResultDto<UserDto>(entityList, entityTotal);
         }
 
         /// <summary>

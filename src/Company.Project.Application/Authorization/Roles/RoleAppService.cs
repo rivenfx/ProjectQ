@@ -10,6 +10,9 @@ using Riven.Extensions;
 using Company.Project.Authorization.Roles.Dtos;
 using System.Security.Claims;
 using Riven.Identity.Authorization;
+using Company.Project.Authorization.Users.Dtos;
+using Company.Project.Dtos;
+using Mapster;
 
 namespace Company.Project.Authorization.Roles
 {
@@ -22,6 +25,27 @@ namespace Company.Project.Authorization.Roles
             _roleManager = roleManager;
         }
 
+
+        /// <summary>
+        /// 查询所有角色
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
+        public virtual async Task<PageResultDto<RoleDto>> GetAll(QueryInput input)
+        {
+            var query = _roleManager.QueryAsNoTracking
+                .Skip(input.SkipCount)
+                .Take(input.PageSize);
+
+            var entityTotal = await query.LongCountAsync();
+
+            var entityList = await query
+                .ProjectToType<RoleDto>()
+                .ToListAsync();
+
+            return new PageResultDto<RoleDto>(entityList, entityTotal);
+        }
 
         /// <summary>
         /// 创建 角色
