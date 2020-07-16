@@ -11,7 +11,14 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { NavigationCancel, NavigationEnd, NavigationError, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  RouteConfigLoadEnd,
+  RouteConfigLoadStart,
+  Router,
+} from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { updateHostClass } from '@delon/util';
 import { environment } from '@env/environment';
@@ -24,6 +31,7 @@ import { SettingDrawerComponent } from './setting-drawer/setting-drawer.componen
 @Component({
   selector: 'layout-default',
   templateUrl: './default.component.html',
+  styleUrls: ['./default.component.less'],
 })
 export class LayoutDefaultComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
