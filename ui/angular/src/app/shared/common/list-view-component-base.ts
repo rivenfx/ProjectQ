@@ -48,10 +48,10 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
   /** 总页数 */
   get totalPage(): number {
-    if (this.total <= 0) {
+    if (this.totalRecord <= 0) {
       return 0;
     } else {
-      return (this.totalRecord + this.pageInfo.pageSize - 1) / this.pageInfo.pageSize;
+      return (this.totalRecord + this.pageInfo.size - 1) / this.pageInfo.size;
     }
   }
 
