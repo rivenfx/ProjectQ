@@ -29,7 +29,6 @@ export class ClaimsGuard implements CanActivate, CanActivateChild, CanLoad {
     if (!data.claims) {
       return true;
     }
-    debugger
     if (Array.isArray(data.claims)) {
       for (let i = 0; i < data.claims.length; i++) {
         if (!this.srv.can(data.claims[i])) {
