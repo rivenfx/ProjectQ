@@ -21,7 +21,8 @@ using Company.Project.Configuration;
 namespace Company.Project
 {
     [DependsOn(
-        typeof(CompanyProjectHostCoreModule)
+        typeof(CompanyProjectApplicationModule),
+        typeof(CompanyProjectEntityFrameworkCoreModule)
         )]
     public class CompanyProjectHostModule : AppModule
     {
