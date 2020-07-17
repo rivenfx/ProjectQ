@@ -11,10 +11,13 @@
 
 <nz-table #pageTable
           nzTableLayout="fixed"
+          nzSize="small"
+          nzShowQuickJumper="true"
+          nzShowSizeChanger="true"
+          nzBordered="true"
+          nzFrontPagination="false"
+          nzHideOnSinglePage="false"
           [nzData]="viewRecord"
-          [nzBordered]="true"
-          [nzFrontPagination]="false"
-          [nzHideOnSinglePage]="false"
           [nzLoading]="loading"
           [nzTotal]="totalRecord"
           [nzPageIndex]="pageInfo.index"
