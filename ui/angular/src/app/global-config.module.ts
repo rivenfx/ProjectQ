@@ -1,8 +1,7 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
-import { throwIfAlreadyLoaded } from './core/module-import-guard';
-import { DelonMockModule } from '@delon/mock';
 import { AlainThemeModule } from '@delon/theme';
 import { AlainConfig, ALAIN_CONFIG } from '@delon/util';
+import { throwIfAlreadyLoaded } from './core/module-import-guard';
 
 // Please refer to: https://ng-alain.com/docs/global-config
 // #region NG-ALAIN Config
@@ -29,7 +28,6 @@ const alainConfig: AlainConfig = {
 const alainModules = [
   AlainThemeModule.forRoot(),
   DelonACLModule.forRoot(),
-  DelonMockModule.forRoot(),
 ];
 const alainProvides = [
   { provide: ALAIN_CONFIG, useValue: alainConfig },

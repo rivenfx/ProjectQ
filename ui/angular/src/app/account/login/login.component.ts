@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, Inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { SFSchema } from '@delon/form';
 import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '../../service-proxies';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { Router } from '@angular/router';

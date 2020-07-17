@@ -1,24 +1,24 @@
+import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { registerLocaleData } from '@angular/common';
 
 //
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { I18nCommon, I18nModule, I18nService } from '@core/i18n';
 import { StartupService } from '@core/startup';
-import { I18nCommon, I18nService, I18nModule } from '@core/i18n';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
 
 
 //
-import { AppComponent } from './app.component';
 import { CoreModule } from '@core/core.module';
-import { GlobalConfigModule } from './global-config.module';
-import { LayoutModule } from './layout/layout.module';
-import { SharedModule, STWidgetModule, JsonSchemaModule } from '@shared';
+import { ServiceProxyModule } from '@service-proxies';
+import { SharedModule } from '@shared';
 import { RivenModule } from '@shared/riven';
 import { AppRoutingModule } from './app-routing.module';
-import { ServiceProxyModule } from '@service-proxies';
+import { AppComponent } from './app.component';
+import { GlobalConfigModule } from './global-config.module';
+import { LayoutModule } from './layout/layout.module';
 
 
 // #region default language
@@ -27,13 +27,6 @@ registerLocaleData(I18nCommon.DEFAULT_LANG.ng, I18nCommon.DEFAULT_LANG.abbr);
 const I18N_SERVICE_PROVIDES = [
   { provide: ALAIN_I18N_TOKEN, useClass: I18nService, multi: false },
 ];
-// #region
-
-// #region JSON Schema form (using @delon/form)
-
-
-const FORM_MODULES = [JsonSchemaModule];
-
 
 // global third module
 const GLOBAL_THIRD_MODULES = [
@@ -74,11 +67,8 @@ const APPINIT_PROVIDES = [
     SharedModule,
     LayoutModule,
     //
-    STWidgetModule,
-    //
     AppRoutingModule,
     //
-    ...FORM_MODULES,
     ...GLOBAL_THIRD_MODULES,
   ],
   providers: [

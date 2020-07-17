@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SimpleGuard } from '@delon/auth';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
 import { RoleComponent } from './role';
@@ -12,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
-    canActivate: [SimpleGuard],
+    canActivate: [ClaimsGuard],
     canActivateChild: [ClaimsGuard],
     children: [
       {
