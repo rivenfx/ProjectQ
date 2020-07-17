@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +7,7 @@ using Riven.Localization;
 
 namespace Company.Project.Authorization
 {
-    public interface IAppSession
+    public interface IAppSession : ITransientDependency
     {
         /// <summary>
         /// 用户ID

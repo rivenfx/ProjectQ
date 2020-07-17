@@ -19,7 +19,6 @@ namespace Company.Project
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.RegisterAssemblyOf<CompanyProjectHostCoreModule>();
-            context.Services.AddTransient<IAppSession, AspNetCoreAppSession>();
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)
@@ -29,7 +28,7 @@ namespace Company.Project
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-
+            
         }
     }
 }
