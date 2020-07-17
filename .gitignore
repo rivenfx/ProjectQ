@@ -351,3 +351,6 @@ MigrationBackup/
 
 # JetBarins
 .idea/
+
+# VS Code
+.vscode/
