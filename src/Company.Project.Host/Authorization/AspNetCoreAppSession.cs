@@ -64,21 +64,7 @@ namespace Company.Project.Authorization
 
         string GetUserIdString()
         {
-            var userIdString = _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
-            if (!userIdString.IsNullOrWhiteSpace())
-            {
-                return userIdString;
-            }
-
-            userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (!userIdString.IsNullOrWhiteSpace())
-            {
-                return userIdString;
-            }
-
-
-            return null;
+            return _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
         }
 
         #endregion
