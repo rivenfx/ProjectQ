@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Modular\Riven.AspNetCore.Modular.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Identity\Riven.AspNetCore.Identity.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Swashbuckle\Riven.AspNetCore.Swashbuckle.csproj" />
+    <ProjectReference Include="..\..\..\Framework\src\Riven.Domain.EntityFrameworkCore\Riven.Domain.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Domain\Riven.Domain.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Uow\Riven.AspNetCore.Uow.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Mapster\Riven.Mapster.csproj" />
