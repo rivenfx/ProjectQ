@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Riven;
 using Riven.Localization;
 using Riven.Modular;
+using Riven.MultiTenancy;
 
 namespace Company.Project
 {
@@ -21,6 +22,8 @@ namespace Company.Project
     {
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
+            MultiTenancyConfig.IsEnabled = false;
+
             context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
         }
 
