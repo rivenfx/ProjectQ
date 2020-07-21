@@ -1,6 +1,7 @@
 using Company.Project.Authorization;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
+using Company.Project.Database.Extenstions;
 using Company.Project.Samples;
 
 using JetBrains.Annotations;
@@ -31,7 +32,10 @@ namespace Company.Project.Database
         : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
         IRivenDbContext
     {
-        #region 功能实例
+        #region IRivenDbContext 属性实现
+
+        [NotMapped]
+        public virtual bool AuditSuppressAutoSetTenantName => true;
 
         [NotMapped]
         public virtual IServiceProvider ServiceProvider { get; }
@@ -40,13 +44,25 @@ namespace Company.Project.Database
         public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap => new ConcurrentDictionary<Type, object>();
 
         [NotMapped]
-        public virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
-
-        [NotMapped]
         public virtual IRivenDbContext Self => this;
 
         #endregion
 
+        #region AppSession 实例
+
+
+        [NotMapped]
+        public virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
+
+
+        #endregion
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="serviceProvider"></param>
         public AppDbContext(DbContextOptions options, IServiceProvider serviceProvider = null)
             : base(options)
         {
@@ -55,11 +71,15 @@ namespace Company.Project.Database
 
         public DbSet<SampleEntity> SampleEntitys { get; set; }
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            ConfigurationIdentityTables(modelBuilder);
+            modelBuilder.ConfigureGlobalFilters(this);
+
+            modelBuilder.ConfiurationIdentityTables();
         }
 
         #region 重写SaveChange函数
@@ -90,48 +110,7 @@ namespace Company.Project.Database
 
         #endregion
 
-
-        /// <summary>
-        /// 配置Identity的表
-        /// </summary>
-        /// <param name="modelBuilder"></param>
-        /// <returns></returns>
-        protected virtual ModelBuilder ConfigurationIdentityTables(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Role>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(Role)}s");
-            });
-            modelBuilder.Entity<RoleClaim>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(RoleClaim)}s");
-            });
-
-            modelBuilder.Entity<User>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(User)}s");
-                entityBuilder.HasIndex(o => o.Nickname)
-                        .IsUnique();
-            });
-            modelBuilder.Entity<UserClaim>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserClaim)}s");
-            });
-            modelBuilder.Entity<UserLogin>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserLogin)}s");
-            });
-            modelBuilder.Entity<UserToken>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserToken)}s");
-            });
-            modelBuilder.Entity<UserRole>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserRole)}s");
-            });
-
-            return modelBuilder;
-        }
+        #region IRivenDbContext 接口函数实现
 
         public virtual string GetCurrentTenantNameOrNull()
         {
@@ -147,5 +126,7 @@ namespace Company.Project.Database
         {
             return Entry(obj);
         }
+
+        #endregion
     }
 }
