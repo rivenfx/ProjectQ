@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,23 +22,30 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Company.Project.Database
 {
     public class AppDbContext
         : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
-        IRivenDbContext,
-        IRivenFilterDbContext,
-        IRivenAuditedDbContext
+        IRivenDbContext
     {
-        [NotMapped]
-        public IServiceProvider ServiceProvider { get; }
+        #region 功能实例
 
         [NotMapped]
-        public ConcurrentDictionary<Type, object> SerivceInstanceMap { get; } = new ConcurrentDictionary<Type, object>();
+        public virtual IServiceProvider ServiceProvider { get; }
 
         [NotMapped]
-        public IAppSession AppSession => ServiceProvider?.GetService<IAppSession>();
+        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap => new ConcurrentDictionary<Type, object>();
+
+        [NotMapped]
+        public virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
+
+        [NotMapped]
+        public virtual IRivenDbContext Self => this;
+
+        #endregion
 
         public AppDbContext(DbContextOptions options, IServiceProvider serviceProvider = null)
             : base(options)
@@ -47,13 +55,40 @@ namespace Company.Project.Database
 
         public DbSet<SampleEntity> SampleEntitys { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             ConfigurationIdentityTables(modelBuilder);
         }
+
+        #region 重写SaveChange函数
+
+        public override int SaveChanges()
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        #endregion
 
 
         /// <summary>
@@ -98,20 +133,19 @@ namespace Company.Project.Database
             return modelBuilder;
         }
 
-
-        public bool GetMultiTenancyEnabled()
-        {
-            return true;
-        }
-
-        public string GetCurrentTenantNameOrNull()
+        public virtual string GetCurrentTenantNameOrNull()
         {
             return AppSession?.TenantIdString;
         }
 
-        public string GetCurrentUserIdOrNull()
+        public virtual string GetCurrentUserIdOrNull()
         {
             return AppSession?.UserIdString;
+        }
+
+        public virtual EntityEntry ConvertToEntry(object obj)
+        {
+            return Entry(obj);
         }
     }
 }
