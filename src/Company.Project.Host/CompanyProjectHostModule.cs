@@ -17,6 +17,7 @@ using Company.Project.Authorization;
 using Riven.Extensions;
 using System.IO;
 using Company.Project.Configuration;
+using Riven.Uow;
 
 namespace Company.Project
 {
@@ -31,6 +32,9 @@ namespace Company.Project
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.RegisterAssemblyOf<CompanyProjectHostModule>();
+
+            // 添加获取当前连接字符串提供者
+            context.Services.AddRivenCurrentConnectionStringNameProvider<AspNetCoreCurrentConnectionStringNameProvider>();
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)
@@ -68,12 +72,12 @@ namespace Company.Project
             {
                 options.AddPolicy(CorsPolicyName, builder =>
                 {
-                     // 配置跨域
-                     var corsOrigins = configuration["App:CorsOrigins"]
-                                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(o => o.TrimEnd('/'))
-                                        .Where(o => o != "*")
-                                        .ToArray();
+                    // 配置跨域
+                    var corsOrigins = configuration["App:CorsOrigins"]
+                                       .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(o => o.TrimEnd('/'))
+                                       .Where(o => o != "*")
+                                       .ToArray();
 
                     builder
                         .WithOrigins(
