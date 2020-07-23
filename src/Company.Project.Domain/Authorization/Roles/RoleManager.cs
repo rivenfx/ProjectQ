@@ -1,13 +1,17 @@
 using Company.Project.Authorization.Extenstions;
+
 using JetBrains.Annotations;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
+
 using Riven;
 using Riven.Authorization;
 using Riven.Exceptions;
 using Riven.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,9 +51,10 @@ namespace Company.Project.Authorization.Roles
         /// <param name="name">角色名称(唯一编码)</param>
         /// <param name="displayName">显示名称</param>
         /// <param name="description">描述</param>
+        /// <param name="isStatic">是否为内置</param>
         /// <param name="claims">角色拥有的claim集合</param>
         /// <returns></returns>
-        public async Task<Role> CreateAsync([NotNull]string name, [NotNull]string displayName, string description, params string[] claims)
+        public async Task<Role> CreateAsync([NotNull] string name, [NotNull] string displayName, string description, bool isStatic = false,  params string[] claims)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -84,7 +89,7 @@ namespace Company.Project.Authorization.Roles
         /// <param name="description">描述</param>
         /// <param name="claims">角色拥有的claim集合</param>
         /// <returns></returns>
-        public async Task<Role> UpdateAsync(long? id, [NotNull]string displayName, string description, params string[] claims)
+        public async Task<Role> UpdateAsync(long? id, [NotNull] string displayName, string description, params string[] claims)
         {
             Check.NotNull(id, nameof(id));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -120,11 +125,11 @@ namespace Company.Project.Authorization.Roles
         /// </summary>
         /// <param name="predicate">条件表达式</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<Role>> DeleteAsync([NotNull]Expression<Func<Role, bool>> predicate)
+        public virtual async Task<IEnumerable<Role>> DeleteAsync([NotNull] Expression<Func<Role, bool>> predicate)
         {
             Check.NotNull(predicate, nameof(predicate));
 
-            var roles = this.Roles.AsNoTracking().Where(predicate);
+            var roles = this.Roles.AsNoTracking().Where(o => !o.IsStatic).Where(predicate);
             if ((await roles.CountAsync()) == 0)
             {
                 return roles;

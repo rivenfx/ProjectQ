@@ -1,14 +1,18 @@
 using Company.Project.Authorization.Extenstions;
 using Company.Project.Authorization.Roles;
+
 using JetBrains.Annotations;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using Riven;
 using Riven.Authorization;
 using Riven.Exceptions;
 using Riven.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -63,9 +67,10 @@ namespace Company.Project.Authorization.Users
         /// <param name="emailConfirmed">邮箱已确认</param>
         /// <param name="lockoutEnabled">是否启用锁定</param>
         /// <param name="isActive">是否激活</param>
+        /// <param name="isStatic">是否为内置</param>
         /// <param name="twoFactorEnabled">是否启用双重验证,默认为false</param>
         /// <returns></returns>
-        public virtual async Task<User> CreateAsync([NotNull]string userName, [NotNull]string password, [NotNull]string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool twoFactorEnabled = false)
+        public virtual async Task<User> CreateAsync([NotNull] string userName, [NotNull] string password, [NotNull] string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool isStatic = false, bool twoFactorEnabled = false)
         {
             Check.NotNullOrWhiteSpace(userName, nameof(userName));
             Check.NotNullOrWhiteSpace(password, nameof(password));
@@ -81,7 +86,8 @@ namespace Company.Project.Authorization.Users
                 LockoutEnabled = lockoutEnabled,
                 IsActive = isActive,
                 TwoFactorEnabled = twoFactorEnabled,
-                Code = Guid.NewGuid().ToString()
+                Code = Guid.NewGuid().ToString(),
+                IsStatic = isStatic
             };
 
             var result = await this.CreateAsync(user, password);
@@ -110,9 +116,10 @@ namespace Company.Project.Authorization.Users
         /// <param name="emailConfirmed">邮箱已确认</param>
         /// <param name="lockoutEnabled">是否启用锁定</param>
         /// <param name="isActive">是否激活</param>
+        /// <param name="isStatic">是否为内置</param>
         /// <param name="twoFactorEnabled">是否启用双重验证,默认为false</param>
         /// <returns></returns>
-        public virtual async Task<User> UpdateAsync(long? id, string password, [NotNull]string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool twoFactorEnabled = false)
+        public virtual async Task<User> UpdateAsync(long? id, string password, [NotNull] string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool isStatic = false, bool twoFactorEnabled = false)
         {
             Check.NotNull(id, nameof(id));
             Check.NotNull(nickname, nameof(nickname));
@@ -160,7 +167,7 @@ namespace Company.Project.Authorization.Users
         /// <param name="user"></param>
         /// <param name="claims"></param>
         /// <returns></returns>
-        public virtual async Task AddClaimsAsync([NotNull]User user, params string[] claims)
+        public virtual async Task AddClaimsAsync([NotNull] User user, params string[] claims)
         {
             Check.NotNull(user, nameof(user));
 
@@ -195,7 +202,7 @@ namespace Company.Project.Authorization.Users
         /// <param name="user">用户</param>
         /// <param name="roles">角色名称</param>
         /// <returns></returns>
-        public virtual async Task AddToRolesAsync([NotNull]User user, params string[] roles)
+        public virtual async Task AddToRolesAsync([NotNull] User user, params string[] roles)
         {
             Check.NotNull(user, nameof(user));
             if (roles == null || roles.Length == 0)
@@ -247,11 +254,11 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="predicate">条件表达式</param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<User>> DeleteAsync([NotNull]Expression<Func<User, bool>> predicate)
+        public virtual async Task<IEnumerable<User>> DeleteAsync([NotNull] Expression<Func<User, bool>> predicate)
         {
             Check.NotNull(predicate, nameof(predicate));
 
-            var users = this.Users.AsNoTracking().Where(predicate);
+            var users = this.Users.AsNoTracking().Where(o => !o.IsStatic).Where(predicate);
             if ((await users.CountAsync()) == 0)
             {
                 return users;
