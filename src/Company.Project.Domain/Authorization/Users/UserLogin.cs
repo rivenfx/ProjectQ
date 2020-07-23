@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserLogin : AppUserLogin<long>, IEntity<long>, IFullAudited
+    public class UserLogin : AppUserLogin<long>, IEntity<long>, IFullAudited, IMayHaveTenant
     {
         public virtual long Id { get; set; }
         public virtual string Creator { get; set; }
@@ -18,6 +18,7 @@ namespace Company.Project.Authorization.Users
         public virtual string Deleter { get; set; }
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
+        public virtual string TenantName { get; set; }
 
         public virtual bool EntityEquals(object obj)
         {

@@ -1,13 +1,14 @@
 using Riven.Entities;
 using Riven.Entities.Auditing;
 using Riven.Identity.Users;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserToken : AppUserToken<long>, IEntity<long>, IFullAudited
+    public class UserToken : AppUserToken<long>, IEntity<long>, IFullAudited, IMayHaveTenant
     {
         public virtual long Id { get; set; }
 
@@ -20,7 +21,8 @@ namespace Company.Project.Authorization.Users
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
 
-        
+        public virtual string TenantName { get; set; }
+
         public virtual bool EntityEquals(object obj)
         {
             return EntityHelper.EntityEquals(this, obj);

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class Role : AppRole<long>, IEntity<long>, IFullAudited
+    public class Role : AppRole<long>, IEntity<long>, IFullAudited, IMayHaveTenant
     {
         public virtual string Creator { get; set; }
         public virtual DateTime CreationTime { get; set; }
@@ -17,6 +17,7 @@ namespace Company.Project.Authorization.Roles
         public virtual string Deleter { get; set; }
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
+        public virtual string TenantName { get; set; }
 
         public virtual bool EntityEquals(object obj)
         {
