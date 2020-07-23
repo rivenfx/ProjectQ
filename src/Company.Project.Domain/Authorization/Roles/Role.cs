@@ -19,8 +19,6 @@ namespace Company.Project.Authorization.Roles
         public virtual bool IsDeleted { get; set; }
         public virtual string TenantName { get; set; }
 
-        public virtual bool IsStatic { get; set; }
-
         public virtual bool EntityEquals(object obj)
         {
             return EntityHelper.EntityEquals(this, obj);

@@ -18,7 +18,6 @@ namespace Company.Project.Authorization.Users
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
         public virtual string TenantName { get; set; }
-        public virtual bool IsStatic { get; set; }
 
         public virtual bool EntityEquals(object obj)
         {

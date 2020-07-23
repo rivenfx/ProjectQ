@@ -29,6 +29,20 @@ namespace Company.Project
             public const string MigrationsHistoryTableName = "EFCoreMigrationsHistory";
         }
 
+        /// <summary>
+        /// 多租户
+        /// </summary>
+        public static class MultiTenancy
+        {
+            /// <summary>
+            /// 默认租户名称
+            /// </summary>
+            public const string DefaultTenantName = "Default";
+        }
+
+        /// <summary>
+        /// 认证
+        /// </summary>
         public static class Authorization
         {
             /// <summary>
@@ -43,10 +57,6 @@ namespace Company.Project
             /// 系统管理员角色
             /// </summary>
             public const string SystemRoleName = "Administrator";
-            /// <summary>
-            /// 系统管理员显示名称
-            /// </summary>
-            public const string SystemRoleDisplayName = "Administrator";
         }
     }
 }
