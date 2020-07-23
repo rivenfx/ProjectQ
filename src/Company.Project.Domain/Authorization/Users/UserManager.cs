@@ -266,7 +266,7 @@ namespace Company.Project.Authorization.Users
 
             foreach (var user in users)
             {
-                if (user.IsSystem)
+                if (user.IsStatic)
                 {
                     throw new UserFriendlyException("不能删除系统用户!");
                 }
