@@ -42,7 +42,7 @@ namespace Company.Project
             /// <summary>
             /// 系统管理员角色
             /// </summary>
-            public const string SystemRoleName = "admin";
+            public const string SystemRoleName = "Administrator";
             /// <summary>
             /// 系统管理员显示名称
             /// </summary>
