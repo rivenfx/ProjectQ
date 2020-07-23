@@ -11,5 +11,6 @@ namespace Company.Project.MultiTenancy
         public string Name { get; set; }
 
         public string DisplayName { get; set; }
+
     }
 }

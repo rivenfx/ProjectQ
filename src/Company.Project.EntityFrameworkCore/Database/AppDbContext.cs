@@ -2,6 +2,7 @@ using Company.Project.Authorization;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using Company.Project.Database.Extenstions;
+using Company.Project.MultiTenancy;
 using Company.Project.Samples;
 
 using JetBrains.Annotations;
@@ -69,8 +70,18 @@ namespace Company.Project.Database
             ServiceProvider = serviceProvider;
         }
 
+        #region 租户
+
+        public DbSet<Tenant> Tenants { get; set; }
+
+        #endregion
+
+
+        #region 示例实体
+
         public DbSet<SampleEntity> SampleEntitys { get; set; }
 
+        #endregion
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -80,6 +91,8 @@ namespace Company.Project.Database
             modelBuilder.ConfigureGlobalFilters(this);
 
             modelBuilder.ConfiurationIdentityTables();
+
+            modelBuilder.ConfiurationTenantTable();
         }
 
         #region 重写SaveChange函数
