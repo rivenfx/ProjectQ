@@ -29,10 +29,9 @@ namespace Company.Project.SeedData
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var unitOfWorkManager = scope.ServiceProvider.GetService<IUnitOfWorkManager>();
-
                     using (var uow = unitOfWorkManager.Begin())
                     {
-                        await this.CreateAdminUserAndRole(scope.ServiceProvider);
+                       
 
                         await uow.CompleteAsync();
                     }
@@ -43,20 +42,22 @@ namespace Company.Project.SeedData
 
                 throw ex;
             }
-
-
-
         }
 
 
+        protected virtual Task Create(IServiceProvider scopeServiceProvider)
+        {
+
+        }
+
         /// <summary>
-        /// ´´½¨¹ÜÀíÔ±ÓÃ»§ºÍ½ÇÉ«
+        /// åˆ›å»ºç®¡ç†å‘˜ç”¨æˆ·å’Œè§’è‰²
         /// </summary>
         /// <param name="scopeServiceProvider"></param>
         /// <returns></returns>
         protected async Task CreateAdminUserAndRole(IServiceProvider scopeServiceProvider)
         {
-            // ¹ÜÀíÔ±½ÇÉ«
+            // ç®¡ç†å‘˜è§’è‰²
             var roleManager = scopeServiceProvider.GetService<RoleManager>();
             var systemRole = await roleManager.FindByNameAsync(AppConsts.Authorization.SystemRoleName);
             if (systemRole == null)
@@ -68,7 +69,7 @@ namespace Company.Project.SeedData
                     );
             }
 
-            // ¸½¼ÓÈ¨ÏŞ
+            // é™„åŠ æƒé™
             await roleManager.ChangeIdentityClaimsAsync(systemRole,
                           AppClaimsConsts.User.Query,
                           AppClaimsConsts.User.Create,
@@ -81,7 +82,7 @@ namespace Company.Project.SeedData
                           );
 
             var userManager = scopeServiceProvider.GetService<UserManager>();
-            // ¹ÜÀíÔ±ÓÃ»§
+            // ç®¡ç†å‘˜ç”¨æˆ·
             var systemUser = await userManager.FindByNameOrEmailOrPhoneNumberAsync(AppConsts.Authorization.SystemUserName);
             if (systemUser == null)
             {
@@ -98,7 +99,7 @@ namespace Company.Project.SeedData
                     );
             }
 
-            // ÓÃ»§Ìí¼Ó½ÇÉ«
+            // ç”¨æˆ·æ·»åŠ è§’è‰²
             var roles = await userManager.GetRolesAsync(systemUser);
             if (!roles.Any(o => o == systemRole.Name))
             {
