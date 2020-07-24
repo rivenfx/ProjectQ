@@ -1,4 +1,4 @@
-﻿
+
 
 using System;
 using System.Linq;
@@ -15,12 +15,14 @@ namespace Company.Project.MultiTenancy
     public class TenantMananger : ITenantManager
     {
         readonly IRepository<Tenant, Guid> _entityRep;
-        readonly IActiveUnitOfWork _currentUnitOfWork;
+        readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public TenantMananger(IRepository<Tenant, Guid> entityRep, IActiveUnitOfWork currentUnitOfWork)
+        IActiveUnitOfWork CurrentUnitOfWork => this._unitOfWorkManager.Current;
+
+        public TenantMananger(IRepository<Tenant, Guid> entityRep, IUnitOfWorkManager unitOfWorkManager)
         {
             _entityRep = entityRep;
-            _currentUnitOfWork = currentUnitOfWork;
+            _unitOfWorkManager = unitOfWorkManager;
         }
 
         public IQueryable<Tenant> Query => _entityRep.GetAll();
