@@ -19,7 +19,7 @@ using Company.Project.MultiTenancy;
 namespace Company.Project.Seeder
 {
     /// <summary>
-    /// 默认租户种子数据
+    /// 租户种子数据
     /// </summary>
     public interface ITenantSeeder : IScopeDependency
     {
