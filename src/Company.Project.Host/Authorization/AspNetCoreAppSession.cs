@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Riven.Dependency;
 using Riven.Extensions;
 using Riven.Localization;
+using Riven.Uow;
 
 namespace Company.Project.Authorization
 {
@@ -23,29 +24,27 @@ namespace Company.Project.Authorization
 
         public string UserName => _httpContextAccessor?.HttpContext?.User.GetUserName(_options.Value);
 
-        public LanguageInfo CurrentLanguage => _currentLanguage.GetCurrentLanguage();
-
-        public long? TenantId => this.GetTenantId();
-
-        public string TenantIdString => this.GetTenantIdString();
+        public string TenantName => _currentConnectionStringNameProvider.Current;
 
         public long? ImpersonatedUserId => this.GetImpersonatedUserId();
 
         public string ImpersonatedUserIdString => this.GetImpersonatedUserIdString();
 
-        public long? ImpersonatedTenantId => this.GetImpersonatedTenantId();
+        public string ImpersonatedTenantName => this.GetImpersonatedTenantNameString();
 
-        public string ImpersonatedTenantIdString => this.GetImpersonatedTenantIdString();
+        public LanguageInfo CurrentLanguage => _currentLanguage.GetCurrentLanguage();
 
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly IOptions<IdentityOptions> _options;
         readonly ICurrentLanguage _currentLanguage;
+        readonly ICurrentConnectionStringNameProvider _currentConnectionStringNameProvider;
 
-        public AspNetCoreAppSession(IHttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage)
+        public AspNetCoreAppSession(IHttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage, ICurrentConnectionStringNameProvider currentConnectionStringNameProvider)
         {
             _httpContextAccessor = httpContextAccessor;
             _options = options;
             _currentLanguage = currentLanguage;
+            _currentConnectionStringNameProvider = currentConnectionStringNameProvider;
         }
 
         #region 用户Id获取函数
@@ -69,35 +68,6 @@ namespace Company.Project.Authorization
 
         #endregion
 
-
-        #region 租户Id获取函数
-
-        long? GetTenantId()
-        {
-            var tenantIdString = this.GetTenantIdString();
-            if (!tenantIdString.IsNullOrWhiteSpace())
-            {
-                return long.Parse(tenantIdString);
-            }
-
-
-            return null;
-        }
-
-        string GetTenantIdString()
-        {
-            var tenantIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.TenantIdNameIdentifier);
-
-            if (!tenantIdString.IsNullOrWhiteSpace())
-            {
-                return tenantIdString;
-            }
-
-
-            return null;
-        }
-
-        #endregion
 
         #region 用户Id获取 - 模拟登录
 
@@ -128,23 +98,12 @@ namespace Company.Project.Authorization
         }
         #endregion
 
-        #region 租户Id获取函数 - 模拟登录
+        #region 租户名称获取函数 - 模拟登录
 
-        long? GetImpersonatedTenantId()
+
+        string GetImpersonatedTenantNameString()
         {
-            var tenantIdString = this.GetImpersonatedTenantIdString();
-            if (!tenantIdString.IsNullOrWhiteSpace())
-            {
-                return long.Parse(tenantIdString);
-            }
-
-
-            return null;
-        }
-
-        string GetImpersonatedTenantIdString()
-        {
-            var tenantIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedTenantIdNameIdentifier);
+            var tenantIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedTenantNameIdentifier);
 
             if (!tenantIdString.IsNullOrWhiteSpace())
             {

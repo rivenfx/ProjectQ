@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,9 +10,9 @@ namespace Company.Project.Authorization.AppClaims
     public static class AppClaimTypes
     {
         /// <summary>
-        /// 租户Id键
+        /// 租户名称 键
         /// </summary>
-        public const string TenantIdNameIdentifier = "RivenFx.TenantIdNameIdentifier";
+        public const string TenantNameIdentifier = "RivenFx.TenantIdNameIdentifier";
 
         /// <summary>
         /// 模拟登录用户id 键
@@ -20,9 +20,9 @@ namespace Company.Project.Authorization.AppClaims
         public const string ImpersonatedUserIdNameIdentifier = "RivenFx.ImpersonatedUserIdNameIdentifier";
 
         /// <summary>
-        /// 模拟登录租户id 键
+        /// 模拟登录租户名称 键
         /// </summary>
-        public const string ImpersonatedTenantIdNameIdentifier = "RivenFx.ImpersonatedTenantIdNameIdentifier";
+        public const string ImpersonatedTenantNameIdentifier = "RivenFx.ImpersonatedTenantIdNameIdentifier";
 
 
     }

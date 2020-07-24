@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 
 using Riven.Uow;
 
@@ -12,12 +12,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using JetBrains.Annotations;
 using Riven;
 using System.Linq;
+using Company.Project;
+using Riven.MultiTenancy;
 
 namespace Riven.Uow
 {
     public class AspNetCoreCurrentConnectionStringNameProvider : ICurrentConnectionStringNameProvider
     {
-        public string Current => _httpContextAccessor?.HttpContext?.Request?.Headers?.GetTenantName();
+        public string Current => this.GetCurrentTenantName();
 
 
         readonly IHttpContextAccessor _httpContextAccessor;
@@ -25,6 +27,20 @@ namespace Riven.Uow
         public AspNetCoreCurrentConnectionStringNameProvider(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        string GetCurrentTenantName()
+        {
+            var tenantName = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetTenantName();
+
+            // 启用多租户,并且多租户名称不为空,返回租户名称
+            if (MultiTenancyConfig.IsEnabled && !tenantName.IsNullOrWhiteSpace())
+            {
+                return tenantName;
+            }
+
+            // 返回空
+            return null;
         }
     }
 }

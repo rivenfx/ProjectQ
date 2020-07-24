@@ -127,7 +127,7 @@ namespace Company.Project.Database
 
         public virtual string GetCurrentTenantNameOrNull()
         {
-            return AppSession?.TenantIdString;
+            return AppSession?.TenantName;
         }
 
         public virtual string GetCurrentUserIdOrNull()

@@ -25,14 +25,9 @@ namespace Company.Project.Authorization
         string UserName { get; }
 
         /// <summary>
-        /// 租户Id
-        /// </summary>
-        long? TenantId { get; }
-
-        /// <summary>
         /// 租户Id - 字符串类型
         /// </summary>
-        string TenantIdString { get; }
+        string TenantName { get; }
 
         /// <summary>
         /// 模拟登录用户Id
@@ -45,14 +40,9 @@ namespace Company.Project.Authorization
         string ImpersonatedUserIdString { get; }
 
         /// <summary>
-        /// 模拟登录租户Id
+        /// 模拟登录租户名称 - 字符串
         /// </summary>
-        long? ImpersonatedTenantId { get; }
-
-        /// <summary>
-        /// 模拟登录租户Id - 字符串
-        /// </summary>
-        string ImpersonatedTenantIdString { get; }
+        string ImpersonatedTenantName { get; }
 
         /// <summary>
         /// 当前语言信息
