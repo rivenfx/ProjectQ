@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Roles.Dtos
 {
-    public class RoleDto : EntityDto<long?>
+    public class RoleDto : EntityDto<Guid?>
     {
 
         /// <summary>
