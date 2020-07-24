@@ -14,12 +14,13 @@ using System.Linq;
 using Company.Project.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Company.Project.MultiTenancy;
 
 namespace Company.Project.Seeder
 {
     public interface IHostSeeder : IScopeDependency
     {
-        Task Create(DbContext dbContext);
+        Task<Tenant> Create(DbContext dbContext);
     }
 
     public class HostSeeder : SeederBase, IHostSeeder
@@ -29,7 +30,7 @@ namespace Company.Project.Seeder
         {
         }
 
-        public virtual async Task Create(DbContext dbContext)
+        public virtual async Task<Tenant> Create(DbContext dbContext)
         {
             if (!(dbContext is AppDbContext))
             {
@@ -41,9 +42,38 @@ namespace Company.Project.Seeder
 
             var defaultUser = await this.CreateUsers(dbContext, defaultRole);
 
+            var defaultTenant = await this.CreateDefaultTenant(dbContext, AppConsts.MultiTenancy.DefaultTenantName);
 
-            await dbContext.SaveChangesAsync();
+            return defaultTenant;
         }
 
+
+        /// <summary>
+        /// 创建默认租户
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="tenantName"></param>
+        /// <returns></returns>
+        public virtual async Task<Tenant> CreateDefaultTenant(DbContext dbContext, string tenantName)
+        {
+            var tenantStore = dbContext.Set<Tenant>();
+
+            var tenant = await tenantStore.AsQueryable().IgnoreQueryFilters()
+                .Where(o => o.Name == tenantName)
+                .FirstOrDefaultAsync();
+            if (tenant == null)
+            {
+                tenant = new Tenant()
+                {
+                    Name = tenantName,
+                    DisplayName = tenantName,
+                    Description = tenantName
+                };
+                await tenantStore.AddAsync(tenant);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return tenant;
+        }
     }
 }

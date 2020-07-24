@@ -41,12 +41,12 @@ namespace Company.Project.Seeder
                         var appContext = unitOfWorkManager.Current.GetDbContext<AppDbContext>();
 
                         var hostSeeder = scopeServiceProvider.GetService<IHostSeeder>();
-                        await hostSeeder.Create(appContext);
+                        var defaultTenant = await hostSeeder.Create(appContext);
 
 
                         var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
-                        await tenantSeeder.Create(appContext);
-                     
+                        await tenantSeeder.Create(appContext, defaultTenant);
+
                         await uow.CompleteAsync();
                     }
                 }

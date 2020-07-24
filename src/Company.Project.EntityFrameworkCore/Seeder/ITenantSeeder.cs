@@ -14,12 +14,13 @@ using System.Linq;
 using Company.Project.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Company.Project.MultiTenancy;
 
 namespace Company.Project.Seeder
 {
     public interface ITenantSeeder : IScopeDependency
     {
-        Task Create(DbContext dbContext);
+        Task Create(DbContext dbContext, Tenant tenant);
     }
 
     public class TenantSeeder : SeederBase, ITenantSeeder
@@ -29,7 +30,7 @@ namespace Company.Project.Seeder
         {
         }
 
-        public virtual async Task Create(DbContext dbContext)
+        public virtual async Task Create(DbContext dbContext, Tenant tenant)
         {
             if (!(dbContext is AppDbContext))
             {
@@ -37,12 +38,9 @@ namespace Company.Project.Seeder
             }
 
 
-            var defaultRole = await this.CreateRoles(dbContext, AppConsts.MultiTenancy.DefaultTenantName);
+            var defaultRole = await this.CreateRoles(dbContext, tenant.Name);
 
             var defaultUser = await this.CreateUsers(dbContext, defaultRole);
-
-
-            await dbContext.SaveChangesAsync();
         }
 
     }
