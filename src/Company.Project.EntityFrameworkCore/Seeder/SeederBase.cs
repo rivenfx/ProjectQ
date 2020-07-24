@@ -124,11 +124,10 @@ namespace Company.Project.Seeder
                     .HashPassword(systemUser, AppConsts.Authorization.SystemUserPassword);
 
                 await userStore.AddAsync(systemUser);
+                await dbContext.SaveChangesAsync();
 
                 // 更新密钥
                 await _userManager.UpdateSecurityStampAsync(systemUser);
-
-                await dbContext.SaveChangesAsync();
             }
 
 
