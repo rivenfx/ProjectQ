@@ -37,7 +37,7 @@ namespace Company.Project.Database.Extenstions
             modelBuilder.Entity<User>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(User)}s");
-                entityBuilder.HasIndex(o => o.Nickname)
+                entityBuilder.HasIndex(o => new { o.Nickname, o.TenantName })
                         .IsUnique();
 
                 // 移除索引
