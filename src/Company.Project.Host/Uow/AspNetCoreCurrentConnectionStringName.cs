@@ -31,16 +31,17 @@ namespace Riven.Uow
 
         string GetCurrentTenantName()
         {
-            var tenantName = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetTenantName();
 
-            // 启用多租户,并且多租户名称不为空,返回租户名称
-            if (MultiTenancyConfig.IsEnabled && !tenantName.IsNullOrWhiteSpace())
+            // 未启用多租户,则返回当前租户名称
+            if (!MultiTenancyConfig.IsEnabled)
             {
-                return tenantName;
+                return AppConsts.MultiTenancy.DefaultTenantName;
             }
 
-            // 返回空
-            return null;
+            // 启用多租户，返回当前租户名称
+            var tenantName = _httpContextAccessor?.HttpContext?.Request?.Headers?.GetTenantName();
+
+            return tenantName;
         }
     }
 }
