@@ -1,4 +1,4 @@
-﻿using Company.Project.Authorization.Users;
+using Company.Project.Authorization.Users;
 
 using Riven.Dependency;
 using Riven.Uow;
@@ -22,7 +22,7 @@ namespace Company.Project.Seeder
         Task Create(DbContext dbContext);
     }
 
-    public class HostSeeder : SeederBase, ITenantSeeder
+    public class HostSeeder : SeederBase, IHostSeeder
     {
         public HostSeeder(ILookupNormalizer lookupNormalizer, IPasswordHasher<User> passwordHasher)
             : base(lookupNormalizer, passwordHasher)
