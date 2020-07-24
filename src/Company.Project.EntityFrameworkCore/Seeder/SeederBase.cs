@@ -18,10 +18,13 @@ namespace Company.Project.Seeder
 
         protected readonly IPasswordHasher<User> _passwordHasher;
 
-        public SeederBase(ILookupNormalizer lookupNormalizer, IPasswordHasher<User> passwordHasher)
+        protected readonly UserManager _userManager;
+
+        public SeederBase(ILookupNormalizer lookupNormalizer, IPasswordHasher<User> passwordHasher, UserManager userManager)
         {
             _lookupNormalizer = lookupNormalizer;
             _passwordHasher = passwordHasher;
+            _userManager = userManager;
         }
 
 
@@ -121,6 +124,10 @@ namespace Company.Project.Seeder
                     .HashPassword(systemUser, AppConsts.Authorization.SystemUserPassword);
 
                 await userStore.AddAsync(systemUser);
+
+                // 更新密钥
+                await _userManager.UpdateSecurityStampAsync(systemUser);
+
                 await dbContext.SaveChangesAsync();
             }
 
