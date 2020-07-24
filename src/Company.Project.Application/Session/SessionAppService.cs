@@ -1,4 +1,4 @@
-﻿using Company.Project.Authorization;
+using Company.Project.Authorization;
 using Company.Project.Authorization.AppClaims;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
@@ -13,6 +13,7 @@ using Nito.AsyncEx;
 using Riven;
 using Riven.Application;
 using Riven.Localization;
+using Riven.MultiTenancy;
 
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,7 @@ namespace Company.Project.Session
             {
                 Name = appInfo.Name,
                 Version = appInfo.Version,
+                MultiTenancy = MultiTenancyConfig.IsEnabled,
                 Auth = await this.GetClaims(),
                 Localization = this.GetLocalization(),
                 Menu = this.GetMenu(),

@@ -1,4 +1,4 @@
-﻿
+
 using Riven.Localization;
 
 using System;
@@ -26,6 +26,11 @@ namespace Company.Project.Session.Dtos
         /// 应用版本
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// 是否启用多租户
+        /// </summary>
+        public bool MultiTenancy { get; set; }
 
         /// <summary>
         /// 当前登录用户id
