@@ -18,6 +18,9 @@ using Company.Project.MultiTenancy;
 
 namespace Company.Project.Seeder
 {
+    /// <summary>
+    /// Host 种子数据
+    /// </summary>
     public interface IHostSeeder : IScopeDependency
     {
         Task<Tenant> Create(DbContext dbContext);
