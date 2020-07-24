@@ -262,11 +262,11 @@ namespace Company.Project.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
+                name: "IX_Roles_NormalizedName_TenantName",
                 table: "Roles",
-                column: "NormalizedName",
+                columns: new[] { "NormalizedName", "TenantName" },
                 unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                filter: "[NormalizedName] IS NOT NULL AND [TenantName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tenants_Name",
@@ -297,16 +297,11 @@ namespace Company.Project.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
+                name: "IX_Users_NormalizedUserName_NormalizedEmail_TenantName",
                 table: "Users",
-                column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "Users",
-                column: "NormalizedUserName",
+                columns: new[] { "NormalizedUserName", "NormalizedEmail", "TenantName" },
                 unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                filter: "[NormalizedUserName] IS NOT NULL AND [NormalizedEmail] IS NOT NULL AND [TenantName] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

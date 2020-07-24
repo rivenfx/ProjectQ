@@ -71,14 +71,13 @@ namespace Company.Project.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("TenantName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
+                    b.HasIndex("NormalizedName", "TenantName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasFilter("[NormalizedName] IS NOT NULL AND [TenantName] IS NOT NULL");
 
                     b.ToTable("Roles");
                 });
@@ -214,7 +213,7 @@ namespace Company.Project.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenantName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -228,13 +227,9 @@ namespace Company.Project.Migrations
                     b.HasIndex("Nickname")
                         .IsUnique();
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
+                    b.HasIndex("NormalizedUserName", "NormalizedEmail", "TenantName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasFilter("[NormalizedUserName] IS NOT NULL AND [NormalizedEmail] IS NOT NULL AND [TenantName] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
