@@ -25,8 +25,8 @@ namespace Company.Project.Seeder
 
     public class HostSeeder : SeederBase, IHostSeeder
     {
-        public HostSeeder(ILookupNormalizer lookupNormalizer, IPasswordHasher<User> passwordHasher)
-            : base(lookupNormalizer, passwordHasher)
+        public HostSeeder(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
         }
 

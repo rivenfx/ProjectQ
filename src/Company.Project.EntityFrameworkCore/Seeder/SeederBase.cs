@@ -1,14 +1,14 @@
-using Company.Project.Authorization.Roles;
-using Company.Project.Authorization.Users;
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+using Company.Project.Authorization.Roles;
+using Company.Project.Authorization.Users;
 
 namespace Company.Project.Seeder
 {
@@ -20,11 +20,11 @@ namespace Company.Project.Seeder
 
         protected readonly UserManager _userManager;
 
-        public SeederBase(ILookupNormalizer lookupNormalizer, IPasswordHasher<User> passwordHasher, UserManager userManager)
+        public SeederBase(IServiceProvider serviceProvider)
         {
-            _lookupNormalizer = lookupNormalizer;
-            _passwordHasher = passwordHasher;
-            _userManager = userManager;
+            _lookupNormalizer = serviceProvider.GetService<ILookupNormalizer>();
+            _passwordHasher = serviceProvider.GetService<IPasswordHasher<User>>(); ;
+            _userManager = serviceProvider.GetService<UserManager>(); ;
         }
 
 
