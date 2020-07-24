@@ -132,7 +132,7 @@ namespace Company.Project.Database
 
         public virtual string GetCurrentUserIdOrNull()
         {
-            return AppSession?.UserIdString;
+            return AppSession?.UserId?.ToString();
         }
 
         public virtual EntityEntry ConvertToEntry(object obj)

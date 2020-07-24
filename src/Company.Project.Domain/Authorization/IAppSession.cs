@@ -12,12 +12,7 @@ namespace Company.Project.Authorization
         /// <summary>
         /// 用户Id
         /// </summary>
-        long? UserId { get; }
-
-        /// <summary>
-        /// 用户Id - 字符串类型
-        /// </summary>
-        string UserIdString { get; }
+        Guid? UserId { get; }
 
         /// <summary>
         /// 用户账号
@@ -32,12 +27,7 @@ namespace Company.Project.Authorization
         /// <summary>
         /// 模拟登录用户Id
         /// </summary>
-        long? ImpersonatedUserId { get; }
-
-        /// <summary>
-        /// 模拟登录用户Id - 字符串
-        /// </summary>
-        string ImpersonatedUserIdString { get; }
+        Guid? ImpersonatedUserId { get; }
 
         /// <summary>
         /// 模拟登录租户名称 - 字符串

@@ -18,17 +18,13 @@ namespace Company.Project.Authorization
 {
     public class AspNetCoreAppSession : IAppSession
     {
-        public long? UserId => this.GetUserId();
-
-        public string UserIdString => this.GetUserIdString();
+        public Guid? UserId => this.GetUserId();
 
         public string UserName => _httpContextAccessor?.HttpContext?.User.GetUserName(_options.Value);
 
         public string TenantName => _currentConnectionStringNameProvider.Current;
 
-        public long? ImpersonatedUserId => this.GetImpersonatedUserId();
-
-        public string ImpersonatedUserIdString => this.GetImpersonatedUserIdString();
+        public Guid? ImpersonatedUserId => this.GetImpersonatedUserId();
 
         public string ImpersonatedTenantName => this.GetImpersonatedTenantNameString();
 
@@ -47,23 +43,18 @@ namespace Company.Project.Authorization
             _currentConnectionStringNameProvider = currentConnectionStringNameProvider;
         }
 
+
         #region 用户Id获取函数
 
-        long? GetUserId()
+        Guid? GetUserId()
         {
-            var userIdString = this.GetUserIdString();
-            if (!userIdString.IsNullOrWhiteSpace())
+            var userIdString = _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
+            if (userIdString.IsNullOrWhiteSpace())
             {
-                return long.Parse(userIdString);
+                return null;
             }
 
-
-            return null;
-        }
-
-        string GetUserIdString()
-        {
-            return _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
+            return Guid.Parse(userIdString);
         }
 
         #endregion
@@ -71,43 +62,31 @@ namespace Company.Project.Authorization
 
         #region 用户Id获取 - 模拟登录
 
-        long? GetImpersonatedUserId()
+
+        Guid? GetImpersonatedUserId()
         {
-            var userIdString = this.GetImpersonatedUserIdString();
-            if (!userIdString.IsNullOrWhiteSpace())
-            {
-                return long.Parse(userIdString);
-            }
-
-
-            return null;
-        }
-
-        string GetImpersonatedUserIdString()
-        {
-
             var userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedUserIdNameIdentifier);
-
-            if (!userIdString.IsNullOrWhiteSpace())
+            if (userIdString.IsNullOrWhiteSpace())
             {
-                return userIdString;
+                return null;
             }
 
-
-            return null;
+            return Guid.Parse(userIdString);
         }
+
         #endregion
+
 
         #region 租户名称获取函数 - 模拟登录
 
 
         string GetImpersonatedTenantNameString()
         {
-            var tenantIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedTenantNameIdentifier);
+            var tenantNameString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedTenantNameIdentifier);
 
-            if (!tenantIdString.IsNullOrWhiteSpace())
+            if (!tenantNameString.IsNullOrWhiteSpace())
             {
-                return tenantIdString;
+                return tenantNameString;
             }
 
 
@@ -117,6 +96,6 @@ namespace Company.Project.Authorization
         #endregion
 
 
-
     }
 }
+
