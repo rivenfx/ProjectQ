@@ -17,8 +17,8 @@ namespace Company.Project.Database
 
             var connectionString = configuration.GetDefaultDatabaseConnectionString();
 
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} 开始迁移");
-            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} 当前使用连接字符串: {connectionString}");
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} start");
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} current database connection string: {connectionString}");
 
             var builder = new DbContextOptionsBuilder<AppDbContext>();
 
