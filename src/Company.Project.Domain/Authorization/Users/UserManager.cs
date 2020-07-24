@@ -119,7 +119,7 @@ namespace Company.Project.Authorization.Users
         /// <param name="isStatic">是否为内置</param>
         /// <param name="twoFactorEnabled">是否启用双重验证,默认为false</param>
         /// <returns></returns>
-        public virtual async Task<User> UpdateAsync(long? id, string password, [NotNull] string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool isStatic = false, bool twoFactorEnabled = false)
+        public virtual async Task<User> UpdateAsync(Guid? id, string password, [NotNull] string nickname, string phoneNumber, bool phoneNumberConfirmed, string email, bool emailConfirmed, bool lockoutEnabled, bool isActive, bool isStatic = false, bool twoFactorEnabled = false)
         {
             Check.NotNull(id, nameof(id));
             Check.NotNull(nickname, nameof(nickname));

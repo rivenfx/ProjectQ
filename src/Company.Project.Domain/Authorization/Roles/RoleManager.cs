@@ -89,7 +89,7 @@ namespace Company.Project.Authorization.Roles
         /// <param name="description">描述</param>
         /// <param name="claims">角色拥有的claim集合</param>
         /// <returns></returns>
-        public async Task<Role> UpdateAsync(long? id, [NotNull] string displayName, string description, params string[] claims)
+        public async Task<Role> UpdateAsync(Guid? id, [NotNull] string displayName, string description, params string[] claims)
         {
             Check.NotNull(id, nameof(id));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
