@@ -60,7 +60,7 @@ namespace Company.Project.Seeder
             }
 
             // 查询现有权限
-            var roleClaims = await roleClaimStore.AsQueryable()
+            var roleClaims = await roleClaimStore.IgnoreQueryFilters()
                 .Where(o => o.RoleId == systemRole.Id && o.TenantName == tenantName)
                 .ToListAsync();
 
@@ -132,11 +132,12 @@ namespace Company.Project.Seeder
 
 
             // 用户添加角色
-            var roles = await userRoleStore.AsQueryable()
+            var userRole = await userRoleStore.IgnoreQueryFilters()
                             .Where(o => o.UserId == systemUser.Id
+                                    && o.RoleId == systemRole.Id
                                     && o.TenantName == systemRole.TenantName)
-                            .ToListAsync();
-            if (!roles.Any(o => o.RoleId == systemRole.Id))
+                            .FirstOrDefaultAsync();
+            if (userRole == null)
             {
                 await userRoleStore.AddAsync(new UserRole()
                 {

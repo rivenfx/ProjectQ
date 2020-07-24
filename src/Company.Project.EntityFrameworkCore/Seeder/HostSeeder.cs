@@ -43,7 +43,7 @@ namespace Company.Project.Seeder
         {
             var tenantStore = dbContext.Set<Tenant>();
 
-            var tenant = await tenantStore.AsQueryable().IgnoreQueryFilters()
+            var tenant = await tenantStore.IgnoreQueryFilters()
                 .Where(o => o.Name == tenantName)
                 .FirstOrDefaultAsync();
             if (tenant == null)
