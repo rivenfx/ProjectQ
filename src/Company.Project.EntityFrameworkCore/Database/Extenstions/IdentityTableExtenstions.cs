@@ -62,14 +62,37 @@ namespace Company.Project.Database.Extenstions
             modelBuilder.Entity<UserLogin>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(UserLogin)}s");
+
+                // 移除复合主键
+                var userRoleKey = entityBuilder.HasKey(o => new { o.LoginProvider, o.ProviderKey }).Metadata;
+                entityBuilder.Metadata.RemoveIndex(userRoleKey.Properties);
+
+                // 创建新的复合主键
+                entityBuilder.HasKey(o => new { o.LoginProvider, o.ProviderKey, o.TenantName });
             });
             modelBuilder.Entity<UserToken>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(UserToken)}s");
+
+                // 移除复合主键
+                var userRoleKey = entityBuilder.HasKey(o => new { o.UserId, o.LoginProvider, o.Name }).Metadata;
+                entityBuilder.Metadata.RemoveIndex(userRoleKey.Properties);
+
+                // 创建新的复合主键
+                entityBuilder.HasKey(o => new { o.UserId, o.LoginProvider, o.Name, o.TenantName });
             });
             modelBuilder.Entity<UserRole>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(UserRole)}s");
+
+
+
+                // 移除复合主键
+                var userRoleKey = entityBuilder.HasKey(o => new { o.UserId, o.RoleId }).Metadata;
+                entityBuilder.Metadata.RemoveIndex(userRoleKey.Properties);
+
+                // 创建新的复合主键
+                entityBuilder.HasKey(o => new { o.UserId, o.RoleId, o.TenantName });
             });
 
             return modelBuilder;
