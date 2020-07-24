@@ -60,7 +60,7 @@ namespace Company.Project.Session
                 Auth = await this.GetClaims(),
                 Localization = this.GetLocalization(),
                 Menu = this.GetMenu(),
-                UserId = _appSession.UserIdString
+                UserId = _appSession.UserId?.ToString()
             };
         }
 
