@@ -6,13 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200505060242_ChangeUserEntity.cs" />
-    <Compile Remove="Migrations\20200505060242_ChangeUserEntity.Designer.cs" />
-    <Compile Remove="Migrations\20200505122608_ChangeUserEntity2.cs" />
-    <Compile Remove="Migrations\20200505122608_ChangeUserEntity2.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="3.1.1" />
