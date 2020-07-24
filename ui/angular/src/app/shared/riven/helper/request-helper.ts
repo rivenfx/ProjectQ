@@ -37,7 +37,7 @@ export class RequestHelper {
     modifiedHeaders = RequestHelper.addAuthorizationHeaders(modifiedHeaders, authorizationSchema);
     modifiedHeaders = RequestHelper.addAspNetCoreCultureHeader(modifiedHeaders);
     modifiedHeaders = RequestHelper.addAcceptLanguageHeader(modifiedHeaders);
-    modifiedHeaders = RequestHelper.addTenantIdHeader(modifiedHeaders);
+    modifiedHeaders = RequestHelper.addTenantHeader(modifiedHeaders);
 
     return request.clone({
       headers: modifiedHeaders,
@@ -91,12 +91,12 @@ export class RequestHelper {
     return headers;
   }
 
-  /** 添加租户Id到请求头 */
-  static addTenantIdHeader(headers: HttpHeaders): HttpHeaders {
+  /** 添加租户到请求头 */
+  static addTenantHeader(headers: HttpHeaders): HttpHeaders {
     if (RequestHelper.settingsSer.user) {
-      const tenantId = RequestHelper.settingsSer.user['tenantId'];
-      if (tenantId && headers && !headers.has('TenantId')) {
-        headers = headers.set('TenantId', tenantId);
+      const tenant = RequestHelper.settingsSer.user['tenant'];
+      if (tenant && headers && !headers.has('Tenant')) {
+        headers = headers.set('Tenant', tenant);
       }
     }
     return headers;
