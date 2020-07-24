@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,7 +55,12 @@ namespace Company.Project.Authorization.Roles
         [ClaimsAuthorize(AppClaimsConsts.Role.Create)]
         public virtual async Task Create(CreateOrUpdateRoleInput input)
         {
-            await _roleManager.CreateAsync(input.EntityDto.Name, input.EntityDto.DisplayName, input.EntityDto.Description, input.Claims?.ToArray());
+            await _roleManager.CreateAsync(
+                input.EntityDto.Name,
+                input.EntityDto.DisplayName,
+                input.EntityDto.Description,
+                claims: input.Claims?.ToArray()
+                );
         }
 
         /// <summary>
