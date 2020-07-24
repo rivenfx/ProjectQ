@@ -1,4 +1,4 @@
-﻿using Company.Project.Authorization.Roles;
+using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +21,13 @@ namespace Company.Project.Database.Extenstions
             modelBuilder.Entity<Role>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(Role)}s");
+
+                // 移除索引
+                var nameIndex = entityBuilder.HasIndex(o => o.NormalizedName).Metadata;
+                entityBuilder.Metadata.RemoveIndex(nameIndex.Properties);
+
+                // 创建复合索引
+                entityBuilder.HasIndex(o => new { o.NormalizedName, o.TenantName }).IsUnique();
             });
             modelBuilder.Entity<RoleClaim>((entityBuilder) =>
             {
@@ -32,6 +39,21 @@ namespace Company.Project.Database.Extenstions
                 entityBuilder.ToTable($"{nameof(User)}s");
                 entityBuilder.HasIndex(o => o.Nickname)
                         .IsUnique();
+
+                // 移除索引
+                var nameIndex = entityBuilder.HasIndex(o => o.NormalizedUserName).Metadata;
+                var emailIndex = entityBuilder.HasIndex(o => o.NormalizedEmail).Metadata;
+                entityBuilder.Metadata.RemoveIndex(nameIndex.Properties);
+                entityBuilder.Metadata.RemoveIndex(emailIndex.Properties);
+
+                // 创建复合索引
+                entityBuilder.HasIndex(o => new
+                {
+                    o.NormalizedUserName,
+                    o.NormalizedEmail,
+                    o.TenantName
+                })
+                .IsUnique();
             });
             modelBuilder.Entity<UserClaim>((entityBuilder) =>
             {
