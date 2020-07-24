@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 namespace Company.Project.Database
 {
     public class AppDbContext
-        : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
+        : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
         IRivenDbContext
     {
         #region IRivenDbContext 属性实现

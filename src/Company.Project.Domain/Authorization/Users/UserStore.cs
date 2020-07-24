@@ -6,10 +6,11 @@ using Riven.Identity.Users;
 using Riven.Uow;
 
 using Company.Project.Authorization.Roles;
+using System;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserStore<TDbContext> : AppUserStore<User, Role, TDbContext, long, UserClaim, UserRole, UserLogin, UserToken, RoleClaim>
+    public class UserStore<TDbContext> : AppUserStore<User, Role, TDbContext, Guid, UserClaim, UserRole, UserLogin, UserToken, RoleClaim>
          where TDbContext : DbContext
     {
         protected readonly IUnitOfWorkManager _unitOfWorkManager;

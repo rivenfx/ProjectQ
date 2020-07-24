@@ -48,7 +48,7 @@ namespace Company.Project.Authorization
                 .AddUserStore<UserStore<AppDbContext>>()
                 .AddRoleStore<RoleStore<AppDbContext>>()
                 .AddSignInManager<SignInManager>()
-                .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role>>()
+                .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role, Guid>>()
                 .AddDefaultTokenProviders();
 
             // 添加 Riven.Identity ClaimAccessor
@@ -60,9 +60,9 @@ namespace Company.Project.Authorization
             return identityBuilder;
         }
 
-      
 
-      
+
+
 
 
 

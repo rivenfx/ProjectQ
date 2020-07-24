@@ -8,10 +8,9 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserRole : AppUserRole<long>, IEntity<long>, IFullAudited, IMayHaveTenant
+    public class UserRole : AppUserRole<Guid>, IEntity<Guid>, IFullAudited, IMayHaveTenant
     {
-        public virtual long Id { get; set; }
-
+        public virtual Guid Id { get; set; }
 
         public virtual string Creator { get; set; }
         public virtual DateTime CreationTime { get; set; }

@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserToken : AppUserToken<long>, IEntity<long>, IFullAudited, IMayHaveTenant
+    public class UserToken : AppUserToken<Guid>, IEntity<Guid>, IFullAudited, IMayHaveTenant
     {
-        public virtual long Id { get; set; }
+        public virtual Guid Id { get; set; }
 
 
         public virtual string Creator { get; set; }

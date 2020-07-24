@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserClaim : AppUserClaim<long>, IEntity<int>, IFullAudited, IMayHaveTenant
+    public class UserClaim : AppUserClaim<Guid>, IEntity<int>, IFullAudited, IMayHaveTenant
     {
         public virtual string Creator { get; set; }
         public virtual DateTime CreationTime { get; set; }

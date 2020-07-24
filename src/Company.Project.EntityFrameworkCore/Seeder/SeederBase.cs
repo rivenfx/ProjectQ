@@ -61,7 +61,7 @@ namespace Company.Project.Seeder
 
             // 查询现有权限
             var roleClaims = await roleClaimStore.AsQueryable()
-                .Where(o => o.Id == systemRole.Id && o.TenantName == tenantName)
+                .Where(o => o.RoleId == systemRole.Id && o.TenantName == tenantName)
                 .ToListAsync();
 
             // 移除权限

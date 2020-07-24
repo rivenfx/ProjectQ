@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserLogin : AppUserLogin<long>, IEntity<long>, IFullAudited, IMayHaveTenant
+    public class UserLogin : AppUserLogin<Guid>, IEntity<long>, IFullAudited, IMayHaveTenant
     {
         public virtual long Id { get; set; }
         public virtual string Creator { get; set; }

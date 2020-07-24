@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class Role : AppRole<long>, IEntity<long>, IFullAudited, IMayHaveTenant
+    public class Role : AppRole<Guid>, IEntity<Guid>, IFullAudited, IMayHaveTenant
     {
         public virtual string Creator { get; set; }
         public virtual DateTime CreationTime { get; set; }
