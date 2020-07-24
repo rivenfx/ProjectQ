@@ -291,10 +291,11 @@ namespace Company.Project.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Nickname",
+                name: "IX_Users_Nickname_TenantName",
                 table: "Users",
-                column: "Nickname",
-                unique: true);
+                columns: new[] { "Nickname", "TenantName" },
+                unique: true,
+                filter: "[TenantName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_NormalizedUserName_NormalizedEmail_TenantName",

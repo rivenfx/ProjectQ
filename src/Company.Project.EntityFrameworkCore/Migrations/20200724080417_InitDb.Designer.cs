@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.Project.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200724080030_InitDb")]
+    [Migration("20200724080417_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,8 +226,9 @@ namespace Company.Project.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Nickname")
-                        .IsUnique();
+                    b.HasIndex("Nickname", "TenantName")
+                        .IsUnique()
+                        .HasFilter("[TenantName] IS NOT NULL");
 
                     b.HasIndex("NormalizedUserName", "NormalizedEmail", "TenantName")
                         .IsUnique()

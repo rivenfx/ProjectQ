@@ -224,8 +224,9 @@ namespace Company.Project.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Nickname")
-                        .IsUnique();
+                    b.HasIndex("Nickname", "TenantName")
+                        .IsUnique()
+                        .HasFilter("[TenantName] IS NOT NULL");
 
                     b.HasIndex("NormalizedUserName", "NormalizedEmail", "TenantName")
                         .IsUnique()
