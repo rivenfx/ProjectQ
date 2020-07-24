@@ -1,4 +1,4 @@
-﻿using Company.Project.Authorization.Roles;
+using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 
 using Microsoft.AspNetCore.Identity;
@@ -70,12 +70,14 @@ namespace Company.Project.Seeder
             {
                 roleClaims.Add(new RoleClaim()
                 {
+                    RoleId = systemRole.Id,
                     ClaimType = item,
                     ClaimValue = item
                 });
             }
             await roleClaimStore.AddRangeAsync(roleClaims);
 
+            await dbContext.SaveChangesAsync();
             return systemRole;
         }
 
@@ -85,7 +87,7 @@ namespace Company.Project.Seeder
         /// <param name="dbContext">数据库上下文</param>
         /// <param name="systemRole">系统默认角色</param>
         /// <returns></returns>
-        protected virtual async Task<User> CreateTenantUsers(DbContext dbContext, Role systemRole)
+        protected virtual async Task<User> CreateUsers(DbContext dbContext, Role systemRole)
         {
             var userStore = dbContext.Set<User>();
             var userRoleStore = dbContext.Set<UserRole>();
@@ -106,6 +108,7 @@ namespace Company.Project.Seeder
                     IsStatic = true,
                     LockoutEnabled = false,
                     TwoFactorEnabled = false,
+                    TenantName = systemRole.TenantName,
                 };
 
                 systemUser.NormalizedUserName = this._lookupNormalizer.NormalizeName(systemUser.UserName);
@@ -133,6 +136,7 @@ namespace Company.Project.Seeder
                 });
             }
 
+            await dbContext.SaveChangesAsync();
             return systemUser;
         }
     }

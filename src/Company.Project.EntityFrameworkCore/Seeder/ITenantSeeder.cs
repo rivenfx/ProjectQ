@@ -1,4 +1,4 @@
-﻿using Company.Project.Authorization.Users;
+using Company.Project.Authorization.Users;
 
 using Riven.Dependency;
 using Riven.Uow;
@@ -39,7 +39,7 @@ namespace Company.Project.Seeder
 
             var defaultRole = await this.CreateRoles(dbContext, AppConsts.MultiTenancy.DefaultTenantName);
 
-            var defaultUser = await this.CreateTenantUsers(dbContext, defaultRole);
+            var defaultUser = await this.CreateUsers(dbContext, defaultRole);
 
 
             await dbContext.SaveChangesAsync();

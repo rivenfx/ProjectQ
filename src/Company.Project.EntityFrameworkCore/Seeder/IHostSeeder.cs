@@ -39,7 +39,7 @@ namespace Company.Project.Seeder
 
             var defaultRole = await this.CreateRoles(dbContext, null);
 
-            var defaultUser = await this.CreateTenantUsers(dbContext, defaultRole);
+            var defaultUser = await this.CreateUsers(dbContext, defaultRole);
 
 
             await dbContext.SaveChangesAsync();

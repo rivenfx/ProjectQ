@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 using Riven.Threading;
 using Riven.Uow;
@@ -53,7 +53,6 @@ namespace Company.Project.Seeder
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
