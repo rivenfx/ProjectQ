@@ -78,21 +78,25 @@ namespace Company.Project.Database.Extenstions
                 var userRoleKey = entityBuilder.HasKey(o => new { o.UserId, o.LoginProvider, o.Name }).Metadata;
                 entityBuilder.Metadata.RemoveIndex(userRoleKey.Properties);
 
-                // 创建新的复合主键
-                entityBuilder.HasKey(o => new { o.UserId, o.LoginProvider, o.Name, o.TenantName });
+                // 创建主键
+                entityBuilder.HasKey(o => o.Id);
+
+                // 创建新的索引
+                entityBuilder.HasIndex(o => new { o.UserId, o.LoginProvider, o.Name, o.TenantName }).IsUnique();
             });
             modelBuilder.Entity<UserRole>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(UserRole)}s");
 
-
-
                 // 移除复合主键
                 var userRoleKey = entityBuilder.HasKey(o => new { o.UserId, o.RoleId }).Metadata;
                 entityBuilder.Metadata.RemoveIndex(userRoleKey.Properties);
 
-                // 创建新的复合主键
-                entityBuilder.HasKey(o => new { o.UserId, o.RoleId, o.TenantName });
+                // 创建主键
+                entityBuilder.HasKey(o => o.Id);
+
+                // 创建新的索引
+                entityBuilder.HasIndex(o => new { o.UserId, o.RoleId, o.TenantName }).IsUnique();
             });
 
             return modelBuilder;

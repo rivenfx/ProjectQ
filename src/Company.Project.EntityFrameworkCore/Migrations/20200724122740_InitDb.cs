@@ -169,6 +169,7 @@ namespace Company.Project.Migrations
                 {
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
+                    TenantName = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     Id = table.Column<long>(nullable: false),
@@ -178,12 +179,11 @@ namespace Company.Project.Migrations
                     LastModificationTime = table.Column<DateTime>(nullable: true),
                     Deleter = table.Column<string>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    TenantName = table.Column<string>(nullable: true)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey, x.TenantName });
                     table.ForeignKey(
                         name: "FK_UserLogins_Users_UserId",
                         column: x => x.UserId,
@@ -196,9 +196,9 @@ namespace Company.Project.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     RoleId = table.Column<Guid>(nullable: false),
-                    Id = table.Column<Guid>(nullable: false),
                     Creator = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     LastModifier = table.Column<string>(nullable: true),
@@ -210,7 +210,7 @@ namespace Company.Project.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_UserRoles", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserRoles_Roles_RoleId",
                         column: x => x.RoleId,
@@ -229,11 +229,11 @@ namespace Company.Project.Migrations
                 name: "UserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
                     Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(nullable: true),
                     Creator = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     LastModifier = table.Column<string>(nullable: true),
@@ -245,7 +245,7 @@ namespace Company.Project.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_UserTokens", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserTokens_Users_UserId",
                         column: x => x.UserId,
@@ -289,6 +289,13 @@ namespace Company.Project.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_UserId_RoleId_TenantName",
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId", "TenantName" },
+                unique: true,
+                filter: "[TenantName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Nickname_TenantName",
                 table: "Users",
                 columns: new[] { "Nickname", "TenantName" },
@@ -301,6 +308,13 @@ namespace Company.Project.Migrations
                 columns: new[] { "NormalizedUserName", "NormalizedEmail", "TenantName" },
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL AND [NormalizedEmail] IS NOT NULL AND [TenantName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTokens_UserId_LoginProvider_Name_TenantName",
+                table: "UserTokens",
+                columns: new[] { "UserId", "LoginProvider", "Name", "TenantName" },
+                unique: true,
+                filter: "[LoginProvider] IS NOT NULL AND [Name] IS NOT NULL AND [TenantName] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
