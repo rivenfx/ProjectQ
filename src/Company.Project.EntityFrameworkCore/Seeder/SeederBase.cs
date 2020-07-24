@@ -38,7 +38,8 @@ namespace Company.Project.Seeder
 
 
             var systemRole = await roleStore.IgnoreQueryFilters()
-                .FirstOrDefaultAsync(o => o.Name == AppConsts.Authorization.SystemRoleName);
+                .FirstOrDefaultAsync(o => o.Name == AppConsts.Authorization.SystemRoleName
+                    && o.TenantName == tenantName);
 
             if (systemRole == null)
             {
@@ -57,7 +58,7 @@ namespace Company.Project.Seeder
 
             // 查询现有权限
             var roleClaims = await roleClaimStore.AsQueryable()
-                .Where(o => o.Id == systemRole.Id)
+                .Where(o => o.Id == systemRole.Id && o.TenantName == tenantName)
                 .ToListAsync();
 
             // 移除权限
@@ -71,6 +72,7 @@ namespace Company.Project.Seeder
                 roleClaims.Add(new RoleClaim()
                 {
                     RoleId = systemRole.Id,
+                    TenantName = tenantName,
                     ClaimType = item,
                     ClaimValue = item
                 });
@@ -93,7 +95,8 @@ namespace Company.Project.Seeder
             var userRoleStore = dbContext.Set<UserRole>();
 
             var systemUser = await userStore.IgnoreQueryFilters()
-                .FirstOrDefaultAsync(o => o.UserName == AppConsts.Authorization.SystemUserName);
+                .FirstOrDefaultAsync(o => o.UserName == AppConsts.Authorization.SystemUserName
+                    && o.TenantName == systemRole.TenantName);
             if (systemUser == null)
             {
                 systemUser = new User()
@@ -124,7 +127,8 @@ namespace Company.Project.Seeder
 
             // 用户添加角色
             var roles = await userRoleStore.AsQueryable()
-                            .Where(o => o.UserId == systemUser.Id)
+                            .Where(o => o.UserId == systemUser.Id
+                                    && o.TenantName == systemRole.TenantName)
                             .ToListAsync();
             if (!roles.Any(o => o.RoleId == systemRole.Id))
             {
