@@ -27,6 +27,11 @@ export class LoginComponent extends AppComponentBase
     useCookie: false,
   });
 
+
+  get isEnabledMultiTenancy():boolean{
+   return  this.sessionSer.session.multiTenancy.isEnabled;
+  }
+
   constructor(
     injector: Injector,
     @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,

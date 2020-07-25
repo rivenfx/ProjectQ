@@ -1,6 +1,7 @@
 <div nz-row>
   <div nz-col nzXs="2" nzSm="4" nzMd="6" nzLg="8" nzXl="10"></div>
   <div nz-col nzXs="20" nzSm="16" nzMd="12" nzLg="8" nzXl="4">
+    <ng-container *ngTemplateOutlet="tenantChangeTpl"></ng-container>
     <ng-container *ngTemplateOutlet="loginTpl"></ng-container>
   </div>
   <div nz-col nzXs="2" nzSm="4" nzMd="6" nzLg="8" nzXl="10"></div>
@@ -9,6 +10,11 @@
 <!-- 表单输入错误模板 -->
 <ng-template #errorTpl let-control>
   <validation-messages [formCtrl]="control"></validation-messages>
+</ng-template>
+
+<!-- 切换租户 -->
+<ng-template #tenantChangeTpl>
+  <app-tenant-change *ngIf="isEnabledMultiTenancy"></app-tenant-change>
 </ng-template>
 
 <!-- 登录表单 -->

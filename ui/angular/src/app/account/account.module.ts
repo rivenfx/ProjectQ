@@ -6,11 +6,13 @@ import { SharedModule } from '@shared';
 import { LoginComponent } from './login';
 import { I18nModule } from '@core/i18n';
 import { RivenModule } from '@shared/riven';
+import { TenantChangeComponent } from './tenant-change';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
+    TenantChangeComponent
   ],
   imports: [
     CommonModule,
