@@ -22,7 +22,7 @@ namespace Company.Project
     {
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
-            MultiTenancyConfig.IsEnabled = false;
+            MultiTenancyConfig.IsEnabled = true;
 
             context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
         }
