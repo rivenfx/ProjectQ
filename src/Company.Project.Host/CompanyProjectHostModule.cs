@@ -226,9 +226,12 @@ namespace Company.Project
                 swaggerUiOption.EnableDeepLinking();
                 swaggerUiOption.DocExpansion(DocExpansion.None);
 
-                swaggerUiOption.InjectStylesheet(
-                    "/views/swagger/index.css"
-                    );
+                // 应用公共的js
+                swaggerUiOption.InjectJavascript("/views/app.js");
+
+                // swagger 定制的样式和脚本
+                swaggerUiOption.InjectStylesheet("/views/swagger/index.css");
+                swaggerUiOption.InjectJavascript("/views/swagger/index.js");
 
             });
 

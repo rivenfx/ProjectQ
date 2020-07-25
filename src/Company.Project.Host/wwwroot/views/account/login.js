@@ -31,7 +31,12 @@ $(function () {
                 var result = response.result;
 
                 if (result.accessToken) {
-                    alert('登录成功,即将跳转到页面');
+                    alert('登录成功,即将跳转页面');
+
+                    // 设置租户
+                    app.multiTenancy.setTenant(tenant);
+
+                    // 跳转到首页
                     window.location.href = '/Home/Index';
                 } else {
                     alert('登录失败');
@@ -39,9 +44,10 @@ $(function () {
 
             },
             error: function (e) {
-                debugger
                 if (e.responseJSON && e.responseJSON.result) {
                     var result = e.responseJSON.result;
+
+                    console.error('登录失败,错误消息: ' + result.message + '  详情: ' + result.details);
                     alert('登录失败,错误消息: ' + result.message + '  详情: ' + result.details);
                 } else {
                     alert('登录异常!');
