@@ -14,6 +14,17 @@
 <form id="login" class="form-signin" method="post">
     <h1 class="h3 mb-3 font-weight-normal text-center">登录</h1>
 
+    @if (ViewBag.IsEnabledMultiTenancy)
+    {
+        <label for="tenant" class="sr-only">租户</label>
+        <input id="tenant" name="tenant"
+               type="text"
+               class="form-control"
+               autofocus=""
+               value=""
+               placeholder="租户名称">
+    }
+
     <label for="account" class="sr-only">账号(用户名/手机/邮箱)</label>
     <input id="account" name="account"
            type="text"

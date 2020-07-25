@@ -36,13 +36,19 @@ body {
             z-index: 2;
         }
 
-    .form-signin input[type="text"] {
-        margin-bottom: -1px;
+    .form-signin input[name="tenant"] {
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
     }
 
-    .form-signin input[type="password"] {
+    .form-signin input[name="account"] {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .form-signin input[name="password"] {
         margin-bottom: 10px;
         border-top-left-radius: 0;
         border-top-right-radius: 0;
