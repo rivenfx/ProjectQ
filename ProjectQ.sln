@@ -52,6 +52,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riven.Mapster", "..\Framewo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riven.Domain.EntityFrameworkCore", "..\Framework\src\Riven.Domain.EntityFrameworkCore\Riven.Domain.EntityFrameworkCore.csproj", "{831BA1CA-7B3C-45D8-A54B-1EACAE5A250A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{25466D59-FA4B-4C3E-8C63-6D9302268EE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Project.Migrator", "tools\Company.Project.Migrator\Company.Project.Migrator.csproj", "{CA01BC49-93DB-4DDB-BE93-63B66847443F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -134,6 +138,10 @@ Global
 		{831BA1CA-7B3C-45D8-A54B-1EACAE5A250A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{831BA1CA-7B3C-45D8-A54B-1EACAE5A250A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{831BA1CA-7B3C-45D8-A54B-1EACAE5A250A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA01BC49-93DB-4DDB-BE93-63B66847443F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA01BC49-93DB-4DDB-BE93-63B66847443F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA01BC49-93DB-4DDB-BE93-63B66847443F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA01BC49-93DB-4DDB-BE93-63B66847443F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,6 +166,7 @@ Global
 		{F5FC76F4-23CB-449E-9616-F85A3032E69A} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
 		{D8694D09-92E0-4A3E-9BD4-616104089024} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
 		{831BA1CA-7B3C-45D8-A54B-1EACAE5A250A} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
+		{CA01BC49-93DB-4DDB-BE93-63B66847443F} = {25466D59-FA4B-4C3E-8C63-6D9302268EE4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EEDD240-EA84-4E40-8C5C-F7EB34BC22B3}
