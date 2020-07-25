@@ -56,11 +56,11 @@ namespace Company.Project.Session
             {
                 Name = appInfo.Name,
                 Version = appInfo.Version,
-                MultiTenancy = MultiTenancyConfig.IsEnabled,
+                UserId = _appSession.UserId?.ToString(),
+                MultiTenancy = this.GetMultiTenancy(),
                 Auth = await this.GetClaims(),
                 Localization = this.GetLocalization(),
-                Menu = this.GetMenu(),
-                UserId = _appSession.UserId?.ToString()
+                Menu = this.GetMenu()
             };
         }
 
@@ -115,6 +115,14 @@ namespace Company.Project.Session
             return claimsDto;
         }
 
+        public MultiTenancyDto GetMultiTenancy()
+        {
+            return new MultiTenancyDto()
+            {
+                IsEnabled = MultiTenancyConfig.IsEnabled,
+                TenantName = _appSession.TenantName
+            };
+        }
 
         protected virtual string GetMenu()
         {

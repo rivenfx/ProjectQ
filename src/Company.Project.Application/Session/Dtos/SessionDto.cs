@@ -26,16 +26,16 @@ namespace Company.Project.Session.Dtos
         /// 应用版本
         /// </summary>
         public string Version { get; set; }
-
-        /// <summary>
-        /// 是否启用多租户
-        /// </summary>
-        public bool MultiTenancy { get; set; }
-
+      
         /// <summary>
         /// 当前登录用户id
         /// </summary>
         public string UserId { get; set; }
+
+        /// <summary>
+        /// 多租户信息
+        /// </summary>
+        public MultiTenancyDto MultiTenancy { get; set; }
 
         /// <summary>
         /// 权限
