@@ -11,6 +11,15 @@ $(function () {
         }
     });
 
+    var $tenant = $('#tenant');
+    if ($tenant) {
+        var tenant = app.multiTenancy.getTenant();
+        if (tenant && tenant !== '') {
+            $tenant.val(tenant);
+        }
+    }
+
+
     $loginForm.submit(function (e) {
 
         var tenant = $loginForm.serializeObject().tenant;
