@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 
 using Company.Project.Authorization.AppClaims;
+using Company.Project.Configuration;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -22,7 +23,9 @@ namespace Company.Project
     {
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
-            MultiTenancyConfig.IsEnabled = true;
+            // ∂‡◊‚ªß≈‰÷√
+            MultiTenancyConfig.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
+
 
             context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
         }

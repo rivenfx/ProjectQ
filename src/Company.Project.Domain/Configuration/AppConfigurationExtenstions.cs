@@ -15,6 +15,8 @@ namespace Company.Project.Configuration
             public const string AppVersion = "App:Version";
             public const string AppCorsOrigins = "App:CorsOrigins";
 
+            public const string MultiTenancyIsEnabled = "MultiTenancy:IsEnabled";
+
 
 
             public const string AuthenticationJwtBearerAudience = "Authentication:JwtBearer:Audience";
@@ -75,6 +77,19 @@ namespace Company.Project.Configuration
                 configuration[AppConfigurationConsts.AuthenticationJwtBearerIssuer],
                 configuration[AppConfigurationConsts.AuthenticationJwtBearerSecurityKey]
                 );
+        }
+
+        /// <summary>
+        /// 获取多租户配置
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static MultiTenancyInfo GetMultiTenancyInfo(this IConfiguration configuration)
+        {
+            return new MultiTenancyInfo()
+            {
+                IsEnabled = bool.Parse(configuration[AppConfigurationConsts.MultiTenancyIsEnabled])
+            };
         }
 
     }
