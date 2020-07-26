@@ -1,1 +1,10 @@
-tenant-change works!
+<div (click)="openChangeModal()">
+  <ng-container [ngSwitch]="!!tenantName">
+    <ng-container *ngSwitchCase="true">
+      {{tenantName}}
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      {{l('label.change-tenant')}}
+    </ng-container>
+  </ng-container>
+</div>

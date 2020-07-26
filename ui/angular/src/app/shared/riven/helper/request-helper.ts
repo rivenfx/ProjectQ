@@ -5,6 +5,11 @@ import { HttpHeaders, HttpRequest } from '@angular/common/http';
 /** 请求帮助类 */
 export class RequestHelper {
 
+  /** 多租户配置 */
+  public static readonly multiTenancy = {
+    key: 'Riven.Tenant',
+  };
+
   /** 是否已经被初始化 */
   protected static inited = false;
 
@@ -94,7 +99,7 @@ export class RequestHelper {
   /** 添加租户到请求头 */
   static addTenantHeader(headers: HttpHeaders): HttpHeaders {
     if (RequestHelper.settingsSer.user) {
-      const tenant = RequestHelper.settingsSer.user['tenant'];
+      const tenant = RequestHelper.settingsSer.getData(RequestHelper.multiTenancy.key);
       if (tenant && headers && !headers.has('Tenant')) {
         headers = headers.set('Tenant', tenant);
       }

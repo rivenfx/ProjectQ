@@ -1,17 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
+import { TenantServiceProxy } from '@service-proxies';
+import { ModalHelper, SettingsService } from '@delon/theme';
+import { AppComponentBase } from '@shared/common';
+import { TenantChangeModalComponent } from './tenant-change-modal';
+import { RequestHelper } from '@shared/riven/helper';
 
 @Component({
   selector: 'app-tenant-change',
   templateUrl: './tenant-change.component.html',
-  styleUrls: ['./tenant-change.component.less']
+  styleUrls: ['./tenant-change.component.less'],
 })
-export class TenantChangeComponent implements OnInit {
+export class TenantChangeComponent extends AppComponentBase
+  implements OnInit {
 
-  constructor() {
+  tenantName: string;
 
+  constructor(
+    injector: Injector,
+    public settingsSer: SettingsService,
+    public modalHelper: ModalHelper,
+  ) {
+    super(injector);
   }
 
   ngOnInit(): void {
+    this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
   }
 
+  openChangeModal() {
+    this.modalHelper.createStatic(TenantChangeModalComponent)
+      .subscribe((res) => {
+        this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
+        debugger
+      });
+  }
 }

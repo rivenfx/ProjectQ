@@ -1674,9 +1674,9 @@ export interface IIsTenantAvailableInput {
 }
 
 export enum TenantAvailabilityState {
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
+    Available = <any>"Available",
+    InActive = <any>"InActive",
+    NotFound = <any>"NotFound",
 }
 
 export class IsTenantAvailableOutput implements IIsTenantAvailableOutput {
