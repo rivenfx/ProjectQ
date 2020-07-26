@@ -33,7 +33,7 @@ import { SampleComponentBase } from '@shared/common';
         <li nz-menu-divider></li>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
-          {{ l('menu.account.logout') }}
+          {{ l('label.log-out') }}
         </div>
       </div>
     </nz-dropdown-menu>
