@@ -21,7 +21,7 @@ const alainConfig: AlainConfig = {
     ignores: [/.*/, /.*?assets\//], // 忽略的地址
   },
   acl: {
-    guard_url: '/admin/dashboard',
+    guard_url: '/account/login',
   },
 };
 
