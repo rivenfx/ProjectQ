@@ -33,7 +33,7 @@
                  [(ngModel)]="input.account"
                  name="accountInput"
                  type="text"
-                 [placeholder]="l('Account')"
+                 [placeholder]="l('label.account')"
                  required
                  minlength="3"
                  maxlength="32"/>
@@ -49,7 +49,7 @@
                  [(ngModel)]="input.password"
                  name="passwordInput"
                  type="password"
-                 [placeholder]="l('Password')"
+                 [placeholder]="l('label.password')"
                  required
                  minlength="6"
                  maxlength="32"/>
@@ -63,18 +63,18 @@
                nz-checkbox
                [(ngModel)]="input.rememberClient"
                name="rememberMeInput">
-          <span>Remember me</span>
+          <span>{{l('label.remember-me')}}</span>
         </label>
       </div>
       <div nz-col [nzSpan]="12">
-        <a class="login-form-forgot">Forgot password</a>
+        <a class="login-form-forgot">{{l('label.forgot-password')}}</a>
       </div>
     </div>
     <!--  登录  -->
     <button nz-button class="login-form-button login-form-margin"
             [nzType]="'primary'"
             [disabled]="!pageForm.form.valid">
-      Log in
+      {{l('label.login')}}
     </button>
   </form>
 </ng-template>

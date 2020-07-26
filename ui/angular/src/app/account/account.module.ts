@@ -7,12 +7,14 @@ import { LoginComponent } from './login';
 import { I18nModule } from '@core/i18n';
 import { RivenModule } from '@shared/riven';
 import { TenantChangeComponent } from './tenant-change';
+import { TenantChangeModalComponent } from './tenant-change/tenant-change-modal';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    TenantChangeComponent
+    TenantChangeComponent,
+    TenantChangeModalComponent,
   ],
   imports: [
     CommonModule,
