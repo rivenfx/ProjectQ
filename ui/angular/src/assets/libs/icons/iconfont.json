@@ -6,6 +6,188 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "158020",
+      "name": "踩",
+      "font_class": "cai",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "720792",
+      "name": "密码",
+      "font_class": "-lock",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "720797",
+      "name": "验证码 (3)",
+      "font_class": "-key",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "1120964",
+      "name": "点赞",
+      "font_class": "-like",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "1132458",
+      "name": "付款方式",
+      "font_class": "-payment-type",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "1800714",
+      "name": "邮件",
+      "font_class": "-email",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "3050838",
+      "name": "付款-减去",
+      "font_class": "-wallet-cut",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "3050839",
+      "name": "付款-添加",
+      "font_class": "-wallet-add",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "3050843",
+      "name": "付款-完成",
+      "font_class": "-wallet-success",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "5122181",
+      "name": "订阅",
+      "font_class": "-subscription",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "5401243",
+      "name": "钱包",
+      "font_class": "-wallet",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "6170596",
+      "name": "链接",
+      "font_class": "-link",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "6204756",
+      "name": "失败",
+      "font_class": "-fail",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "6246302",
+      "name": "数据库",
+      "font_class": "-database",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "6352500",
+      "name": "版本号",
+      "font_class": "-info",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "6529901",
+      "name": "付款失败",
+      "font_class": "-pay-fail",
+      "unicode": "e708",
+      "unicode_decimal": 59144
+    },
+    {
+      "icon_id": "10666917",
+      "name": "成功",
+      "font_class": "-success",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "504573",
+      "name": "刷新",
+      "font_class": "-refresh",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "689296",
+      "name": "添加 加号 无边框",
+      "font_class": "-add",
+      "unicode": "e81a",
+      "unicode_decimal": 59418
+    },
+    {
+      "icon_id": "3369109",
+      "name": "修改",
+      "font_class": "-edit",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "5383656",
+      "name": "设置",
+      "font_class": "-settings",
+      "unicode": "e781",
+      "unicode_decimal": 59265
+    },
+    {
+      "icon_id": "6263342",
+      "name": "移除",
+      "font_class": "-remove",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "9697332",
+      "name": "领导小组成员",
+      "font_class": "-member",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "12685013",
+      "name": "删除",
+      "font_class": "-delete",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "14303353",
+      "name": "关联",
+      "font_class": "-correlation",
+      "unicode": "e74b",
+      "unicode_decimal": 59211
+    },
+    {
+      "icon_id": "3702594",
+      "name": "租户管理",
+      "font_class": "-tenant",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
       "icon_id": "742818",
       "name": "user",
       "font_class": "-user",
