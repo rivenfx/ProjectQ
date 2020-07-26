@@ -3,7 +3,7 @@
              [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
-    <button nz-button (click)="refresh()" [title]="l('refresh')">
+    <button nz-button (click)="refresh()" [title]="l('common.refresh')">
       <i class="icon iconfont icon-refresh"></i>
     </button>
   </ng-template>
@@ -29,8 +29,8 @@
   <thead>
   <tr>
     <th nzEllipsis [title]="l('role.name')">{{l('role.name')}}</th>
-    <th nzEllipsis [title]="l('role.displayName')">{{l('role.displayName')}}</th>
-    <th nzEllipsis [title]="l('action')">{{l('action')}}</th>
+    <th nzEllipsis [title]="l('role.display-name')">{{l('role.display-name')}}</th>
+    <th nzEllipsis [title]="l('common.action')">{{l('common.action')}}</th>
   </tr>
   </thead>
   <tbody>
@@ -38,9 +38,9 @@
     <td nzEllipsis [title]="data.name">{{ data.name }}</td>
     <td nzEllipsis [title]="data.displayName">{{ data.displayName }}</td>
     <td nzEllipsis>
-      <a>{{l('action.edit')}}</a>
+      <a>{{l('common.edit')}}</a>
       <nz-divider nzType="vertical"></nz-divider>
-      <a>{{l('action.delete')}}</a>
+      <a>{{l('common.delete')}}</a>
     </td>
   </tr>
   </tbody>
