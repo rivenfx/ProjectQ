@@ -52,7 +52,9 @@ namespace Company.Project.Seeder
                 {
                     Name = tenantName,
                     DisplayName = tenantName,
-                    Description = tenantName
+                    Description = tenantName,
+                    IsStatic = true,
+                    IsActive = true
                 };
                 await tenantStore.AddAsync(tenant);
                 await dbContext.SaveChangesAsync();

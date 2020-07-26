@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Company.Project.MultiTenancy
 {
-    public class Tenant : Entity<Guid>, IFullAudited
+    public class Tenant : Entity<Guid>, IFullAudited, IPassivable
     {
         /// <summary>
         /// 租户名称 唯一
@@ -34,6 +34,10 @@ namespace Company.Project.MultiTenancy
         /// </summary>
         public virtual bool IsStatic { get; set; }
 
+        /// <summary>
+        /// 是否已激活
+        /// </summary>
+        public virtual bool IsActive { get; set; }
 
         public virtual string Creator { get; set; }
         public virtual DateTime CreationTime { get; set; }
@@ -42,5 +46,6 @@ namespace Company.Project.MultiTenancy
         public virtual string Deleter { get; set; }
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
+
     }
 }
