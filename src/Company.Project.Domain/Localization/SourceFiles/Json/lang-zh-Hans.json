@@ -41,7 +41,7 @@
     "message.tenant.not-found": "未找到租户 {0}",
 
     // validation
-    "validation.required": "不能为空！",
+    "validation.required": "输入不能为空！",
     "validation.twice": "两次输入不匹配!",
 
     // label

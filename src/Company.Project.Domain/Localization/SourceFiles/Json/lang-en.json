@@ -39,7 +39,7 @@
     "message.tenant.not-found": "tenant not found {0}",
 
     // validation
-    "validation.required": "can't be empty！",
+    "validation.required": "the input cannot be null！",
     "validation.twice": "the two inputs don't match!",
 
     // label
