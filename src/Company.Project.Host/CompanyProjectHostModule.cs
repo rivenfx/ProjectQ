@@ -18,6 +18,7 @@ using Riven.Extensions;
 using System.IO;
 using Company.Project.Configuration;
 using Riven.Uow;
+using Newtonsoft.Json.Converters;
 
 namespace Company.Project
 {
@@ -48,7 +49,7 @@ namespace Company.Project
             var mvcBuilder = context.Services.AddControllersWithViews();
             mvcBuilder.AddNewtonsoftJson((options) =>
             {
-
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
 #if DEBUG
             mvcBuilder.AddRazorRuntimeCompilation();
@@ -124,7 +125,6 @@ namespace Company.Project
             context.Services.AddRivenAspNetCoreSwashbuckle(
                 (options) =>
                 {
-
                     var apiInfo = new OpenApiInfo()
                     {
                         Title = appInfo.Name,
@@ -144,7 +144,7 @@ namespace Company.Project
                     options.AddAssemblyOptions(typeof(CompanyProjectApplicationModule).Assembly, options.DefaultApiPrefix, "POST");
                 });
 
-
+            context.Services.AddSwaggerGenNewtonsoftSupport();
 
             // Riven - AspNetCore 基础服务与配置
             context.Services.AddRivenAspNetCore((options) =>
