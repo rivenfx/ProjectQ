@@ -74,7 +74,7 @@ namespace Company.Project
                 options.AddPolicy(CorsPolicyName, builder =>
                 {
                     // 配置跨域
-                    var corsOrigins = configuration["App:CorsOrigins"]
+                    var corsOrigins = configuration.GetAppInfo().CorsOrigins
                                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
                                        .Select(o => o.TrimEnd('/'))
                                        .Where(o => o != "*")
