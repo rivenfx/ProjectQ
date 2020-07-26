@@ -8,6 +8,7 @@ import { I18nService } from '@core/i18n';
 import { AppComponentBase } from '@shared/common';
 import { NgForm } from '@angular/forms';
 import { ACLService } from '@delon/acl';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -28,8 +29,8 @@ export class LoginComponent extends AppComponentBase
   });
 
 
-  get isEnabledMultiTenancy():boolean{
-   return  this.sessionSer.session.multiTenancy.isEnabled;
+  get isEnabledMultiTenancy(): boolean {
+    return this.sessionSer.session.multiTenancy.isEnabled;
   }
 
   constructor(
@@ -55,7 +56,13 @@ export class LoginComponent extends AppComponentBase
 
 
   submitForm() {
+
+    this.loading = true;
+
     this.tokenAuthSer.authenticate(this.input)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
       .subscribe((result) => {
         this.tokenService.set({
           token: result.accessToken,
