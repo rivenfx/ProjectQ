@@ -35,6 +35,10 @@
     "common.state": "状态",
     "common.phone-number": "电话号码",
     "common.email": "邮箱",
+    "common.action": "操作",
+    "common.edit": "编辑",
+    "common.delete": "删除",
+    "common.refresh": "刷新",
 
     // message
     "message.tenant.in-active": "租户 {0} 未激活",
@@ -59,9 +63,10 @@
 
     // entity
     "tenant.name": "租户名称",
-    "user.name": "账号",
+    "user.user-name": "账号",
     "user.nick-name": "昵称",
-    "role.name": "角色名称"
+    "role.name": "角色名称",
+    "role.display-name": "角色显示名称"
 
 
   }
