@@ -12,6 +12,7 @@ export const APIS = [
   ServiceProxies.TokenAuthServiceProxy,
   ServiceProxies.UserServiceProxy,
   ServiceProxies.RoleServiceProxy,
+  ServiceProxies.TenantServiceProxy,
   ServiceProxies.SessionServiceProxy,
 ];
 
