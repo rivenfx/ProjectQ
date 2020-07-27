@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -12,15 +12,15 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Localization\Riven.AspNetCore.Localization.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Modular\Riven.AspNetCore.Modular.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Identity\Riven.AspNetCore.Identity.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Swashbuckle\Riven.AspNetCore.Swashbuckle.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.Domain.EntityFrameworkCore\Riven.Domain.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.Domain\Riven.Domain.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Uow\Riven.AspNetCore.Uow.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.Mapster\Riven.Mapster.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.UnitOfWork.EntityFrameworkCore\Riven.UnitOfWork.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="Riven.AspNetCore.Localization" Version="0.1.0" />
+    <ProjectReference Include="Riven.AspNetCore.Modular" Version="0.1.0" />
+    <ProjectReference Include="Riven.AspNetCore.Identity" Version="0.1.0" />
+    <ProjectReference Include="Riven.AspNetCore.Swashbuckle" Version="0.1.0" />
+    <ProjectReference Include="Riven.Domain.EntityFrameworkCore" Version="0.1.0" />
+    <ProjectReference Include="Riven.Domain" Version="0.1.0" />
+    <ProjectReference Include="Riven.AspNetCore.Uow" Version="0.1.0" />
+    <ProjectReference Include="Riven.Mapster" Version="0.1.0" />
+    <ProjectReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.1.0" />
   </ItemGroup>
 
 
@@ -35,3 +35,4 @@
 
 
 </Project>
+

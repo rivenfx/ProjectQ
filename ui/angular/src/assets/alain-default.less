@@ -3253,6 +3253,9 @@ this.tinycolor = tinycolor;
 // 可以通过 https://ng-alain.github.io/ng-alain/ 获取主题参数代码
 // The theme paraments can be generated at https://ng-alain.github.io/ng-alain/
 
+:host ::ng-deep :first-child {
+  color: @primary-color;
+}
 :host ::ng-deep .container {
   background: #f0f2f5;
 }
