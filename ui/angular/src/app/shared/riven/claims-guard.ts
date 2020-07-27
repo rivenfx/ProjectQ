@@ -25,7 +25,6 @@ export class ClaimsGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   private process(data: Data): boolean {
-    debugger
     const { session } = this.sessionSrv;
     data = {
       guard_url: this.srv.guard_url,

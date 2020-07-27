@@ -31,7 +31,6 @@ export class TenantChangeComponent extends AppComponentBase
     this.modalHelper.createStatic(TenantChangeModalComponent)
       .subscribe((res) => {
         this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
-        debugger
       });
   }
 }
