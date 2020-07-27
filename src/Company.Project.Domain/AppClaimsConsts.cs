@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Company.Project
@@ -13,11 +14,14 @@ namespace Company.Project
     /// </summary>
     public static class AppClaimsConsts
     {
+        public const string RootNode = "root";
+
         /// <summary>
         /// 用户
         /// </summary>
         public static class User
         {
+            public const string Node = "user.node";
             public const string Query = "user.query";
             public const string Create = "user.create";
             public const string Edit = "user.edit";
@@ -29,6 +33,7 @@ namespace Company.Project
         /// </summary>
         public static class Role
         {
+            public const string Node = "role.node";
             public const string Query = "role.query";
             public const string Create = "role.create";
             public const string Edit = "role.edit";
@@ -55,15 +60,19 @@ namespace Company.Project
         {
             return new ClaimItem[]
             {
-                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Query),
-                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Create),
-                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Edit),
-                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Delete),
+                ClaimItem.CreateWithCommon(RootNode),
 
-                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Query),
-                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Create),
-                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Edit),
-                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Delete),
+                ClaimItem.CreateWithCommon(User.Node, RootNode),
+                ClaimItem.CreateWithCommon(User.Query, User.Node),
+                ClaimItem.CreateWithCommon(User.Create, User.Node),
+                ClaimItem.CreateWithCommon(User.Edit,User.Node),
+                ClaimItem.CreateWithCommon(User.Delete, User.Node),
+
+                ClaimItem.CreateWithCommon(Role.Node,RootNode),
+                ClaimItem.CreateWithCommon(Role.Query,Role.Node),
+                ClaimItem.CreateWithCommon(Role.Create,Role.Node),
+                ClaimItem.CreateWithCommon(Role.Edit,Role.Node),
+                ClaimItem.CreateWithCommon(Role.Delete,Role.Node),
             };
         }
 

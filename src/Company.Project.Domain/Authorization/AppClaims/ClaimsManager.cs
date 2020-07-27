@@ -31,7 +31,9 @@ namespace Company.Project.Authorization.AppClaims
                 claimItemType = ClaimItemType.Tenant;
             }
 
-            return _claims.Where(o => o.Type == ClaimItemType.Common || o.Type == claimItemType).AsQueryable();
+            return _claims.Where(o => o.Type == ClaimItemType.Common || o.Type == claimItemType)
+                .OrderBy(o => o.Sort)
+                .AsQueryable();
         }
 
         public void Remove(params ClaimItem[] claims)
