@@ -32,7 +32,7 @@ foreach($file in $fileList){
         # 库名
         $libName = $match.Groups[1].Value.ToString()
         # 新的nuget引用
-        $newVal = "ProjectReference Include=" + '"' + "$libName" + '"' + " Version=" + '"' + "$versionStr" + '"'
+        $newVal = "PackageReference Include=" + '"' + "$libName" + '"' + " Version=" + '"' + "$versionStr" + '"'
         # 替换csproj的内容
         $matchVal =  $match.Value.ToString()
         $resultProjContent = $resultProjContent.Replace("$matchVal","$newVal")
