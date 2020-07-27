@@ -15,7 +15,7 @@ import { SampleComponentBase } from './sample-component-base';
 /***
  * 控件基类
  */
-export abstract class AppControlComponentBase<T> extends SampleComponentBase
+export abstract class ControlComponentBase<T> extends SampleComponentBase
   implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor, OnChanges {
 
   /** 控件名称 */
