@@ -53,7 +53,7 @@ namespace Company.Project.Seeder
                 systemRole = new Role()
                 {
                     Name = AppConsts.Authorization.SystemRoleName,
-                    DispayName = AppConsts.Authorization.SystemRoleName,
+                    DisplayName = AppConsts.Authorization.SystemRoleName,
                     Description = AppConsts.Authorization.SystemRoleName,
                     NormalizedName = this._lookupNormalizer.NormalizeName(AppConsts.Authorization.SystemRoleName),
                     IsStatic = true,
