@@ -9,7 +9,7 @@ foreach ($project in $projects)
         dotnet sln $slnFilePath remove ("../"+$project)
     }
 }
-Write-Host "移除ProjectQ.sln项目已完成,按任意键结束程序!"
+Write-Host "移除ProjectQ.sln项目依赖已完成!"
 
 
 # 修改项目中对 中对 Riven Framework 库的引用
