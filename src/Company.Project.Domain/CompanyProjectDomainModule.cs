@@ -2,12 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
+using Company.Project.Authorization.AppClaims;
+using Company.Project.Configuration;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Riven;
 using Riven.Localization;
 using Riven.Modular;
+using Riven.MultiTenancy;
 
 namespace Company.Project
 {
@@ -18,12 +23,21 @@ namespace Company.Project
     {
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
+            // 多租户配置
+            MultiTenancyConfig.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
+
+
             context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
 
+        }
+
+        public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context.ServiceProvider.RegisterBasicClaims();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -58,8 +72,8 @@ namespace Company.Project
                 throw new ArgumentException($"启用语言数量为0");
             }
 
-            languageManager.ChangeDefaultLanguage(AppConsts.DefaultLanguage);
-        } 
+            languageManager.ChangeDefaultLanguage(AppConsts.Settings.DefaultLanguage);
+        }
 
         #endregion
     }

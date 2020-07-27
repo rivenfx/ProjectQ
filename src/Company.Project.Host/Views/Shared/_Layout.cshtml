@@ -1,6 +1,11 @@
+﻿@using Company.Project.Configuration;
 @inject IWebHostEnvironment _env;
 @inject IConfiguration _configuration;
 
+
+@{
+    var appInfo = _configuration.GetAppInfo();
+}
 <!DOCTYPE html>
 
 <html>
@@ -9,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>
-        @_configuration[AppConsts.AppNameKey] @ViewBag.Title
+        @appInfo.Name @ViewBag.Title
     </title>
     <link href="~/libs/bootstrap/4.4.1/dist/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
 
@@ -26,7 +31,7 @@
 
         <footer class="text-center mt-3  ">
             <p>
-                Copyright &copy; @DateTime.Now.Year - 当前版本 @_configuration[AppConsts.AppVersionKey]
+                Copyright &copy; @DateTime.Now.Year - 当前版本 @appInfo.Version
                 <a href="/" class="text-primary" target="_blank"> @_env.EnvironmentName </a>
             </p>
         </footer>

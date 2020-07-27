@@ -1,32 +1,82 @@
+import { registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+//
+import { I18nCommon, I18nModule, I18nService } from '@core/i18n';
+import { StartupService } from '@core/startup';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+
+
+//
+import { CoreModule } from '@core/core.module';
+import { ServiceProxyModule } from '@service-proxies';
+import { SharedModule } from '@shared';
+import { RivenModule } from '@shared/riven';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { IconsProviderModule } from './icons-provider.module';
-import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { registerLocaleData } from '@angular/common';
-import zh from '@angular/common/locales/zh';
+import { GlobalConfigModule } from './global-config.module';
+import { LayoutModule } from './layout/layout.module';
 
-registerLocaleData(zh);
+
+// #region default language
+
+registerLocaleData(I18nCommon.DEFAULT_LANG.ng, I18nCommon.DEFAULT_LANG.abbr);
+const I18N_SERVICE_PROVIDES = [
+  { provide: ALAIN_I18N_TOKEN, useClass: I18nService, multi: false },
+];
+
+// global third module
+const GLOBAL_THIRD_MODULES = [
+  ServiceProxyModule.forRoot(),
+  RivenModule.forRoot(),
+];
+
+
+export function StartupServiceFactory(startupService: StartupService) {
+  return () => startupService.load();
+}
+
+const APPINIT_PROVIDES = [
+  StartupService,
+  {
+    provide: APP_INITIALIZER,
+    useFactory: StartupServiceFactory,
+    deps: [StartupService],
+    multi: true,
+  },
+];
+
+// #endregion
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    IconsProviderModule,
-    NgZorroAntdModule,
-    FormsModule,
+    BrowserAnimationsModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    //
+    GlobalConfigModule.forRoot(),
+    I18nModule.forRoot(),
+    CoreModule,
+    SharedModule,
+    LayoutModule,
+    //
+    AppRoutingModule,
+    //
+    ...GLOBAL_THIRD_MODULES,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
-  bootstrap: [AppComponent]
+  providers: [
+    ...I18nCommon.LANG_PROVIDES,
+    ...I18N_SERVICE_PROVIDES,
+    ...APPINIT_PROVIDES,
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

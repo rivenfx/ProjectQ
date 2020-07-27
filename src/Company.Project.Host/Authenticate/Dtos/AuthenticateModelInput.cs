@@ -37,6 +37,16 @@ namespace Company.Project.Authenticate.Dtos
         /// 返回的url地址
         /// </summary>
         public string ReturnUrl { get; set; }
+
+        /// <summary>
+        /// 启用 cookie
+        /// </summary>
+        public bool UseCookie { get; set; } = true;
+
+        /// <summary>
+        /// 启用 token
+        /// </summary>
+        public bool UseToken { get; set; } = true;
     }
 
 }

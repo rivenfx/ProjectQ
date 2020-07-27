@@ -24,6 +24,8 @@ namespace Company.Project.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            ViewBag.IsEnabledMultiTenancy = Riven.MultiTenancy.MultiTenancyConfig.IsEnabled;
+
             return View();
         }
 

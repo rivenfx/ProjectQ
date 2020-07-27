@@ -11,32 +11,36 @@ using WebHost = Microsoft.Extensions.Hosting.Host;
 
 using Serilog;
 using Serilog.Events;
+using System.IO;
 
-namespace Company.Project
+namespace Company.Project.Host
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static readonly string Namespace = typeof(Program).Namespace;
+        public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+
+
+        public static int Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-#if DEBUG
-                .MinimumLevel.Debug()
-#else
-                .MinimumLevel.Information()
-#endif
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.File("Logs/logs.txt")
-                .CreateLogger();
+            var configuration = GetConfiguration();
+
+            Log.Logger = CreateSerilogLogger(configuration);
 
             try
             {
-                Log.Information("Starting Company.Project.Host.");
-                CreateHostBuilder(args).Build().Run();
+                Log.Information("Configuring web host ({ApplicationContext})...", AppName);
+                var host = CreateHostBuilder(args, configuration).Build();
+
+                Log.Information("Starting web host ({ApplicationContext})...", AppName);
+                host.Run();
+
+                return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly!");
+                Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", AppName);
+                return 1;
             }
             finally
             {
@@ -44,13 +48,55 @@ namespace Company.Project
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        /// <summary>
+        /// 创建 HostBuilder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
         {
             return WebHost.CreateDefaultBuilder(args)
                             .ConfigureWebHostDefaults(webBuilder =>
                             {
                                 webBuilder.UseStartup<Startup>();
-                            });
+                            })
+                            .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
+                            .UseSerilog();
+        }
+
+
+        /// <summary>
+        /// 创建 SerilogLogger 配置
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+        {
+            var cfg = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .Enrich.WithProperty("ApplicationContext", AppName)
+                .Enrich.FromLogContext()
+                .WriteTo.File(Path.Join("logs", "log.txt"), rollingInterval: RollingInterval.Hour)
+                .WriteTo.Console();
+
+
+            return cfg.CreateLogger();
+        }
+
+
+        /// <summary>
+        /// 获取 appsettings 配置
+        /// </summary>
+        /// <returns></returns>
+        private static IConfiguration GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            return builder.Build();
         }
 
     }

@@ -1,0 +1,82 @@
+<div nz-row>
+  <div nz-col nzXs="2" nzSm="4" nzMd="6" nzLg="8" nzXl="10"></div>
+  <div nz-col nzXs="20" nzSm="16" nzMd="12" nzLg="8" nzXl="4">
+    <nz-spin [nzSpinning]="loading">
+      <ng-container *ngTemplateOutlet="tenantChangeTpl"></ng-container>
+      <ng-container *ngTemplateOutlet="loginTpl"></ng-container>
+    </nz-spin>
+  </div>
+  <div nz-col nzXs="2" nzSm="4" nzMd="6" nzLg="8" nzXl="10"></div>
+</div>
+
+<!-- 表单输入错误模板 -->
+<ng-template #errorTpl let-control>
+  <validation-messages [formCtrl]="control"></validation-messages>
+</ng-template>
+
+<!-- 切换租户 -->
+<ng-template #tenantChangeTpl>
+  <app-tenant-change *ngIf="isEnabledMultiTenancy"></app-tenant-change>
+</ng-template>
+
+<!-- 登录表单 -->
+<ng-template #loginTpl>
+  <form #pageForm="ngForm"
+        nz-form
+        (ngSubmit)="submitForm()"
+        class="login-form"
+        novalidate>
+    <!-- 账号 -->
+    <nz-form-item>
+      <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-input-group nzPrefixIcon="user">
+          <input #accountInput="ngModel"
+                 nz-input
+                 [(ngModel)]="input.account"
+                 name="accountInput"
+                 type="text"
+                 [placeholder]="l('label.account')"
+                 required
+                 minlength="3"
+                 maxlength="32"/>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- 密码 -->
+    <nz-form-item>
+      <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-input-group nzPrefixIcon="lock">
+          <input #passwordInput="ngModel"
+                 nz-input
+                 [(ngModel)]="input.password"
+                 name="passwordInput"
+                 type="password"
+                 [placeholder]="l('label.password')"
+                 required
+                 minlength="6"
+                 maxlength="32"/>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- 记住我/忘记密码 -->
+    <div nz-row class="login-form-margin">
+      <div nz-col [nzSpan]="12">
+        <label #rememberMeInput="ngModel"
+               nz-checkbox
+               [(ngModel)]="input.rememberClient"
+               name="rememberMeInput">
+          <span>{{l('label.remember-me')}}</span>
+        </label>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <a class="login-form-forgot">{{l('label.forgot-password')}}</a>
+      </div>
+    </div>
+    <!--  登录  -->
+    <button nz-button class="login-form-button login-form-margin"
+            [nzType]="'primary'"
+            [disabled]="!pageForm.form.valid">
+      {{l('label.login')}}
+    </button>
+  </form>
+</ng-template>

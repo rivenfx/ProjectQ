@@ -4,6 +4,66 @@
   "icon": "famfamfam-flags us",
   "enabled": true,
   "texts": {
+    // asp.net core identiy
+    "NotLoggedIn": "unlogged system",
+    "SomeClaimDoNotExist": "some claims do not exist",
+    "WithoutAnyClaim": "no claim",
 
+    // menu
+    "menu.search.placeholder": "search",
+    "menu.fullscreen": "full screen",
+    "menu.fullscreen.exit": "exit full screen",
+    "menu.clear.local.storage": "clear local storage",
+    "menu.lang": "languages",
+    "menu.main": "main page",
+    "menu.dashboard": "dashboard",
+    "menu.role": "roles",
+    "menu.user": "users",
+
+    // common
+    "common.creater": "creater",
+    "common.creation-time": "creation time",
+    "common.last-modifier": "last modifier",
+    "common.last-modification-time": "last modification time",
+    "common.deleter": "deleter",
+    "common.deletion-time": "deletion time",
+    "common.is-active": "active",
+    "common.is-enabled": "enabled",
+    "common.is-static": "static",
+    "common.state": "state",
+    "common.phone-number": "phone number",
+    "common.email": "email",
+    "common.action": "action",
+    "common.edit": "edit",
+    "common.delete": "delete",
+    "common.refresh": "refresh",
+
+    // message
+    "message.tenant.in-active": "tenant {0} is not active",
+    "message.tenant.not-found": "tenant not found {0}",
+
+    // validation
+    "validation.required": "the input cannot be null！",
+    "validation.twice": "the two inputs don't match!",
+
+    // label
+    "label.change-tenant": "switch tenant",
+    "label.ok": "ok",
+    "label.cancel": "cancel",
+    "label.account": "account",
+    "label.password": "password",
+    "label.forgot-password": "forgot password",
+    "label.remember-me": "remember me",
+    "label.register": "register",
+    "label.login": "login",
+    "label.log-out": "log out",
+
+
+    // entity
+    "tenant.name": "tenant name",
+    "user.user-name": "account",
+    "user.nick-name": "nick name",
+    "role.name": "role name",
+    "role.display-name": "role display name"
   }
 }

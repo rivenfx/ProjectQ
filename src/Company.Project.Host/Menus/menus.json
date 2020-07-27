@@ -1,0 +1,33 @@
+﻿[
+  {
+    "text": "主导航",
+    "i18n": "menu.main",
+    "group": true,
+    "hideInBreadcrumb": true,
+    "children": [
+      {
+        "text": "工作台",
+        "i18n": "menu.dashboard",
+        "link": "/admin/dashboard",
+        "icon": "anticon-dashboard",
+        "hideInBreadcrumb": true
+      },
+      {
+        "text": "角色",
+        "i18n": "menu.role",
+        "link": "/admin/role",
+        "icon": "icon iconfont icon-role",
+        "acl": "role.query",
+        "hideInBreadcrumb": true
+      },
+      {
+        "text": "用户",
+        "i18n": "menu.user",
+        "link": "/admin/user",
+        "icon": "icon iconfont icon-user",
+        "acl": "user.query",
+        "hideInBreadcrumb": true
+      }
+    ]
+  }
+]

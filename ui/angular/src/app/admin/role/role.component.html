@@ -1,0 +1,47 @@
+<page-header [title]="l('menu.role')"
+             [breadcrumb]="breadcrumb"
+             [action]="action">
+  <ng-template #breadcrumb></ng-template>
+  <ng-template #action>
+    <button nz-button (click)="refresh()" [title]="l('common.refresh')">
+      <i class="icon iconfont icon-refresh"></i>
+    </button>
+  </ng-template>
+</page-header>
+
+<nz-table #pageTable
+          nzTableLayout="fixed"
+          nzSize="small"
+          nzShowQuickJumper="true"
+          nzShowSizeChanger="true"
+          nzBordered="true"
+          nzFrontPagination="false"
+          nzHideOnSinglePage="false"
+          [nzData]="viewRecord"
+          [nzLoading]="loading"
+          [nzTotal]="totalRecord"
+          [nzPageIndex]="pageInfo.index"
+          [nzPageSize]="pageInfo.size"
+          (nzPageIndexChange)="onPageIndexChange($event)"
+          (nzPageSizeChange)="onPageSizeChange($event)"
+          [nzScroll]="tableScroll"
+>
+  <thead>
+  <tr>
+    <th nzEllipsis [title]="l('role.name')">{{l('role.name')}}</th>
+    <th nzEllipsis [title]="l('role.display-name')">{{l('role.display-name')}}</th>
+    <th nzEllipsis [title]="l('common.action')">{{l('common.action')}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let data of viewRecord">
+    <td nzEllipsis [title]="data.name">{{ data.name }}</td>
+    <td nzEllipsis [title]="data.displayName">{{ data.displayName }}</td>
+    <td nzEllipsis>
+      <a>{{l('common.edit')}}</a>
+      <nz-divider nzType="vertical"></nz-divider>
+      <a>{{l('common.delete')}}</a>
+    </td>
+  </tr>
+  </tbody>
+</nz-table>

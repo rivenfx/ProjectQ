@@ -1,0 +1,35 @@
+nz-table-inner-scroll {
+
+  .ant-table-header {
+    /** 修正滚动误差 */
+    margin-right: -13px;
+  }
+
+  .ant-table-body {
+
+    &::-webkit-scrollbar {
+      width: 0.5px;
+      height: 1px;
+      margin: 0;
+      padding: 0;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #bfbfbf;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #333;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+  }
+}

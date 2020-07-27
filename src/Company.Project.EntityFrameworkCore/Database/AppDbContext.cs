@@ -1,76 +1,145 @@
+using Company.Project.Authorization;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
+using Company.Project.Database.Extenstions;
+using Company.Project.MultiTenancy;
 using Company.Project.Samples;
+
+using JetBrains.Annotations;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+
 using Riven;
 using Riven.Identity.Roles;
 using Riven.Identity.Users;
+
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Company.Project.Database
 {
     public class AppDbContext
-        : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+        : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
+        IRivenDbContext
     {
+        #region IRivenDbContext 属性实现
 
-        public AppDbContext(DbContextOptions options)
-            : base(options)
-        {
+        [NotMapped]
+        public virtual bool AuditSuppressAutoSetTenantName => true;
 
-        }
+        [NotMapped]
+        public virtual IServiceProvider ServiceProvider { get; }
 
-        public DbSet<SampleEntity> SampleEntitys { get; set; }
+        [NotMapped]
+        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap => new ConcurrentDictionary<Type, object>();
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+        [NotMapped]
+        public virtual IRivenDbContext Self => this;
 
-            ConfigurationIdentityTables(builder);
-        }
+        #endregion
+
+        #region AppSession 实例
+
+
+        [NotMapped]
+        public virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
+
+
+        #endregion
 
 
         /// <summary>
-        /// 配置Identity的表
+        /// 
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        protected virtual ModelBuilder ConfigurationIdentityTables(ModelBuilder builder)
+        /// <param name="options"></param>
+        /// <param name="serviceProvider"></param>
+        public AppDbContext(DbContextOptions options, IServiceProvider serviceProvider = null)
+            : base(options)
         {
-            builder.Entity<Role>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(Role)}s");
-            });
-            builder.Entity<RoleClaim>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(RoleClaim)}s");
-            });
-
-            builder.Entity<User>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(User)}s");
-            });
-            builder.Entity<UserClaim>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserClaim)}s");
-            });
-            builder.Entity<UserLogin>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserLogin)}s");
-            });
-            builder.Entity<UserToken>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserToken)}s");
-            });
-            builder.Entity<UserRole>((entityBuilder) =>
-            {
-                entityBuilder.ToTable($"{nameof(UserRole)}s");
-            });
-
-            return builder;
+            ServiceProvider = serviceProvider;
         }
+
+        #region 租户
+
+        public DbSet<Tenant> Tenants { get; set; }
+
+        #endregion
+
+
+        #region 示例实体
+
+        public DbSet<SampleEntity> SampleEntitys { get; set; }
+
+        #endregion
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ConfigureGlobalFilters(this);
+
+            modelBuilder.ConfiurationIdentityTables();
+
+            modelBuilder.ConfiurationTenantTable();
+        }
+
+        #region 重写SaveChange函数
+
+        public override int SaveChanges()
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            this.Self.ApplyAudit(ChangeTracker);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        #endregion
+
+        #region IRivenDbContext 接口函数实现
+
+        public virtual string GetCurrentTenantNameOrNull()
+        {
+            return AppSession?.TenantName;
+        }
+
+        public virtual string GetCurrentUserIdOrNull()
+        {
+            return AppSession?.UserId?.ToString();
+        }
+
+        public virtual EntityEntry ConvertToEntry(object obj)
+        {
+            return Entry(obj);
+        }
+
+        #endregion
     }
 }

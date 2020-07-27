@@ -1,9 +1,73 @@
 {
   "culture": "zh-Hans",
-  "displayName": "���ļ���",
+  "displayName": "中文简体",
   "icon": "famfamfam-flags cn",
   "enabled": true,
   "texts": {
+
+
+    // asp.net core identiy
+    "NotLoggedIn": "未登录系统",
+    "SomeClaimDoNotExist": "某些Claim不存在",
+    "WithoutAnyClaim": "没有任何Claim",
+
+    // menu
+    "menu.search.placeholder": "搜索",
+    "menu.fullscreen": "全屏",
+    "menu.fullscreen.exit": "退出全屏",
+    "menu.clear.local.storage": "清理本地缓存",
+    "menu.lang": "语言",
+    "menu.main": "主导航",
+    "menu.dashboard": "仪表盘",
+    "menu.role": "角色",
+    "menu.user": "用户",
+
+    // common
+    "common.creater": "创建者",
+    "common.creation-time": "创建时间",
+    "common.last-modifier": "最后修改人",
+    "common.last-modification-time": "最后修改时间",
+    "common.deleter": "删除者",
+    "common.deletion-time": "删除时间",
+    "common.is-active": "激活",
+    "common.is-enabled": "启用",
+    "common.is-static": "内置",
+    "common.state": "状态",
+    "common.phone-number": "电话号码",
+    "common.email": "邮箱",
+    "common.action": "操作",
+    "common.edit": "编辑",
+    "common.delete": "删除",
+    "common.refresh": "刷新",
+
+    // message
+    "message.tenant.in-active": "租户 {0} 未激活",
+    "message.tenant.not-found": "未找到租户 {0}",
+
+    // validation
+    "validation.required": "输入不能为空！",
+    "validation.twice": "两次输入不匹配!",
+
+    // label
+    "label.change-tenant": "切换租户",
+    "label.ok": "确认",
+    "label.cancel": "取消",
+    "label.account": "账号",
+    "label.password": "密码",
+    "label.forgot-password": "忘记密码",
+    "label.remember-me": "记住我",
+    "label.register": "注册",
+    "label.login": "登录",
+    "label.log-out": "退出登录",
+
+
+    // entity
+    "tenant.name": "租户名称",
+    "user.user-name": "账号",
+    "user.nick-name": "昵称",
+    "role.name": "角色名称",
+    "role.display-name": "角色显示名称"
+
 
   }
 }

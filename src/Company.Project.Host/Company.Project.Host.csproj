@@ -5,12 +5,36 @@
     <RootNamespace>Company.Project</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Company.Project.Application\Company.Project.Application.csproj" />
+    <ProjectReference Include="..\Company.Project.Domain\Company.Project.Domain.csproj" />
+    <ProjectReference Include="..\Company.Project.EntityFrameworkCore\Company.Project.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <Compile Remove="Logs\**" />
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Remove="Menus\menus.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Menus\menus.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -21,18 +45,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1"  />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Company.Project.Host.Core\Company.Project.Host.Core.csproj" />
-  </ItemGroup>
-
 
   <ProjectExtensions>
     <VisualStudio>
@@ -40,6 +54,5 @@
     </VisualStudio>
   </ProjectExtensions>
 
-
-
 </Project>
+

@@ -8,8 +8,8 @@ namespace Company.Project.Authorization.Users
 {
     public class LoginResult : LoginResult<User>
     {
-        public LoginResult(LoginResultType result, User user = null, ClaimsIdentity identity = null)
-            : base(result, user, identity)
+        public LoginResult(LoginResultType result, User user = null, ClaimsPrincipal claimsPrincipal = null)
+            : base(result, user, claimsPrincipal)
         {
 
         }

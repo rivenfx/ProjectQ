@@ -14,11 +14,17 @@ using Riven.AspNetCore.Accessors;
 using Riven.Modular;
 
 using Company.Project.Authorization;
+using Riven.Extensions;
+using System.IO;
+using Company.Project.Configuration;
+using Riven.Uow;
+using Newtonsoft.Json.Converters;
 
 namespace Company.Project
 {
     [DependsOn(
-        typeof(CompanyProjectHostCoreModule)
+        typeof(CompanyProjectApplicationModule),
+        typeof(CompanyProjectEntityFrameworkCoreModule)
         )]
     public class CompanyProjectHostModule : AppModule
     {
@@ -27,6 +33,9 @@ namespace Company.Project
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.RegisterAssemblyOf<CompanyProjectHostModule>();
+
+            // 添加获取当前连接字符串提供者
+            context.Services.AddRivenCurrentConnectionStringNameProvider<AspNetCoreCurrentConnectionStringNameProvider>();
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)
@@ -38,6 +47,10 @@ namespace Company.Project
 
             // aspnet core mvc
             var mvcBuilder = context.Services.AddControllersWithViews();
+            mvcBuilder.AddNewtonsoftJson((options) =>
+            {
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
+            });
 #if DEBUG
             mvcBuilder.AddRazorRuntimeCompilation();
 #endif
@@ -61,11 +74,11 @@ namespace Company.Project
                 options.AddPolicy(CorsPolicyName, builder =>
                 {
                     // 配置跨域
-                    var corsOrigins = configuration["App:CorsOrigins"]
-                                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(o => o.TrimEnd('/'))
-                                        .Where(o => o != "*")
-                                        .ToArray();
+                    var corsOrigins = configuration.GetAppInfo().CorsOrigins
+                                       .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(o => o.TrimEnd('/'))
+                                       .Where(o => o != "*")
+                                       .ToArray();
 
                     builder
                         .WithOrigins(
@@ -83,12 +96,21 @@ namespace Company.Project
 
             #region AspNetCore - Identity And Auth
 
-            // 认证配置
+            // 注册 asp.net core identity
             context.Services.IdentityRegister();
-            context.Services.IdentityConfiguration(configuration);
+            // 配置校验
+            context.Services.AuthenticationConfiguration(configuration);
 
             #endregion
 
+
+        }
+
+        public override void OnPostConfigureServices(ServiceConfigurationContext context)
+        {
+            var configuration = context.Configuration;
+
+            var appInfo = configuration.GetAppInfo();
 
             #region Riven - AspNetCore 请求本地化
 
@@ -100,25 +122,44 @@ namespace Company.Project
             #region Riven - AspNetCore 服务注册和配置
 
             // Riven - Swagger 和 动态WebApi
-            context.Services.AddRivenAspNetCoreSwashbuckle((options) =>
-            {
-                var apiInfo = new OpenApiInfo()
+            context.Services.AddRivenAspNetCoreSwashbuckle(
+                (options) =>
                 {
-                    Title = configuration[AppConsts.AppNameKey],
-                    Version = configuration[AppConsts.AppVersionKey]
-                };
-                options.SwaggerDoc(apiInfo.Version, apiInfo);
+                    var apiInfo = new OpenApiInfo()
+                    {
+                        Title = appInfo.Name,
+                        Version = appInfo.Version
+                    };
+                    options.SwaggerDoc(apiInfo.Version, apiInfo);
+                },
+                (options) =>
+                {
+                    // 不删除结尾
+                    options.RemoveActionPostfixes.Clear();
+                    // 处理ActionName
+                    options.GetRestFulActionName = (actionName) => actionName;
+                    // 指定默认的 api 前缀
+                    options.DefaultApiPrefix = "apis";
+                    // 注册指定程序集对应的 url 和 http 请求方式
+                    options.AddAssemblyOptions(typeof(CompanyProjectApplicationModule).Assembly, options.DefaultApiPrefix, "POST");
+                });
+
+            context.Services.AddSwaggerGenNewtonsoftSupport();
+
+            // Riven - AspNetCore 基础服务与配置
+            context.Services.AddRivenAspNetCore((options) =>
+            {
+#if DEBUG
+                // 发送所有异常数据到客户端
+                options.SendAllExceptionToClient = true;
+#endif
             });
+
+            // Riven - AspNetCore 过滤器
+            context.Services.AddRivenAspNetCoreFilters();
 
             // Riven - AspNetCore Uow实现
             context.Services.AddRivenAspNetCoreUow();
-
-            // Riven - AspNetCore 基础服务相关
-            context.Services.AddRivenAspNetCore((options) =>
-            {
-                // 启用Uow
-                options.UnitOfWorkFilterEnable = true;
-            });
 
             #endregion
         }
@@ -129,11 +170,14 @@ namespace Company.Project
             var app = context.ServiceProvider.GetService<IApplicationBuilderAccessor>().ApplicationBuilder;
             var env = context.ServiceProvider.GetService<IWebHostEnvironment>();
 
+            var appInfo = configuration.GetAppInfo();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
 
             #region AspNetCore - UseStaticFiles / UseRouting /UseCors
 
@@ -145,6 +189,22 @@ namespace Company.Project
             #endregion
 
 
+
+            #region Riven - AspNetCore  ExceptionHandling / Uow / RequestLocalization
+
+            // ExceptionHandling
+            app.UseRivenAspNetCoreExceptionHandling();
+
+            // Uow
+            app.UseRivenAspnetCoreUow();
+
+            // RequestLocalization
+            app.UseRivenRequestLocalization();
+
+            #endregion
+
+
+
             #region App - AspNetCore Auth
 
             // 认证配置
@@ -153,12 +213,6 @@ namespace Company.Project
             #endregion
 
 
-            #region Riven - AspNetCore 请求本地化
-
-            app.UseRivenRequestLocalization();
-
-            #endregion
-
 
             #region Riven -启用并配置 Swagger 和 SwaggerUI
 
@@ -166,14 +220,23 @@ namespace Company.Project
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
             {
                 swaggerUiOption.SwaggerEndpoint(
-                       $"/swagger/{configuration[AppConsts.AppVersionKey]}/swagger.json",
-                       configuration[AppConsts.AppNameKey]
+                       $"/swagger/{appInfo.Version}/swagger.json",
+                       appInfo.Name
                    );
                 swaggerUiOption.EnableDeepLinking();
                 swaggerUiOption.DocExpansion(DocExpansion.None);
+
+                // 应用公共的js
+                swaggerUiOption.InjectJavascript("/views/app.js");
+
+                // swagger 定制的样式和脚本
+                swaggerUiOption.InjectStylesheet("/views/swagger/index.css");
+                swaggerUiOption.InjectJavascript("/views/swagger/index.js");
+
             });
 
             #endregion
+
 
 
             #region AspNetCore - Endpoints
