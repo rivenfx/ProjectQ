@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Riven;
 using Riven.Extensions;
+using Company.Project.Authorization.Claims.Dtos;
 
 namespace Company.Project.Authorization.Claims
 {
@@ -30,6 +32,15 @@ namespace Company.Project.Authorization.Claims
 
             return await Task.FromResult(
                 _claimsManager.GetAll(claimItemType).Select(o => o.Claim).ToList()
+                );
+        }
+
+        public async Task<List<ClaimItemDto>> GetAllClaimsWithTree()
+        {
+            var claimItemType = _appSession.TenantName.IsNullOrWhiteSpace() ? ClaimItemType.Host : ClaimItemType.Tenant;
+
+            return await Task.FromResult(
+                _claimsManager.GetAll(claimItemType).ProjectTo<ClaimItemDto>().ToList()
                 );
         }
 
