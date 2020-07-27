@@ -1,14 +1,16 @@
 # 移除 ProjectQ.sln 中对 Riven Framework 库的引用
-# $slnFilePath = "../ProjectQ.sln";
-# $projects = (dotnet sln $slnFilePath list)
+$slnFilePath = "../ProjectQ.sln";
+$projects = (dotnet sln $slnFilePath list)
 
-# foreach ($project in $projects)
-# {
-#     if($project.StartsWith("..\Framework\src\Riven")){
-#         # Write-Host $project
-#         dotnet sln $slnFilePath remove ("../"+$project)
-#     }
-# }
+foreach ($project in $projects)
+{
+    if($project.StartsWith("..\Framework\src\Riven")){
+        # Write-Host $project
+        dotnet sln $slnFilePath remove ("../"+$project)
+    }
+}
+Write-Host "移除ProjectQ.sln项目已完成,按任意键结束程序!"
+
 
 # 修改项目中对 中对 Riven Framework 库的引用
 
@@ -31,17 +33,17 @@ foreach($file in $fileList){
         $libName = $match.Groups[1].Value.ToString()
         # 新的nuget引用
         $newVal = "ProjectReference Include=" + '"' + "$libName" + '"' + " Version=" + '"' + "$versionStr" + '"'
-        #   " Version=""$versionStr"" "
         # 替换csproj的内容
         $matchVal =  $match.Value.ToString()
-        Write-Host $matchVal
-        Write-Host $newVal
+        $resultProjContent = $resultProjContent.Replace("$matchVal","$newVal")
 
-        $resultProjContent = [System.Text.RegularExpressions.Regex]::Replace("$resultProjContent", "$matchVal", "$newVal")
-        # $tmpProjContent = ($resultProjContent -Replace "$matchVal","$newRef")
-        # $resultProjContent =  $tmpProjContent
+        Write-Host "$libName  $versionStr"
     }
 
     # 写入csproj
-    # Set-Content -Encoding "UTF8NoBOM" -Path $file -Value $resultProjContent
+    Set-Content -Encoding "UTF8NoBOM" -Path "$file" -Value $resultProjContent
 }
+
+Write-Host "类库引用替换完成,按任意键结束程序!"
+
+[System.Console]::ReadLine()
