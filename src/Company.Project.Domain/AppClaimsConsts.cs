@@ -37,25 +37,6 @@ namespace Company.Project
 
 
         /// <summary>
-        /// 所有的claims
-        /// </summary>
-        /// <returns></returns>
-        public static string[] GetClaims()
-        {
-            return new string[]
-            {
-                 AppClaimsConsts.User.Query,
-                 AppClaimsConsts.User.Create,
-                 AppClaimsConsts.User.Edit,
-                 AppClaimsConsts.User.Delete,
-
-                 AppClaimsConsts.Role.Query,
-                 AppClaimsConsts.Role.Edit,
-                 AppClaimsConsts.Role.Delete
-            };
-        }
-
-        /// <summary>
         /// 注册 claims
         /// </summary>
         /// <param name="serviceProvider">注入容器</param>
@@ -63,11 +44,46 @@ namespace Company.Project
         public static IServiceProvider RegisterBasicClaims(this IServiceProvider serviceProvider)
         {
             var claimsManager = serviceProvider.GetRequiredService<IClaimsManager>();
-            claimsManager.Add(
-                    AppClaimsConsts.GetClaims()
-                );
+            claimsManager.Add(CommonClaims());
+            claimsManager.Add(HostClaims());
+            claimsManager.Add(TenantClaims());
 
             return serviceProvider;
         }
+
+        private static ClaimItem[] CommonClaims()
+        {
+            return new ClaimItem[]
+            {
+                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Query),
+                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Create),
+                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Edit),
+                ClaimItem.CreateWithCommon(AppClaimsConsts.User.Delete),
+
+                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Query),
+                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Create),
+                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Edit),
+                ClaimItem.CreateWithCommon(AppClaimsConsts.Role.Delete),
+            };
+        }
+
+        private static ClaimItem[] HostClaims()
+        {
+            return new ClaimItem[]
+            {
+
+            };
+        }
+
+        private static ClaimItem[] TenantClaims()
+        {
+            return new ClaimItem[]
+            {
+
+            };
+        }
+
+
+
     }
 }

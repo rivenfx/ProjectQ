@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
+using Company.Project.Authorization.AppClaims;
 
 namespace Company.Project.Seeder
 {
@@ -20,11 +21,14 @@ namespace Company.Project.Seeder
 
         protected readonly UserManager _userManager;
 
+        protected readonly IClaimsManager _claimsManager;
+
         public SeederBase(IServiceProvider serviceProvider)
         {
             _lookupNormalizer = serviceProvider.GetService<ILookupNormalizer>();
-            _passwordHasher = serviceProvider.GetService<IPasswordHasher<User>>(); ;
-            _userManager = serviceProvider.GetService<UserManager>(); ;
+            _passwordHasher = serviceProvider.GetService<IPasswordHasher<User>>();
+            _userManager = serviceProvider.GetService<UserManager>();
+            _claimsManager = serviceProvider.GetService<IClaimsManager>();
         }
 
 
@@ -70,14 +74,17 @@ namespace Company.Project.Seeder
 
             // 添加权限
             roleClaims.Clear();
-            foreach (var item in AppClaimsConsts.GetClaims())
+            var claimItems = _claimsManager.GetAll(
+                string.IsNullOrWhiteSpace(tenantName) ? ClaimItemType.Host : ClaimItemType.Tenant
+                );
+            foreach (var item in claimItems)
             {
                 roleClaims.Add(new RoleClaim()
                 {
                     RoleId = systemRole.Id,
                     TenantName = tenantName,
-                    ClaimType = item,
-                    ClaimValue = item
+                    ClaimType = item.Claim,
+                    ClaimValue = item.Claim
                 });
             }
             await roleClaimStore.AddRangeAsync(roleClaims);

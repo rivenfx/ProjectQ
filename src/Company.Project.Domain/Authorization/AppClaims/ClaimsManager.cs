@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Riven.Dependency;
 
 namespace Company.Project.Authorization.AppClaims
 {
     public class ClaimsManager : IClaimsManager, ISingletonDependency
     {
-        static List<string> _claims = new List<string>();
+        static List<ClaimItem> _claims = new List<ClaimItem>();
 
-        public void Add(params string[] claims)
+        public void Add(params ClaimItem[] claims)
         {
             if (claims == null || claims.Length == 0)
             {
@@ -22,12 +23,18 @@ namespace Company.Project.Authorization.AppClaims
             _claims.Clear();
         }
 
-        public IQueryable<string> GetAll()
+        public IQueryable<ClaimItem> GetAll(ClaimItemType claimItemType)
         {
-            return _claims.AsQueryable();
+            // 如果筛选类型为 Host 但是没有开启多租户,那么修改类型为 Tenant
+            if (claimItemType == ClaimItemType.Host && !Riven.MultiTenancy.MultiTenancyConfig.IsEnabled)
+            {
+                claimItemType = ClaimItemType.Tenant;
+            }
+
+            return _claims.Where(o => o.Type == ClaimItemType.Common && o.Type == claimItemType).AsQueryable();
         }
 
-        public void Remove(params string[] claims)
+        public void Remove(params ClaimItem[] claims)
         {
             if (claims == null || claims.Length == 0)
             {
