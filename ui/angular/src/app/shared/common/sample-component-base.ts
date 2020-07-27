@@ -4,6 +4,7 @@ import { ALAIN_I18N_TOKEN } from '@delon/theme';
 
 export abstract class SampleComponentBase {
 
+  loading: boolean;
 
   i18nSer: I18nService;
 
