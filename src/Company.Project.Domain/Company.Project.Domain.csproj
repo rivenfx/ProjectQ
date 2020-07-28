@@ -12,15 +12,15 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Riven.AspNetCore.Localization" Version="0.1.0" />
-    <PackageReference Include="Riven.AspNetCore.Modular" Version="0.1.0" />
-    <PackageReference Include="Riven.AspNetCore.Identity" Version="0.1.0" />
-    <PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="0.1.0" />
-    <PackageReference Include="Riven.Domain.EntityFrameworkCore" Version="0.1.0" />
-    <PackageReference Include="Riven.Domain" Version="0.1.0" />
-    <PackageReference Include="Riven.AspNetCore.Uow" Version="0.1.0" />
-    <PackageReference Include="Riven.Mapster" Version="0.1.0" />
-    <PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.1.0" />
+    <PackageReference Include="Riven.AspNetCore.Localization" Version="0.1.1" />
+    <PackageReference Include="Riven.AspNetCore.Modular" Version="0.1.1" />
+    <PackageReference Include="Riven.AspNetCore.Identity" Version="0.1.1" />
+    <PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="0.1.1" />
+    <PackageReference Include="Riven.Domain.EntityFrameworkCore" Version="0.1.1" />
+    <PackageReference Include="Riven.Domain" Version="0.1.1" />
+    <PackageReference Include="Riven.AspNetCore.Uow" Version="0.1.1" />
+    <PackageReference Include="Riven.Mapster" Version="0.1.1" />
+    <PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.1.1" />
   </ItemGroup>
 
 
