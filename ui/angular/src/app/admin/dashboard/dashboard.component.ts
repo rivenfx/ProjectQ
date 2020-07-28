@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
+  selectVals = [
+    'user.query'
+  ]
+
   constructor() { }
 
   ngOnInit(): void {

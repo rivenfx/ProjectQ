@@ -7,13 +7,13 @@ namespace Company.Project.Authorization.AppClaims
 {
     public interface IClaimsManager
     {
-        IQueryable<string> GetAll();
+        IQueryable<ClaimItem> GetAll(ClaimItemType claimItemType);
 
 
-        void Add(params string[] claims);
+        void Add(params ClaimItem[] claims);
 
 
-        void Remove(params string[] claims);
+        void Remove(params ClaimItem[] claims);
 
 
         void Clear();
