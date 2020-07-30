@@ -62,7 +62,7 @@ namespace Company.Project.Authorization.Roles
             var role = new Role()
             {
                 Name = name,
-                DispayName = displayName,
+                DisplayName = displayName,
                 Description = description ?? string.Empty
             };
             var result = await this.CreateAsync(role);
@@ -100,7 +100,7 @@ namespace Company.Project.Authorization.Roles
                 throw new UserFriendlyException($"Î´ÕÒµ½½ÇÉ«: {displayName}");
             }
 
-            role.DispayName = displayName;
+            role.DisplayName = displayName;
             role.Description = description ?? string.Empty;
 
             var identityResult = await this.UpdateAsync(role);

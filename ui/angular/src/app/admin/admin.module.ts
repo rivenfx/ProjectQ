@@ -9,6 +9,7 @@ import { STModule } from '@delon/abc';
 import { FormsModule } from '@angular/forms';
 import { NzFormModule, NzTableModule } from 'ng-zorro-antd';
 import { SharedModule } from '@shared';
+import { AdminSharedModule } from './admin-shared';
 
 
 @NgModule({
@@ -20,7 +21,9 @@ import { SharedModule } from '@shared';
   imports: [
     CommonModule,
     AdminRoutingModule,
-    SharedModule
+    SharedModule,
+    AdminSharedModule,
   ],
 })
-export class AdminModule { }
+export class AdminModule {
+}

@@ -28,10 +28,13 @@ export class TenantChangeComponent extends AppComponentBase
   }
 
   openChangeModal() {
-    this.modalHelper.createStatic(TenantChangeModalComponent)
+    this.modalHelper.createStatic(TenantChangeModalComponent,
+      {},
+      {
+        size: 'sm',
+      })
       .subscribe((res) => {
         this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
-        debugger
       });
   }
 }

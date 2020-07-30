@@ -1,0 +1,13 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-tree
+    #nzTreeComponent
+    [nzData]="treeData"
+    nzCheckable
+    [nzCheckedKeys]="value"
+
+  >
+<!--    <ng-template #nzTreeTemplate let-node let-origin="origin">-->
+<!--      {{l(origin.claim)}}-->
+<!--    </ng-template>-->
+  </nz-tree>
+</nz-spin>
