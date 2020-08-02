@@ -4,7 +4,7 @@ import { QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-user',
+  selector: 'user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less'],
 })

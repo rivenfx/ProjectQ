@@ -18,7 +18,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'loadsh';
 
 @Component({
-  selector: 'app-permission-tree',
+  selector: 'permission-tree',
   templateUrl: './permission-tree.component.html',
   styleUrls: ['./permission-tree.component.less'],
   providers: [{

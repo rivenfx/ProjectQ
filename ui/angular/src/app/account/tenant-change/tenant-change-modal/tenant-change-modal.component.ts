@@ -6,7 +6,7 @@ import { SettingsService } from '@delon/theme';
 import { RequestHelper } from '@shared/riven/helper';
 
 @Component({
-  selector: 'app-tenant-change-modal.component',
+  selector: 'tenant-change-modal.component',
   templateUrl: './tenant-change-modal.component.html',
   styleUrls: ['./tenant-change-modal.component.less'],
 })

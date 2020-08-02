@@ -11,7 +11,7 @@ import { ACLService } from '@delon/acl';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.less'],
 })

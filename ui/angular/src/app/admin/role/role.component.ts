@@ -4,7 +4,7 @@ import { QueryInput, RoleDto, RoleServiceProxy, UserDto, UserServiceProxy } from
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-role',
+  selector: 'role',
   templateUrl: './role.component.html',
   styleUrls: ['./role.component.less'],
 })

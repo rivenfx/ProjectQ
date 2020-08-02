@@ -6,7 +6,7 @@ import { TenantChangeModalComponent } from './tenant-change-modal';
 import { RequestHelper } from '@shared/riven/helper';
 
 @Component({
-  selector: 'app-tenant-change',
+  selector: 'tenant-change',
   templateUrl: './tenant-change.component.html',
   styleUrls: ['./tenant-change.component.less'],
 })
