@@ -1,7 +1,8 @@
 <!-- 搜索框 -->
 <div>
-  <nz-input-group [nzSuffix]="suffixIconSearch">
-    <input type="text" nz-input [placeholder]="l('')"
+  <nz-input-group [nzSuffix]="suffixIconSearch" [nzSize]="'small'">
+    <input type="text" nz-input [placeholder]="placeholder"
+           [nzSize]="'small'"
            [disabled]="loading"
            [(ngModel)]="treeSearchVal"/>
   </nz-input-group>
