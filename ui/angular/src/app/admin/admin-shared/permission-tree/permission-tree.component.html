@@ -1,10 +1,10 @@
 <nz-spin [nzSpinning]="loading">
   <nz-tree
-    #nzTreeComponent
+    #tree
     [nzData]="treeData"
     nzCheckable
     [nzCheckedKeys]="value"
-
+    (nzCheckBoxChange)="onNzCheckBoxChange($event)"
   >
 <!--    <ng-template #nzTreeTemplate let-node let-origin="origin">-->
 <!--      {{l(origin.claim)}}-->

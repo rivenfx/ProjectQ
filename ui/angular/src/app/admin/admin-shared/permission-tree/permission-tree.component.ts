@@ -1,11 +1,21 @@
-import { Component, forwardRef, Injector, Input, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  Injector,
+  Input,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+  ViewChildren,
+} from '@angular/core';
 import { ControlComponentBase } from '@shared/common';
 import { ClaimsServiceProxy } from '@service-proxies';
-import { NzTreeNodeOptions } from 'ng-zorro-antd';
+import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd';
 import { ArrayService } from '@delon/util';
 import { finalize } from 'rxjs/operators';
 import { NzTreeNode } from 'ng-zorro-antd/core/tree';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import * as _ from 'loadsh';
 
 @Component({
   selector: 'app-permission-tree',
@@ -41,7 +51,10 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
           parentIdMapName: 'parent',
           titleMapName: 'claim',
         });
-        debugger
+
+        if (Array.isArray(this.value)) {
+          this.writeValue(_.clone(this.value));
+        }
       });
   }
 
@@ -55,6 +68,12 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
   }
 
   onInputChange(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges) {
+
+  }
+
+  onNzCheckBoxChange(event: NzFormatEmitEvent) {
+    const checkedKeys = this.arraySer.getKeysByTreeNode(event.checkedKeys);
+    this.emitValueChange(checkedKeys);
   }
 
 }
