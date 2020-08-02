@@ -4,8 +4,10 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users.Dtos
 {
-    public class CreateOrEditUserInput : UserEditDto
+    public class UserEditDto
     {
-        public string Password { get; set; }
+        public UserDto EntityDto { get; set; }
+
+        public List<Guid> Roles { get; set; }
     }
 }

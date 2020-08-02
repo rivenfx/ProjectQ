@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Roles.Dtos
 {
-    public class EditRoleDto
+    public class RoleEditDto
     {
         public RoleDto EntityDto { get; set; }
 

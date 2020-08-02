@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +43,28 @@ namespace Company.Project.Authorization.Users
                 .ToListAsync();
 
             return new PageResultDto<UserDto>(entityList, entityTotal);
+        }
+
+
+        /// <summary>
+        /// 根据用户id获取编辑dto
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
+        public virtual async Task<UserEditDto> GetEditById(Guid input)
+        {
+            var entity = await _userManager.QueryAsNoTracking
+                .FirstOrDefaultAsync(o => o.Id == input);
+
+            var roles = await _userManager.GetRolesByUserIdAsync(entity?.Id.ToString());
+
+            return new UserEditDto()
+            {
+                EntityDto = entity.Adapt<UserDto>(),
+                Roles = roles.Select(o => Guid.Parse(o)).ToList()
+            };
+
         }
 
         /// <summary>

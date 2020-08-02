@@ -53,18 +53,18 @@ namespace Company.Project.Authorization.Roles
 
 
         /// <summary>
-        /// 根据租户
+        /// 根据角色id获取编辑dto
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public virtual async Task<EditRoleDto> GetRoleById(Guid input)
+        public virtual async Task<RoleEditDto> GetEditById(Guid input)
         {
             var entity = await _roleManager.QueryAsNoTracking
                 .FirstOrDefaultAsync(o => o.Id == input);
 
             var claims = await _roleManager.GetClaimsByRoleIdAsync(entity?.Id.ToString());
 
-            return new EditRoleDto()
+            return new RoleEditDto()
             {
                 EntityDto = entity.Adapt<RoleDto>(),
                 Claims = claims.Select(o => o.Type).ToList()
