@@ -89,6 +89,10 @@ export abstract class ControlComponentBase<T> extends SampleComponentBase
     this.value = obj;
   }
 
+  emitValueChange(val: T) {
+    this.value = val;
+    this.valueChange.emit(val);
+  }
 
   /** 初始化 */
   abstract onInit(): void;
