@@ -8,12 +8,18 @@ export abstract class ModalComponentBase extends AppComponentBase {
 
   constructor(injector: Injector) {
     super(injector);
-    this.modalRef = injector.get(NzModalRef);
+    try {
+      this.modalRef = injector.get(NzModalRef);
+    } catch (e) {
+
+    }
   }
 
 
   success(res: boolean | any = true) {
-    this.modalRef.close(res);
+    if (this.modalRef) {
+      this.modalRef.close(res);
+    }
   }
 
   close(res: boolean | any = false) {
