@@ -24,15 +24,15 @@ export abstract class ControlComponentBase<T> extends SampleComponentBase
 
   /** 占位符 */
   @Input()
-  placeholder: string;
+  placeholder: string = '';
 
   /** 启用清除,默认为false */
   @Input()
-  showClear: boolean;
+  enabledClear: boolean;
 
   /** 启用过滤,默认为false */
   @Input()
-  enableFileter: boolean;
+  enabledFileter: boolean;
 
   /** 禁用,默认为false */
   @Input()
