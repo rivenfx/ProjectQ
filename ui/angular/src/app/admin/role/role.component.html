@@ -38,7 +38,7 @@
     <td nzEllipsis [title]="data.name">{{ data.name }}</td>
     <td nzEllipsis [title]="data.displayName">{{ data.displayName }}</td>
     <td nzEllipsis>
-      <a>{{l('common.edit')}}</a>
+      <a (click)="onClickEdit(data)">{{l('common.edit')}}</a>
       <nz-divider nzType="vertical"></nz-divider>
       <a>{{l('common.delete')}}</a>
     </td>

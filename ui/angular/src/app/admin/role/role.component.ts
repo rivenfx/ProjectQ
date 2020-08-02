@@ -2,6 +2,8 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { ListViewComponentBase } from '@shared/common';
 import { QueryInput, RoleDto, RoleServiceProxy, UserDto, UserServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';
+import { ModalHelper } from '@delon/theme';
+import { CreateOrEditRoleComponent } from './create-or-edit-role';
 
 @Component({
   selector: 'role',
@@ -14,6 +16,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
   constructor(
     injector: Injector,
     private roleSer: RoleServiceProxy,
+    private modalHelper: ModalHelper,
   ) {
     super(injector);
   }
@@ -35,6 +38,18 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
         this.viewRecord = res.items;
         callback(res.total);
       });
+  }
+
+
+  onClickEdit(data: RoleDto) {
+    this.modalHelper.createStatic(
+      CreateOrEditRoleComponent,
+      { modalInput: data.id },
+    ).subscribe((res) => {
+      if (res) {
+        this.refresh();
+      }
+    });
   }
 
 }

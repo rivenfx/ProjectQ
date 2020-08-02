@@ -10,19 +10,31 @@ import { FormsModule } from '@angular/forms';
 import { NzFormModule, NzTableModule } from 'ng-zorro-antd';
 import { SharedModule } from '@shared';
 import { AdminSharedModule } from './admin-shared';
+import { CreateOrEditRoleComponent } from './role/create-or-edit-role';
+import { CreateOrEditUserComponent } from './user/create-or-edit-user';
+import { RivenModule } from '@shared/riven';
 
+const entryComponents = [
+  CreateOrEditRoleComponent,
+  CreateOrEditUserComponent,
+];
 
 @NgModule({
-  declarations: [
-    DashboardComponent,
-    RoleComponent,
-    UserComponent,
-  ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
     AdminSharedModule,
+    RivenModule.forChild(),
+  ],
+  declarations: [
+    DashboardComponent,
+    RoleComponent,
+    UserComponent,
+    ...entryComponents,
+  ],
+  entryComponents: [
+    ...entryComponents,
   ],
 })
 export class AdminModule {
