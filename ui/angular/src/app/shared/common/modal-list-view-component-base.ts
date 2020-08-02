@@ -1,10 +1,13 @@
 import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 import { NzModalRef } from 'ng-zorro-antd';
-import { Injector } from '@angular/core';
+import { Injector, Input } from '@angular/core';
 
-export abstract class ModalListViewComponentBase<T> extends ListViewComponentBase<T> {
+export abstract class ModalListViewComponentBase<TModal, TList> extends ListViewComponentBase<TList> {
   title = '';
   modalRef: NzModalRef;
+
+  @Input()
+  modalInput: TModal;
 
   constructor(injector: Injector) {
     super(injector);

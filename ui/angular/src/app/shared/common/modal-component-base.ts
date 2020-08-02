@@ -1,10 +1,13 @@
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { Injector } from '@angular/core';
+import { Injector, Input } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd';
 
-export abstract class ModalComponentBase extends AppComponentBase {
+export abstract class ModalComponentBase<T> extends AppComponentBase {
   title = '';
   modalRef: NzModalRef;
+
+  @Input()
+  modalInput: T;
 
   constructor(injector: Injector) {
     super(injector);
