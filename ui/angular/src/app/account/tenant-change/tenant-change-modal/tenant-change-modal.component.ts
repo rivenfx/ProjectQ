@@ -10,7 +10,7 @@ import { RequestHelper } from '@shared/riven/helper';
   templateUrl: './tenant-change-modal.component.html',
   styleUrls: ['./tenant-change-modal.component.less'],
 })
-export class TenantChangeModalComponent extends ModalComponentBase implements OnInit {
+export class TenantChangeModalComponent extends ModalComponentBase<any> implements OnInit {
 
   input = new IsTenantAvailableInput();
 
