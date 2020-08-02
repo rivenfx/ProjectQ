@@ -24,7 +24,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
   ngOnInit(): void {
     if (this.modalInput) {
       this.loading = true;
-      this.roleSer.getRoleById(this.modalInput)
+      this.roleSer.getEditById(this.modalInput)
         .pipe(finalize(() => {
           this.loading = false;
         }))

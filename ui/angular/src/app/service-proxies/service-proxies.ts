@@ -209,8 +209,8 @@ export class RoleServiceProxy {
      * @param input (optional) 
      * @return Success
      */
-    getRoleById(input: string | undefined): Observable<EditRoleDto> {
-        let url_ = this.baseUrl + "/apis/Role/GetRoleById?";
+    getEditById(input: string | undefined): Observable<RoleEditDto> {
+        let url_ = this.baseUrl + "/apis/Role/GetEditById?";
         if (input === null)
             throw new Error("The parameter 'input' cannot be null.");
         else if (input !== undefined)
@@ -226,20 +226,20 @@ export class RoleServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetRoleById(response_);
+            return this.processGetEditById(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetRoleById(<any>response_);
+                    return this.processGetEditById(<any>response_);
                 } catch (e) {
-                    return <Observable<EditRoleDto>><any>_observableThrow(e);
+                    return <Observable<RoleEditDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<EditRoleDto>><any>_observableThrow(response_);
+                return <Observable<RoleEditDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetRoleById(response: HttpResponseBase): Observable<EditRoleDto> {
+    protected processGetEditById(response: HttpResponseBase): Observable<RoleEditDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -250,7 +250,7 @@ export class RoleServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = EditRoleDto.fromJS(resultData200);
+            result200 = RoleEditDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -258,7 +258,7 @@ export class RoleServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<EditRoleDto>(<any>null);
+        return _observableOf<RoleEditDto>(<any>null);
     }
 
     /**
@@ -1015,6 +1015,62 @@ export class UserServiceProxy {
     }
 
     /**
+     * @param input (optional) 
+     * @return Success
+     */
+    getEditById(input: string | undefined): Observable<UserEditDto> {
+        let url_ = this.baseUrl + "/apis/User/GetEditById?";
+        if (input === null)
+            throw new Error("The parameter 'input' cannot be null.");
+        else if (input !== undefined)
+            url_ += "input=" + encodeURIComponent("" + input) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEditById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEditById(<any>response_);
+                } catch (e) {
+                    return <Observable<UserEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEditById(response: HttpResponseBase): Observable<UserEditDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserEditDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserEditDto>(<any>null);
+    }
+
+    /**
      * @param body (optional) 
      * @return Success
      */
@@ -1379,11 +1435,11 @@ export interface IRoleDtoPageResultDto {
     total: number;
 }
 
-export class EditRoleDto implements IEditRoleDto {
+export class RoleEditDto implements IRoleEditDto {
     entityDto: RoleDto;
     claims: string[] | undefined;
 
-    constructor(data?: IEditRoleDto) {
+    constructor(data?: IRoleEditDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1403,9 +1459,9 @@ export class EditRoleDto implements IEditRoleDto {
         }
     }
 
-    static fromJS(data: any): EditRoleDto {
+    static fromJS(data: any): RoleEditDto {
         data = typeof data === 'object' ? data : {};
-        let result = new EditRoleDto();
+        let result = new RoleEditDto();
         result.init(data);
         return result;
     }
@@ -1421,15 +1477,15 @@ export class EditRoleDto implements IEditRoleDto {
         return data; 
     }
 
-    clone(): EditRoleDto {
+    clone(): RoleEditDto {
         const json = this.toJSON();
-        let result = new EditRoleDto();
+        let result = new RoleEditDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IEditRoleDto {
+export interface IRoleEditDto {
     entityDto: RoleDto;
     claims: string[] | undefined;
 }
@@ -2215,9 +2271,65 @@ export interface IUserDtoPageResultDto {
     total: number;
 }
 
-export class CreateOrEditUserInput implements ICreateOrEditUserInput {
+export class UserEditDto implements IUserEditDto {
     entityDto: UserDto;
+    roles: string[] | undefined;
+
+    constructor(data?: IUserEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.entityDto = _data["entityDto"] ? UserDto.fromJS(_data["entityDto"]) : <any>undefined;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UserEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+
+    clone(): UserEditDto {
+        const json = this.toJSON();
+        let result = new UserEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserEditDto {
+    entityDto: UserDto;
+    roles: string[] | undefined;
+}
+
+export class CreateOrEditUserInput implements ICreateOrEditUserInput {
     password: string | undefined;
+    entityDto: UserDto;
+    roles: string[] | undefined;
 
     constructor(data?: ICreateOrEditUserInput) {
         if (data) {
@@ -2230,8 +2342,13 @@ export class CreateOrEditUserInput implements ICreateOrEditUserInput {
 
     init(_data?: any) {
         if (_data) {
-            this.entityDto = _data["entityDto"] ? UserDto.fromJS(_data["entityDto"]) : <any>undefined;
             this.password = _data["password"];
+            this.entityDto = _data["entityDto"] ? UserDto.fromJS(_data["entityDto"]) : <any>undefined;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles.push(item);
+            }
         }
     }
 
@@ -2244,8 +2361,13 @@ export class CreateOrEditUserInput implements ICreateOrEditUserInput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
         data["password"] = this.password;
+        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
         return data; 
     }
 
@@ -2258,8 +2380,9 @@ export class CreateOrEditUserInput implements ICreateOrEditUserInput {
 }
 
 export interface ICreateOrEditUserInput {
-    entityDto: UserDto;
     password: string | undefined;
+    entityDto: UserDto;
+    roles: string[] | undefined;
 }
 
 export class SwaggerException extends Error {
