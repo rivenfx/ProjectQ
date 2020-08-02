@@ -4,8 +4,10 @@ using System.Text;
 
 namespace Company.Project.Authorization.Roles.Dtos
 {
-    public class CreateOrUpdateRoleInput : EditRoleDto
+    public class EditRoleDto
     {
+        public RoleDto EntityDto { get; set; }
 
+        public List<string> Claims { get; set; }
     }
 }

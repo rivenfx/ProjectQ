@@ -53,6 +53,26 @@ namespace Company.Project.Authorization.Roles
 
 
         /// <summary>
+        /// 根据租户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual async Task<EditRoleDto> GetRoleById(Guid input)
+        {
+            var entity = await _roleManager.QueryAsNoTracking
+                .FirstOrDefaultAsync(o => o.Id == input);
+
+            var claims = await _roleManager.GetClaimsByRoleIdAsync(entity?.Id.ToString());
+
+            return new EditRoleDto()
+            {
+                EntityDto = entity.Adapt<RoleDto>(),
+                Claims = claims.Select(o => o.Type).ToList()
+            };
+
+        }
+
+        /// <summary>
         /// 创建 角色
         /// </summary>
         /// <param name="input"></param>
