@@ -29,7 +29,13 @@ import * as _ from 'loadsh';
 })
 export class PermissionTreeComponent extends ControlComponentBase<string[]> implements OnInit {
 
+
+  // @ViewChildren('tree') treeRef: NzTreeComponent;
+
+
   treeData: NzTreeNode[];
+
+  treeSearchVal: string;
 
   constructor(
     injector: Injector,
@@ -46,6 +52,11 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
         this.loading = false;
       }))
       .subscribe((res) => {
+
+        res.forEach(o => {
+          o.claim = this.l(o.claim);
+        });
+
         this.treeData = this.arraySer.arrToTreeNode(res, {
           idMapName: 'claim',
           parentIdMapName: 'parent',

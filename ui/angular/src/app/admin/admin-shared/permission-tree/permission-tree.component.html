@@ -1,13 +1,24 @@
+<!-- 搜索框 -->
+<div>
+  <nz-input-group [nzSuffix]="suffixIconSearch">
+    <input type="text" nz-input [placeholder]="l('')"
+           [disabled]="loading"
+           [(ngModel)]="treeSearchVal"/>
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+  </ng-template>
+</div>
+
+<!-- 树形控件 -->
 <nz-spin [nzSpinning]="loading">
   <nz-tree
     #tree
     [nzData]="treeData"
+    [nzSearchValue]="treeSearchVal"
     nzCheckable
     [nzCheckedKeys]="value"
     (nzCheckBoxChange)="onNzCheckBoxChange($event)"
   >
-<!--    <ng-template #nzTreeTemplate let-node let-origin="origin">-->
-<!--      {{l(origin.claim)}}-->
-<!--    </ng-template>-->
   </nz-tree>
 </nz-spin>
