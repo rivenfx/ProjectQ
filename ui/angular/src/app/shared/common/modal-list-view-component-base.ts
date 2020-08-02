@@ -1,10 +1,8 @@
 import { ListViewComponentBase } from '@shared/common/list-view-component-base';
-import { IModalComponent } from '@shared/common/i-modal-component';
 import { NzModalRef } from 'ng-zorro-antd';
 import { Injector } from '@angular/core';
 
-export abstract class ModalListViewComponentBase<T> extends ListViewComponentBase<T>
-  implements IModalComponent {
+export abstract class ModalListViewComponentBase<T> extends ListViewComponentBase<T> {
   title = '';
   modalRef: NzModalRef;
 
