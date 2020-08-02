@@ -13,9 +13,13 @@ using Riven.Identity.Authorization;
 using Company.Project.Authorization.Users.Dtos;
 using Company.Project.Dtos;
 using Mapster;
+using JetBrains.Annotations;
+using Riven.Exceptions;
 
 namespace Company.Project.Authorization.Roles
 {
+
+    [ClaimsAuthorize]
     public class RoleAppService : IApplicationService
     {
         readonly RoleManager _roleManager;
@@ -46,6 +50,7 @@ namespace Company.Project.Authorization.Roles
 
             return new PageResultDto<RoleDto>(entityList, entityTotal);
         }
+
 
         /// <summary>
         /// 创建 角色

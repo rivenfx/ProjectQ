@@ -1,4 +1,4 @@
-﻿using Company.Project.Authorization.AppClaims;
+using Company.Project.Authorization.AppClaims;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +12,11 @@ using System.Threading.Tasks;
 using Riven;
 using Riven.Extensions;
 using Company.Project.Authorization.Claims.Dtos;
+using Riven.Identity.Authorization;
 
 namespace Company.Project.Authorization.Claims
 {
+    [ClaimsAuthorize]
     public class ClaimsAppService : IApplicationService
     {
         readonly IAppSession _appSession;
