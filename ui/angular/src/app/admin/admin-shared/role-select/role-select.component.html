@@ -1,0 +1,11 @@
+<nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="onCheckedChange($event)">
+  <div nz-row>
+    <ng-container *ngFor="let item of checkboxs">
+      <div nz-col nzSpan="8">
+        <label nz-checkbox [nzValue]="item.value" [title]="item.tips" [(nzChecked)]="item.checked" [nzDisabled]="disabled">
+          {{item.label}}
+        </label>
+      </div>
+    </ng-container>
+  </div>
+</nz-checkbox-wrapper>
