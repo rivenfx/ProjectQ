@@ -8,6 +8,6 @@ namespace Company.Project.Authorization.Users.Dtos
     {
         public UserDto EntityDto { get; set; }
 
-        public List<Guid> Roles { get; set; }
+        public List<string> Roles { get; set; }
     }
 }

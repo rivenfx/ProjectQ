@@ -30,7 +30,7 @@ namespace Company.Project.Authorization.Users
         /// <param name="input"></param>
         /// <returns></returns>
         [ClaimsAuthorize(AppClaimsConsts.User.Query)]
-        public virtual async Task<PageResultDto<UserDto>> GetAll(QueryInput input)
+        public virtual async Task<PageResultDto<UserDto>> GetPage(QueryInput input)
         {
             var query = _userManager.QueryAsNoTracking
                 .Skip(input.SkipCount)
@@ -62,7 +62,7 @@ namespace Company.Project.Authorization.Users
             return new UserEditDto()
             {
                 EntityDto = entity.Adapt<UserDto>(),
-                Roles = roles.Select(o => Guid.Parse(o)).ToList()
+                Roles = roles.ToList()
             };
 
         }

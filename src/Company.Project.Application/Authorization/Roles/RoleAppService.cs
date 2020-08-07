@@ -14,7 +14,6 @@ using Company.Project.Authorization.Users.Dtos;
 using Company.Project.Dtos;
 using Mapster;
 using JetBrains.Annotations;
-using Riven.Exceptions;
 
 namespace Company.Project.Authorization.Roles
 {
@@ -31,12 +30,12 @@ namespace Company.Project.Authorization.Roles
 
 
         /// <summary>
-        /// 查询所有角色
+        /// 分页查询所有角色
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
-        public virtual async Task<PageResultDto<RoleDto>> GetAll(QueryInput input)
+        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        public virtual async Task<PageResultDto<RoleDto>> GetPage(QueryInput input)
         {
             var query = _roleManager.QueryAsNoTracking
                 .Skip(input.SkipCount)
@@ -53,10 +52,26 @@ namespace Company.Project.Authorization.Roles
 
 
         /// <summary>
+        /// 查询所有角色
+        /// </summary>
+        /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        public virtual async Task<ListResultDto<RoleDto>> GetAll()
+        {
+            var entityList = await _roleManager.QueryAsNoTracking
+                .ProjectToType<RoleDto>()
+                .ToListAsync();
+
+            return new ListResultDto<RoleDto>(entityList);
+        }
+
+
+        /// <summary>
         /// 根据角色id获取编辑dto
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
         public virtual async Task<RoleEditDto> GetEditById(Guid input)
         {
             var entity = await _roleManager.QueryAsNoTracking
