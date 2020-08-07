@@ -2,6 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { ListViewComponentBase } from '@shared/common';
 import { QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';
+import { CreateOrEditUserComponent } from './create-or-edit-user';
 
 @Component({
   selector: 'user',
@@ -27,7 +28,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
     queryInput.skipCount = skipCount;
     queryInput.pageSize = pageSize;
 
-    this.userSer.getAll(queryInput)
+    this.userSer.getPage(queryInput)
       .pipe(finalize(() => {
         this.loading = false;
       }))
@@ -35,6 +36,19 @@ export class UserComponent extends ListViewComponentBase<UserDto>
         this.viewRecord = res.items;
         callback(res.total);
       });
+  }
+
+  onClickEdit(data: UserDto) {
+    this.modalHelper.createStatic(
+      CreateOrEditUserComponent,
+      {
+        modalInput: data.id,
+      },
+    ).subscribe((res) => {
+      if (res) {
+        this.refresh();
+      }
+    });
   }
 
 }

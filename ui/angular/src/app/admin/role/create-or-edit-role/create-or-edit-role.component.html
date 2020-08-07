@@ -24,6 +24,7 @@
                    nz-input
                    [(ngModel)]="role.name"
                    [placeholder]="l('label.role-name')"
+                   [disabled]="isEdit"
                    required
                    minlength="3"
                    maxlength="32"/>

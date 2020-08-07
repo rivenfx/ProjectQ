@@ -14,6 +14,8 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
   role = new RoleDto();
   claims: string[] = [];
 
+  isEdit: boolean;
+
   constructor(
     injector: Injector,
     public roleSer: RoleServiceProxy,
@@ -23,6 +25,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
 
   ngOnInit(): void {
     if (this.modalInput) {
+      this.isEdit = true;
       this.loading = true;
       this.roleSer.getEditById(this.modalInput)
         .pipe(finalize(() => {

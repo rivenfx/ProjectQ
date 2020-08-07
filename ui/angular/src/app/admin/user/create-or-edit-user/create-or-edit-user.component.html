@@ -1,1 +1,88 @@
-<p>create-or-edit-user works!</p>
+<div class="modal-header">
+  <div class="modal-title">Title</div>
+</div>
+
+<!-- 表单输入错误模板 -->
+<ng-template #errorTpl let-control>
+  <validation-messages [formCtrl]="control"></validation-messages>
+</ng-template>
+
+<form #pageForm="ngForm"
+      nz-form
+      (ngSubmit)="submitForm()"
+      novalidate>
+  <nz-tabset>
+    <!-- 基本信息 -->
+    <nz-tab [nzTitle]="l('label.user-info')">
+      <!-- 用户名称 -->
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <nz-input-group nzPrefixIcon="user">
+            <input name="userNameInput"
+                   #userNameInput="ngModel"
+                   type="text"
+                   nz-input
+                   [(ngModel)]="user.userName"
+                   [placeholder]="l('label.user-name')"
+                   [disabled]="isEdit"
+                   required
+                   minlength="3"
+                   maxlength="32"/>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 显示名称 -->
+      <!--      <nz-form-item>-->
+      <!--        <nz-form-control [nzErrorTip]="errorTpl">-->
+      <!--          <nz-input-group nzPrefixIcon="user">-->
+      <!--            <input name="roleDisplayNameInput"-->
+      <!--                   #roleDisplayNameInput="ngModel"-->
+      <!--                   type="text"-->
+      <!--                   nz-input-->
+      <!--                   [(ngModel)]="role.displayName"-->
+      <!--                   [placeholder]="l('label.role-display-name')"-->
+      <!--                   required-->
+      <!--                   minlength="3"-->
+      <!--                   maxlength="32"/>-->
+      <!--          </nz-input-group>-->
+      <!--        </nz-form-control>-->
+      <!--      </nz-form-item>-->
+      <!-- 描述 -->
+      <!--      <nz-form-item>-->
+      <!--        <nz-form-control [nzErrorTip]="errorTpl">-->
+      <!--          <textarea rows="4"-->
+      <!--                    name="roleDescriptionInput"-->
+      <!--                    #roleDescriptionInput="ngModel"-->
+      <!--                    nz-input-->
+      <!--                    [(ngModel)]="role.description"-->
+      <!--                    [placeholder]="l('label.role-description')"-->
+      <!--                    maxlength="512"-->
+      <!--          ></textarea>-->
+      <!--        </nz-form-control>-->
+      <!--      </nz-form-item>-->
+    </nz-tab>
+
+    <!-- 角色选择 -->
+    <nz-tab [nzTitle]="l('label.roles')">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="errorTpl">
+          <role-select name="rolesInput"
+                       #rolesInput="ngModel"
+                       [(ngModel)]="roles"
+                       [disabled]="user.isStatic"
+          ></role-select>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-tab>
+  </nz-tabset>
+
+</form>
+
+<div class="modal-footer">
+  <button nz-button [nzType]="'default'" (click)="close()">
+    {{l('label.cancel')}}
+  </button>
+  <button nz-button [nzType]="'primary'" (click)="submitForm()">
+    {{l('label.ok')}}
+  </button>
+</div>

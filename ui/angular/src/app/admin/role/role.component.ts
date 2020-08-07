@@ -15,8 +15,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
 
   constructor(
     injector: Injector,
-    private roleSer: RoleServiceProxy,
-    private modalHelper: ModalHelper,
+    private roleSer: RoleServiceProxy
   ) {
     super(injector);
   }
@@ -30,7 +29,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
     queryInput.skipCount = skipCount;
     queryInput.pageSize = pageSize;
 
-    this.roleSer.getAll(queryInput)
+    this.roleSer.getPage(queryInput)
       .pipe(finalize(() => {
         this.loading = false;
       }))
