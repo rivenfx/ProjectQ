@@ -1,6 +1,7 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from './app-component-base';
 import { NzTableComponent } from 'ng-zorro-antd';
+import { ModalHelper } from '@delon/theme';
 
 /** 页面信息 */
 export interface IPageInfo {
@@ -70,8 +71,12 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 页面表格组件实例 */
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
 
+  modalHelper: ModalHelper;
+
   constructor(injector: Injector) {
     super(injector);
+
+    this.modalHelper = injector.get(ModalHelper);
   }
 
   ngOnInit(): void {

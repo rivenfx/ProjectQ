@@ -9,6 +9,10 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   @Input()
   modalInput: T;
 
+  /** 是否为编辑 */
+  isEdit: boolean;
+
+
   constructor(injector: Injector) {
     super(injector);
     try {
