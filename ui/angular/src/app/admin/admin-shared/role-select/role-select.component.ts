@@ -64,13 +64,14 @@ export class RoleSelectComponent extends ControlComponentBase<string[]> {
   }
 
   onInputChange(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges) {
-    if (changes.value && Array.isArray(changes.value.currentValue)) {
+    if (changes.value) {
       this.processDataToCheckBox();
     }
   }
 
   onCheckedChange(event: string[]) {
-    this.emitValueChange(event);
+    this.value = event;
+    this.emitValueChange(this.value);
   }
 
   protected processDataToCheckBox() {
