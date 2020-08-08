@@ -5,9 +5,14 @@ import { PermissionCheckerService } from './permission-checker.service';
 import { ValidationMessagesComponent } from './components/validation-messages';
 import { MessageService } from './message.service';
 import { NotifyService } from './notify.service';
+import { ConfirmValidatorDirective } from './directives/confirm-validator';
 
 const COMPONENTS = [
   ValidationMessagesComponent,
+];
+
+const DIRECTIVES = [
+  ConfirmValidatorDirective,
 ];
 
 @NgModule({
@@ -16,9 +21,11 @@ const COMPONENTS = [
   ],
   declarations: [
     ...COMPONENTS,
+    ...DIRECTIVES
   ],
   exports: [
     ...COMPONENTS,
+    ...DIRECTIVES
   ],
 })
 export class RivenModule {
