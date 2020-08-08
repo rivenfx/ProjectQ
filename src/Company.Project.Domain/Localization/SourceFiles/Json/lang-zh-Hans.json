@@ -45,8 +45,13 @@
     "message.tenant.not-found": "未找到租户 {0}",
 
     // validation
-    "validation.required": "输入不能为空！",
-    "validation.twice": "两次输入不匹配!",
+    "validation.required": "输入不能为空",
+    "validation.email": "错误的邮箱",
+    "validation.maxlength": "超过最大长度",
+    "validation.minlength": "低于最短长度",
+    "validation.confirm": "两次输入不匹配",
+    "validation.pattern": "不符合输入规范",
+    "validation.exist": "数据重复",
 
     // label
     "label.change-tenant": "切换租户",
@@ -54,19 +59,35 @@
     "label.cancel": "取消",
     "label.account": "账号",
     "label.password": "密码",
+    "label.password-confirm": "确认密码",
     "label.forgot-password": "忘记密码",
     "label.remember-me": "记住我",
     "label.register": "注册",
     "label.login": "登录",
     "label.log-out": "退出登录",
+    "label.user-info": "用户信息",
+    "label.roles": "角色",
+    "label.permission": "权限",
+    "label.create": "创建",
+    "label.edit": "编辑",
+    "label.readonly": "只读",
 
 
     // entity
     "tenant.name": "租户名称",
     "user.user-name": "账号",
     "user.nick-name": "昵称",
+    "user.phone-number": "昵称",
+    "user.phone-number-confirmed": "昵称",
+    "user.email": "昵称",
+    "user.email-confirmed": "昵称",
+    "user.lockout-enabled": "登录锁定",
+    "user.is-active": "激活",
+    "user.two-factor-enabled": "双重校验",
+    "user.is-static": "内置",
     "role.name": "角色名称",
-    "role.display-name": "角色显示名称"
+    "role.display-name": "角色显示名称",
+    "role.description": "角色描述"
 
 
   }
