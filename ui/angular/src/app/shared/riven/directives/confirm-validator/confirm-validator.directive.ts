@@ -13,6 +13,7 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 })
 export class ConfirmValidatorDirective implements Validator {
 
+  private _default = {};
   private _enabled = false;
   private _onChange?: () => void;
   private _confirmValue: string;
@@ -20,26 +21,25 @@ export class ConfirmValidatorDirective implements Validator {
   constructor() {
   }
 
-  /**
-   * @description
-   * Tracks changes to the email attribute bound to this directive.
-   */
   @Input()
   set confirm(value: string) {
     this._confirmValue = value;
-    this._enabled = !!value;
+    this._enabled = typeof (value) === 'string';
     if (this._onChange) this._onChange();
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
     if (!this._enabled) {
-      return {};
+      return this._default;
+    }
+    if (!control.value || control.value.trim() === '') {
+      return this._default;
     }
     if (control.value !== this._confirmValue) {
       return { confirm: true, error: true };
     }
 
-    return {};
+    return this._default;
   }
 
   registerOnValidatorChange(fn: () => void): void {
