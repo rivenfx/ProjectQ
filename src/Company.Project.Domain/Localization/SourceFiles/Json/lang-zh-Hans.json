@@ -66,6 +66,7 @@
     "label.login": "登录",
     "label.log-out": "退出登录",
     "label.user-info": "用户信息",
+    "label.role-info": "角色信息",
     "label.roles": "角色",
     "label.permission": "权限",
     "label.create": "创建",
