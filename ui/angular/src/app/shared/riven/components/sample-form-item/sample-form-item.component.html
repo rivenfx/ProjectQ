@@ -1,0 +1,10 @@
+<ng-template #errorTpl let-control>
+  <validation-messages [formCtrl]="control"></validation-messages>
+</ng-template>
+
+<nz-form-item >
+  <nz-form-label *ngIf="label" [nzFor]="name" [nzRequired]="required">{{l(label)}}</nz-form-label>
+  <nz-form-control [nzErrorTip]="errorTpl">
+    <ng-content></ng-content>
+  </nz-form-control>
+</nz-form-item>

@@ -6,9 +6,12 @@ import { ValidationMessagesComponent } from './components/validation-messages';
 import { MessageService } from './message.service';
 import { NotifyService } from './notify.service';
 import { ConfirmValidatorDirective } from './directives/confirm-validator';
+import { SampleFormItemComponent } from './components/sample-form-item';
+import { SharedModule } from '@shared';
 
 const COMPONENTS = [
   ValidationMessagesComponent,
+  SampleFormItemComponent,
 ];
 
 const DIRECTIVES = [
@@ -18,14 +21,15 @@ const DIRECTIVES = [
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
   ],
   declarations: [
     ...COMPONENTS,
-    ...DIRECTIVES
+    ...DIRECTIVES,
   ],
   exports: [
     ...COMPONENTS,
-    ...DIRECTIVES
+    ...DIRECTIVES,
   ],
 })
 export class RivenModule {
