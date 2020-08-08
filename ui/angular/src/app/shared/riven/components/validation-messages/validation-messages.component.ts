@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import { IErrorDef } from './interfaces';
 import { FormControl } from '@angular/forms';
 import standartErrors from './standart-errors';
@@ -25,7 +25,7 @@ export class ValidationMessagesComponent
   constructor() {
   }
 
-  ngOnChanges(changes: { [P in keyof this]?: import('@angular/core').SimpleChange } & import('@angular/core').SimpleChanges) {
+  ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges) {
     if (changes.customErrors) {
       this.updateErrorDefsInternal();
     }
