@@ -19,10 +19,14 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   @Input()
   set modalInput(val: T) {
     this._modalInput = val;
+    if (typeof (val) !== 'undefined') {
+      this.isEdit = true;
+    }
     if (!!val && !this.readonly) {
       this.titlePrefix = this.l('label.edit');
     }
   }
+
   /** 外部输入参数 */
   get modalInput(): T {
     return this._modalInput;
