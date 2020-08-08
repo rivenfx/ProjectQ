@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <div class="modal-title">Title</div>
+  <div class="modal-title">{{titlePrefix}} - {{title}}</div>
 </div>
 
 <!-- 表单输入错误模板 -->
@@ -7,76 +7,181 @@
   <validation-messages [formCtrl]="control"></validation-messages>
 </ng-template>
 
-<form #pageForm="ngForm"
-      nz-form
-      (ngSubmit)="submitForm()"
-      novalidate>
-  <nz-tabset>
-    <!-- 基本信息 -->
-    <nz-tab [nzTitle]="l('label.user-info')">
-      <!-- 用户名称 -->
-      <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <nz-input-group nzPrefixIcon="user">
-            <input name="userNameInput"
-                   #userNameInput="ngModel"
-                   type="text"
+<div class="modal-body">
+  <form #pageForm="ngForm"
+        nz-form
+        (ngSubmit)="submitForm()"
+        novalidate
+        autocomplete="off">
+    <nz-tabset>
+      <!-- 基本信息 -->
+      <nz-tab [nzTitle]="l('label.user-info')">
+        <!-- 用户名称 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="user">
+              <input name="userNameInput"
+                     #userNameInput="ngModel"
+                     type="text"
+                     nz-input
+                     [(ngModel)]="user.userName"
+                     [placeholder]="l('user.user-name')"
+                     [disabled]="isEdit"
+                     required
+                     minlength="3"
+                     maxlength="32"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- 昵称 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="user">
+              <input name="userNickNameInput"
+                     #userNickNameInput="ngModel"
+                     type="text"
+                     nz-input
+                     [(ngModel)]="user.nickname"
+                     [placeholder]="l('user.nick-name')"
+                     required
+                     minlength="3"
+                     maxlength="32"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- 密码 -->
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="passwordInput"
+                         [nzRequired]="!isEdit">{{l('label.password')}}</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+            <input name="passwordInput"
+                   #passwordInput="ngModel"
+                   type="password"
                    nz-input
-                   [(ngModel)]="user.userName"
-                   [placeholder]="l('label.user-name')"
-                   [disabled]="isEdit"
-                   required
+                   [(ngModel)]="password"
+                   [placeholder]="l('label.password')"
+                   [required]="!isEdit"
+                   autocomplete="new-password-1"
                    minlength="3"
                    maxlength="32"/>
-          </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
-      <!-- 显示名称 -->
-      <!--      <nz-form-item>-->
-      <!--        <nz-form-control [nzErrorTip]="errorTpl">-->
-      <!--          <nz-input-group nzPrefixIcon="user">-->
-      <!--            <input name="roleDisplayNameInput"-->
-      <!--                   #roleDisplayNameInput="ngModel"-->
-      <!--                   type="text"-->
-      <!--                   nz-input-->
-      <!--                   [(ngModel)]="role.displayName"-->
-      <!--                   [placeholder]="l('label.role-display-name')"-->
-      <!--                   required-->
-      <!--                   minlength="3"-->
-      <!--                   maxlength="32"/>-->
-      <!--          </nz-input-group>-->
-      <!--        </nz-form-control>-->
-      <!--      </nz-form-item>-->
-      <!-- 描述 -->
-      <!--      <nz-form-item>-->
-      <!--        <nz-form-control [nzErrorTip]="errorTpl">-->
-      <!--          <textarea rows="4"-->
-      <!--                    name="roleDescriptionInput"-->
-      <!--                    #roleDescriptionInput="ngModel"-->
-      <!--                    nz-input-->
-      <!--                    [(ngModel)]="role.description"-->
-      <!--                    [placeholder]="l('label.role-description')"-->
-      <!--                    maxlength="512"-->
-      <!--          ></textarea>-->
-      <!--        </nz-form-control>-->
-      <!--      </nz-form-item>-->
-    </nz-tab>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- 确认密码 -->
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="passwordConfirmInput"
+                         [nzRequired]="!isEdit">{{l('label.password-confirm')}}</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+            <input name="passwordConfirmInput"
+                   #passwordConfirmInput="ngModel"
+                   type="password"
+                   nz-input
+                   [(ngModel)]="passwordConfimd"
+                   [placeholder]="l('label.password-confirm')"
+                   [required]="!isEdit"
+                   [confirm]="password"
+                   autocomplete="new-password-2"
+            />
+          </nz-form-control>
+        </nz-form-item>
+        <!-- 手机号 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="user">
+              <input name="phoneNumberInput"
+                     #phoneNumberInput="ngModel"
+                     type="text"
+                     nz-input
+                     [(ngModel)]="user.phoneNumber"
+                     [placeholder]="l('user.phone-number')"
+                     required
+                     minlength="3"
+                     maxlength="32"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- 手机号码已确认 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <label name="phoneNumberConfirmedInput"
+                   #phoneNumberConfirmedInput="ngModel"
+                   nz-checkbox
+                   [(ngModel)]="user.phoneNumberConfirmed">
+              {{l('user.phone-number-confirmed')}}
+            </label>
+          </nz-form-control>
+        </nz-form-item>
 
-    <!-- 角色选择 -->
-    <nz-tab [nzTitle]="l('label.roles')">
-      <nz-form-item>
-        <nz-form-control [nzErrorTip]="errorTpl">
-          <role-select name="rolesInput"
-                       #rolesInput="ngModel"
-                       [(ngModel)]="roles"
-                       [disabled]="user.isStatic"
-          ></role-select>
-        </nz-form-control>
-      </nz-form-item>
-    </nz-tab>
-  </nz-tabset>
+        <!-- 邮箱 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-input-group nzPrefixIcon="user">
+              <input name="emailInput"
+                     #emailInput="ngModel"
+                     type="text"
+                     nz-input
+                     [(ngModel)]="user.email"
+                     [placeholder]="l('user.email')"
+                     required
+                     minlength="3"
+                     maxlength="32"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
 
-</form>
+        <!-- 邮箱已确认 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <label name="emailConfirmedInput"
+                   #emailConfirmedInput="ngModel"
+                   nz-checkbox
+                   [(ngModel)]="user.emailConfirmed">
+              {{l('user.email-confirmed')}}
+            </label>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- 是否启用锁定机制 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <label name="lockoutEnabledInput"
+                   #lockoutEnabledInput="ngModel"
+                   nz-checkbox
+                   [(ngModel)]="user.lockoutEnabled">
+              {{l('user.lockout-enabled')}}
+            </label>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- 是否激活 -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <label name="isActiveInput"
+                   #isActiveInput="ngModel"
+                   nz-checkbox
+                   [(ngModel)]="user.isActive">
+              {{l('user.is-active')}}
+            </label>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-tab>
+
+      <!-- 角色选择 -->
+      <nz-tab [nzTitle]="l('label.roles')">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <role-select name="rolesInput"
+                         #rolesInput="ngModel"
+                         [(ngModel)]="roles"
+                         [disabled]="user.isStatic"
+            ></role-select>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-tab>
+    </nz-tabset>
+
+  </form>
+</div>
+
 
 <div class="modal-footer">
   <button nz-button [nzType]="'default'" (click)="close()">

@@ -14,6 +14,9 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
   user = new UserDto();
   roles: string[] = [];
 
+  password: string;
+  passwordConfimd: string;
+
   constructor(
     injector: Injector,
     private userSer: UserServiceProxy,
@@ -22,8 +25,8 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
   }
 
   ngOnInit(): void {
+    this.title = this.l('menu.user');
     if (this.modalInput) {
-      this.isEdit = true;
       this.loading = true;
       this.userSer.getEditById(this.modalInput)
         .pipe(finalize(() => {
