@@ -4,7 +4,9 @@
       <div nz-col [nzXs]="12" [nzSm]="8">
         <label nz-checkbox [nzValue]="item.value" [title]="item.tips" [(nzChecked)]="item.checked"
                [nzDisabled]="disabled">
-          {{item.label}}
+          <ellipsis>
+            {{item.label}}
+          </ellipsis>
         </label>
       </div>
     </ng-container>
