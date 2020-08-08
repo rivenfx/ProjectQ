@@ -5,7 +5,6 @@ import { NzModalRef } from 'ng-zorro-antd';
 export abstract class ModalComponentBase<T> extends AppComponentBase {
 
   private _modalInput: T;
-  private _isEdit: boolean;
   private _readonly: boolean;
 
   /** 标题前缀 */
@@ -14,6 +13,8 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   title = '';
   /** 模态框指针 */
   modalRef: NzModalRef;
+  /** 编辑 */
+  isEdit: boolean;
 
   /** 外部输入参数 */
   @Input()
@@ -45,8 +46,6 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
     return this._readonly;
   }
 
-  /** 编辑 */
-  isEdit: boolean;
 
   constructor(injector: Injector) {
     super(injector);
