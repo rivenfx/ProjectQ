@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Tokens;
 using Riven.Exceptions;
 using Riven.Identity.Authorization;
 using Riven.Identity.Users;
+using Riven.Security;
 
 namespace Company.Project.Controllers
 {
@@ -70,6 +71,7 @@ namespace Company.Project.Controllers
             if (input.UseToken)
             {
                 result.AccessToken = CreateAccessToken(loginResult.Identity.Claims, expiration);
+                result.EncryptedAccessToken = SimpleStringCipher.Instance.Encrypt(result.AccessToken);
                 result.ExpireInSeconds = expiration.TotalSeconds;
             }
 
