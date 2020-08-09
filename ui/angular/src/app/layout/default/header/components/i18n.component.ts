@@ -62,7 +62,11 @@ export class HeaderI18nComponent extends SampleComponentBase {
   ) {
     super(injector);
     this.i18nSer.change.subscribe((lang) => {
-      this.cdr.detectChanges();
+      try {
+        this.cdr.detectChanges();
+      } catch (e) {
+
+      }
     });
   }
 

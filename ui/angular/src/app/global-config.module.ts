@@ -15,11 +15,6 @@ const alainConfig: AlainConfig = {
     license: `A59B099A586B3851E0F0D7FDBF37B603`,
     licenseA: `C94CEE276DB2187AE6B65D56B3FC2848`,
   },
-  auth: {
-    login_url: '/account/login', // 登录页面
-    store_key: 'riven_token',    // 存储token的键值
-    ignores: [/.*/, /.*?assets\//], // 忽略的地址
-  },
   acl: {
     guard_url: '/account/login',
   },

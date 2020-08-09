@@ -1,7 +1,6 @@
 import { Injectable, Injector, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MenuService, SettingsService, TitleService, ALAIN_I18N_TOKEN } from '@delon/theme';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { ACLService } from '@delon/acl';
 import { I18nService } from '../i18n';
 
@@ -26,12 +25,20 @@ export class StartupService {
     private settingService: SettingsService,
     private aclService: ACLService,
     private titleService: TitleService,
-    @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
     private httpClient: HttpClient,
     private injector: Injector,
     private router: Router,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
+
+    // 重写 setData 函数实现
+    this.settingService.setData = function(key: string, value: any) {
+      if (!this.platform.isBrowser) {
+        return;
+      }
+      localStorage.setItem(key, JSON.stringify(value));
+      this.notify$.next({ type: key, name: key, value } as any);
+    };
   }
 
   load(): Promise<any> {
@@ -66,10 +73,12 @@ export class StartupService {
     // 订阅会话数据更改
     sessionSer.sessionChange.subscribe((data) => {
       if (data) {
-        const token = this.tokenService.get().token;
+
+        const token = this.settingService.getData(AppConsts.settings.token);
         if (token && !data.userId) {
-          this.tokenService.clear();
-          this.router.navigateByUrl(this.tokenService.login_url);
+          this.settingService.setData(AppConsts.settings.token, false);
+          this.settingService.setData(AppConsts.settings.encryptedToken, false);
+          this.router.navigateByUrl(AppConsts.urls.loginPage);
           resolve({});
           return;
         }

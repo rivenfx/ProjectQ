@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
 import { SampleComponentBase } from '@shared/common';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'header-user',
@@ -45,13 +45,14 @@ export class HeaderUserComponent extends SampleComponentBase {
     injector: Injector,
     public settings: SettingsService,
     private router: Router,
-    @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
   ) {
     super(injector);
   }
 
   logout() {
-    this.tokenService.clear();
-    this.router.navigateByUrl(this.tokenService.login_url);
+    this.settings.setData(AppConsts.settings.token, false);
+    this.settings.setData(AppConsts.settings.encryptedToken, false);
+    this.settings.setData(AppConsts.settings.tokenExpiration, false);
+    this.router.navigateByUrl(AppConsts.urls.loginPage);
   }
 }

@@ -1,6 +1,7 @@
 import { ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
 import { HttpHeaders, HttpRequest } from '@angular/common/http';
+import { AppConsts } from '@shared';
 
 /** 请求帮助类 */
 export class RequestHelper {
@@ -13,21 +14,16 @@ export class RequestHelper {
   /** 是否已经被初始化 */
   protected static inited = false;
 
-  /** token服务 */
-  protected static tokenSer: ITokenService;
-
   /** settings服务 */
   protected static settingsSer: SettingsService;
 
 
   /** 初始化 */
-  static init(tokenSer: ITokenService, settingsSer: SettingsService) {
+  static init(settingsSer: SettingsService) {
     if (RequestHelper.inited) {
       return;
     }
     RequestHelper.inited = true;
-
-    RequestHelper.tokenSer = tokenSer;
     RequestHelper.settingsSer = settingsSer;
   }
 
@@ -68,7 +64,8 @@ export class RequestHelper {
     }
 
     if (!this.itemExists(authorizationHeaders, (item) => item.startsWith(authorizationSchema))) {
-      let token = RequestHelper.tokenSer.get().token;
+
+      const token = RequestHelper.settingsSer.getData(AppConsts.settings.token);
       if (headers && token) {
         headers = headers.set('Authorization', `${authorizationSchema} ${token}`);
       }

@@ -14,5 +14,9 @@ export class AppConsts {
   /** 设置键值 */
   static settings = {
     lang: 'lang',
+    token: 'token',
+    encryptedToken: 'encryptedToken',
+    tokenExpiration: 'tokenExpiration',
   };
+
 }
