@@ -72,7 +72,6 @@ export class ValidationMessagesComponent extends SampleComponentBase
 
   /** 更新视图错误 */
   private updateViewError() {
-    console.log(this.formCtrl);
     if (this.formCtrl.invalid && (this.formCtrl.dirty || this.formCtrl.touched)) {
       const tmpViewErrors = [];
       for (const key in this.formCtrl.errors) {
