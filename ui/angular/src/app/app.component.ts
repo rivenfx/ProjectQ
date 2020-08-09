@@ -74,9 +74,8 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    // 20秒偏移
-    const currentTimeStamp = Date.now() - (20 * 1000);
-    if (tokenExpirationTimeStamp < currentTimeStamp) {
+    const currentTimeStamp = Date.now();
+    if (currentTimeStamp > tokenExpirationTimeStamp) {
       return;
     }
 
@@ -85,6 +84,7 @@ export class AppComponent implements OnInit {
     this.refreshTokenTimer = setTimeout(() => {
       clearTimeout(this.refreshTokenTimer);
       this.refreshTokenTimer = null;
+
       this.tokenAuthSer.refreshToken()
         .subscribe((result) => {
           // 更新token
