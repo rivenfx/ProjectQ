@@ -48,6 +48,8 @@ export class AppComponent implements OnInit {
     this.settingSer.notify
       .subscribe((setting) => {
         if (setting.name === AppConsts.settings.tokenExpiration) {
+          clearTimeout(this.refreshTokenTimer);
+          this.refreshTokenTimer = null;
           console.log('setting change: tokenExpiration');
           console.log(setting.value);
           this.waitRefreshToken();
