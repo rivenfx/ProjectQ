@@ -98,7 +98,7 @@ namespace Company.Project.Authorization
                     ValidateLifetime = true,
 
                     // 时间偏移
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.FromSeconds(30)
                 };
             });
 
