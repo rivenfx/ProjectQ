@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Company.Project.Authenticate.Dtos;
+using Company.Project.Authorization;
 using Company.Project.Authorization.Users;
 using Company.Project.Configuration;
 
@@ -19,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 using Riven.Exceptions;
+using Riven.Identity.Authorization;
 using Riven.Identity.Users;
 
 namespace Company.Project.Controllers
@@ -26,18 +28,27 @@ namespace Company.Project.Controllers
     [Route("api/[controller]/[action]")]
     public class TokenAuthController : Controller
     {
+        static TimeSpan expiration = new TimeSpan(0, 30, 0);
+
         readonly IConfiguration _configuration;
         readonly SignInManager _signInManager;
         readonly IHttpClientFactory _httpClientFactory;
-        static TimeSpan expiration = new TimeSpan(0, 30, 0);
+        readonly IAppSession _appSession;
 
-        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory)
+
+        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory, IAppSession appSession)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _httpClientFactory = httpClientFactory;
+            _appSession = appSession;
         }
 
+        /// <summary>
+        /// 校验
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<AuthenticateResultDto> Authenticate([FromBody] AuthenticateModelInput input)
         {
@@ -65,7 +76,25 @@ namespace Company.Project.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 刷新Token
+        /// </summary>
+        /// <returns></returns>
+        [ClaimsAuthorize]
+        [HttpPost]
+        public async Task<AuthenticateResultDto> RefreshToken()
+        {
+            var result = new AuthenticateResultDto();
 
+            var userId = _appSession.UserId.Value.ToString();
+
+            var loginResult = await _signInManager.LoginByUserIdAsync(userId);
+
+            result.AccessToken = CreateAccessToken(loginResult.Identity.Claims, expiration);
+            result.ExpireInSeconds = expiration.TotalSeconds;
+
+            return result;
+        }
 
         /// <summary>
         /// 创建token
