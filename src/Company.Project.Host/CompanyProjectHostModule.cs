@@ -19,6 +19,7 @@ using System.IO;
 using Company.Project.Configuration;
 using Riven.Uow;
 using Newtonsoft.Json.Converters;
+using Company.Project.Debugger;
 
 namespace Company.Project
 {
@@ -149,10 +150,11 @@ namespace Company.Project
             // Riven - AspNetCore 基础服务与配置
             context.Services.AddRivenAspNetCore((options) =>
             {
-#if DEBUG
-                // 发送所有异常数据到客户端
-                options.SendAllExceptionToClient = true;
-#endif
+                if (DebugHelper.IsDebug)
+                {
+                    // 发送所有异常数据到客户端
+                    options.SendAllExceptionToClient = true;
+                }
             });
 
             // Riven - AspNetCore 过滤器
