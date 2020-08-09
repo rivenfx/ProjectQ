@@ -29,6 +29,7 @@ namespace Company.Project.Controllers
         readonly IConfiguration _configuration;
         readonly SignInManager _signInManager;
         readonly IHttpClientFactory _httpClientFactory;
+        static TimeSpan expiration = new TimeSpan(0, 30, 0);
 
         public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory)
         {
@@ -57,7 +58,8 @@ namespace Company.Project.Controllers
             }
             if (input.UseToken)
             {
-                result.AccessToken = CreateAccessToken(loginResult.Identity.Claims);
+                result.AccessToken = CreateAccessToken(loginResult.Identity.Claims, expiration);
+                result.ExpireInSeconds = expiration.TotalSeconds;
             }
 
             return result;
@@ -71,7 +73,7 @@ namespace Company.Project.Controllers
         /// <param name="claims">携带信息</param>
         /// <param name="expiration">过期时间</param>
         /// <returns></returns>
-        private string CreateAccessToken(IEnumerable<Claim> claims, TimeSpan? expiration = null)
+        private string CreateAccessToken(IEnumerable<Claim> claims, TimeSpan expiration)
         {
             /*
                 iss: jwt签发者
@@ -105,7 +107,7 @@ namespace Company.Project.Controllers
                     audience: jwtBearerInfo.Audience,   // 接收方
                     claims: claimsList,                 // 
                     notBefore: now,
-                    expires: now.Add(expiration ?? new TimeSpan(0, 30, 0)),
+                    expires: now.Add(expiration),
                     signingCredentials: signingCredentials
             );
 
