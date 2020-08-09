@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ListViewComponentBase } from '@shared/common';
-import { QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
+import { PageFilterItemDto, QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
 
@@ -11,6 +11,29 @@ import { CreateOrEditUserComponent } from './create-or-edit-user';
 })
 export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
+
+  pageFilters: PageFilterItemDto[] = [
+    new PageFilterItemDto({
+      type: 'basic-input',
+      name: 'userName',
+      label: 'user.user-name',
+      required: false,
+      args: {
+        type: 'text',
+      },
+      valueChange: [],
+      order: 0,
+      advanced: false,
+      enabled: true,
+      width: 8,
+      xsWidth: undefined,
+      smWidth: undefined,
+      mdWidth: undefined,
+      lgWidth: undefined,
+      xlWidth: undefined,
+      xxlWidth: undefined,
+    }),
+  ];
 
   constructor(
     injector: Injector,
