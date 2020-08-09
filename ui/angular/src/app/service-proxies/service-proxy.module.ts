@@ -15,6 +15,7 @@ export const APIS = [
   ServiceProxies.TenantServiceProxy,
   ServiceProxies.SessionServiceProxy,
   ServiceProxies.ClaimsServiceProxy,
+  ServiceProxies.PageFilterServiceProxy
 ];
 
 export const APIS_HTTP_INTERCEPTORS = [

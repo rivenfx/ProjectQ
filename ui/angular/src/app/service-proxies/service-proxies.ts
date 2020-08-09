@@ -139,6 +139,72 @@ export class ClaimsServiceProxy {
 }
 
 @Injectable()
+export class PageFilterServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getPageFilter(name: string | null | undefined): Observable<PageFilterItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/PageFilter/GetPageFilter?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPageFilter(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPageFilter(<any>response_);
+                } catch (e) {
+                    return <Observable<PageFilterItemDtoListResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PageFilterItemDtoListResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPageFilter(response: HttpResponseBase): Observable<PageFilterItemDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PageFilterItemDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PageFilterItemDtoListResultDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class RoleServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1378,6 +1444,180 @@ export interface IClaimItemDto {
     parent: string | undefined;
     claim: string | undefined;
     sort: number;
+}
+
+export class PageFilterItemDto implements IPageFilterItemDto {
+    type: string | undefined;
+    name: string | undefined;
+    label: string | undefined;
+    required: boolean;
+    args: { [key: string]: any; } | undefined;
+    valueChange: string[] | undefined;
+    order: number;
+    advanced: boolean;
+    enabled: boolean;
+    width: number;
+    xsWidth: number | undefined;
+    smWidth: number | undefined;
+    mdWidth: number | undefined;
+    lgWidth: number | undefined;
+    xlWidth: number | undefined;
+    xxlWidth: number | undefined;
+
+    constructor(data?: IPageFilterItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.type = _data["type"];
+            this.name = _data["name"];
+            this.label = _data["label"];
+            this.required = _data["required"];
+            if (_data["args"]) {
+                this.args = {} as any;
+                for (let key in _data["args"]) {
+                    if (_data["args"].hasOwnProperty(key))
+                        this.args[key] = _data["args"][key];
+                }
+            }
+            if (Array.isArray(_data["valueChange"])) {
+                this.valueChange = [] as any;
+                for (let item of _data["valueChange"])
+                    this.valueChange.push(item);
+            }
+            this.order = _data["order"];
+            this.advanced = _data["advanced"];
+            this.enabled = _data["enabled"];
+            this.width = _data["width"];
+            this.xsWidth = _data["xsWidth"];
+            this.smWidth = _data["smWidth"];
+            this.mdWidth = _data["mdWidth"];
+            this.lgWidth = _data["lgWidth"];
+            this.xlWidth = _data["xlWidth"];
+            this.xxlWidth = _data["xxlWidth"];
+        }
+    }
+
+    static fromJS(data: any): PageFilterItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PageFilterItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        data["name"] = this.name;
+        data["label"] = this.label;
+        data["required"] = this.required;
+        if (this.args) {
+            data["args"] = {};
+            for (let key in this.args) {
+                if (this.args.hasOwnProperty(key))
+                    data["args"][key] = this.args[key];
+            }
+        }
+        if (Array.isArray(this.valueChange)) {
+            data["valueChange"] = [];
+            for (let item of this.valueChange)
+                data["valueChange"].push(item);
+        }
+        data["order"] = this.order;
+        data["advanced"] = this.advanced;
+        data["enabled"] = this.enabled;
+        data["width"] = this.width;
+        data["xsWidth"] = this.xsWidth;
+        data["smWidth"] = this.smWidth;
+        data["mdWidth"] = this.mdWidth;
+        data["lgWidth"] = this.lgWidth;
+        data["xlWidth"] = this.xlWidth;
+        data["xxlWidth"] = this.xxlWidth;
+        return data; 
+    }
+
+    clone(): PageFilterItemDto {
+        const json = this.toJSON();
+        let result = new PageFilterItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPageFilterItemDto {
+    type: string | undefined;
+    name: string | undefined;
+    label: string | undefined;
+    required: boolean;
+    args: { [key: string]: any; } | undefined;
+    valueChange: string[] | undefined;
+    order: number;
+    advanced: boolean;
+    enabled: boolean;
+    width: number;
+    xsWidth: number | undefined;
+    smWidth: number | undefined;
+    mdWidth: number | undefined;
+    lgWidth: number | undefined;
+    xlWidth: number | undefined;
+    xxlWidth: number | undefined;
+}
+
+export class PageFilterItemDtoListResultDto implements IPageFilterItemDtoListResultDto {
+    items: PageFilterItemDto[] | undefined;
+
+    constructor(data?: IPageFilterItemDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(PageFilterItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PageFilterItemDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PageFilterItemDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): PageFilterItemDtoListResultDto {
+        const json = this.toJSON();
+        let result = new PageFilterItemDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPageFilterItemDtoListResultDto {
+    items: PageFilterItemDto[] | undefined;
 }
 
 export class QueryInput implements IQueryInput {
