@@ -1,0 +1,39 @@
+page-filter
+
+<div nz-row [nzGutter]="4">
+  <!-- 基本筛选条件 -->
+  <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:basicFilters}"></ng-container>
+
+</div>
+
+<div nz-row [nzGutter]="4">
+  <!-- 高级筛选条件 -->
+  <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:advancedFilters}"></ng-container>
+</div>
+
+<!-- 筛选条件渲染模板 -->
+<ng-template #pageFiltersRendder let-data>
+  <div nz-col *ngFor="let item of data"
+       [nzXs]="item.xsWidth"
+       [nzSm]="item.smWidth"
+       [nzMd]="item.mdWidth"
+       [nzLg]="item.lgWidth"
+       [nzXl]="item.xlWidth"
+       [nzXXl]="item.xxlWidth">
+    <ng-container *ngTemplateOutlet="pageFilterItemRendder;context:{$implicit:item}"></ng-container>
+  </div>
+</ng-template>
+
+
+<!-- 组件渲染模板 -->
+<ng-template #pageFilterItemRendder let-data>
+  <ng-container [ngSwitch]="data.type">
+    <ng-container *ngSwitchCase="'basic-input'">
+      <sample-input [name]="data.name"
+                    [args]="data.args"
+                    [externalArgs]="pageFilterExternalArgsData[data.name]"
+                    [(value)]="pageFilterData[data.name]"
+                    (valueChange)="onValueChange($event,data)"></sample-input>
+    </ng-container>
+  </ng-container>
+</ng-template>
