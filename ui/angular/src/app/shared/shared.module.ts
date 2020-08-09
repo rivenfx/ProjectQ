@@ -7,10 +7,14 @@ import { AlainThemeModule } from '@delon/theme';
 
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
+import { TableBarModule } from '@shared/components/table-bar';
+import { PageFilterModule } from '@shared/components/page-filter';
 
 // #region third libs
 
-const THIRDMODULES = [];
+const THIRDMODULES = [
+
+];
 
 // #endregion
 
@@ -32,12 +36,12 @@ const DIRECTIVES = [];
     ...SHARED_DELON_MODULES,
     ...SHARED_ZORRO_MODULES,
     // third libs
-    ...THIRDMODULES
+    ...THIRDMODULES,
   ],
   declarations: [
     // your components
     ...COMPONENTS,
-    ...DIRECTIVES
+    ...DIRECTIVES,
   ],
   exports: [
     CommonModule,
@@ -52,8 +56,8 @@ const DIRECTIVES = [];
     ...THIRDMODULES,
     // your components
     ...COMPONENTS,
-    ...DIRECTIVES
-  ]
+    ...DIRECTIVES,
+  ],
 })
 export class SharedModule {
 
