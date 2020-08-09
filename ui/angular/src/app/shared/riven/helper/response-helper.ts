@@ -234,11 +234,13 @@ export class ResponseHelper {
 
   /** 处理目标地址 */
   static handleTargetUrl(targetUrl: string): void {
-    if (!targetUrl) {
-      location.href = '/';
-    } else {
-      location.href = targetUrl;
-    }
+    setTimeout(() => {
+      if (!targetUrl) {
+        location.href = '/';
+      } else {
+        location.href = targetUrl;
+      }
+    }, 5000);
   }
 
   /** 日志 - 错误 */
