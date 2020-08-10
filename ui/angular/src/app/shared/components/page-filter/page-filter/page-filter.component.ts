@@ -11,6 +11,7 @@ import { PageFilterItemDto, PageFilterServiceProxy } from '@service-proxies';
 import { SampleControlComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
+import { IPageFilterItemData } from './interfaces';
 
 @Component({
   selector: 'page-filter',
@@ -18,7 +19,7 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./page-filter.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageFilterComponent extends SampleControlComponentBase<any> {
+export class PageFilterComponent extends SampleControlComponentBase<IPageFilterItemData[]> {
 
 
   /** 筛选条件配置文件名称 */
@@ -37,7 +38,7 @@ export class PageFilterComponent extends SampleControlComponentBase<any> {
   advancedFilters: PageFilterItemDto[] = [];
 
   /** 筛选条件的数据 */
-  pageFilterData: any = {};
+  pageFilterData: { [P in string]: IPageFilterItemData } = {};
 
   /** 依赖的输入数据 */
   pageFilterExternalArgsData: any = {};
@@ -86,8 +87,12 @@ export class PageFilterComponent extends SampleControlComponentBase<any> {
       }
     }
 
-
-    this.emitValueChange(this.pageFilterData);
+    const tmpValue = [];
+    // tslint:disable-next-line: forin
+    for (const key in this.pageFilterData) {
+      tmpValue.push(this.pageFilterData[key]);
+    }
+    this.emitValueChange(tmpValue);
   }
 
   /** 查询配置 */
@@ -150,7 +155,11 @@ export class PageFilterComponent extends SampleControlComponentBase<any> {
       } else if (item.valueChange.length === 0) {
         item.valueChange = undefined;
       }
-      this.pageFilterData[item.name] = undefined;
+      this.pageFilterData[item.name] = {
+        name: item.name,
+        condition: item.condition,
+        value: undefined,
+      };
       this.pageFilterExternalArgsData[item.name] = undefined;
     });
 

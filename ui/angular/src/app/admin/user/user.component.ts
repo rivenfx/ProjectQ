@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { PageFilterItemDto, QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { ListViewComponentBase } from '@shared/common';
+import { IPageFilterItemData } from '@shared/components/page-filter';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
 
@@ -17,9 +18,13 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       type: 'basic-input',
       name: 'userName',
       label: 'user.user-name',
+      condition: 'contains',
       required: false,
       args: {
         type: 'text',
+        min: 0,
+        max: 100,
+        step: 1
       },
       valueChange: [],
       order: 0,
@@ -72,6 +77,10 @@ export class UserComponent extends ListViewComponentBase<UserDto>
         this.refresh();
       }
     });
+  }
+
+  onFilterVauleChange(filters: IPageFilterItemData[]) {
+    debugger;
   }
 
 }

@@ -44,7 +44,7 @@ page-filter
             [args]="data.args"
             [externalArgs]="pageFilterExternalArgsData[data.name]"
             [required]="data.required"
-            [(ngModel)]="pageFilterData[data.name]"
+            [(ngModel)]="pageFilterData[data.name].value"
             (ngModelChange)="onValueChange($event,data)">
           </sample-input>
         </nz-form-control>

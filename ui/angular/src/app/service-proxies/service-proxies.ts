@@ -1450,6 +1450,7 @@ export class PageFilterItemDto implements IPageFilterItemDto {
     type: string | undefined;
     name: string | undefined;
     label: string | undefined;
+    condition: string | undefined;
     required: boolean;
     args: { [key: string]: any; } | undefined;
     valueChange: string[] | undefined;
@@ -1478,6 +1479,7 @@ export class PageFilterItemDto implements IPageFilterItemDto {
             this.type = _data["type"];
             this.name = _data["name"];
             this.label = _data["label"];
+            this.condition = _data["condition"];
             this.required = _data["required"];
             if (_data["args"]) {
                 this.args = {} as any;
@@ -1516,6 +1518,7 @@ export class PageFilterItemDto implements IPageFilterItemDto {
         data["type"] = this.type;
         data["name"] = this.name;
         data["label"] = this.label;
+        data["condition"] = this.condition;
         data["required"] = this.required;
         if (this.args) {
             data["args"] = {};
@@ -1554,6 +1557,7 @@ export interface IPageFilterItemDto {
     type: string | undefined;
     name: string | undefined;
     label: string | undefined;
+    condition: string | undefined;
     required: boolean;
     args: { [key: string]: any; } | undefined;
     valueChange: string[] | undefined;
