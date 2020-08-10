@@ -38,7 +38,6 @@ export class RoleSelectComponent extends ControlComponentBase<string[]> {
 
   constructor(
     injector: Injector,
-    private cdr: ChangeDetectorRef,
     private roleSer: RoleServiceProxy,
   ) {
     super(injector);
