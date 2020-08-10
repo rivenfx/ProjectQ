@@ -7,7 +7,8 @@ namespace Company.Project.DynamicQuery
     /// <summary>
     /// 动态查询扩展函数
     /// </summary>
-    class DynamicQueryExtensions
+    public static class DynamicQueryExtensions
     {
+
     }
 }
