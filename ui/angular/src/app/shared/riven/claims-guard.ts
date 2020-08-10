@@ -4,16 +4,16 @@ import {
   CanActivate,
   CanActivateChild,
   CanLoad,
+  Data,
   Route,
   Router,
   RouterStateSnapshot,
-  Data,
 } from '@angular/router';
-import { of, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 import { ACLCanType, ACLService } from '@delon/acl';
 import { AlainACLConfig } from '@delon/util';
 import { SessionService } from '@shared/riven/session.service';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 
 @Injectable({ providedIn: 'root' })

@@ -1,5 +1,5 @@
-import { ControlComponentBase } from '@shared/common/control-component-base';
 import { ChangeDetectorRef, Injector, Input, SimpleChange, SimpleChanges } from '@angular/core';
+import { ControlComponentBase } from '@shared/common/control-component-base';
 
 /** page filter 组件的基类 */
 export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T> {

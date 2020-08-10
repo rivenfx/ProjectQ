@@ -7,12 +7,12 @@ import {
   SettingsService,
 } from '@delon/theme';
 
+import { AppConsts } from '@shared/app-consts';
+import { SessionService } from '@shared/riven/session.service';
 import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LanguageInfoDto, LocalizationDto } from '../../service-proxies';
-import { AppConsts } from '@shared/app-consts';
-import { SessionService } from '@shared/riven/session.service';
 import { I18nCommon } from './i18n-common';
 
 
@@ -36,7 +36,7 @@ export class I18nService implements AlainI18NService {
   ) {
     this.sessionSer.localizationChange
       .subscribe((result) => {
-        if(result){
+        if (result){
           this._localization = result;
           this._curLang = result.languages.find(o => o.culture === result.currentCulture);
         }
@@ -64,7 +64,7 @@ export class I18nService implements AlainI18NService {
 
   /** 获取语言列表 */
   getLangs() {
-    if(!this._localization){
+    if (!this._localization){
       return  [];
     }
     return this._localization.languages;

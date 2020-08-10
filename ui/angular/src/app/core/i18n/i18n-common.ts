@@ -1,13 +1,13 @@
 import { NZ_DATE_LOCALE, NZ_I18N } from 'ng-zorro-antd/i18n';
 
 //
-import { LOCALE_ID } from '@angular/core';
-import { default as ngLang } from '@angular/common/locales/zh';
-import { en_US as zorroEnUS, zh_CN as zorroLang } from 'ng-zorro-antd/i18n';
-import { enUS as dfEn, zhCN as dateLang } from 'date-fns/locale';
-import { en_US as delonEnUS, zh_CN as delonLang } from '@delon/theme';
 import ngEn from '@angular/common/locales/en';
+import { default as ngLang } from '@angular/common/locales/zh';
+import { LOCALE_ID } from '@angular/core';
+import { en_US as delonEnUS, zh_CN as delonLang } from '@delon/theme';
 import { DELON_LOCALE } from '@delon/theme';
+import { enUS as dfEn, zhCN as dateLang } from 'date-fns/locale';
+import { en_US as zorroEnUS, zh_CN as zorroLang } from 'ng-zorro-antd/i18n';
 import { ILangData } from './interfaces';
 
 export class I18nCommon {
@@ -33,7 +33,7 @@ export class I18nCommon {
   /** 语言映射字典 */
   static readonly LANG_MAP: { [key: string]: ILangData } = {
     'zh-Hans': I18nCommon.DEFAULT_LANG,
-    'en': {
+    en: {
       text: 'English',
       abbr: 'en',
       ng: ngEn,

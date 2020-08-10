@@ -1,3 +1,4 @@
+import { NzTreeModule } from 'ng-zorro-antd';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
@@ -25,7 +26,6 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { NzTreeModule } from 'ng-zorro-antd';
 
 export const SHARED_ZORRO_MODULES = [
   NzFormModule,

@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
+import { UserDto, UserServiceProxy } from '@service-proxies';
 import { ModalComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
-import { UserDto, UserServiceProxy } from '@service-proxies';
 
 @Component({
   selector: 'create-or-edit-user',

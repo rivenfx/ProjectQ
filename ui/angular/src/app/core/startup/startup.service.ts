@@ -1,16 +1,16 @@
-import { Injectable, Injector, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MenuService, SettingsService, TitleService, ALAIN_I18N_TOKEN } from '@delon/theme';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { ACLService } from '@delon/acl';
+import { ALAIN_I18N_TOKEN, MenuService, SettingsService, TitleService } from '@delon/theme';
 import { I18nService } from '../i18n';
 
+import { Router } from '@angular/router';
+import { SessionDto } from '@service-proxies';
+import { AppConsts } from '@shared';
+import { SessionService } from '@shared/riven';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { ICONS } from '../../../style-icons';
 import { ICONS_AUTO } from '../../../style-icons-auto';
-import { SessionService } from '@shared/riven';
-import { AppConsts } from '@shared';
-import { SessionDto } from '@service-proxies';
-import { Router } from '@angular/router';
 
 /**
  * Used for application startup
@@ -55,7 +55,7 @@ export class StartupService {
     this.httpClient.get('assets/appsettings.json')
       .subscribe(
         (response) => {
-          var result = response as any;
+          let result = response as any;
           AppConsts.remoteServiceUrl = result.remoteServiceUrl;
           AppConsts.appUrl = result.appUrl;
 

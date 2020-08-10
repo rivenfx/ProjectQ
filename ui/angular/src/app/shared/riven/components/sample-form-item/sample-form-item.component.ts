@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector, Input, OnInit } from '@angular/core';
-import { SampleComponentBase } from '@shared/common';
 import { numberToChinese } from '@delon/abc';
+import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'sample-form-item,[sample-form-item]',
@@ -15,7 +15,7 @@ export class SampleFormItemComponent extends SampleComponentBase
 
   @Input() label: string;
 
-  @Input() tips: string = '';
+  @Input() tips = '';
 
   @Input() required: boolean;
 

@@ -5,10 +5,10 @@ import { RouterModule } from '@angular/router';
 import { DelonACLModule } from '@delon/acl';
 import { AlainThemeModule } from '@delon/theme';
 
+import { PageFilterModule } from '@shared/components/page-filter';
+import { TableBarModule } from '@shared/components/table-bar';
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
-import { TableBarModule } from '@shared/components/table-bar';
-import { PageFilterModule } from '@shared/components/page-filter';
 
 // #region third libs
 

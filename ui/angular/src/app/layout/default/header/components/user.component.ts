@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
-import { SampleComponentBase } from '@shared/common';
 import { AppConsts } from '@shared';
+import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'header-user',

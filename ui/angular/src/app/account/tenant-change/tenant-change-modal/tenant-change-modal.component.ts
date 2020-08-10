@@ -1,9 +1,9 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ModalComponentBase } from '@shared/common';
-import { IsTenantAvailableInput, TenantAvailabilityState, TenantServiceProxy } from '@service-proxies';
-import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@delon/theme';
+import { IsTenantAvailableInput, TenantAvailabilityState, TenantServiceProxy } from '@service-proxies';
+import { ModalComponentBase } from '@shared/common';
 import { RequestHelper } from '@shared/riven/helper';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'tenant-change-modal.component',

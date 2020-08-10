@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, Inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '@service-proxies';
 import { Router } from '@angular/router';
-import { SessionService } from '@shared/riven';
 import { SettingsService } from '@delon/theme';
-import { AppComponentBase } from '@shared/common';
-import { finalize } from 'rxjs/operators';
+import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '@service-proxies';
 import { AppConsts } from '@shared';
+import { AppComponentBase } from '@shared/common';
+import { SessionService } from '@shared/riven';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'login',

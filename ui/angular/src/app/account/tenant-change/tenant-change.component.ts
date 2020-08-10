@@ -1,9 +1,9 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { TenantServiceProxy } from '@service-proxies';
 import { ModalHelper, SettingsService } from '@delon/theme';
+import { TenantServiceProxy } from '@service-proxies';
 import { AppComponentBase } from '@shared/common';
-import { TenantChangeModalComponent } from './tenant-change-modal';
 import { RequestHelper } from '@shared/riven/helper';
+import { TenantChangeModalComponent } from './tenant-change-modal';
 
 @Component({
   selector: 'tenant-change',

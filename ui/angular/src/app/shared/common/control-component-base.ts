@@ -24,7 +24,7 @@ export abstract class ControlComponentBase<T> extends SampleComponentBase
 
   /** 占位符 */
   @Input()
-  placeholder: string = '';
+  placeholder = '';
 
   /** 启用清除,默认为false */
   @Input()
@@ -64,7 +64,7 @@ export abstract class ControlComponentBase<T> extends SampleComponentBase
   }
 
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
-    debugger
+    debugger;
     if (changes.value) {
       this.writeValue(changes.value.currentValue);
     }

@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { PageFilterItemDto, PageFilterServiceProxy } from '@service-proxies';
 import { SampleComponentBase } from '@shared/common';
-import { finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'page-filter',
@@ -97,7 +97,7 @@ export class PageFilterComponent extends SampleComponentBase
 
 
   protected processFilters() {
-    debugger
+    debugger;
     this.pageFilterData = {};
     this.pageFilterExternalArgsData = {};
     this.basicFilters = [];

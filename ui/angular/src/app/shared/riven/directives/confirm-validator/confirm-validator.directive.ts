@@ -25,7 +25,7 @@ export class ConfirmValidatorDirective implements Validator {
   set confirm(value: string) {
     this._confirmValue = value;
     this._enabled = typeof (value) === 'string';
-    if (this._onChange) this._onChange();
+    if (this._onChange) { this._onChange(); }
   }
 
   validate(control: AbstractControl): ValidationErrors | null {

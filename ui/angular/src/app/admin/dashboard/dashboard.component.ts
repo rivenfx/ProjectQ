@@ -9,7 +9,7 @@ export class DashboardComponent implements OnInit {
 
   selectVals = [
     'user.query'
-  ]
+  ];
 
   constructor() { }
 

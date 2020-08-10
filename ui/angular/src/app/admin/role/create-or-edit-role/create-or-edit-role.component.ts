@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { AppComponentBase, ModalComponentBase } from '@shared/common';
 import { CreateOrUpdateRoleInput, RoleDto, RoleServiceProxy } from '@service-proxies';
+import { AppComponentBase, ModalComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 
 @Component({

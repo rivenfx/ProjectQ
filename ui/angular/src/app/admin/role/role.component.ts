@@ -1,8 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ListViewComponentBase } from '@shared/common';
-import { QueryInput, RoleDto, RoleServiceProxy, UserDto, UserServiceProxy } from '@service-proxies';
-import { finalize } from 'rxjs/operators';
 import { ModalHelper } from '@delon/theme';
+import { QueryInput, RoleDto, RoleServiceProxy, UserDto, UserServiceProxy } from '@service-proxies';
+import { ListViewComponentBase } from '@shared/common';
+import { finalize } from 'rxjs/operators';
 import { CreateOrEditRoleComponent } from './create-or-edit-role';
 
 @Component({

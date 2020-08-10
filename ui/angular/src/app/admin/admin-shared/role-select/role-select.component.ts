@@ -8,8 +8,8 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ControlComponentBase } from '@shared/common';
 import { RoleDto, RoleServiceProxy } from '@service-proxies';
+import { ControlComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 
 interface ICheckBox<TValue> {

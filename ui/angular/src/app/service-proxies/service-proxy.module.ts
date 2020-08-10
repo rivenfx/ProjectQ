@@ -1,11 +1,11 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 
-import * as ServiceProxies from './service-proxies';
-import { ServiceProxiesInterceptor } from './interceptor';
-import { API_BASE_URL } from './service-proxies';
-import { AppConsts } from '@shared/app-consts';
 import { throwIfAlreadyLoaded } from '@core/module-import-guard';
+import { AppConsts } from '@shared/app-consts';
+import { ServiceProxiesInterceptor } from './interceptor';
+import * as ServiceProxies from './service-proxies';
+import { API_BASE_URL } from './service-proxies';
 
 
 export const APIS = [

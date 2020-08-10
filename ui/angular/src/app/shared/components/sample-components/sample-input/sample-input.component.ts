@@ -35,7 +35,7 @@ export class SampleInputComponent extends PageFilterItemComponentBase<any> {
     if (this.argsObject.placeholder) {
       this.placeholder = this.l(this.argsObject.placeholder);
     }
-    debugger
+    debugger;
     this.cdr.detectChanges();
   }
 

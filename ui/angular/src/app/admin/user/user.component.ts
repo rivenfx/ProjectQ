@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ListViewComponentBase } from '@shared/common';
 import { PageFilterItemDto, QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
+import { ListViewComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
 

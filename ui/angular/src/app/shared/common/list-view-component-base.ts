@@ -1,7 +1,7 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
-import { AppComponentBase } from './app-component-base';
-import { NzTableComponent } from 'ng-zorro-antd';
 import { ModalHelper } from '@delon/theme';
+import { NzTableComponent } from 'ng-zorro-antd';
+import { AppComponentBase } from './app-component-base';
 
 /** 页面信息 */
 export interface IPageInfo {
@@ -26,7 +26,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   private _viewRecord: T[];
 
   /** 数据总量 */
-  private _totalRecord: number = 0;
+  private _totalRecord = 0;
 
   /** 视图数据 */
   get viewRecord(): T[] {
