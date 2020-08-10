@@ -106,13 +106,13 @@ export class PageFilterComponent extends SampleComponentBase
       return;
     }
 
-    // todo: 需要深度克隆 pageFilters
-
-    const enabledPageFilters = this.pageFilters.filter(o => o.enabled);
-    if (enabledPageFilters.length === 0) {
+    const tmpEnabledPageFilters = this.pageFilters.filter(o => o.enabled);
+    if (tmpEnabledPageFilters.length === 0) {
       this.cdr.detectChanges();
       return;
     }
+
+    const enabledPageFilters = _.cloneDeep(tmpEnabledPageFilters);
 
     enabledPageFilters.forEach(item => {
       if (item.width <= 0) {
