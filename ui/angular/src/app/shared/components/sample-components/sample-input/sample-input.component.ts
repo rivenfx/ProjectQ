@@ -5,7 +5,7 @@ import { PageFilterItemComponentBase } from '@shared/common';
   selector: 'sample-input',
   templateUrl: './sample-input.component.html',
   styleUrls: ['./sample-input.component.less'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SampleInputComponent extends PageFilterItemComponentBase<any> {
 
@@ -32,7 +32,6 @@ export class SampleInputComponent extends PageFilterItemComponentBase<any> {
     if (this.argsObject.placeholder) {
       this.placeholder = this.l(this.argsObject.placeholder);
     }
-    debugger;
     this.cdr.detectChanges();
   }
 
