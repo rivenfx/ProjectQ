@@ -57,7 +57,7 @@ export class ResponseHelper {
         const clonedResponse = event.clone();
 
         ResponseHelper.blobToText(event.body).subscribe(json => {
-          const responseBody = json == 'null' ? {} : JSON.parse(json);
+          const responseBody = json === 'null' ? {} : JSON.parse(json);
 
           const modifiedResponse = ResponseHelper.handleResponse(event.clone({
             body: responseBody,
@@ -89,7 +89,7 @@ export class ResponseHelper {
     }
 
     ResponseHelper.blobToText(error.error).subscribe(json => {
-      const errorBody = (json == '' || json == 'null') ? {} : JSON.parse(json);
+      const errorBody = (json === '' || json === 'null') ? {} : JSON.parse(json);
       const errorResponse = new HttpResponse({
         headers: error.headers,
         status: error.status,

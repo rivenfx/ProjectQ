@@ -1,6 +1,6 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
 import { ModalHelper } from '@delon/theme';
-import { NzTableComponent } from 'ng-zorro-antd';
+import { NzTableComponent } from 'ng-zorro-antd/table';
 import { AppComponentBase } from './app-component-base';
 
 /** 页面信息 */

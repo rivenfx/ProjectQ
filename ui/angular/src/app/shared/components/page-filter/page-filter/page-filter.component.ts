@@ -72,8 +72,7 @@ export class PageFilterComponent extends SampleComponentBase
     }
 
     // 更新触发的组件的数据
-    for (let i = 0; i < item.valueChange.length; i++) {
-      const key = item.valueChange[i];
+    for (const key of item.valueChange) {
       let externalArgs = this.pageFilterExternalArgsData[key];
       if (!externalArgs) {
         externalArgs = {};
@@ -97,7 +96,6 @@ export class PageFilterComponent extends SampleComponentBase
 
 
   protected processFilters() {
-    debugger;
     this.pageFilterData = {};
     this.pageFilterExternalArgsData = {};
     this.basicFilters = [];

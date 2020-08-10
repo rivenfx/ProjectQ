@@ -13,8 +13,7 @@ import { ArrayService } from '@delon/util';
 import { ClaimsServiceProxy } from '@service-proxies';
 import { ControlComponentBase } from '@shared/common';
 import * as _ from 'loadsh';
-import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd';
-import { NzTreeNode } from 'ng-zorro-antd/core/tree';
+import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 import { finalize } from 'rxjs/operators';
 
 @Component({

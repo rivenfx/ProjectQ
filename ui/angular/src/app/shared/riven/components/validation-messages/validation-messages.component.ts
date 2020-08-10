@@ -74,6 +74,7 @@ export class ValidationMessagesComponent extends SampleComponentBase
   private updateViewError() {
     if (this.formCtrl.invalid && (this.formCtrl.dirty || this.formCtrl.touched)) {
       const tmpViewErrors = [];
+      // tslint:disable-next-line: forin
       for (const key in this.formCtrl.errors) {
         const formError = this.formCtrl.errors[key];
         if (!formError) {

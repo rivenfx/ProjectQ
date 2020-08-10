@@ -24,9 +24,6 @@ export class SampleInputComponent extends PageFilterItemComponentBase<any> {
     super(injector);
   }
 
-  ngOnInit(): void {
-  }
-
   onAfterViewInit(): void {
   }
 

@@ -54,7 +54,7 @@ export class RequestHelper {
   }
 
   /** 请求头添加认证标识 */
-  static addAuthorizationHeaders(headers: HttpHeaders, authorizationSchema: string = undefined): HttpHeaders {
+  static addAuthorizationHeaders(headers: HttpHeaders, authorizationSchema?: string): HttpHeaders {
     let authorizationHeaders = headers ? headers.getAll('Authorization') : null;
     if (!authorizationHeaders) {
       authorizationHeaders = [];
@@ -106,12 +106,11 @@ export class RequestHelper {
 
   /** 判断数组中是否存在某一项 */
   static itemExists<T>(items: T[], predicate: (item: T) => boolean): boolean {
-    for (let i = 0; i < items.length; i++) {
-      if (predicate(items[i])) {
+    for (const item of items) {
+      if (predicate(item)) {
         return true;
       }
     }
-
     return false;
   }
 

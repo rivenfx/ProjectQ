@@ -26,14 +26,16 @@
     "directive-selector": [
       true,
       "attribute",
-      ["app", "passport", "exception", "layout", "header"],
+      ["app", "passport", "exception", "layout", "header", ""],
+      "kebab-case",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      ["app", "passport", "exception", "layout", "header"],
-      "kebab-case"
+      ["app", "passport", "exception", "layout", "header", ""],
+      "kebab-case",
+      "camelCase"
     ],
     "eofline": true,
     "import-blacklist": [
@@ -78,7 +80,7 @@
       true,
       "ignore-params"
     ],
-    "no-non-null-assertion": true,
+    "no-non-null-assertion": false,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
     "no-var-requires": false,

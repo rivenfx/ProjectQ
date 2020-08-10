@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Injector, Input, OnInit } from '@angular/core';
-import { numberToChinese } from '@delon/abc';
 import { SampleComponentBase } from '@shared/common';
 
 @Component({

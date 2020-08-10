@@ -6,7 +6,7 @@ import { RequestHelper } from '@shared/riven/helper';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'tenant-change-modal.component',
+  selector: 'tenant-change-modal',
   templateUrl: './tenant-change-modal.component.html',
   styleUrls: ['./tenant-change-modal.component.less'],
 })

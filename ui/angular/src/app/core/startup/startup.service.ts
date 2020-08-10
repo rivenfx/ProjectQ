@@ -55,7 +55,7 @@ export class StartupService {
     this.httpClient.get('assets/appsettings.json')
       .subscribe(
         (response) => {
-          let result = response as any;
+          const result = response as any;
           AppConsts.remoteServiceUrl = result.remoteServiceUrl;
           AppConsts.appUrl = result.appUrl;
 
