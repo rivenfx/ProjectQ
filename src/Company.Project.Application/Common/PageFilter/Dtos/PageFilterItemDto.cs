@@ -22,6 +22,22 @@ namespace Company.Project.Common.PageFilter.Dtos
         public string Label { get; set; }
 
         /// <summary>
+        /// 操作条件 
+        /// == 等于
+        /// != 不等于
+        /// > 大于
+        /// < 小于
+        /// >=  大于等于
+        /// <= 小于
+        /// range 范围
+        /// in 在xx之中
+        /// startswith 以xx开头
+        /// endswith 已xx结尾
+        /// contains 包含
+        /// </summary>
+        public string Condition { get; set; }
+
+        /// <summary>
         /// 必填校验
         /// </summary>
         public bool Required { get; set; }
