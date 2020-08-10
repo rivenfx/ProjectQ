@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Injector, SimpleChange, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Injector, SimpleChange, SimpleChanges } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PageFilterItemComponentBase } from '@shared/common';
 
 @Component({
@@ -6,6 +7,11 @@ import { PageFilterItemComponentBase } from '@shared/common';
   templateUrl: './sample-input.component.html',
   styleUrls: ['./sample-input.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => SampleInputComponent),
+    multi: true,
+  }],
 })
 export class SampleInputComponent extends PageFilterItemComponentBase<any> {
 
