@@ -8,7 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { PageFilterItemDto, PageFilterServiceProxy } from '@service-proxies';
-import { SampleComponentBase } from '@shared/common';
+import { SampleControlComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 
@@ -18,8 +18,8 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./page-filter.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageFilterComponent extends SampleComponentBase
-  implements OnInit, OnChanges {
+export class PageFilterComponent extends SampleControlComponentBase<any> {
+
 
   /** 筛选条件配置文件名称 */
   @Input() pageFilterName: string;
@@ -44,16 +44,18 @@ export class PageFilterComponent extends SampleComponentBase
 
   constructor(
     injector: Injector,
-    private cdr: ChangeDetectorRef,
     private pageFilterSer: PageFilterServiceProxy,
   ) {
     super(injector);
   }
 
-  ngOnInit(): void {
-  }
+  onInit(): void {
 
-  ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
+  }
+  onAfterViewInit(): void {
+
+  }
+  onInputChange(changes: { [P in keyof this]?: SimpleChange; } & SimpleChanges) {
     if (changes.pageFilterName && changes.pageFilterName.currentValue && changes.pageFilterName.currentValue.trim() !== '') {
       this.fetchData();
     }
@@ -61,27 +63,34 @@ export class PageFilterComponent extends SampleComponentBase
       if (!Array.isArray(changes.pageFilters.currentValue)) {
         this.pageFilters = [];
       }
-
       this.processFilters();
     }
   }
 
-  onValueChange(event: any, item: PageFilterItemDto) {
-    if (!item.valueChange) {
-      return;
-    }
+  onDestroy(): void {
 
-    // 更新触发的组件的数据
-    for (const key of item.valueChange) {
-      let externalArgs = this.pageFilterExternalArgsData[key];
-      if (!externalArgs) {
-        externalArgs = {};
-      }
-      externalArgs[item.name] = event;
-      this.pageFilterExternalArgsData[key] = _.clone(externalArgs);
-    }
   }
 
+
+  /** page-filter-item 组件数据发生改变 */
+  onValueChange(event: any, item: PageFilterItemDto) {
+    if (item.valueChange) {
+      // 更新触发的组件的数据
+      for (const key of item.valueChange) {
+        let externalArgs = this.pageFilterExternalArgsData[key];
+        if (!externalArgs) {
+          externalArgs = {};
+        }
+        externalArgs[item.name] = event;
+        this.pageFilterExternalArgsData[key] = _.clone(externalArgs);
+      }
+    }
+
+
+    this.emitValueChange(this.pageFilterData);
+  }
+
+  /** 查询配置 */
   protected fetchData() {
     this.pageFilterSer.getPageFilter(this.pageFilterName)
       .pipe(finalize(() => {
@@ -94,7 +103,7 @@ export class PageFilterComponent extends SampleComponentBase
       });
   }
 
-
+  /** 处理page-filter配置 */
   protected processFilters() {
     this.pageFilterData = {};
     this.pageFilterExternalArgsData = {};

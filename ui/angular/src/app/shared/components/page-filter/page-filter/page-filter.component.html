@@ -1,39 +1,54 @@
 page-filter
 
-<div nz-row [nzGutter]="4">
-  <!-- 基本筛选条件 -->
+<!-- 基本筛选条件 -->
+<div *ngIf="basicFilters.length>0"
+  nz-row
+  [nzGutter]="4">
   <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:basicFilters}"></ng-container>
 
 </div>
 
-<div nz-row [nzGutter]="4">
-  <!-- 高级筛选条件 -->
+<!-- 高级筛选条件 -->
+<div *ngIf="advancedFilters.length>0"
+  nz-row
+  [nzGutter]="4">
   <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:advancedFilters}"></ng-container>
 </div>
 
 <!-- 筛选条件渲染模板 -->
-<ng-template #pageFiltersRendder let-data>
-  <div nz-col *ngFor="let item of data"
-       [nzXs]="item.xsWidth"
-       [nzSm]="item.smWidth"
-       [nzMd]="item.mdWidth"
-       [nzLg]="item.lgWidth"
-       [nzXl]="item.xlWidth"
-       [nzXXl]="item.xxlWidth">
+<ng-template #pageFiltersRendder
+  let-data>
+  <div nz-col
+    *ngFor="let item of data"
+    [nzXs]="item.xsWidth"
+    [nzSm]="item.smWidth"
+    [nzMd]="item.mdWidth"
+    [nzLg]="item.lgWidth"
+    [nzXl]="item.xlWidth"
+    [nzXXl]="item.xxlWidth">
     <ng-container *ngTemplateOutlet="pageFilterItemRendder;context:{$implicit:item}"></ng-container>
   </div>
 </ng-template>
 
 
 <!-- 组件渲染模板 -->
-<ng-template #pageFilterItemRendder let-data>
+<ng-template #pageFilterItemRendder
+  let-data>
   <ng-container [ngSwitch]="data.type">
     <ng-container *ngSwitchCase="'basic-input'">
-      <sample-input [name]="data.name"
-                    [args]="data.args"
-                    [externalArgs]="pageFilterExternalArgsData[data.name]"
-                    [(value)]="pageFilterData[data.name]"
-                    (valueChange)="onValueChange($event,data)"></sample-input>
+      <nz-form-item [title]="l(data.label)">
+        <nz-form-label *ngIf="displayLabel"
+          [nzFor]="data.name">{{l(data.label)}}</nz-form-label>
+        <nz-form-control>
+          <sample-input [name]="data.name"
+            [args]="data.args"
+            [externalArgs]="pageFilterExternalArgsData[data.name]"
+            [required]="data.required"
+            [(ngModel)]="pageFilterData[data.name]"
+            (ngModelChange)="onValueChange($event,data)">
+          </sample-input>
+        </nz-form-control>
+      </nz-form-item>
     </ng-container>
   </ng-container>
 </ng-template>
