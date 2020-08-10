@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Injector, Input, SimpleChange, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Injector, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { ControlComponentBase } from '@shared/common/control-component-base';
 
 /** page filter 组件的基类 */
-export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T> {
+export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T>
+  implements OnChanges {
 
   /** 配置文件中的参数 */
   @Input() args: string;
@@ -20,16 +21,19 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
     this.cdr = injector.get(ChangeDetectorRef);
   }
 
-  // ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
-  //   super.ngOnChanges(changes);
-  //   debugger
-  //   if (changes.args && changes.args.currentValue) {
-  //     this.onArgsChange(JSON.parse(changes.args.currentValue));
-  //   }
-  //   if (changes.externalArgs && changes.externalArgs.currentValue) {
-  //     this.onExternalArgs(changes.externalArgs.currentValue);
-  //   }
-  // }
+  ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
+    super.ngOnChanges(changes);
+    if (changes.args && changes.args.currentValue) {
+      if (typeof (changes.args.currentValue) === 'string') {
+        this.onArgsChange(JSON.parse(changes.args.currentValue));
+      } else {
+        this.onArgsChange(changes.args.currentValue);
+      }
+    }
+    if (changes.externalArgs && changes.externalArgs.currentValue) {
+      this.onExternalArgs(changes.externalArgs.currentValue);
+    }
+  }
 
   /** 参数发生更改 */
   abstract onArgsChange(args: any);
