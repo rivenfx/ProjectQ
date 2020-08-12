@@ -46,11 +46,14 @@ namespace Company.Project.DynamicQuery
         #region MethodInfos
 
         public static MethodInfo StartsWithMethod { get; private set; }
+        public static MethodInfo EndsWithMethod { get; private set; }
+        public static MethodInfo ContainsWithMethod { get; private set; }
 
         #endregion
 
         static DynamicQueryExpressionParser()
         {
+
             Parameter = Expression.Parameter(typeof(T), "p");
             SplitChar = '.';
             SplitChars = new char[] { SplitChar };
@@ -93,6 +96,8 @@ namespace Company.Project.DynamicQuery
             #region MethodInfos
 
             StartsWithMethod = StringType.GetMethod("StartsWith", new[] { StringType });
+            EndsWithMethod = StringType.GetMethod("EndsWith", new[] { StringType });
+            ContainsWithMethod = StringType.GetMethod("Contains", new[] { StringType });
 
             #endregion
 
@@ -105,9 +110,9 @@ namespace Company.Project.DynamicQuery
             foreach (var condition in conditions)
             {
                 //查询条件值不为空,才加入查询条件
-                if (fieldValue != null && !string.IsNullOrEmpty(fieldValue.ToString()))
+                if (condition.Value != null && !string.IsNullOrWhiteSpace(condition.Value.ToString()))
                 {
-                    Expression<Func<T, bool>> tempCondition = ParseCondition(condition);
+                    var tempCondition = ParseCondition(condition);
 
                     if (result == null)
                     {
@@ -133,12 +138,23 @@ namespace Company.Project.DynamicQuery
             var field = condition.Field;
             var fieldValue = condition.Value;
             var queryOperator = condition.Operator;
+            var notNull = condition.NotNull;
 
             var fieldExpression = GetFieldExpression(condition.Field);
 
             var fieldType = fieldExpression.Type;
 
             var constantExpressions = GetConstantExpressions(field, fieldValue, fieldType, queryOperator);
+
+            return GetExpressionWithQueryOperator(
+                     field,
+                     fieldValue,
+                     fieldType,
+                     notNull,
+                     queryOperator,
+                     fieldExpression,
+                     constantExpressions
+                  );
 
         }
 
@@ -242,54 +258,170 @@ namespace Company.Project.DynamicQuery
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="field"></param>
-        /// <param name="fieldValue"></param>
-        /// <param name="fieldType"></param>
-        /// <param name="fieldNotNull"></param>
-        /// <param name="queryOperator"></param>
+        /// <param name="field">字段名称</param>
+        /// <param name="fieldValue">字段值</param>
+        /// <param name="fieldType">字段CLR类型</param>
+        /// <param name="fieldNotNull">字段是否为空</param>
+        /// <param name="queryOperator">查询操作方式</param>
+        /// <param name="constantExpressions"></param>
         /// <returns></returns>
-        static Expression<Func<T, bool>> GetExpressionWithQueryOperator(string field, string fieldValue, Type fieldType, bool fieldNotNull, QueryOperatorType queryOperator, Expression fieldExpression)
+        static Expression<Func<T, bool>> GetExpressionWithQueryOperator(string field,
+            string fieldValue,
+            Type fieldType,
+            bool fieldNotNull,
+            QueryOperatorType queryOperator,
+            Expression fieldExpression,
+            (ConstantExpression a, ConstantExpression b) constantExpressions
+            )
         {
+            var queryExpression = default(Expression<Func<T, bool>>);
+
             switch (queryOperator)
             {
                 case QueryOperatorType.StartsWith:
-                    if (fieldNotNull)
                     {
                         var methodCallExpression = Expression.Call(
-                                fieldExpression,
-                                StartsWithMethod,
-                                Expression.Convert(fieldExpression, fieldType)
-                            );
-
-                        return Expression.Lambda<Func<T, bool>>(methodCallExpression, Parameter);
+                               fieldExpression,
+                               StartsWithMethod,
+                               Expression.Convert(constantExpressions.a, fieldType)
+                           );
+                        if (fieldNotNull)
+                        {
+                            queryExpression = Expression.Lambda<Func<T, bool>>(methodCallExpression, Parameter);
+                        }
+                        else
+                        {
+                            var notNullExp = Expression.NotEqual(fieldExpression, Expression.Constant(null, fieldType));
+                            var predicate = Expression.Lambda<Func<T, bool>>(notNullExp, Parameter);
+                            queryExpression = ExpressionFuncExtender.And(
+                                predicate,
+                                Expression.Lambda<Func<T, bool>>(methodCallExpression, Parameter)
+                           );
+                        }
                     }
-
-                    var notNullExp = Expression.NotEqual(fieldExpression, Expression.Constant(null, fieldType));
-                    var predicate = Expression.Lambda<Func<T, bool>>(notNullExp, Parameter);
                     break;
                 case QueryOperatorType.EndsWith:
+                    {
+                        var methodCallExpression = Expression.Call(
+                               fieldExpression,
+                               EndsWithMethod,
+                               Expression.Convert(constantExpressions.a, fieldType)
+                           );
+                        if (fieldNotNull)
+                        {
+                            queryExpression = Expression.Lambda<Func<T, bool>>(methodCallExpression, Parameter);
+                        }
+                        else
+                        {
+                            var notNullExp = Expression.NotEqual(fieldExpression, Expression.Constant(null, fieldType));
+                            var predicate = Expression.Lambda<Func<T, bool>>(notNullExp, Parameter);
+                            queryExpression = ExpressionFuncExtender.And(
+                                predicate,
+                                Expression.Lambda<Func<T, bool>>(methodCallExpression, Parameter)
+                           );
+                        }
+                    }
                     break;
                 case QueryOperatorType.Equal:
+                    {
+                        var predicate = Expression.Equal(fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        queryExpression = Expression.Lambda<Func<T, bool>>(predicate, Parameter);
+                    }
                     break;
                 case QueryOperatorType.NotEqual:
+                    {
+                        var predicate = Expression.NotEqual(fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        queryExpression = Expression.Lambda<Func<T, bool>>(predicate, Parameter);
+                    }
                     break;
                 case QueryOperatorType.Greater:
+                    {
+                        var predicate = Expression.GreaterThan(fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        queryExpression = Expression.Lambda<Func<T, bool>>(predicate, Parameter);
+                    }
                     break;
                 case QueryOperatorType.GreaterEqual:
+                    {
+                        var predicate = Expression.GreaterThanOrEqual(fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        queryExpression = Expression.Lambda<Func<T, bool>>(predicate, Parameter);
+                    }
                     break;
                 case QueryOperatorType.Less:
+                    {
+                        var predicate = Expression.LessThan(fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        queryExpression = Expression.Lambda<Func<T, bool>>(predicate, Parameter);
+                    }
                     break;
                 case QueryOperatorType.LessEqual:
+                    {
+                        var predicate = Expression.LessThanOrEqual(fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        queryExpression = Expression.Lambda<Func<T, bool>>(predicate, Parameter);
+                    }
                     break;
                 case QueryOperatorType.Between:
+                    {
+                        // 大于等于 起始值
+                        var greatorThanExp = Expression.GreaterThanOrEqual(
+                                fieldExpression,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+                        var greatorThanPredict = Expression.Lambda<Func<T, bool>>(greatorThanExp, Parameter);
+
+                        // 小于等于 结束值
+                        var lessThanExp = Expression.LessThanOrEqual(
+                                fieldExpression,
+                                Expression.Convert(constantExpressions.b, fieldType)
+                            );
+                        var lessThanPredict = Expression.Lambda<Func<T, bool>>(lessThanExp, Parameter);
+
+                        queryExpression = ExpressionFuncExtender.And(lessThanPredict, greatorThanPredict);
+                    }
                     break;
                 case QueryOperatorType.In:
                     break;
                 case QueryOperatorType.Contains:
+                    {
+                        var methodExpression = Expression.Call(
+                                fieldExpression,
+                                ContainsWithMethod,
+                                Expression.Convert(constantExpressions.a, fieldType)
+                            );
+
+                        if (fieldNotNull)
+                        {
+                            queryExpression = Expression.Lambda<Func<T, bool>>(methodExpression, Parameter);
+                        }
+                        else
+                        {
+                            var notNullExp1 = Expression.NotEqual(fieldExpression, Expression.Constant(null, fieldType));
+                            var predicate1 = Expression.Lambda<Func<T, bool>>(notNullExp1, Parameter);
+
+                            queryExpression = ExpressionFuncExtender.And(
+                                    predicate1,
+                                    Expression.Lambda<Func<T, bool>>(methodExpression, Parameter)
+                                );
+                        }
+                    }
                     break;
                 default:
                     break;
             }
+
+
+            end:
+            return queryExpression;
         }
 
         static Expression Property(Expression target, string field)
