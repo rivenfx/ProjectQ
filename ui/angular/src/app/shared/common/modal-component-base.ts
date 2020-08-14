@@ -1,4 +1,5 @@
-import { Injector, Input } from '@angular/core';
+import { Injector, Input, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
@@ -38,6 +39,7 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
     this._readonly = val;
     if (val) {
       this.titlePrefix = this.l('label.readonly');
+      this.updateFormControlState();
     }
   }
 
@@ -45,6 +47,9 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   get readonly(): boolean {
     return this._readonly;
   }
+
+  /** 页面表单 */
+  @ViewChild('pageForm') pageForm: NgForm;
 
 
   constructor(injector: Injector) {
@@ -57,15 +62,29 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   }
 
 
+  /** 关闭模态框-成功 */
   success(res: boolean | any = true) {
     if (this.modalRef) {
       this.modalRef.close(res);
     }
   }
 
+  /** 关闭模态框-直接关闭 */
   close(res: boolean | any = false) {
     this.success(res);
   }
 
+  /** 修改表单控件状态 禁用或启用 */
+  updateFormControlState() {
+    for (const key in this.pageForm.controls) {
+      if (this.readonly) {
+        this.pageForm.controls[key].disable();
+      } else {
+        this.pageForm.controls[key].enable();
+      }
+    }
+  }
+
+  /** 提交表单 */
   abstract submitForm(event?: any);
 }
