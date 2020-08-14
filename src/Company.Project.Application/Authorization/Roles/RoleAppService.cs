@@ -38,12 +38,14 @@ namespace Company.Project.Authorization.Roles
         public virtual async Task<PageResultDto<RoleDto>> GetPage(QueryInput input)
         {
             var query = _roleManager.QueryAsNoTracking
-                .Skip(input.SkipCount)
-                .Take(input.PageSize);
+                .Where(input.QueryConditions);
 
             var entityTotal = await query.LongCountAsync();
 
             var entityList = await query
+                .OrderBy(input.SortConditions)
+                .Skip(input.SkipCount)
+                .Take(input.PageSize)
                 .ProjectToType<RoleDto>()
                 .ToListAsync();
 
