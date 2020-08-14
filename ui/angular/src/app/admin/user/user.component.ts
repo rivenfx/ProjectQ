@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { PageFilterItemDto, QueryCondition, QueryInput, UserDto, UserServiceProxy } from '@service-proxies';
+import { PageFilterItemDto, QueryCondition, QueryInput, SortCondition, UserDto, UserServiceProxy } from '@service-proxies';
 import { ListViewComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
@@ -23,13 +23,13 @@ export class UserComponent extends ListViewComponentBase<UserDto>
     super.ngOnInit();
   }
 
-  fetchData(skipCount: number, pageSize: number, callback: (total: number) => void) {
+  fetchData(skipCount: number, pageSize: number, queryConditions: QueryCondition[], sortConditions: SortCondition[], callback: (total: number) => void) {
     const queryInput = new QueryInput();
     queryInput.skipCount = skipCount;
     queryInput.pageSize = pageSize;
 
-    queryInput.queryConditions = this.queryConditions;
-    queryInput.sortConditions = this.sortConditions;
+    queryInput.queryConditions = queryConditions;
+    queryInput.sortConditions = sortConditions;
 
     this.userSer.getPage(queryInput)
       .pipe(finalize(() => {

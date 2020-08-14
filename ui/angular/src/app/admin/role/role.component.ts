@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ModalHelper } from '@delon/theme';
-import { QueryInput, RoleDto, RoleServiceProxy, UserDto, UserServiceProxy } from '@service-proxies';
+import { QueryCondition, QueryInput, RoleDto, RoleServiceProxy, SortCondition, UserDto, UserServiceProxy } from '@service-proxies';
 import { ListViewComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditRoleComponent } from './create-or-edit-role';
@@ -24,10 +24,12 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
     super.ngOnInit();
   }
 
-  fetchData(skipCount: number, pageSize: number, callback: (total: number) => void) {
+  fetchData(skipCount: number, pageSize: number, queryConditions: QueryCondition[], sortConditions: SortCondition[], callback: (total: number) => void) {
     const queryInput = new QueryInput();
     queryInput.skipCount = skipCount;
     queryInput.pageSize = pageSize;
+    queryInput.queryConditions = queryConditions;
+    queryInput.sortConditions = sortConditions;
 
     this.roleSer.getPage(queryInput)
       .pipe(finalize(() => {
