@@ -15,7 +15,6 @@ import { PageFilterItemComponentBase } from '@shared/common';
 })
 export class SampleInputComponent extends PageFilterItemComponentBase<any> {
 
-
   argsObject: {
     type: undefined,
     placeholder: undefined,
@@ -41,9 +40,10 @@ export class SampleInputComponent extends PageFilterItemComponentBase<any> {
     this.cdr.detectChanges();
   }
 
-  onExternalArgs(externalArgs: any) {
+  onExternalArgsChange(externalArgs: any) {
 
   }
+
 
   onDestroy(): void {
   }
