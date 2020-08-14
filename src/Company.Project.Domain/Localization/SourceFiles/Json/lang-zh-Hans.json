@@ -72,6 +72,8 @@
     "label.create": "创建",
     "label.edit": "编辑",
     "label.readonly": "只读",
+    "label.collapsed": "收起",
+    "label.unfold": "展开",
 
 
     // entity
