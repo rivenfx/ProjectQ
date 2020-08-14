@@ -21,7 +21,7 @@ const routes: Routes = [
       {
         path: 'role',
         component: RoleComponent,
-        data: { claims: ['role.query'] },
+        data: { claims: 'role.query' },
       },
       {
         path: 'user',

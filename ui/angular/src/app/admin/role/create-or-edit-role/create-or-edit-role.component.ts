@@ -32,6 +32,11 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
         .subscribe((res) => {
           this.role = res.entityDto;
           this.claims = res.claims;
+
+          if (!this.readonly) {
+            this.readonly = this.role.isStatic;
+          }
+          this.updateFormControlState();
         });
     }
   }

@@ -255,6 +255,7 @@
     {{l('label.cancel')}}
   </button>
   <button nz-button
+    *ngIf="!readonly"
     [nzType]="'primary'"
     (click)="submitForm()">
     {{l('label.ok')}}
