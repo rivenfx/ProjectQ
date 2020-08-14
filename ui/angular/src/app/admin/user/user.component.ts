@@ -41,6 +41,15 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       });
   }
 
+  onClickAdd() {
+    this.modalHelper.createStatic(
+      CreateOrEditUserComponent).subscribe((res) => {
+        if (res) {
+          this.refresh();
+        }
+      });
+  }
+
   onClickEdit(data: UserDto) {
     this.modalHelper.createStatic(
       CreateOrEditUserComponent,

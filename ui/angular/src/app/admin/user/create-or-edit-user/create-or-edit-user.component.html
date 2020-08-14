@@ -3,92 +3,114 @@
 </div>
 
 <!-- 表单输入错误模板 -->
-<ng-template #errorTpl let-control>
+<ng-template #errorTpl
+  let-control>
   <validation-messages [formCtrl]="control"></validation-messages>
 </ng-template>
 
 <div class="modal-body">
   <form #pageForm="ngForm"
-        nz-form
-        (ngSubmit)="submitForm()"
-        novalidate
-        autocomplete="off">
+    nz-form
+    (ngSubmit)="submitForm()"
+    novalidate
+    autocomplete="off">
     <nz-tabset>
       <!-- 基本信息 -->
       <nz-tab [nzTitle]="l('label.user-info')">
 
         <!-- 账号/昵称 -->
-        <div nz-row [nzGutter]="10">
+        <div nz-row
+          [nzGutter]="10">
           <!-- 账号 -->
-          <div nz-col [nzXs]="24" [nzSm]="12">
-            <div sample-form-item name="accountInput" label="user.user-name" required>
+          <div nz-col
+            [nzXs]="24"
+            [nzSm]="12">
+            <div sample-form-item
+              name="accountInput"
+              label="user.user-name"
+              required>
               <nz-input-group nzPrefixIcon="user">
                 <input name="accountInput"
-                       #userNameInput="ngModel"
-                       type="text"
-                       nz-input
-                       [(ngModel)]="user.userName"
-                       [placeholder]="l('user.user-name')"
-                       [disabled]="isEdit"
-                       required
-                       minlength="3"
-                       maxlength="32"/>
+                  #userNameInput="ngModel"
+                  type="text"
+                  nz-input
+                  [(ngModel)]="user.userName"
+                  [placeholder]="l('user.user-name')"
+                  [disabled]="isEdit"
+                  required
+                  minlength="3"
+                  maxlength="32" />
               </nz-input-group>
             </div>
           </div>
 
           <!-- 昵称 -->
-          <div nz-col [nzXs]="24" [nzSm]="12">
-            <div sample-form-item name="userNickNameInput" label="user.nick-name" required>
+          <div nz-col
+            [nzXs]="24"
+            [nzSm]="12">
+            <div sample-form-item
+              name="userNickNameInput"
+              label="user.nick-name"
+              required>
               <nz-input-group nzPrefixIcon="user">
                 <input name="userNickNameInput"
-                       #userNickNameInput="ngModel"
-                       type="text"
-                       nz-input
-                       [(ngModel)]="user.nickname"
-                       [placeholder]="l('user.nick-name')"
-                       required
-                       minlength="3"
-                       maxlength="32"/>
+                  #userNickNameInput="ngModel"
+                  type="text"
+                  nz-input
+                  [(ngModel)]="user.nickname"
+                  [placeholder]="l('user.nick-name')"
+                  required
+                  minlength="3"
+                  maxlength="32" />
               </nz-input-group>
             </div>
           </div>
         </div>
 
         <!-- 密码/确认密码 -->
-        <div nz-row [nzGutter]="10">
+        <div nz-row
+          [nzGutter]="10">
           <!-- 密码 -->
-          <div nz-col [nzXs]="24" [nzSm]="12">
-            <div sample-form-item name="password1Input" label="label.password" [required]="!isEdit">
+          <div nz-col
+            [nzXs]="24"
+            [nzSm]="12">
+            <div sample-form-item
+              name="password1Input"
+              label="label.password"
+              [required]="!isEdit">
               <nz-input-group nzPrefixIcon="user">
                 <input name="password1Input"
-                       #passwordInput="ngModel"
-                       type="password"
-                       nz-input
-                       [(ngModel)]="password"
-                       [placeholder]="l('label.password')"
-                       [required]="!isEdit"
-                       autocomplete="new-password-new-1"
-                       minlength="6"
-                       maxlength="32"/>
+                  #passwordInput="ngModel"
+                  type="password"
+                  nz-input
+                  [(ngModel)]="password"
+                  [placeholder]="l('label.password')"
+                  [required]="!isEdit"
+                  autocomplete="new-password-new-1"
+                  minlength="6"
+                  maxlength="32" />
               </nz-input-group>
             </div>
           </div>
 
           <!-- 确认密码 -->
-          <div nz-col [nzXs]="24" [nzSm]="12">
-            <div sample-form-item name="passwordConfirmInput" label="label.password-confirm" [required]="!isEdit">
+          <div nz-col
+            [nzXs]="24"
+            [nzSm]="12">
+            <div sample-form-item
+              name="passwordConfirmInput"
+              label="label.password-confirm"
+              [required]="!isEdit">
               <nz-input-group nzPrefixIcon="user">
                 <input name="passwordConfirmInput"
-                       #passwordConfirmInput="ngModel"
-                       type="password"
-                       nz-input
-                       [(ngModel)]="passwordConfimd"
-                       [placeholder]="l('label.password-confirm')"
-                       [required]="!isEdit"
-                       [confirm]="password"
-                       autocomplete="new-password-new-2"
-                />
+                  #passwordConfirmInput="ngModel"
+                  type="password"
+                  nz-input
+                  [(ngModel)]="passwordConfimd"
+                  [placeholder]="l('label.password-confirm')"
+                  [required]="!isEdit"
+                  [confirm]="password"
+                  autocomplete="new-password-new-2" />
               </nz-input-group>
             </div>
           </div>
@@ -96,85 +118,110 @@
 
 
         <!-- 手机号/邮箱 -->
-        <div nz-row [nzGutter]="10">
+        <div nz-row
+          [nzGutter]="10">
           <!-- 手机号 -->
-          <div nz-col [nzXs]="24" [nzSm]="12">
-            <div sample-form-item name="phoneNumberInput" label="user.phone-number" required>
+          <div nz-col
+            [nzXs]="24"
+            [nzSm]="12">
+            <div sample-form-item
+              name="phoneNumberInput"
+              label="user.phone-number"
+              required>
               <nz-input-group nzPrefixIcon="user">
                 <input name="phoneNumberInput"
-                       #phoneNumberInput="ngModel"
-                       type="text"
-                       nz-input
-                       [(ngModel)]="user.phoneNumber"
-                       [placeholder]="l('user.phone-number')"
-                       required
-                       minlength="3"
-                       maxlength="32"/>
+                  #phoneNumberInput="ngModel"
+                  type="text"
+                  nz-input
+                  [(ngModel)]="user.phoneNumber"
+                  [placeholder]="l('user.phone-number')"
+                  required
+                  minlength="3"
+                  maxlength="32" />
               </nz-input-group>
             </div>
           </div>
 
           <!-- 邮箱 -->
-          <div nz-col [nzXs]="24" [nzSm]="12">
-            <div sample-form-item name="emailInput" label="user.email" required>
+          <div nz-col
+            [nzXs]="24"
+            [nzSm]="12">
+            <div sample-form-item
+              name="emailInput"
+              label="user.email"
+              required>
               <nz-input-group nzPrefixIcon="user">
                 <input name="emailInput"
-                       #emailInput="ngModel"
-                       type="text"
-                       nz-input
-                       [(ngModel)]="user.email"
-                       [placeholder]="l('user.email')"
-                       required
-                       minlength="3"
-                       maxlength="32"/>
+                  #emailInput="ngModel"
+                  type="text"
+                  nz-input
+                  [(ngModel)]="user.email"
+                  [placeholder]="l('user.email')"
+                  required
+                  minlength="3"
+                  maxlength="32" />
               </nz-input-group>
             </div>
           </div>
         </div>
 
         <!-- 手机号确认/邮箱确认/是否启用锁定机制/是否激活 -->
-        <div nz-row >
+        <div nz-row>
           <!-- 手机号确认 -->
-          <div nz-col [nzXs]="12" [nzSm]="6">
-            <div sample-form-item name="phoneNumberConfirmedInput">
+          <div nz-col
+            [nzXs]="12"
+            [nzSm]="6">
+            <div sample-form-item
+              name="phoneNumberConfirmedInput">
               <label name="phoneNumberConfirmedInput"
-                     #phoneNumberConfirmedInput="ngModel"
-                     nz-checkbox
-                     [(ngModel)]="user.phoneNumberConfirmed"></label>
+                #phoneNumberConfirmedInput="ngModel"
+                nz-checkbox
+                [(ngModel)]="user.phoneNumberConfirmed">
+                {{l('user.phone-number-confirmed')}}
+              </label>
             </div>
           </div>
 
           <!-- 邮箱确认 -->
-          <div nz-col [nzXs]="12" [nzSm]="6">
-            <div sample-form-item name="emailConfirmedInput">
+          <div nz-col
+            [nzXs]="12"
+            [nzSm]="6">
+            <div sample-form-item
+              name="emailConfirmedInput">
               <label name="emailConfirmedInput"
-                     #emailConfirmedInput="ngModel"
-                     nz-checkbox
-                     [(ngModel)]="user.emailConfirmed">
+                #emailConfirmedInput="ngModel"
+                nz-checkbox
+                [(ngModel)]="user.emailConfirmed">
                 {{l('user.email-confirmed')}}
               </label>
             </div>
           </div>
 
           <!-- 是否启用锁定机制 -->
-          <div nz-col [nzXs]="12" [nzSm]="6">
-            <div sample-form-item name="lockoutEnabledInput">
+          <div nz-col
+            [nzXs]="12"
+            [nzSm]="6">
+            <div sample-form-item
+              name="lockoutEnabledInput">
               <label name="lockoutEnabledInput"
-                     #lockoutEnabledInput="ngModel"
-                     nz-checkbox
-                     [(ngModel)]="user.lockoutEnabled">
+                #lockoutEnabledInput="ngModel"
+                nz-checkbox
+                [(ngModel)]="user.lockoutEnabled">
                 {{l('user.lockout-enabled')}}
               </label>
             </div>
           </div>
 
           <!-- 是否激活 -->
-          <div nz-col [nzXs]="12" [nzSm]="6">
-            <div sample-form-item name="isActiveInput">
+          <div nz-col
+            [nzXs]="12"
+            [nzSm]="6">
+            <div sample-form-item
+              name="isActiveInput">
               <label name="isActiveInput"
-                     #isActiveInput="ngModel"
-                     nz-checkbox
-                     [(ngModel)]="user.isActive">
+                #isActiveInput="ngModel"
+                nz-checkbox
+                [(ngModel)]="user.isActive">
                 {{l('user.is-active')}}
               </label>
             </div>
@@ -189,10 +236,9 @@
         <nz-form-item>
           <nz-form-control [nzErrorTip]="errorTpl">
             <role-select name="rolesInput"
-                         #rolesInput="ngModel"
-                         [(ngModel)]="roles"
-                         [disabled]="user.isStatic"
-            ></role-select>
+              #rolesInput="ngModel"
+              [(ngModel)]="roles"
+              [disabled]="user.isStatic"></role-select>
           </nz-form-control>
         </nz-form-item>
       </nz-tab>
@@ -203,10 +249,14 @@
 
 
 <div class="modal-footer">
-  <button nz-button [nzType]="'default'" (click)="close()">
+  <button nz-button
+    [nzType]="'default'"
+    (click)="close()">
     {{l('label.cancel')}}
   </button>
-  <button nz-button [nzType]="'primary'" (click)="submitForm()">
+  <button nz-button
+    [nzType]="'primary'"
+    (click)="submitForm()">
     {{l('label.ok')}}
   </button>
 </div>
