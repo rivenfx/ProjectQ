@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { ServiceProxyModule } from '@service-proxies';
 import { SharedModule } from '@shared';
 import { SampleComponentsModule } from '@shared/components/sample-components';
 import { PageFilterComponent } from './page-filter';
