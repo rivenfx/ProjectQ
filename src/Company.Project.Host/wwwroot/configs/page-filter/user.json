@@ -1,3 +1,44 @@
-{
-
-}
+[
+  {
+    "field": "userName",
+    "operator": "Contains",
+    "skipValueIsNull": true,
+    "order": 0,
+    "label": "user.user-name",
+    "componentName": "basic-input",
+    "args": {
+      "type": "text"
+    },
+    "valueChange": [],
+    "advanced": false,
+    "enabled": true,
+    "width": 6,
+    "xsWidth": null,
+    "smWidth": null,
+    "mdWidth": null,
+    "lgWidth": null,
+    "xlWidth": null,
+    "xxlWidth": null
+  },
+  {
+    "field": "nickname",
+    "operator": "Contains",
+    "skipValueIsNull": true,
+    "order": 1,
+    "label": "user.nick-name",
+    "componentName": "basic-input",
+    "args": {
+      "type": "text"
+    },
+    "valueChange": [],
+    "advanced": false,
+    "enabled": true,
+    "width": 6,
+    "xsWidth": null,
+    "smWidth": null,
+    "mdWidth": null,
+    "lgWidth": null,
+    "xlWidth": null,
+    "xxlWidth": null
+  }
+]
