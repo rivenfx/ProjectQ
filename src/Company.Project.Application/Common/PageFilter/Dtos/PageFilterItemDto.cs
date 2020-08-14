@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Company.Project.Common.PageFilter.Dtos
 {
-    public class PageFilterItemDto
+    /// <summary>
+    /// 筛选条件项
+    /// </summary>
+    public class PageFilterItemDto : QueryCondition
     {
         /// <summary>
-        /// 组件类型(组件名称)
+        /// 顺序号
         /// </summary>
-        public string Type { get; set; }
-
-        /// <summary>
-        ///  标识名称(映射字段)
-        /// </summary>
-        public string Name { get; set; }
+        public int Order { get; set; }
 
         /// <summary>
         /// 显示名称
@@ -22,28 +21,17 @@ namespace Company.Project.Common.PageFilter.Dtos
         public string Label { get; set; }
 
         /// <summary>
-        /// 操作条件 
-        /// == 等于
-        /// != 不等于
-        /// > 大于
-        /// < 小于
-        /// >=  大于等于
-        /// <= 小于
-        /// range 范围
-        /// in 在xx之中
-        /// startswith 以xx开头
-        /// endswith 已xx结尾
-        /// contains 包含
+        /// 组件名称
         /// </summary>
-        public string Condition { get; set; }
+        public string ComponentName { get; set; }
 
         /// <summary>
-        /// 必填校验
+        /// 数据源
         /// </summary>
-        public bool Required { get; set; }
+        public string DataSource { get; set; }
 
         /// <summary>
-        /// 默认携带参数
+        /// 组件参数
         /// </summary>
         public Dictionary<string, object> Args { get; set; }
 
@@ -53,17 +41,12 @@ namespace Company.Project.Common.PageFilter.Dtos
         public List<string> ValueChange { get; set; }
 
         /// <summary>
-        /// 顺序号
-        /// </summary>
-        public int Order { get; set; }
-
-        /// <summary>
-        /// 高级条件
+        /// 是否为高级搜索条件,高级搜索条件将被折叠
         /// </summary>
         public bool Advanced { get; set; }
 
         /// <summary>
-        /// 是否启用
+        /// 是否启用,不启用将隐藏
         /// </summary>
         public bool Enabled { get; set; }
 
