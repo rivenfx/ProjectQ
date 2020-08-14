@@ -1624,9 +1624,141 @@ export interface IPageFilterItemDtoListResultDto {
     items: PageFilterItemDto[] | undefined;
 }
 
+export enum QueryOperator {
+    Equal = <any>"Equal",
+    NotEqual = <any>"NotEqual",
+    Greater = <any>"Greater",
+    GreaterEqual = <any>"GreaterEqual",
+    Less = <any>"Less",
+    LessEqual = <any>"LessEqual",
+    StartsWith = <any>"StartsWith",
+    EndsWith = <any>"EndsWith",
+    In = <any>"In",
+    NotIn = <any>"NotIn",
+    Contains = <any>"Contains",
+    Between = <any>"Between",
+    BetweenEqualStart = <any>"BetweenEqualStart",
+    BetweenEqualEnd = <any>"BetweenEqualEnd",
+    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
+}
+
+export class QueryCondition implements IQueryCondition {
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+
+    constructor(data?: IQueryCondition) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.field = _data["field"];
+            this.value = _data["value"];
+            this.operator = _data["operator"];
+            this.skipValueIsNull = _data["skipValueIsNull"];
+        }
+    }
+
+    static fromJS(data: any): QueryCondition {
+        data = typeof data === 'object' ? data : {};
+        let result = new QueryCondition();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["field"] = this.field;
+        data["value"] = this.value;
+        data["operator"] = this.operator;
+        data["skipValueIsNull"] = this.skipValueIsNull;
+        return data; 
+    }
+
+    clone(): QueryCondition {
+        const json = this.toJSON();
+        let result = new QueryCondition();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IQueryCondition {
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+}
+
+export enum SortType {
+    None = <any>"None",
+    Asc = <any>"Asc",
+    Desc = <any>"Desc",
+}
+
+export class SortCondition implements ISortCondition {
+    field: string | undefined;
+    order: number;
+    type: SortType;
+
+    constructor(data?: ISortCondition) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.field = _data["field"];
+            this.order = _data["order"];
+            this.type = _data["type"];
+        }
+    }
+
+    static fromJS(data: any): SortCondition {
+        data = typeof data === 'object' ? data : {};
+        let result = new SortCondition();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["field"] = this.field;
+        data["order"] = this.order;
+        data["type"] = this.type;
+        return data; 
+    }
+
+    clone(): SortCondition {
+        const json = this.toJSON();
+        let result = new SortCondition();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISortCondition {
+    field: string | undefined;
+    order: number;
+    type: SortType;
+}
+
 export class QueryInput implements IQueryInput {
     pageSize: number;
     skipCount: number;
+    queryConditions: QueryCondition[] | undefined;
+    sortConditions: SortCondition[] | undefined;
 
     constructor(data?: IQueryInput) {
         if (data) {
@@ -1641,6 +1773,16 @@ export class QueryInput implements IQueryInput {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.skipCount = _data["skipCount"];
+            if (Array.isArray(_data["queryConditions"])) {
+                this.queryConditions = [] as any;
+                for (let item of _data["queryConditions"])
+                    this.queryConditions.push(QueryCondition.fromJS(item));
+            }
+            if (Array.isArray(_data["sortConditions"])) {
+                this.sortConditions = [] as any;
+                for (let item of _data["sortConditions"])
+                    this.sortConditions.push(SortCondition.fromJS(item));
+            }
         }
     }
 
@@ -1655,6 +1797,16 @@ export class QueryInput implements IQueryInput {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
+        if (Array.isArray(this.queryConditions)) {
+            data["queryConditions"] = [];
+            for (let item of this.queryConditions)
+                data["queryConditions"].push(item.toJSON());
+        }
+        if (Array.isArray(this.sortConditions)) {
+            data["sortConditions"] = [];
+            for (let item of this.sortConditions)
+                data["sortConditions"].push(item.toJSON());
+        }
         return data; 
     }
 
@@ -1669,6 +1821,8 @@ export class QueryInput implements IQueryInput {
 export interface IQueryInput {
     pageSize: number;
     skipCount: number;
+    queryConditions: QueryCondition[] | undefined;
+    sortConditions: SortCondition[] | undefined;
 }
 
 export class RoleDto implements IRoleDto {
