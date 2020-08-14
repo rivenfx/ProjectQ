@@ -43,6 +43,11 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
   /** 依赖的输入数据 */
   pageFilterExternalArgsData: any = {};
 
+  /** 存在高级搜索 */
+  existAdvancedFilter: boolean;
+  /** 是否展开高级搜索 */
+  isCollapsed = true;
+
   constructor(
     injector: Injector,
     private pageFilterSer: PageFilterServiceProxy,
@@ -70,6 +75,11 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
 
   onDestroy(): void {
 
+  }
+
+  onClickCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+    this.cdr.detectChanges();
   }
 
 
@@ -114,6 +124,8 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
     this.pageFilterExternalArgsData = {};
     this.basicFilters = [];
     this.advancedFilters = [];
+    this.existAdvancedFilter = false;
+    this.isCollapsed = true;
 
     if (!Array.isArray(this.pageFilters) || this.pageFilters.length === 0) {
       this.cdr.detectChanges();
@@ -165,6 +177,9 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
 
     this.basicFilters = enabledPageFilters.filter(o => !o.advanced);
     this.advancedFilters = enabledPageFilters.filter(o => o.advanced);
+    if (this.advancedFilters.length > 0) {
+      this.existAdvancedFilter = true;
+    }
 
     this.cdr.detectChanges();
   }

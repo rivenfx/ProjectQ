@@ -1,19 +1,34 @@
-page-filter
-
 <!-- 基本筛选条件 -->
 <div *ngIf="basicFilters.length>0"
   nz-row
-  [nzGutter]="4">
+  [nzGutter]="8">
   <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:basicFilters}"></ng-container>
 
 </div>
 
 <!-- 高级筛选条件 -->
-<div *ngIf="advancedFilters.length>0"
-  nz-row
-  [nzGutter]="4">
-  <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:advancedFilters}"></ng-container>
-</div>
+<ng-container *ngIf="existAdvancedFilter">
+  <!-- 筛选条件 -->
+  <div *ngIf="!isCollapsed"
+    nz-row
+    [nzGutter]="8">
+    <ng-container *ngTemplateOutlet="pageFiltersRendder;context:{$implicit:advancedFilters}"></ng-container>
+  </div>
+
+  <!-- 展开高级搜索 -->
+  <div nz-row>
+    <div nz-col
+      [nzSpan]="24"
+      class="search-area">
+      <a class="collapse"
+        (click)="onClickCollapse()">
+        Collapse
+        <i nz-icon
+          [nzType]="isCollapsed ? 'down' : 'up'"></i>
+      </a>
+    </div>
+  </div>
+</ng-container>
 
 <!-- 筛选条件渲染模板 -->
 <ng-template #pageFiltersRendder
