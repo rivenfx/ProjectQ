@@ -7,11 +7,10 @@ import {
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { PageFilterItemDto, PageFilterServiceProxy } from '@service-proxies';
+import { PageFilterItemDto, PageFilterServiceProxy, QueryCondition } from '@service-proxies';
 import { SampleControlComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
-import { IPageFilterItemData } from './interfaces';
 
 @Component({
   selector: 'page-filter',
@@ -19,7 +18,7 @@ import { IPageFilterItemData } from './interfaces';
   styleUrls: ['./page-filter.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageFilterComponent extends SampleControlComponentBase<IPageFilterItemData[]> {
+export class PageFilterComponent extends SampleControlComponentBase<QueryCondition[]> {
 
 
   /** 筛选条件配置文件名称 */
@@ -38,11 +37,12 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
   advancedFilters: PageFilterItemDto[] = [];
 
   /** 筛选条件的数据 */
-  pageFilterData: { [P in string]: IPageFilterItemData } = {};
+  pageFilterData: { [P in string]: QueryCondition } = {};
 
   /** 依赖的输入数据 */
   pageFilterExternalArgsData: any = {};
-
+  /** 存在基本搜索 */
+  existBasicFilter: boolean;
   /** 存在高级搜索 */
   existAdvancedFilter: boolean;
   /** 是否展开高级搜索 */
@@ -92,7 +92,7 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
         if (!externalArgs) {
           externalArgs = {};
         }
-        externalArgs[item.name] = event;
+        externalArgs[item.field] = event;
         this.pageFilterExternalArgsData[key] = _.clone(externalArgs);
       }
     }
@@ -124,6 +124,7 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
     this.pageFilterExternalArgsData = {};
     this.basicFilters = [];
     this.advancedFilters = [];
+    this.existBasicFilter = false;
     this.existAdvancedFilter = false;
     this.isCollapsed = true;
 
@@ -167,16 +168,20 @@ export class PageFilterComponent extends SampleControlComponentBase<IPageFilterI
       } else if (item.valueChange.length === 0) {
         item.valueChange = undefined;
       }
-      this.pageFilterData[item.name] = {
-        name: item.name,
-        condition: item.condition,
+      this.pageFilterData[item.field] = new QueryCondition({
+        field: item.field,
+        operator: item.operator,
         value: undefined,
-      };
-      this.pageFilterExternalArgsData[item.name] = undefined;
+        skipValueIsNull: !!item.skipValueIsNull,
+      });
+      this.pageFilterExternalArgsData[item.field] = undefined;
     });
 
     this.basicFilters = enabledPageFilters.filter(o => !o.advanced);
     this.advancedFilters = enabledPageFilters.filter(o => o.advanced);
+    if (this.basicFilters.length > 0) {
+      this.existBasicFilter = true;
+    }
     if (this.advancedFilters.length > 0) {
       this.existAdvancedFilter = true;
     }
