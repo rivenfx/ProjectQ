@@ -26,11 +26,6 @@ namespace Company.Project.Common.PageFilter.Dtos
         public string ComponentName { get; set; }
 
         /// <summary>
-        /// 数据源
-        /// </summary>
-        public string DataSource { get; set; }
-
-        /// <summary>
         /// 组件参数
         /// </summary>
         public Dictionary<string, object> Args { get; set; }

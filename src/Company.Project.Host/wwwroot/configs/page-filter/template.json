@@ -7,7 +7,6 @@
     "order": 0, // 顺序,越小越靠前
     "label": "", // 显示名称
     "componentName": "", // 前端组件名称
-    "dataSource": "", // 前端组件数据源
     "args": { // 前端组件参数
 
     },
