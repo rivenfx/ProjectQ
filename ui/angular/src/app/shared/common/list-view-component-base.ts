@@ -1,5 +1,6 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
 import { ModalHelper } from '@delon/theme';
+import { QueryCondition, SortCondition } from '@service-proxies';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { AppComponentBase } from './app-component-base';
 
@@ -71,7 +72,14 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 页面表格组件实例 */
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
 
+  /** 模态框帮助类 */
   modalHelper: ModalHelper;
+
+  /** 筛选条件 */
+  queryConditions: QueryCondition[] = [];
+
+  /** 排序条件 */
+  sortConditions: SortCondition[] = [];
 
   constructor(injector: Injector) {
     super(injector);
@@ -106,6 +114,16 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     this.fetchData(skipCount, this.pageInfo.size, (totalRecord) => {
       this._totalRecord = totalRecord;
     });
+  }
+
+  /** 查询条件发生改变 */
+  onFilterChange(queryConditions: QueryCondition[]) {
+    this.queryConditions = queryConditions;
+  }
+
+  /** 排序条件发生改变 */
+  onSortChange(sortConditions: SortCondition[]) {
+    this.sortConditions = sortConditions;
   }
 
   /** 加载数据 */
