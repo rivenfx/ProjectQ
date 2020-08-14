@@ -1,4 +1,5 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
 import { QueryCondition, SortCondition } from '@service-proxies';
 import { NzTableComponent } from 'ng-zorro-antd/table';
@@ -69,6 +70,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     y: '100%',
   };
 
+  /** 筛选条件配置名称 */
+  pageFilterName: string;
+
   /** 页面表格组件实例 */
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
 
@@ -85,6 +89,17 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     super(injector);
 
     this.modalHelper = injector.get(ModalHelper);
+
+    // 获取筛选条件配置名称名称
+    const activatedRoute = injector.get(ActivatedRoute);
+    if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
+      const claims = activatedRoute.snapshot.data.claims;
+      if (Array.isArray(claims) && claims.length > 0) {
+        this.pageFilterName = claims[0];
+      } else if (typeof (claims) === 'string') {
+        this.pageFilterName = claims;
+      }
+    }
   }
 
   ngOnInit(): void {
