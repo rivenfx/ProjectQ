@@ -1446,15 +1446,30 @@ export interface IClaimItemDto {
     sort: number;
 }
 
+export enum QueryOperator {
+    Equal = <any>"Equal",
+    NotEqual = <any>"NotEqual",
+    Greater = <any>"Greater",
+    GreaterEqual = <any>"GreaterEqual",
+    Less = <any>"Less",
+    LessEqual = <any>"LessEqual",
+    StartsWith = <any>"StartsWith",
+    EndsWith = <any>"EndsWith",
+    In = <any>"In",
+    NotIn = <any>"NotIn",
+    Contains = <any>"Contains",
+    Between = <any>"Between",
+    BetweenEqualStart = <any>"BetweenEqualStart",
+    BetweenEqualEnd = <any>"BetweenEqualEnd",
+    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
+}
+
 export class PageFilterItemDto implements IPageFilterItemDto {
-    type: string | undefined;
-    name: string | undefined;
+    order: number;
     label: string | undefined;
-    condition: string | undefined;
-    required: boolean;
+    componentName: string | undefined;
     args: { [key: string]: any; } | undefined;
     valueChange: string[] | undefined;
-    order: number;
     advanced: boolean;
     enabled: boolean;
     width: number;
@@ -1464,6 +1479,10 @@ export class PageFilterItemDto implements IPageFilterItemDto {
     lgWidth: number | undefined;
     xlWidth: number | undefined;
     xxlWidth: number | undefined;
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
 
     constructor(data?: IPageFilterItemDto) {
         if (data) {
@@ -1476,11 +1495,9 @@ export class PageFilterItemDto implements IPageFilterItemDto {
 
     init(_data?: any) {
         if (_data) {
-            this.type = _data["type"];
-            this.name = _data["name"];
+            this.order = _data["order"];
             this.label = _data["label"];
-            this.condition = _data["condition"];
-            this.required = _data["required"];
+            this.componentName = _data["componentName"];
             if (_data["args"]) {
                 this.args = {} as any;
                 for (let key in _data["args"]) {
@@ -1493,7 +1510,6 @@ export class PageFilterItemDto implements IPageFilterItemDto {
                 for (let item of _data["valueChange"])
                     this.valueChange.push(item);
             }
-            this.order = _data["order"];
             this.advanced = _data["advanced"];
             this.enabled = _data["enabled"];
             this.width = _data["width"];
@@ -1503,6 +1519,10 @@ export class PageFilterItemDto implements IPageFilterItemDto {
             this.lgWidth = _data["lgWidth"];
             this.xlWidth = _data["xlWidth"];
             this.xxlWidth = _data["xxlWidth"];
+            this.field = _data["field"];
+            this.value = _data["value"];
+            this.operator = _data["operator"];
+            this.skipValueIsNull = _data["skipValueIsNull"];
         }
     }
 
@@ -1515,11 +1535,9 @@ export class PageFilterItemDto implements IPageFilterItemDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["type"] = this.type;
-        data["name"] = this.name;
+        data["order"] = this.order;
         data["label"] = this.label;
-        data["condition"] = this.condition;
-        data["required"] = this.required;
+        data["componentName"] = this.componentName;
         if (this.args) {
             data["args"] = {};
             for (let key in this.args) {
@@ -1532,7 +1550,6 @@ export class PageFilterItemDto implements IPageFilterItemDto {
             for (let item of this.valueChange)
                 data["valueChange"].push(item);
         }
-        data["order"] = this.order;
         data["advanced"] = this.advanced;
         data["enabled"] = this.enabled;
         data["width"] = this.width;
@@ -1542,6 +1559,10 @@ export class PageFilterItemDto implements IPageFilterItemDto {
         data["lgWidth"] = this.lgWidth;
         data["xlWidth"] = this.xlWidth;
         data["xxlWidth"] = this.xxlWidth;
+        data["field"] = this.field;
+        data["value"] = this.value;
+        data["operator"] = this.operator;
+        data["skipValueIsNull"] = this.skipValueIsNull;
         return data; 
     }
 
@@ -1554,14 +1575,11 @@ export class PageFilterItemDto implements IPageFilterItemDto {
 }
 
 export interface IPageFilterItemDto {
-    type: string | undefined;
-    name: string | undefined;
+    order: number;
     label: string | undefined;
-    condition: string | undefined;
-    required: boolean;
+    componentName: string | undefined;
     args: { [key: string]: any; } | undefined;
     valueChange: string[] | undefined;
-    order: number;
     advanced: boolean;
     enabled: boolean;
     width: number;
@@ -1571,6 +1589,10 @@ export interface IPageFilterItemDto {
     lgWidth: number | undefined;
     xlWidth: number | undefined;
     xxlWidth: number | undefined;
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
 }
 
 export class PageFilterItemDtoListResultDto implements IPageFilterItemDtoListResultDto {
@@ -1622,24 +1644,6 @@ export class PageFilterItemDtoListResultDto implements IPageFilterItemDtoListRes
 
 export interface IPageFilterItemDtoListResultDto {
     items: PageFilterItemDto[] | undefined;
-}
-
-export enum QueryOperator {
-    Equal = <any>"Equal",
-    NotEqual = <any>"NotEqual",
-    Greater = <any>"Greater",
-    GreaterEqual = <any>"GreaterEqual",
-    Less = <any>"Less",
-    LessEqual = <any>"LessEqual",
-    StartsWith = <any>"StartsWith",
-    EndsWith = <any>"EndsWith",
-    In = <any>"In",
-    NotIn = <any>"NotIn",
-    Contains = <any>"Contains",
-    Between = <any>"Between",
-    BetweenEqualStart = <any>"BetweenEqualStart",
-    BetweenEqualEnd = <any>"BetweenEqualEnd",
-    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
 }
 
 export class QueryCondition implements IQueryCondition {
