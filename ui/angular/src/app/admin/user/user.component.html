@@ -4,7 +4,7 @@
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
     <button nz-button
-      (click)="onClickAdd()"
+      (click)="onClickCreateOrEdit()"
       [title]="l('common.create')">
       <i class="icon iconfont icon-add"></i>
     </button>
@@ -66,7 +66,7 @@
         <td nzEllipsis
           [title]="data.isActive">{{ data.isActive }}</td>
         <td nzEllipsis>
-          <a (click)="onClickEdit(data)">{{l('common.edit')}}</a>
+          <a (click)="onClickCreateOrEdit(data)">{{l('common.edit')}}</a>
           <nz-divider nzType="vertical"></nz-divider>
           <a>{{l('common.delete')}}</a>
         </td>

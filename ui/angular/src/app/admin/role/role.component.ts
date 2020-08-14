@@ -41,11 +41,17 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
       });
   }
 
+  onClickCreateOrEdit(data?: RoleDto) {
+    let input;
+    if (data) {
+      input = data.id;
+    }
 
-  onClickEdit(data: RoleDto) {
     this.modalHelper.createStatic(
       CreateOrEditRoleComponent,
-      { modalInput: data.id },
+      {
+        modalInput: input,
+      },
     ).subscribe((res) => {
       if (res) {
         this.refresh();

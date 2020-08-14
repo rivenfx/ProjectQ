@@ -1,8 +1,13 @@
-<page-header [title]="l('menu.role')"
+<page-header [title]="l('menu.user')"
   [breadcrumb]="breadcrumb"
   [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
+    <button nz-button
+      (click)="onClickCreateOrEdit()"
+      [title]="l('common.create')">
+      <i class="icon iconfont icon-add"></i>
+    </button>
     <button nz-button
       (click)="refresh()"
       [title]="l('common.refresh')">
@@ -10,6 +15,7 @@
     </button>
   </ng-template>
 </page-header>
+
 
 
 <div class="page-body">
@@ -54,7 +60,7 @@
         <td nzEllipsis
           [title]="data.displayName">{{ data.displayName }}</td>
         <td nzEllipsis>
-          <a (click)="onClickEdit(data)">{{l('common.edit')}}</a>
+          <a (click)="onClickCreateOrEdit(data)">{{l('common.edit')}}</a>
           <nz-divider nzType="vertical"></nz-divider>
           <a>{{l('common.delete')}}</a>
         </td>
