@@ -126,9 +126,14 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     }
 
     const skipCount = (this.pageInfo.index - 1) * this.pageInfo.size;
-    this.fetchData(skipCount, this.pageInfo.size, (totalRecord) => {
-      this._totalRecord = totalRecord;
-    });
+    this.fetchData(
+      skipCount,
+      this.pageInfo.size,
+      this.queryConditions,
+      this.sortConditions,
+      (totalRecord) => {
+        this._totalRecord = totalRecord;
+      });
   }
 
   /** 查询条件发生改变 */
@@ -142,5 +147,11 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   }
 
   /** 加载数据 */
-  abstract fetchData(skipCount: number, pageSize: number, callback: (totalRecord: number) => void);
+  abstract fetchData(
+    skipCount: number,
+    pageSize: number,
+    queryConditions: QueryCondition[],
+    sortConditions: SortCondition[],
+    callback: (totalRecord: number) => void
+  );
 }
