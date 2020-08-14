@@ -5,6 +5,11 @@
   <ng-template #action>
     <button nz-button
       (click)="refresh()"
+      [title]="l('common.add')">
+      <i class="icon iconfont icon-add"></i>
+    </button>
+    <button nz-button
+      (click)="refresh()"
       [title]="l('common.refresh')">
       <i class="icon iconfont icon-refresh"></i>
     </button>
@@ -14,9 +19,9 @@
 
 <div class="page-body">
 
-  <page-filter [pageFilters]="pageFilters"
+  <page-filter [pageFilterName]="'user'"
     [displayLabel]="true"
-    (valueChange)="onFilterVauleChange($event)">
+    (valueChange)="onFilterChange($event)">
 
   </page-filter>
 
