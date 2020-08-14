@@ -3,16 +3,17 @@
 </div>
 
 <!-- 表单输入错误模板 -->
-<ng-template #errorTpl let-control>
+<ng-template #errorTpl
+  let-control>
   <validation-messages [formCtrl]="control"></validation-messages>
 </ng-template>
 
 <div class="modal-body">
   <form #pageForm="ngForm"
-        nz-form
-        (ngSubmit)="submitForm()"
-        novalidate
-        autocomplete="off">
+    nz-form
+    (ngSubmit)="submitForm()"
+    novalidate
+    autocomplete="off">
     <nz-tabset>
       <!-- 基本信息 -->
       <nz-tab [nzTitle]="l('label.role-info')">
@@ -21,15 +22,15 @@
           <nz-form-control [nzErrorTip]="errorTpl">
             <nz-input-group nzPrefixIcon="user">
               <input name="roleNameInput"
-                     #roleNameInput="ngModel"
-                     type="text"
-                     nz-input
-                     [(ngModel)]="role.name"
-                     [placeholder]="l('role.name')"
-                     [disabled]="isEdit"
-                     required
-                     minlength="3"
-                     maxlength="32"/>
+                #roleNameInput="ngModel"
+                type="text"
+                nz-input
+                [(ngModel)]="role.name"
+                [placeholder]="l('role.name')"
+                [disabled]="isEdit"
+                required
+                minlength="3"
+                maxlength="32" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -38,28 +39,27 @@
           <nz-form-control [nzErrorTip]="errorTpl">
             <nz-input-group nzPrefixIcon="user">
               <input name="roleDisplayNameInput"
-                     #roleDisplayNameInput="ngModel"
-                     type="text"
-                     nz-input
-                     [(ngModel)]="role.displayName"
-                     [placeholder]="l('role.display-name')"
-                     required
-                     minlength="3"
-                     maxlength="32"/>
+                #roleDisplayNameInput="ngModel"
+                type="text"
+                nz-input
+                [(ngModel)]="role.displayName"
+                [placeholder]="l('role.display-name')"
+                required
+                minlength="3"
+                maxlength="32" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
         <!-- 描述 -->
         <nz-form-item>
           <nz-form-control [nzErrorTip]="errorTpl">
-          <textarea rows="4"
-                    name="roleDescriptionInput"
-                    #roleDescriptionInput="ngModel"
-                    nz-input
-                    [(ngModel)]="role.description"
-                    [placeholder]="l('role.description')"
-                    maxlength="512"
-          ></textarea>
+            <textarea rows="4"
+              name="roleDescriptionInput"
+              #roleDescriptionInput="ngModel"
+              nz-input
+              [(ngModel)]="role.description"
+              [placeholder]="l('role.description')"
+              maxlength="512"></textarea>
           </nz-form-control>
         </nz-form-item>
       </nz-tab>
@@ -67,9 +67,8 @@
       <!-- 权限选择 -->
       <nz-tab [nzTitle]="l('label.permission')">
         <permission-tree name="rolePermissionInput"
-                         #rolePermissionInput="ngModel"
-                         [(ngModel)]="claims"
-        ></permission-tree>
+          #rolePermissionInput="ngModel"
+          [(ngModel)]="claims"></permission-tree>
       </nz-tab>
     </nz-tabset>
 
@@ -77,10 +76,14 @@
 </div>
 
 <div class="modal-footer">
-  <button nz-button [nzType]="'default'" (click)="close()">
+  <button nz-button
+    [nzType]="'default'"
+    (click)="close()">
     {{l('label.cancel')}}
   </button>
-  <button nz-button [nzType]="'primary'" (click)="submitForm()">
+  <button nz-button
+    [nzType]="'primary'"
+    (click)="submitForm()">
     {{l('label.ok')}}
   </button>
 </div>
