@@ -26,7 +26,7 @@
     "skipValueIsNull": true,
     "order": 1,
     "label": "role.display-name",
-    "componentName": "basic-input",
+    "componentName": "sample-input",
     "args": {
       "type": "text"
     },
@@ -47,7 +47,7 @@
     "skipValueIsNull": true,
     "order": 2,
     "label": "role.description",
-    "componentName": "basic-input",
+    "componentName": "sample-input",
     "args": {
       "type": "text"
     },
