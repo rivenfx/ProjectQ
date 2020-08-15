@@ -39,7 +39,7 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
     this._readonly = val;
     if (val) {
       this.titlePrefix = this.l('label.readonly');
-      this.updateFormControlState();
+      this.disableFormControls();
     }
   }
 
@@ -74,13 +74,11 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
     this.success(res);
   }
 
-  /** 修改表单控件状态 禁用或启用 */
-  updateFormControlState() {
-    for (const key in this.pageForm.controls) {
-      if (this.readonly) {
+  /** 当页面状态为只读, 修改表单控件状态为禁用 */
+  disableFormControls() {
+    if (this.readonly) {
+      for (const key in this.pageForm.controls) {
         this.pageForm.controls[key].disable();
-      } else {
-        this.pageForm.controls[key].enable();
       }
     }
   }
