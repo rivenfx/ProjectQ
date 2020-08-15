@@ -79,6 +79,8 @@
     "label.readonly": "只读",
     "label.collapsed": "收起",
     "label.unfold": "展开",
+    "label.yes": "是",
+    "label.no": "否",
 
 
     // entity
