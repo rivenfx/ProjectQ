@@ -44,6 +44,10 @@
     // message
     "message.tenant.in-active": "租户 {0} 未激活",
     "message.tenant.not-found": "未找到租户 {0}",
+    "message.operate.successfully": "操作成功",
+    "message.operate.failure": "操作失败",
+    "message.operate.cancelled": "操作取消",
+    "message.operate.abnormal": "操作异常",
 
     // validation
     "validation.required": "输入不能为空",
