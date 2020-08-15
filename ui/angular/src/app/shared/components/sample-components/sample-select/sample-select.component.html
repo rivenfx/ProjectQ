@@ -1,0 +1,32 @@
+<ng-container [ngSwitch]="argsObject.type">
+  <!-- 单选 -->
+  <ng-container *ngSwitchCase="'default'">
+    <nz-select nzShowSearch
+               nzAllowClear
+               [nzPlaceHolder]="placeholder"
+               [(ngModel)]="value"
+               (ngModelChange)="emitValueChange($event)">
+      <nz-option *ngFor="let item of souceData"
+                 [nzLabel]="l(item.label)"
+                 [nzValue]="item.value">
+      </nz-option>
+    </nz-select>
+  </ng-container>
+  <!-- 多选 -->
+  <ng-container *ngSwitchCase="'mulit'">
+    <nz-select
+      [nzMaxTagCount]="argsObject.maxCount"
+      [nzMaxTagPlaceholder]="tagPlaceHolder"
+      nzMode="multiple"
+      [nzPlaceHolder]="placeholder"
+      [(ngModel)]="value"
+    >
+      <nz-option *ngFor="let item of souceData"
+                 [nzLabel]="l(item.label)"
+                 [nzValue]="item.value">
+      </nz-option>
+    </nz-select>
+    <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected</ng-template>
+  </ng-container>
+
+</ng-container>
