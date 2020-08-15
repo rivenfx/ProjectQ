@@ -47,7 +47,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
           if (!this.readonly) {
             this.readonly = this.user.isStatic;
           }
-          this.updateFormControlState();
+          this.disableFormControls();
         });
     }
   }
