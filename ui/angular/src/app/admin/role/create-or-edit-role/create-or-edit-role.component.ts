@@ -2,6 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { CreateOrUpdateRoleInput, RoleDto, RoleServiceProxy } from '@service-proxies';
 import { AppComponentBase, ModalComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'create-or-edit-role',
@@ -51,13 +52,13 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
     if (this.modalInput) {
       this.roleSer.update(input)
         .subscribe(() => {
-          this.message.success(this.l('message.success.update'));
+          this.message.success(this.l(AppConsts.message.success));
           this.success();
         });
     } else {
       this.roleSer.create(input)
         .subscribe(() => {
-          this.message.success(this.l('message.success.create'));
+          this.message.success(this.l(AppConsts.message.success));
           this.success();
         });
     }

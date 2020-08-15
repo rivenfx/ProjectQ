@@ -19,4 +19,16 @@ export class AppConsts {
     tokenExpiration: 'tokenExpiration',
   };
 
+  /** 消息 */
+  static message = {
+    /** 操作成功 */
+    success: 'message.operate.successfully',
+    /** 操作失败 */
+    failure: 'message.operate.failure',
+    /** 操作取消 */
+    cancelled: 'message.operate.cancelled',
+    /** 操作异常 */
+    abnormal: 'message.operate.abnormal',
+  };
+
 }
