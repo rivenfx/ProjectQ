@@ -1,7 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { UserDto, UserServiceProxy } from '@service-proxies';
+import { CreateOrEditUserInput, CreateOrUpdateRoleInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { ModalComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'create-or-edit-user',
@@ -53,5 +54,31 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
   }
 
   submitForm(event?: any) {
+    const input = new CreateOrEditUserInput({
+      entityDto: this.user,
+      password: this.password,
+      roles: this.roles,
+    });
+
+    this.loading = true;
+    if (this.modalInput) {
+      this.userSer.update(input)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
+        .subscribe(() => {
+          this.message.success(this.l(AppConsts.message.success));
+          this.success();
+        });
+    } else {
+      this.userSer.create(input)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
+        .subscribe(() => {
+          this.message.success(this.l(AppConsts.message.success));
+          this.success();
+        });
+    }
   }
 }

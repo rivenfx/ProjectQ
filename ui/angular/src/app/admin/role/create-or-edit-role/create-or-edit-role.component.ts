@@ -49,14 +49,21 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
       claims: this.claims,
     });
 
+    this.loading = true;
     if (this.modalInput) {
       this.roleSer.update(input)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
         .subscribe(() => {
           this.message.success(this.l(AppConsts.message.success));
           this.success();
         });
     } else {
       this.roleSer.create(input)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
         .subscribe(() => {
           this.message.success(this.l(AppConsts.message.success));
           this.success();
