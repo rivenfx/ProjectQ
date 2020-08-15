@@ -10,7 +10,6 @@
       "type": "text"
     },
     "valueChange": [],
-    "advanced": false,
     "enabled": true,
     "width": 6,
     "xsWidth": null,
@@ -31,7 +30,6 @@
       "type": "text"
     },
     "valueChange": [],
-    "advanced": false,
     "enabled": true,
     "width": 6,
     "xsWidth": null,
@@ -52,7 +50,6 @@
       "type": "text"
     },
     "valueChange": [],
-    "advanced": false,
     "enabled": true,
     "width": 6,
     "xsWidth": null,

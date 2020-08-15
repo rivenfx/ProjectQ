@@ -30,6 +30,9 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   /** 显示标签 */
   @Input() displayLabel: boolean;
 
+  /** 基本筛选条件显示列,超出的将属于高级筛选条件 */
+  @Input() basicRow = 1;
+
   /** 基本筛选条件 */
   basicFilters: PageFilterItemDto[] = [];
 
@@ -58,9 +61,11 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   onInit(): void {
 
   }
+
   onAfterViewInit(): void {
 
   }
+
   onInputChange(changes: { [P in keyof this]?: SimpleChange; } & SimpleChanges) {
     if (changes.pageFilterName && changes.pageFilterName.currentValue && changes.pageFilterName.currentValue.trim() !== '') {
       this.fetchData();
@@ -127,6 +132,9 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     this.existBasicFilter = false;
     this.existAdvancedFilter = false;
     this.isCollapsed = true;
+    if (typeof (this.basicRow) !== 'number' || this.basicRow <= 0) {
+      this.basicRow = 1;
+    }
 
     if (!Array.isArray(this.pageFilters) || this.pageFilters.length === 0) {
       this.cdr.detectChanges();
@@ -139,11 +147,26 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
       return;
     }
 
-    const enabledPageFilters = _.cloneDeep(tmpEnabledPageFilters);
+    // 启用的pageFilter选项
+    const enabledPageFilters = _.cloneDeep(tmpEnabledPageFilters)
+      .sort((a, b) => {
+        return a.order - b.order;
+      });
 
-    enabledPageFilters.forEach(item => {
+    // 屏幕大小编码
+    const screenSizeCode = this.getCurrentScreenSizeCode();
+    // 宽度字段
+    const widthFiled = `${screenSizeCode}Width`;
+    // 基本过滤选项最大col数量
+    const basicMaxColCount = this.basicRow * 24;
+    // 临时col数量
+    let tmpColCount = 0;
+
+    // 遍历可用的pageFilter
+    for (const item of enabledPageFilters) {
+      // 预处理数据,初始化映射
       if (item.width <= 0) {
-        item.width = 8;
+        item.width = 6;
       }
       if (typeof (item.xsWidth) !== 'number' || item.xsWidth <= 0) {
         item.xsWidth = item.width;
@@ -175,10 +198,16 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
         skipValueIsNull: !!item.skipValueIsNull,
       });
       this.pageFilterExternalArgsData[item.field] = undefined;
-    });
 
-    this.basicFilters = enabledPageFilters.filter(o => !o.advanced);
-    this.advancedFilters = enabledPageFilters.filter(o => o.advanced);
+      // 根据宽度动态计算是否为高级过滤选项
+      tmpColCount += item[widthFiled];
+      if (tmpColCount <= basicMaxColCount) {
+        this.basicFilters.push(item);
+      } else {
+        this.advancedFilters.push(item);
+      }
+    }
+
     if (this.basicFilters.length > 0) {
       this.existBasicFilter = true;
     }
@@ -187,6 +216,30 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     }
 
     this.cdr.detectChanges();
+  }
+
+  getCurrentScreenSizeCode(): string {
+    const width = window.innerWidth;
+    if (width < 575) {
+      return 'xs';
+    }
+    if (width >= 575 && width < 768) {
+      return 'sm';
+    }
+    if (width >= 768 && width < 992) {
+      return 'md';
+    }
+    if (width >= 992 && width < 1200) {
+      return 'lg';
+    }
+    if (width >= 1200 && width < 1600) {
+      return 'xl';
+    }
+    if (width >= 1600) {
+      return 'xxl';
+    }
+
+    return 'md';
   }
 
 

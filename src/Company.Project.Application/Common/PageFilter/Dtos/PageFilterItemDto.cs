@@ -36,11 +36,6 @@ namespace Company.Project.Common.PageFilter.Dtos
         public List<string> ValueChange { get; set; }
 
         /// <summary>
-        /// 是否为高级搜索条件,高级搜索条件将被折叠
-        /// </summary>
-        public bool Advanced { get; set; }
-
-        /// <summary>
         /// 是否启用,不启用将隐藏
         /// </summary>
         public bool Enabled { get; set; }

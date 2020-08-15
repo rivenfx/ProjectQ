@@ -1470,7 +1470,6 @@ export class PageFilterItemDto implements IPageFilterItemDto {
     componentName: string | undefined;
     args: { [key: string]: any; } | undefined;
     valueChange: string[] | undefined;
-    advanced: boolean;
     enabled: boolean;
     width: number;
     xsWidth: number | undefined;
@@ -1510,7 +1509,6 @@ export class PageFilterItemDto implements IPageFilterItemDto {
                 for (let item of _data["valueChange"])
                     this.valueChange.push(item);
             }
-            this.advanced = _data["advanced"];
             this.enabled = _data["enabled"];
             this.width = _data["width"];
             this.xsWidth = _data["xsWidth"];
@@ -1550,7 +1548,6 @@ export class PageFilterItemDto implements IPageFilterItemDto {
             for (let item of this.valueChange)
                 data["valueChange"].push(item);
         }
-        data["advanced"] = this.advanced;
         data["enabled"] = this.enabled;
         data["width"] = this.width;
         data["xsWidth"] = this.xsWidth;
@@ -1580,7 +1577,6 @@ export interface IPageFilterItemDto {
     componentName: string | undefined;
     args: { [key: string]: any; } | undefined;
     valueChange: string[] | undefined;
-    advanced: boolean;
     enabled: boolean;
     width: number;
     xsWidth: number | undefined;
