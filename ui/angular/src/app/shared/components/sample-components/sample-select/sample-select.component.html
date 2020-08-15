@@ -4,6 +4,7 @@
     <nz-select nzShowSearch
                nzAllowClear
                [nzPlaceHolder]="placeholder"
+               [nzDisabled]="disabled"
                [(ngModel)]="value"
                (ngModelChange)="emitValueChange($event)">
       <nz-option *ngFor="let item of souceData"
@@ -19,6 +20,7 @@
       [nzMaxTagPlaceholder]="tagPlaceHolder"
       nzMode="multiple"
       [nzPlaceHolder]="placeholder"
+      [nzDisabled]="disabled"
       [(ngModel)]="value"
     >
       <nz-option *ngFor="let item of souceData"
@@ -27,6 +29,31 @@
       </nz-option>
     </nz-select>
     <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected</ng-template>
+  </ng-container>
+  <!-- 树形选择 -->
+  <ng-container *ngSwitchCase="'tree'">
+    <nz-tree-select
+      nzShowSearch
+      [nzNodes]="souceData"
+      [nzPlaceHolder]="placeholder"
+      [nzDisabled]="disabled"
+      [(ngModel)]="value"
+      (ngModelChange)="emitValueChange($event)"
+    >
+    </nz-tree-select>
+  </ng-container>
+  <!-- 树形选择-多选 -->
+  <ng-container *ngSwitchCase="'tree-mulit'">
+    <nz-tree-select
+      nzShowSearch
+      nzCheckable
+      [nzNodes]="souceData"
+      [nzPlaceHolder]="placeholder"
+      [nzDisabled]="disabled"
+      [(ngModel)]="value"
+      (ngModelChange)="emitValueChange($event)"
+    >
+    </nz-tree-select>
   </ng-container>
 
 </ng-container>

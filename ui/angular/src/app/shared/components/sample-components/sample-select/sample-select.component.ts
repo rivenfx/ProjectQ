@@ -26,7 +26,7 @@ export class SampleSelectComponent extends PageFilterItemComponentBase<any> {
 
   argsObject: {
     dataSource: undefined,
-    type: undefined, // default/mulit/tree
+    type: undefined, // default/mulit/tree/tree-mulit
     placeholder: undefined,
     maxCount: 3
   };
@@ -47,11 +47,14 @@ export class SampleSelectComponent extends PageFilterItemComponentBase<any> {
     if (this.argsObject.placeholder) {
       this.placeholder = this.l(this.argsObject.placeholder);
     }
-    this.sampleDataSourceSer.fetchData<any>(this.argsObject.dataSource, this.args)
-      .subscribe((res) => {
+
+    const obs = this.sampleDataSourceSer.fetchData<any>(this.argsObject.dataSource, this.args);
+    if (obs) {
+      obs.subscribe((res) => {
         this.souceData = res;
         this.cdr.detectChanges();
       });
+    }
     this.cdr.detectChanges();
   }
 
