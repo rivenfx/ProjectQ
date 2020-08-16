@@ -12,6 +12,7 @@ import { RoleComponent } from './role';
 import { CreateOrEditRoleComponent } from './role/create-or-edit-role';
 import { UserComponent } from './user';
 import { CreateOrEditUserComponent } from './user/create-or-edit-user';
+import { SampleComponentsModule } from '@shared/components/sample-components';
 
 const entryComponents = [
   CreateOrEditRoleComponent,
@@ -27,6 +28,7 @@ const entryComponents = [
     RivenModule.forChild(),
     PageFilterModule,
     TableBarModule,
+    SampleComponentsModule,
   ],
   declarations: [
     DashboardComponent,
