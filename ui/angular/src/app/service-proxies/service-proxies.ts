@@ -139,6 +139,72 @@ export class ClaimsServiceProxy {
 }
 
 @Injectable()
+export class ListViewServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getPageFilter(name: string | null | undefined): Observable<ColumnItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/ListView/GetPageFilter?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPageFilter(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPageFilter(<any>response_);
+                } catch (e) {
+                    return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPageFilter(response: HttpResponseBase): Observable<ColumnItemDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ColumnItemDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ColumnItemDtoListResultDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class PageFilterServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -1444,6 +1510,152 @@ export interface IClaimItemDto {
     parent: string | undefined;
     claim: string | undefined;
     sort: number;
+}
+
+export enum ColumnItemStatistical {
+    None = <any>"None",
+    Count = <any>"Count",
+    DistinctCount = <any>"DistinctCount",
+    Sum = <any>"Sum",
+    Average = <any>"Average",
+    Max = <any>"Max",
+    Min = <any>"Min",
+}
+
+export enum ColumnItemFixed {
+    None = <any>"None",
+    Left = <any>"Left",
+    Right = <any>"Right",
+}
+
+export class ColumnItemDto implements IColumnItemDto {
+    field: string | undefined;
+    type: string | undefined;
+    title: string | undefined;
+    render: string | undefined;
+    order: number | undefined;
+    width: number | undefined;
+    numberDigits: number;
+    dateFormat: string | undefined;
+    statistical: ColumnItemStatistical;
+    fixed: ColumnItemFixed;
+
+    constructor(data?: IColumnItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.field = _data["field"];
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.render = _data["render"];
+            this.order = _data["order"];
+            this.width = _data["width"];
+            this.numberDigits = _data["numberDigits"];
+            this.dateFormat = _data["dateFormat"];
+            this.statistical = _data["statistical"];
+            this.fixed = _data["fixed"];
+        }
+    }
+
+    static fromJS(data: any): ColumnItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["field"] = this.field;
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["render"] = this.render;
+        data["order"] = this.order;
+        data["width"] = this.width;
+        data["numberDigits"] = this.numberDigits;
+        data["dateFormat"] = this.dateFormat;
+        data["statistical"] = this.statistical;
+        data["fixed"] = this.fixed;
+        return data; 
+    }
+
+    clone(): ColumnItemDto {
+        const json = this.toJSON();
+        let result = new ColumnItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnItemDto {
+    field: string | undefined;
+    type: string | undefined;
+    title: string | undefined;
+    render: string | undefined;
+    order: number | undefined;
+    width: number | undefined;
+    numberDigits: number;
+    dateFormat: string | undefined;
+    statistical: ColumnItemStatistical;
+    fixed: ColumnItemFixed;
+}
+
+export class ColumnItemDtoListResultDto implements IColumnItemDtoListResultDto {
+    items: ColumnItemDto[] | undefined;
+
+    constructor(data?: IColumnItemDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(ColumnItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColumnItemDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnItemDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ColumnItemDtoListResultDto {
+        const json = this.toJSON();
+        let result = new ColumnItemDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnItemDtoListResultDto {
+    items: ColumnItemDto[] | undefined;
 }
 
 export enum QueryOperator {
