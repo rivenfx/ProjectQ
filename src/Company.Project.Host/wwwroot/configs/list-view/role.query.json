@@ -1,0 +1,16 @@
+[
+  {
+    "key": "",
+    "title": "", // 列名
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "type": "", // 类型
+    "click": "", // 点击事件触发函数名称 
+    "render": "", // 要使用的渲染器名称
+    "width": "", // 宽度
+    "sort": "", // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": "yyyy-MM-dd HH:mm:ss", // 列类型为datetime类型格式化规则
+    "statistical": "", // 统计类型
+    "fixed": null, // 固定列 left或right,必须指定width
+  }
+]
