@@ -1,7 +1,7 @@
 [
   {
     "field": "", // 字段名称  xx或xx.xx
-    "operator": "=", // 操作条件 Equal/NotEqual/Greater/GreaterEqual/Less/LessEqual/StartsWith/EndsWith/In/NotIn/Contains/Between/BetweenEqualStart/BetweenEqualEnd/BetweenEqualStartAndEnd
+    "operator": "Equal", // 操作条件 Equal/NotEqual/Greater/GreaterEqual/Less/LessEqual/StartsWith/EndsWith/In/NotIn/Contains/Between/BetweenEqualStart/BetweenEqualEnd/BetweenEqualStartAndEnd
     "skipValueIsNull": true, // true:值为空则跳过筛选 false:值为空不跳过筛选
 
     "order": 0, // 顺序,越小越靠前
