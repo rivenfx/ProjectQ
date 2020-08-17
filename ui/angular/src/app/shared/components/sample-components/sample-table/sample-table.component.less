@@ -1,7 +1,7 @@
 :host{
   ::ng-deep{
     .nz-table-hide-scrollbar::-webkit-scrollbar {
-      width: 8px;
+      width: 20px;
       height: 8px;
     }
 
@@ -17,9 +17,15 @@
     }
 
     .nz-table-hide-scrollbar::-webkit-scrollbar-thumb:horizontal {
-      width: 8px;
+      width: 20px;
       background-color: transparent;
       -webkit-border-radius: 6px;
+    }
+
+
+    .ant-table-ping-right:not(.ant-table-has-fix-right) .ant-table-container::after{
+      box-shadow: inset -10px 0 8px -8px transparent;
+      // inset -10px 0 8px -8px rgba(0, 0, 0, 0.15)
     }
   }
 }
