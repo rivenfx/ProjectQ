@@ -9,3 +9,11 @@ export interface ISampleTableInfo {
   /** 显示分页, 默认显示 */
   displayPagination?: boolean;
 }
+
+/** 当action触发 */
+export interface ISampleTableAction {
+  /** action名称 */
+  name: string;
+  /** 被点击的数据 */
+  record: any;
+}

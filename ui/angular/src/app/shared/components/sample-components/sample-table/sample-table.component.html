@@ -1,8 +1,3 @@
-<p>sample-table works!</p>
-
-
-
-
 <!-- 类型为 button 的 action -->
 <ng-template #actionWithButtonsTemplate
   let-action
@@ -37,6 +32,7 @@
   </nz-dropdown-menu>
 </ng-template>
 
+<!-- 列表模板 -->
 <st #st
   [data]="tableData"
   [columns]="tableColumns"
@@ -45,6 +41,8 @@
   virtualScroll
   [scroll]="{ x: '1300px', y: '240px' }">
 
+
+  <!-- actions 渲染模板 -->
   <ng-template st-row="actions"
     let-item
     let-index="index">
@@ -66,9 +64,5 @@
         </ng-container>
       </ng-container>
     </ng-container>
-
-
-    <!-- <nz-divider nzType="vertical"></nz-divider> -->
-    <!-- <item></item>  -->
   </ng-template>
 </st>

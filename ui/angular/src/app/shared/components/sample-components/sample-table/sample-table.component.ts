@@ -2,10 +2,12 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  Injector,
-  Input, OnChanges,
-  OnDestroy,
-  OnInit, SimpleChange, SimpleChanges,
+  EventEmitter,
+  Injector, Input,
+  OnChanges,
+  OnDestroy, OnInit, Output,
+  SimpleChange,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { STColumn, STComponent, STPage } from '@delon/abc/st';
@@ -13,7 +15,7 @@ import { AppComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { SampleTableDataProcessorService } from '../sample-table-data-processor.service';
-import { ISampleTableInfo } from './interfaces';
+import { ISampleTableAction, ISampleTableInfo } from './interfaces';
 
 @Component({
   selector: 'sample-table',
@@ -32,6 +34,10 @@ export class SampleTableComponent extends AppComponentBase
     front: false,
     show: true,
   };
+
+  /** 列被触发 */
+  // tslint:disable-next-line: no-output-on-prefix
+  @Output() onAction = new EventEmitter<ISampleTableAction>();
 
 
   /** 列表数据 */
@@ -69,9 +75,13 @@ export class SampleTableComponent extends AppComponentBase
     this.destroy$.complete();
   }
 
-  /** 当action被点击 */
+  /** 当 action 项被点击 */
   onActionClick(action: string, record: any) {
-    debugger;
+    this.onAction.emit({
+      name: action,
+      // tslint:disable-next-line: object-literal-shorthand
+      record: record
+    });
   }
 
   /** 处理列表信息 */
