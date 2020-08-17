@@ -31,4 +31,17 @@ export class AppConsts {
     abnormal: 'message.operate.abnormal',
   };
 
+
+  /** 操作类型 */
+  static action = {
+    /** 创建 */
+    create: 'create',
+    /** 编辑 */
+    edit: 'edit',
+    /** 删除 */
+    delete: 'delete',
+    /** 浏览 */
+    view: 'view'
+  };
+
 }
