@@ -65,6 +65,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
     }
     const result: T[] = [];
 
+    let actions;
     // 遍历表格数据
     for (const item of data) {
       // 复制一份新数据
@@ -86,7 +87,10 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
         }
 
         if (col.type === 'action') {
-          newItem.actions = col.actions;
+          if (!actions) {
+            actions = col.actions;
+          }
+          newItem.actions = actions;
           continue;
         }
 
