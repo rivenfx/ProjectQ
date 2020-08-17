@@ -38,7 +38,7 @@
   {
     "field": "isActive", // 字段,支持嵌套 aa.bb 
     "title": "user.is-active", // 列名
-    "type": null, // 类型
+    "type": "yn", // 类型
     "render": null, // 要使用的渲染器名称
     "width": null, // 宽度
     "order": 3, // 排序号
@@ -60,13 +60,6 @@
     "fixed": null, // 固定列 left或right,必须指定width
     "actions": [
       //{
-      //  "name": "create",
-      //  "type": "button",
-      //  "label": "common.create",
-      //  "icon": "",
-      //  "acl": "user.create"
-      //},
-      //{
       //  "name": "edit",
       //  "type": "button",
       //  "label": "common.edit",
@@ -85,13 +78,6 @@
         "type": "select",
         "label": "common.action",
         "buttons": [
-          {
-            "name": "create",
-            "type": "button",
-            "label": "common.create",
-            "icon": "",
-            "acl": "user.create"
-          },
           {
             "name": "edit",
             "type": "button",
