@@ -1,9 +1,74 @@
 <p>sample-table works!</p>
 
-<st #st [data]="tableData"
-    [columns]="tableColumns"
-    [page]="page"
-    size="small"
-    virtualScroll
-    [scroll]="{ x: '1300px', y: '240px' }">
+
+
+
+<!-- 类型为 button 的 action -->
+<ng-template #actionWithButtonsTemplate
+  let-action
+  let-item="item">
+  <a (click)="onActionClick(action.name, item.original)">
+    <i *ngIf="action.icon"
+      [class]="action.icon"></i>
+    {{l(action.label)}}
+  </a>
+</ng-template>
+
+<!-- 类型为 select 的 action -->
+<ng-template #actionWithSelectTemplate
+  let-action
+  let-item="item">
+  <a nz-dropdown
+    [nzDropdownMenu]="menu">
+    {{l(action.label)}}
+    <i nz-icon
+      nzType="down"></i>
+  </a>
+
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <ng-container *ngFor="let btn of action.buttons">
+        <li nz-menu-item>
+          <ng-container *ngTemplateOutlet="actionWithButtonsTemplate;context:{$implicit: btn, item: item}">
+          </ng-container>
+        </li>
+      </ng-container>
+    </ul>
+  </nz-dropdown-menu>
+</ng-template>
+
+<st #st
+  [data]="tableData"
+  [columns]="tableColumns"
+  [page]="page"
+  size="small"
+  virtualScroll
+  [scroll]="{ x: '1300px', y: '240px' }">
+
+  <ng-template st-row="actions"
+    let-item
+    let-index="index">
+    <ng-container *ngIf="item.actions">
+      <ng-container *ngFor="let action of item.actions; let i = index">
+        <ng-container [ngSwitch]="action.type">
+          <!-- button 按钮 -->
+          <ng-container *ngSwitchCase="'Button'">
+            <ng-container *ngTemplateOutlet="actionWithButtonsTemplate;context:{$implicit: action, item: item}">
+            </ng-container>
+            <nz-divider nzType="vertical"
+              [hidden]="i===(item.actions.length-1)"></nz-divider>
+          </ng-container>
+          <!-- 选择项 -->
+          <ng-container *ngSwitchCase="'Select'">
+            <ng-container *ngTemplateOutlet="actionWithSelectTemplate;context:{$implicit: action, item: item}">
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+
+    <!-- <nz-divider nzType="vertical"></nz-divider> -->
+    <!-- <item></item>  -->
+  </ng-template>
 </st>

@@ -69,6 +69,11 @@ export class SampleTableComponent extends AppComponentBase
     this.destroy$.complete();
   }
 
+  /** 当action被点击 */
+  onActionClick(action: string, record: any) {
+    debugger;
+  }
+
   /** 处理列表信息 */
   protected processTableInfo(input: ISampleTableInfo) {
     this.tableData = [];

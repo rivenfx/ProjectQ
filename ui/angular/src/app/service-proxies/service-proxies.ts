@@ -1528,6 +1528,82 @@ export enum ColumnItemFixed {
     Right = <any>"Right",
 }
 
+export enum ColumnControl {
+    Button = <any>"Button",
+    Select = <any>"Select",
+}
+
+export class ColumnActionItemDto implements IColumnActionItemDto {
+    name: string | undefined;
+    label: string | undefined;
+    icon: string | undefined;
+    type: ColumnControl;
+    acl: string | undefined;
+    buttons: ColumnActionItemDto[] | undefined;
+
+    constructor(data?: IColumnActionItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.label = _data["label"];
+            this.icon = _data["icon"];
+            this.type = _data["type"];
+            this.acl = _data["acl"];
+            if (Array.isArray(_data["buttons"])) {
+                this.buttons = [] as any;
+                for (let item of _data["buttons"])
+                    this.buttons.push(ColumnActionItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColumnActionItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnActionItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["label"] = this.label;
+        data["icon"] = this.icon;
+        data["type"] = this.type;
+        data["acl"] = this.acl;
+        if (Array.isArray(this.buttons)) {
+            data["buttons"] = [];
+            for (let item of this.buttons)
+                data["buttons"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ColumnActionItemDto {
+        const json = this.toJSON();
+        let result = new ColumnActionItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnActionItemDto {
+    name: string | undefined;
+    label: string | undefined;
+    icon: string | undefined;
+    type: ColumnControl;
+    acl: string | undefined;
+    buttons: ColumnActionItemDto[] | undefined;
+}
+
 export class ColumnItemDto implements IColumnItemDto {
     field: string | undefined;
     type: string | undefined;
@@ -1539,6 +1615,7 @@ export class ColumnItemDto implements IColumnItemDto {
     dateFormat: string | undefined;
     statistical: ColumnItemStatistical;
     fixed: ColumnItemFixed;
+    actions: ColumnActionItemDto[] | undefined;
 
     constructor(data?: IColumnItemDto) {
         if (data) {
@@ -1561,6 +1638,11 @@ export class ColumnItemDto implements IColumnItemDto {
             this.dateFormat = _data["dateFormat"];
             this.statistical = _data["statistical"];
             this.fixed = _data["fixed"];
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions.push(ColumnActionItemDto.fromJS(item));
+            }
         }
     }
 
@@ -1583,6 +1665,11 @@ export class ColumnItemDto implements IColumnItemDto {
         data["dateFormat"] = this.dateFormat;
         data["statistical"] = this.statistical;
         data["fixed"] = this.fixed;
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item.toJSON());
+        }
         return data; 
     }
 
@@ -1605,6 +1692,7 @@ export interface IColumnItemDto {
     dateFormat: string | undefined;
     statistical: ColumnItemStatistical;
     fixed: ColumnItemFixed;
+    actions: ColumnActionItemDto[] | undefined;
 }
 
 export class ColumnItemDtoListResultDto implements IColumnItemDtoListResultDto {

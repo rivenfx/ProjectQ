@@ -62,6 +62,12 @@ namespace Company.Project.Common.ListView.Dtos
         /// 固定列, left 或 right, 指定 Width 时生效
         /// </summary>
         public ColumnItemFixed? Fixed { get; set; }
+
+
+        /// <summary>
+        /// 操作,当 <see cref="Type"/> 值为 action 时
+        /// </summary>
+        public ColumnActionItemDto[] Actions { get; set; }
     }
 
 }

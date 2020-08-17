@@ -40,6 +40,10 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
         newItem.type = item.type.toLowerCase() as any;
         if (newItem.type === 'no') {
           newItem.sort = undefined;
+        } else if (newItem.type === ('action' as any)) {
+          newItem.type = undefined;
+          newItem.index = 'actions';
+          newItem.render = 'actions';
         }
       }
       if (item.statistical && item.statistical !== ColumnItemStatistical.None) {
@@ -64,7 +68,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
     // 遍历表格数据
     for (const item of data) {
       // 复制一份新数据
-      const newItem = _.cloneDeep(item);
+      const newItem = _.cloneDeep(item) as any;
       // 设置原始数据
       newItem.original = item;
       result.push(newItem);
@@ -78,6 +82,11 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
         if (!col.type
           || col.type === 'checkbox'
           || col.type === 'no') {
+          continue;
+        }
+
+        if (col.type === 'action') {
+          newItem.actions = col.actions;
           continue;
         }
 
@@ -95,7 +104,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
           case 'datetime': // 时间类型
             if (col.dateFormat && col.dateFormat.trim() !== '') {
               if (fieldValue instanceof moment) {
-                fieldValue = fieldValue.format(col.dateFormat);
+                fieldValue = (fieldValue as moment.Moment).format(col.dateFormat);
               } else {
                 fieldValue = moment(fieldValue).format(col.dateFormat);
               }
