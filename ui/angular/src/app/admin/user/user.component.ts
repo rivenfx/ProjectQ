@@ -9,10 +9,10 @@ import {
   UserServiceProxy,
 } from '@service-proxies';
 import { ListViewComponentBase } from '@shared/common';
-import { finalize } from 'rxjs/operators';
-import { CreateOrEditUserComponent } from './create-or-edit-user';
 import { ISampleTableInfo } from '@shared/components/sample-components/sample-table';
 import * as _ from 'lodash';
+import { finalize } from 'rxjs/operators';
+import { CreateOrEditUserComponent } from './create-or-edit-user';
 
 @Component({
   selector: 'user',

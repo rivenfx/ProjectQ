@@ -1,8 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { CreateOrEditUserInput, CreateOrUpdateRoleInput, UserDto, UserServiceProxy } from '@service-proxies';
+import { AppConsts } from '@shared';
 import { ModalComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
-import { AppConsts } from '@shared';
 
 @Component({
   selector: 'create-or-edit-user',

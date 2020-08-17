@@ -7,8 +7,8 @@ import {
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { PageFilterItemComponentBase } from '@shared/common';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { PageFilterItemComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 
 @Component({

@@ -77,6 +77,7 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   /** 当页面状态为只读, 修改表单控件状态为禁用 */
   disableFormControls() {
     if (this.readonly) {
+      // tslint:disable-next-line: forin
       for (const key in this.pageForm.controls) {
         this.pageForm.controls[key].disable();
       }

@@ -1,17 +1,17 @@
 import { Injectable, Injector } from '@angular/core';
-import { SampleComponentBase } from '@shared/common';
-import * as moment from 'moment';
-import * as _ from 'lodash';
-import { ColumnItemDto, ColumnItemFixed, ColumnItemStatistical } from '@service-proxies';
 import { STColumn } from '@delon/abc';
+import { ColumnItemDto, ColumnItemFixed, ColumnItemStatistical } from '@service-proxies';
+import { SampleComponentBase } from '@shared/common';
+import * as _ from 'lodash';
+import * as moment from 'moment';
 
 
 @Injectable()
 export class SampleTableDataProcessorService extends SampleComponentBase {
 
   colTypeMap = {
-    'datetime': undefined,
-    'number': undefined,
+    datetime: undefined,
+    number: undefined,
   };
 
   constructor(
@@ -66,7 +66,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
       // 复制一份新数据
       const newItem = _.cloneDeep(item);
       // 设置原始数据
-      newItem['original'] = item;
+      newItem.original = item;
       result.push(newItem);
 
       // 遍历列配置
@@ -95,7 +95,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
           case 'datetime': // 时间类型
             if (col.dateFormat && col.dateFormat.trim() !== '') {
               if (fieldValue instanceof moment) {
-                fieldValue = fieldValue['format'](col.dateFormat);
+                fieldValue = fieldValue.format(col.dateFormat);
               } else {
                 fieldValue = moment(fieldValue).format(col.dateFormat);
               }

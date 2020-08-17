@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared';
 import { PageFilterModule } from '@shared/components/page-filter';
+import { SampleComponentsModule } from '@shared/components/sample-components';
 import { TableBarModule } from '@shared/components/table-bar';
 import { RivenModule } from '@shared/riven';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -12,7 +13,6 @@ import { RoleComponent } from './role';
 import { CreateOrEditRoleComponent } from './role/create-or-edit-role';
 import { UserComponent } from './user';
 import { CreateOrEditUserComponent } from './user/create-or-edit-user';
-import { SampleComponentsModule } from '@shared/components/sample-components';
 
 const entryComponents = [
   CreateOrEditRoleComponent,

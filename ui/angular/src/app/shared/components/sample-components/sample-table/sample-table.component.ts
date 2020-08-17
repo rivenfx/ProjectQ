@@ -8,12 +8,12 @@ import {
   OnInit, SimpleChange, SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import { STColumn, STComponent, STPage } from '@delon/abc/st';
 import { AppComponentBase } from '@shared/common';
-import { STColumn, STComponent, STPage } from '@delon/abc';
+import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { SampleTableDataProcessorService } from '../sample-table-data-processor.service';
 import { ISampleTableInfo } from './interfaces';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'sample-table',
@@ -82,7 +82,7 @@ export class SampleTableComponent extends AppComponentBase
     this.tableColumns = this.tableDataProcessor.processCols(input.columns);
 
     if (typeof (input.displayPagination) === 'boolean') {
-      debugger
+      debugger;
       const tmpPage = _.clone(this.page);
       tmpPage.show = input.displayPagination;
       this.page = tmpPage;
