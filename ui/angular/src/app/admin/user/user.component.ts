@@ -9,7 +9,7 @@ import {
   UserServiceProxy,
 } from '@service-proxies';
 import { ListViewComponentBase } from '@shared/common';
-import { ISampleTableInfo } from '@shared/components/sample-components/sample-table';
+import { ISampleTableAction, ISampleTableInfo } from '@shared/components/sample-components/sample-table';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
@@ -65,6 +65,25 @@ export class UserComponent extends ListViewComponentBase<UserDto>
         }
         callback(res.total);
       });
+  }
+
+
+  onAction(event: ISampleTableAction) {
+    if (!event) {
+      return;
+    }
+    switch (event.name) {
+      case this.appConsts.action.create:
+        this.onClickCreateOrEdit();
+        break;
+      case this.appConsts.action.edit:
+        this.onClickCreateOrEdit(event.record);
+        break;
+      case this.appConsts.action.delete:
+        break;
+      case this.appConsts.action.view:
+        break;
+    }
   }
 
   onClickCreateOrEdit(data?: UserDto) {
