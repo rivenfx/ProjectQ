@@ -46,5 +46,68 @@
     "dateFormat": null, // 列类型为datetime类型格式化规则
     "statistical": null, // 统计类型
     "fixed": null // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "common.action", // 列名
+    "type": "action", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 3, // 排序号
+    "numberDigits": 0, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null, // 固定列 left或right,必须指定width
+    "actions": [
+      //{
+      //  "name": "create",
+      //  "type": "button",
+      //  "label": "common.create",
+      //  "icon": "",
+      //  "acl": "user.create"
+      //},
+      //{
+      //  "name": "edit",
+      //  "type": "button",
+      //  "label": "common.edit",
+      //  "icon": "",
+      //  "acl": "user.edit"
+      //},
+      //{
+      //  "name": "delete",
+      //  "type": "button",
+      //  "label": "common.delete",
+      //  "icon": "",
+      //  "acl": "user.delete"
+      //},
+      {
+        "name": null,
+        "type": "select",
+        "label": "common.action",
+        "buttons": [
+          {
+            "name": "create",
+            "type": "button",
+            "label": "common.create",
+            "icon": "",
+            "acl": "user.create"
+          },
+          {
+            "name": "edit",
+            "type": "button",
+            "label": "common.edit",
+            "icon": "",
+            "acl": "user.edit"
+          },
+          {
+            "name": "delete",
+            "type": "button",
+            "label": "common.delete",
+            "icon": "",
+            "acl": "user.delete"
+          }
+        ]
+      }
+    ]
   }
 ]
