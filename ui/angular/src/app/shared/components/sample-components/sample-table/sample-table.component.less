@@ -1,5 +1,6 @@
 :host{
   ::ng-deep{
+    // 虚拟滚动表头滚动条样式
     .nz-table-hide-scrollbar::-webkit-scrollbar {
       width: 20px;
       height: 8px;
@@ -22,10 +23,9 @@
       -webkit-border-radius: 6px;
     }
 
-
+    // 右侧阴影
     .ant-table-ping-right:not(.ant-table-has-fix-right) .ant-table-container::after{
       box-shadow: inset -10px 0 8px -8px transparent;
-      // inset -10px 0 8px -8px rgba(0, 0, 0, 0.15)
     }
   }
 }
