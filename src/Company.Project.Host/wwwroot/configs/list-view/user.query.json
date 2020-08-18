@@ -1,63 +1,75 @@
 [
   {
-    "field": "", // ×Ö¶Î,Ö§³ÖÇ¶Ì× aa.bb 
-    "title": "No", // ÁĞÃû
-    "type": "no", // ÀàĞÍ
-    "render": null, // ÒªÊ¹ÓÃµÄäÖÈ¾Æ÷Ãû³Æ
-    "width": 50, // ¿í¶È
-    "order": 0, // ÅÅĞòºÅ
-    "numberDigits": 2, // ÁĞÀàĞÍÎªnumberÊ±±£ÁôĞ¡ÊıÎ»
-    "dateFormat": null, // ÁĞÀàĞÍÎªdatetimeÀàĞÍ¸ñÊ½»¯¹æÔò
-    "statistical": null, // Í³¼ÆÀàĞÍ
-    "fixed": "Left" // ¹Ì¶¨ÁĞ left»òright,±ØĞëÖ¸¶¨width
+    "field": "", // å­—æ®µ,æ”¯æŒåµŒå¥— aa.bb 
+    "title": "No", // åˆ—å
+    "type": "no", // ç±»å‹
+    "render": null, // è¦ä½¿ç”¨çš„æ¸²æŸ“å™¨åç§°
+    "width": 50, // å®½åº¦
+    "order": 0, // æ’åºå·
+    "numberDigits": 2, // åˆ—ç±»å‹ä¸ºnumberæ—¶ä¿ç•™å°æ•°ä½
+    "dateFormat": null, // åˆ—ç±»å‹ä¸ºdatetimeç±»å‹æ ¼å¼åŒ–è§„åˆ™
+    "statistical": null, // ç»Ÿè®¡ç±»å‹
+    "fixed": "Left" // å›ºå®šåˆ— leftæˆ–right,å¿…é¡»æŒ‡å®šwidth
   },
   {
-    "field": "userName", // ×Ö¶Î,Ö§³ÖÇ¶Ì× aa.bb 
-    "title": "user.user-name", // ÁĞÃû
-    "type": null, // ÀàĞÍ
-    "render": null, // ÒªÊ¹ÓÃµÄäÖÈ¾Æ÷Ãû³Æ
-    "width": null, // ¿í¶È
-    "order": 1, // ÅÅĞòºÅ
-    "numberDigits": 2, // ÁĞÀàĞÍÎªnumberÊ±±£ÁôĞ¡ÊıÎ»
-    "dateFormat": null, // ÁĞÀàĞÍÎªdatetimeÀàĞÍ¸ñÊ½»¯¹æÔò
-    "statistical": null, // Í³¼ÆÀàĞÍ
-    "fixed": null // ¹Ì¶¨ÁĞ left»òright,±ØĞëÖ¸¶¨width
+    "field": "", // å­—æ®µ,æ”¯æŒåµŒå¥— aa.bb 
+    "title": "No", // åˆ—å
+    "type": "checkbox", // ç±»å‹
+    "render": null, // è¦ä½¿ç”¨çš„æ¸²æŸ“å™¨åç§°
+    "width": 50, // å®½åº¦
+    "order": 1, // æ’åºå·
+    "numberDigits": 2, // åˆ—ç±»å‹ä¸ºnumberæ—¶ä¿ç•™å°æ•°ä½
+    "dateFormat": null, // åˆ—ç±»å‹ä¸ºdatetimeç±»å‹æ ¼å¼åŒ–è§„åˆ™
+    "statistical": null, // ç»Ÿè®¡ç±»å‹
+    "fixed": "Left" // å›ºå®šåˆ— leftæˆ–right,å¿…é¡»æŒ‡å®šwidth
   },
   {
-    "field": "nickname", // ×Ö¶Î,Ö§³ÖÇ¶Ì× aa.bb 
-    "title": "user.nick-name", // ÁĞÃû
-    "type": null, // ÀàĞÍ
-    "render": null, // ÒªÊ¹ÓÃµÄäÖÈ¾Æ÷Ãû³Æ
-    "width": null, // ¿í¶È
-    "order": 2, // ÅÅĞòºÅ
-    "numberDigits": 2, // ÁĞÀàĞÍÎªnumberÊ±±£ÁôĞ¡ÊıÎ»
-    "dateFormat": null, // ÁĞÀàĞÍÎªdatetimeÀàĞÍ¸ñÊ½»¯¹æÔò
-    "statistical": null, // Í³¼ÆÀàĞÍ
-    "fixed": null // ¹Ì¶¨ÁĞ left»òright,±ØĞëÖ¸¶¨width
+    "field": "userName", // å­—æ®µ,æ”¯æŒåµŒå¥— aa.bb 
+    "title": "user.user-name", // åˆ—å
+    "type": null, // ç±»å‹
+    "render": null, // è¦ä½¿ç”¨çš„æ¸²æŸ“å™¨åç§°
+    "width": null, // å®½åº¦
+    "order": 2, // æ’åºå·
+    "numberDigits": 2, // åˆ—ç±»å‹ä¸ºnumberæ—¶ä¿ç•™å°æ•°ä½
+    "dateFormat": null, // åˆ—ç±»å‹ä¸ºdatetimeç±»å‹æ ¼å¼åŒ–è§„åˆ™
+    "statistical": null, // ç»Ÿè®¡ç±»å‹
+    "fixed": null // å›ºå®šåˆ— leftæˆ–right,å¿…é¡»æŒ‡å®šwidth
   },
   {
-    "field": "isActive", // ×Ö¶Î,Ö§³ÖÇ¶Ì× aa.bb 
-    "title": "user.is-active", // ÁĞÃû
-    "type": "yn", // ÀàĞÍ
-    "render": null, // ÒªÊ¹ÓÃµÄäÖÈ¾Æ÷Ãû³Æ
-    "width": null, // ¿í¶È
-    "order": 3, // ÅÅĞòºÅ
-    "numberDigits": 0, // ÁĞÀàĞÍÎªnumberÊ±±£ÁôĞ¡ÊıÎ»
-    "dateFormat": null, // ÁĞÀàĞÍÎªdatetimeÀàĞÍ¸ñÊ½»¯¹æÔò
-    "statistical": null, // Í³¼ÆÀàĞÍ
-    "fixed": null // ¹Ì¶¨ÁĞ left»òright,±ØĞëÖ¸¶¨width
+    "field": "nickname", // å­—æ®µ,æ”¯æŒåµŒå¥— aa.bb 
+    "title": "user.nick-name", // åˆ—å
+    "type": null, // ç±»å‹
+    "render": null, // è¦ä½¿ç”¨çš„æ¸²æŸ“å™¨åç§°
+    "width": null, // å®½åº¦
+    "order": 3, // æ’åºå·
+    "numberDigits": 2, // åˆ—ç±»å‹ä¸ºnumberæ—¶ä¿ç•™å°æ•°ä½
+    "dateFormat": null, // åˆ—ç±»å‹ä¸ºdatetimeç±»å‹æ ¼å¼åŒ–è§„åˆ™
+    "statistical": null, // ç»Ÿè®¡ç±»å‹
+    "fixed": null // å›ºå®šåˆ— leftæˆ–right,å¿…é¡»æŒ‡å®šwidth
   },
   {
-    "field": "", // ×Ö¶Î,Ö§³ÖÇ¶Ì× aa.bb 
-    "title": "common.action", // ÁĞÃû
-    "type": "action", // ÀàĞÍ
-    "render": null, // ÒªÊ¹ÓÃµÄäÖÈ¾Æ÷Ãû³Æ
-    "width": null, // ¿í¶È
-    "order": 3, // ÅÅĞòºÅ
-    "numberDigits": 0, // ÁĞÀàĞÍÎªnumberÊ±±£ÁôĞ¡ÊıÎ»
-    "dateFormat": null, // ÁĞÀàĞÍÎªdatetimeÀàĞÍ¸ñÊ½»¯¹æÔò
-    "statistical": null, // Í³¼ÆÀàĞÍ
-    "fixed": null, // ¹Ì¶¨ÁĞ left»òright,±ØĞëÖ¸¶¨width
+    "field": "isActive", // å­—æ®µ,æ”¯æŒåµŒå¥— aa.bb 
+    "title": "user.is-active", // åˆ—å
+    "type": "yn", // ç±»å‹
+    "render": null, // è¦ä½¿ç”¨çš„æ¸²æŸ“å™¨åç§°
+    "width": null, // å®½åº¦
+    "order": 4, // æ’åºå·
+    "numberDigits": 0, // åˆ—ç±»å‹ä¸ºnumberæ—¶ä¿ç•™å°æ•°ä½
+    "dateFormat": null, // åˆ—ç±»å‹ä¸ºdatetimeç±»å‹æ ¼å¼åŒ–è§„åˆ™
+    "statistical": null, // ç»Ÿè®¡ç±»å‹
+    "fixed": null // å›ºå®šåˆ— leftæˆ–right,å¿…é¡»æŒ‡å®šwidth
+  },
+  {
+    "field": "", // å­—æ®µ,æ”¯æŒåµŒå¥— aa.bb 
+    "title": "common.action", // åˆ—å
+    "type": "action", // ç±»å‹
+    "render": null, // è¦ä½¿ç”¨çš„æ¸²æŸ“å™¨åç§°
+    "width": null, // å®½åº¦
+    "order": 5, // æ’åºå·
+    "numberDigits": 0, // åˆ—ç±»å‹ä¸ºnumberæ—¶ä¿ç•™å°æ•°ä½
+    "dateFormat": null, // åˆ—ç±»å‹ä¸ºdatetimeç±»å‹æ ¼å¼åŒ–è§„åˆ™
+    "statistical": null, // ç»Ÿè®¡ç±»å‹
+    "fixed": null, // å›ºå®šåˆ— leftæˆ–right,å¿…é¡»æŒ‡å®šwidth
     "actions": [
       //{
       //  "name": "edit",
