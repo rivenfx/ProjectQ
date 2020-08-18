@@ -128,31 +128,13 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     if (!event) {
       return;
     }
-    switch (event.name) {
-      case this.appConsts.action.create:
-        const createFunc = (this as any).create;
-        if (createFunc) {
-          createFunc.apply(this);
-        }
-        break;
-      case this.appConsts.action.edit:
-        const editFunc = (this as any).edit;
-        if (editFunc) {
-          editFunc.apply(this, [event.record]);
-        }
-        break;
-      case this.appConsts.action.delete:
-        const deleteFunc = (this as any).delete;
-        if (deleteFunc) {
-          deleteFunc.apply(this, [event.record]);
-        }
-        break;
-      case this.appConsts.action.view:
-        const viewFunc = (this as any).view;
-        if (viewFunc) {
-          viewFunc.apply(this, [event.record]);
-        }
-        break;
+
+    const eventFunc = (this as any)[event.name];
+    if (eventFunc) {
+      eventFunc.apply(this, [event.record]);
+    } else {
+      // tslint:disable-next-line: no-console
+      console.debug(`action没有此函数 ${event.name}`);
     }
   }
 
