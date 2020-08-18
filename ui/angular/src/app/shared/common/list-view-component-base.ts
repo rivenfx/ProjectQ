@@ -2,6 +2,7 @@ import { Injector, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
 import { QueryCondition, SortCondition } from '@service-proxies';
+import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { AppComponentBase } from './app-component-base';
 
@@ -11,6 +12,15 @@ export interface IPageInfo {
   index: number;
   /** 一页最大数据量 */
   size: number;
+
+  /** 是否显示分页 */
+  show?: boolean;
+  /** 是否前端分页 */
+  front?: boolean;
+  /** 是否显示快速跳转 */
+  showQuickJumper?: boolean;
+  /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
+  pageSizes?: number[];
 }
 
 /** 页面滚动信息 */
@@ -62,6 +72,10 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   pageInfo: IPageInfo = {
     index: 1,
     size: 20,
+    show: true,
+    front: false,
+    showQuickJumper: true,
+    pageSizes: [10, 20, 30, 40, 50]
   };
 
   /** 表格滚动 */
@@ -85,6 +99,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 排序条件 */
   sortConditions: SortCondition[] = [];
 
+  /** 选中的数据 */
+  checkedData: T[] = [];
+
   constructor(injector: Injector) {
     super(injector);
 
@@ -106,6 +123,39 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     this.refresh();
   }
 
+  /** 当触发操作事件 */
+  onAction(event: ISampleTableAction) {
+    if (!event) {
+      return;
+    }
+    switch (event.name) {
+      case this.appConsts.action.create:
+        const createFunc = (this as any).create;
+        if (createFunc) {
+          createFunc();
+        }
+        break;
+      case this.appConsts.action.edit:
+        const editFunc = (this as any).edit;
+        if (editFunc) {
+          editFunc(event.record);
+        }
+        break;
+      case this.appConsts.action.delete:
+        const deleteFunc = (this as any).delete;
+        if (deleteFunc) {
+          deleteFunc(event.record);
+        }
+        break;
+      case this.appConsts.action.view:
+        const viewFunc = (this as any).view;
+        if (viewFunc) {
+          viewFunc(event.record);
+        }
+        break;
+    }
+  }
+
   /** 页码发生更改 */
   onPageIndexChange(pageIndex: number) {
     this.pageInfo.index = pageIndex;
@@ -116,6 +166,11 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   onPageSizeChange(pageSize: number) {
     this.pageInfo.size = pageSize;
     this.refresh(true);
+  }
+
+  /** 选中的数据发生更改 */
+  onCheckChange(data: T[]) {
+    this.checkedData = data;
   }
 
   /** 刷新页面 */
@@ -143,7 +198,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
   /** 排序条件发生改变 */
   onSortChange(sortConditions: SortCondition[]) {
+    debugger;
     this.sortConditions = sortConditions;
+    this.refresh();
   }
 
   /** 加载数据 */
