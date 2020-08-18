@@ -98,6 +98,13 @@
             "acl": "user.edit"
           },
           {
+            "name": "view",
+            "type": "button",
+            "label": "common.view",
+            "icon": "",
+            "acl": "user.delete"
+          },
+          {
             "name": "delete",
             "type": "button",
             "label": "common.delete",
