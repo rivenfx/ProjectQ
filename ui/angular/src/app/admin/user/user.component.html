@@ -1,16 +1,16 @@
 <page-header [title]="l('menu.user')"
-  [breadcrumb]="breadcrumb"
-  [action]="action">
+             [breadcrumb]="breadcrumb"
+             [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
     <button nz-button
-      (click)="onClickCreateOrEdit()"
-      [title]="l('common.create')">
+            (click)="onClickCreateOrEdit()"
+            [title]="l('common.create')">
       <i class="icon iconfont icon-add"></i>
     </button>
     <button nz-button
-      (click)="refresh()"
-      [title]="l('common.refresh')">
+            (click)="refresh()"
+            [title]="l('common.refresh')">
       <i class="icon iconfont icon-refresh"></i>
     </button>
   </ng-template>
@@ -20,8 +20,8 @@
 <div class="page-body">
 
   <page-filter [pageFilterName]="pageFilterName"
-    [displayLabel]="true"
-    (valueChange)="onFilterChange($event)">
+               [displayLabel]="true"
+               (valueChange)="onFilterChange($event)">
 
   </page-filter>
 
@@ -31,7 +31,8 @@
 
 
   <sample-table [info]="tableInfo"
-    (onAction)="onAction($event)">
+                [total]="totalRecord"
+                (onAction)="onAction($event)">
 
   </sample-table>
   <!--  -->

@@ -1,9 +1,10 @@
-import { Injector } from '@angular/core';
+import { Injector, Input } from '@angular/core';
 import { I18nService } from '@core/i18n';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 
 export abstract class SampleComponentBase {
 
+  @Input()
   loading: boolean;
 
   i18nSer: I18nService;

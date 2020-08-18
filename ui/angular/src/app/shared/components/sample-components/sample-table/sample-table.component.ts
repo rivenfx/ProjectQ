@@ -10,12 +10,13 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { STColumn, STComponent, STPage } from '@delon/abc/st';
+import { STColumn, STComponent, STPage, STChange } from '@delon/abc/st';
 import { AppComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { SampleTableDataProcessorService } from '../sample-table-data-processor.service';
 import { ISampleTableAction, ISampleTableInfo } from './interfaces';
+import { SortCondition, SortType } from '@service-proxies';
 
 @Component({
   selector: 'sample-table',
@@ -26,6 +27,7 @@ import { ISampleTableAction, ISampleTableInfo } from './interfaces';
 export class SampleTableComponent extends AppComponentBase
   implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
+
   /** 列表信息 */
   @Input() info: ISampleTableInfo;
 
@@ -35,13 +37,31 @@ export class SampleTableComponent extends AppComponentBase
     show: true,
   };
 
+  /** 数据总量 */
+  @Input() total: number;
+
+  /** 边框 */
+  @Input() bordered = true;
+
   /** 列被触发 */
-  // tslint:disable-next-line: no-output-on-prefix
+    // tslint:disable-next-line: no-output-on-prefix
   @Output() onAction = new EventEmitter<ISampleTableAction>();
 
+  /** 列表排序事件 */
+  @Output() onSort = new EventEmitter<SortCondition[]>();
+
+  /** 当check多选 */
+  @Output() onCheck = new EventEmitter<any[]>();
+
+  /** 页面数据大小发生改变 */
+  @Output() onPageSizeChange = new EventEmitter<number>();
+
+  /** 页码发生改变 */
+  @Output() onPageIndexChange = new EventEmitter<number>();
 
   /** 列表数据 */
   tableData: any = [];
+
   /** 列表配置 */
   tableColumns: STColumn[] = [];
 
@@ -80,8 +100,61 @@ export class SampleTableComponent extends AppComponentBase
     this.onAction.emit({
       name: action,
       // tslint:disable-next-line: object-literal-shorthand
-      record: record
+      record: record,
     });
+  }
+
+  /** 表格事件 */
+  onTableChange(evnet: STChange) {
+    switch (evnet.type) {
+      case 'checkbox': // 多选
+        const checked = evnet.checkbox;
+        this.onCheck.emit(checked);
+        break;
+      case 'radio': // 单选
+        this.onCheck.emit([evnet.radio]);
+        break;
+      case 'sort': // 排序
+        this.updateSort(evnet);
+        break;
+      case 'pi': // page index 修改
+        this.onPageIndexChange.emit(evnet.pi);
+        break;
+      case 'ps': // page size 修改
+        this.onPageSizeChange.emit(evnet.ps);
+        break;
+    }
+  }
+
+  /** 更新排序 */
+  protected updateSort(evnet: STChange) {
+    if (evnet.type !== 'sort') {
+      return;
+    }
+
+    const sortConditions: SortCondition[] = [];
+    const sorts = evnet.sort.map.sort.split('-');
+    let sortField = undefined;
+    let sortType: SortType = SortType.None;
+    let index = 0;
+    for (const sort of sorts) {
+      const lastIndex = sort.lastIndexOf('.');
+      sortField = sort.substring(0, lastIndex);
+      if (sort.endsWith('.descend')) {
+        sortType = SortType.Desc;
+      } else if (sort.endsWith('.ascend')) {
+        sortType = SortType.Asc;
+      }
+      sortConditions.push(
+        new SortCondition({
+          field: sortField,
+          order: index++,
+          type: sortType,
+        }),
+      );
+    }
+
+    this.onSort.emit(sortConditions);
   }
 
   /** 处理列表信息 */

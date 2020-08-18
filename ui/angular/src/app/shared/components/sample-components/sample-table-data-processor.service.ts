@@ -38,10 +38,12 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
       };
       if (item.type && item.type !== '' && item.type !== 'yn') {
         newItem.type = item.type.toLowerCase() as any;
-        if (newItem.type === 'no') {
+        if (newItem.type === 'no'
+          || newItem.type === 'checkbox') {
           newItem.sort = undefined;
         } else if (newItem.type === ('action' as any)) {
           newItem.type = undefined;
+          newItem.sort = undefined;
           newItem.index = 'actions';
           newItem.render = 'actions';
         }
