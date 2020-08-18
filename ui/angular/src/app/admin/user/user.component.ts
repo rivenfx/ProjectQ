@@ -67,26 +67,36 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       });
   }
 
-
-  onAction(event: ISampleTableAction) {
-    if (!event) {
-      return;
-    }
-    switch (event.name) {
-      case this.appConsts.action.create:
-        this.onClickCreateOrEdit();
-        break;
-      case this.appConsts.action.edit:
-        this.onClickCreateOrEdit(event.record);
-        break;
-      case this.appConsts.action.delete:
-        break;
-      case this.appConsts.action.view:
-        break;
-    }
+  create() {
+    this.onClickCreateOrEdit();
   }
 
-  onClickCreateOrEdit(data?: UserDto) {
+  edit(data: UserDto) {
+    this.onClickCreateOrEdit(data);
+  }
+
+  delete(data: UserDto) {
+    this.message.confirm(this.l('是否删除'), (res) => {
+      if (res) {
+        this.loading = true;
+        this.userSer.delete([data.id])
+          .pipe(finalize(() => {
+            this.loading = false;
+          }))
+          .subscribe(() => {
+            this.message.success(this.l(this.appConsts.message.success));
+          });
+      } else {
+        this.message.success(this.l(this.appConsts.message.cancelled));
+      }
+    });
+  }
+
+  view(data: UserDto) {
+    this.onClickCreateOrEdit(data, true);
+  }
+
+  onClickCreateOrEdit(data?: UserDto, readonly?: boolean) {
     let input;
     if (data) {
       input = data.id;
@@ -96,6 +106,8 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       CreateOrEditUserComponent,
       {
         modalInput: input,
+        // tslint:disable-next-line: object-literal-shorthand
+        readonly: readonly
       },
     ).subscribe((res) => {
       if (res) {
