@@ -10,13 +10,13 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { STColumn, STComponent, STPage, STChange } from '@delon/abc/st';
+import { STChange, STColumn, STComponent, STMultiSort, STPage } from '@delon/abc/st';
+import { SortCondition, SortType } from '@service-proxies';
 import { AppComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
 import { SampleTableDataProcessorService } from '../sample-table-data-processor.service';
 import { ISampleTableAction, ISampleTableInfo } from './interfaces';
-import { SortCondition, SortType } from '@service-proxies';
 
 @Component({
   selector: 'sample-table',
@@ -35,7 +35,18 @@ export class SampleTableComponent extends AppComponentBase
   @Input() page: STPage = {
     front: false,
     show: true,
+    showQuickJumper: true,
+    pageSizes: [10, 20, 30, 40, 50]
   };
+
+  /** 页码 */
+  @Input() pageIndex = 1;
+
+  /** 页面数据量 */
+  @Input() pageSize = 20;
+
+  /** 页面数据分页条选项 */
+  @Input() pageSizes = [10, 20, 30, 40, 50];
 
   /** 数据总量 */
   @Input() total: number;
@@ -44,26 +55,34 @@ export class SampleTableComponent extends AppComponentBase
   @Input() bordered = true;
 
   /** 列被触发 */
-    // tslint:disable-next-line: no-output-on-prefix
-  @Output() onAction = new EventEmitter<ISampleTableAction>();
+  @Output() action = new EventEmitter<ISampleTableAction>();
 
   /** 列表排序事件 */
-  @Output() onSort = new EventEmitter<SortCondition[]>();
+  @Output() sort = new EventEmitter<SortCondition[]>();
 
   /** 当check多选 */
-  @Output() onCheck = new EventEmitter<any[]>();
+  @Output() check = new EventEmitter<any[]>();
 
   /** 页面数据大小发生改变 */
-  @Output() onPageSizeChange = new EventEmitter<number>();
+  @Output() pageSizeChange = new EventEmitter<number>();
 
   /** 页码发生改变 */
-  @Output() onPageIndexChange = new EventEmitter<number>();
+  @Output() pageIndexChange = new EventEmitter<number>();
 
   /** 列表数据 */
   tableData: any = [];
 
   /** 列表配置 */
   tableColumns: STColumn[] = [];
+
+  /** 排序配置 */
+  sortData: STMultiSort = {
+    key: 'sort',
+    separator: '-',
+    nameSeparator: '.',
+    keepEmptyKey: true,
+    global: true
+  };
 
   private destroy$ = new Subject();
   @ViewChild('st', { static: false }) stRef: STComponent;
@@ -88,6 +107,9 @@ export class SampleTableComponent extends AppComponentBase
     if (changes.info && changes.info.currentValue) {
       this.processTableInfo(changes.info.currentValue);
     }
+    if (changes.pageSizes) {
+      this.page;
+    }
   }
 
   ngOnDestroy(): void {
@@ -97,7 +119,7 @@ export class SampleTableComponent extends AppComponentBase
 
   /** 当 action 项被点击 */
   onActionClick(action: string, record: any) {
-    this.onAction.emit({
+    this.action.emit({
       name: action,
       // tslint:disable-next-line: object-literal-shorthand
       record: record,
@@ -109,32 +131,33 @@ export class SampleTableComponent extends AppComponentBase
     switch (evnet.type) {
       case 'checkbox': // 多选
         const checked = evnet.checkbox;
-        this.onCheck.emit(checked);
+        this.check.emit(checked);
         break;
       case 'radio': // 单选
-        this.onCheck.emit([evnet.radio]);
+        this.check.emit([evnet.radio]);
         break;
       case 'sort': // 排序
         this.updateSort(evnet);
         break;
       case 'pi': // page index 修改
-        this.onPageIndexChange.emit(evnet.pi);
+        this.pageIndexChange.emit(evnet.pi);
         break;
       case 'ps': // page size 修改
-        this.onPageSizeChange.emit(evnet.ps);
+        this.pageSizeChange.emit(evnet.ps);
         break;
     }
   }
 
   /** 更新排序 */
   protected updateSort(evnet: STChange) {
+    debugger;
     if (evnet.type !== 'sort') {
       return;
     }
 
     const sortConditions: SortCondition[] = [];
     const sorts = evnet.sort.map.sort.split('-');
-    let sortField = undefined;
+    let sortField;
     let sortType: SortType = SortType.None;
     let index = 0;
     for (const sort of sorts) {
@@ -154,7 +177,7 @@ export class SampleTableComponent extends AppComponentBase
       );
     }
 
-    this.onSort.emit(sortConditions);
+    this.sort.emit(sortConditions);
   }
 
   /** 处理列表信息 */
