@@ -21,7 +21,15 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
   }
 
   ngOnInit(): void {
-    super.ngOnInit();
+
+  }
+
+  onPageNameChange(name: string) {
+    this.fetchPageFilter(name, () => {
+      this.fetchListView(name, () => {
+        this.refresh();
+      });
+    });
   }
 
   fetchData(skipCount: number, pageSize: number, queryConditions: QueryCondition[], sortConditions: SortCondition[], callback: (total: number) => void) {

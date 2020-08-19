@@ -22,6 +22,7 @@ import { CreateOrEditUserComponent } from './create-or-edit-user';
 export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
 
+
   constructor(
     injector: Injector,
     private userSer: UserServiceProxy,
@@ -33,6 +34,13 @@ export class UserComponent extends ListViewComponentBase<UserDto>
     super.ngOnInit();
   }
 
+  onPageNameChange(name: string) {
+    this.fetchPageFilter(name, () => {
+      this.fetchListView(name, () => {
+        this.refresh();
+      });
+    });
+  }
 
   fetchData(skipCount: number, pageSize: number, queryConditions: QueryCondition[], sortConditions: SortCondition[], callback: (total: number) => void) {
     const queryInput = new QueryInput();

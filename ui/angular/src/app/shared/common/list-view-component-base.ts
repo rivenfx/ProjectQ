@@ -1,7 +1,14 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
-import { ColumnItemDto, ListViewServiceProxy, PageFilterItemDto, PageFilterServiceProxy, QueryCondition, SortCondition } from '@service-proxies';
+import {
+  ColumnItemDto,
+  ListViewServiceProxy,
+  PageFilterItemDto,
+  PageFilterServiceProxy,
+  QueryCondition,
+  SortCondition
+} from '@service-proxies/service-proxies';
 import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
@@ -96,7 +103,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   set pageName(val: string) {
     this.pageInfo.name = val;
     if (val && val.trim() !== '') {
-      this.fetchListView(val);
+      this.onPageNameChange(val);
     }
   }
   /** 筛选条件/列表 配置名称 */
@@ -210,8 +217,27 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
       });
   }
 
+  /** 获取pageFilterList */
+  fetchPageFilter(name: string, callback?: () => void) {
+    this.loading = true;
+    this.pageFilterSer.getPageFilter(name)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((res) => {
+        if (!res || !res.items) {
+          this.pageInfo.pageFilters = [];
+        } else {
+          this.pageInfo.pageFilters = res.items;
+        }
+        if (callback) {
+          callback();
+        }
+      });
+  }
+
   /** 获取列表配置 */
-  fetchListView(name: string) {
+  fetchListView(name: string, callback?: () => void) {
     this.loading = true;
     this.listViewSer.getListView(name)
       .pipe(finalize(() => {
@@ -222,10 +248,15 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
           this.pageInfo.columns = [];
         } else {
           this.pageInfo.columns = res.items;
-          this.refresh();
+        }
+        if (callback) {
+          callback();
         }
       });
   }
+
+  /** pageName发生修改 */
+  abstract onPageNameChange(name: string);
 
   /** 加载列表数据 */
   abstract fetchData(

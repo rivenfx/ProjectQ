@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { STColumn } from '@delon/abc';
+import { STColumn } from '@delon/abc/st';
 import { ColumnItemDto, ColumnItemFixed, ColumnItemStatistical } from '@service-proxies';
 import { SampleComponentBase } from '@shared/common';
 import * as _ from 'lodash';

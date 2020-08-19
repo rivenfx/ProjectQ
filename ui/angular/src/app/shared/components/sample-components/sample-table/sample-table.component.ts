@@ -153,7 +153,6 @@ export class SampleTableComponent extends AppComponentBase
 
   /** 更新排序 */
   protected updateSort(evnet: STChange) {
-    debugger;
     if (evnet.type !== 'sort') {
       return;
     }
