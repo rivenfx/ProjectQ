@@ -153,8 +153,8 @@ export class ListViewServiceProxy {
      * @param name (optional) 
      * @return Success
      */
-    getPageFilter(name: string | null | undefined): Observable<ColumnItemDtoListResultDto> {
-        let url_ = this.baseUrl + "/apis/ListView/GetPageFilter?";
+    getListView(name: string | null | undefined): Observable<ColumnItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/ListView/GetListView?";
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -168,11 +168,11 @@ export class ListViewServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetPageFilter(response_);
+            return this.processGetListView(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetPageFilter(<any>response_);
+                    return this.processGetListView(<any>response_);
                 } catch (e) {
                     return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(e);
                 }
@@ -181,7 +181,7 @@ export class ListViewServiceProxy {
         }));
     }
 
-    protected processGetPageFilter(response: HttpResponseBase): Observable<ColumnItemDtoListResultDto> {
+    protected processGetListView(response: HttpResponseBase): Observable<ColumnItemDtoListResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :

@@ -35,7 +35,7 @@ namespace Company.Project.Common.ListView
         /// </summary>
         /// <param name="name">筛选条件名称</param>
         /// <returns>筛选条件配置</returns>
-        public async Task<ListResultDto<ColumnItemDto>> GetPageFilter(string name)
+        public async Task<ListResultDto<ColumnItemDto>> GetListView(string name)
         {
             var configFilePath = Path.Join(_hostEnv.ContentRootPath, "wwwroot", "configs", "list-view", $"{name}.json");
             if (!File.Exists(configFilePath))

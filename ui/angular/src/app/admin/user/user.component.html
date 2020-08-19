@@ -19,22 +19,18 @@
 
 <div class="page-body">
 
-  <page-filter [pageFilterName]="pageFilterName"
+  <page-filter [pageFilterName]="pageInfo.name"
     [displayLabel]="true"
     (valueChange)="onFilterChange($event)">
 
   </page-filter>
 
-  <!--  <table-bar>-->
-
-  <!--  </table-bar>-->
-
-
-  <sample-table [info]="tableInfo"
-    [page]="pageInfo"
+  <sample-table [page]="pageInfo"
+    [columns]="pageInfo.columns"
+    [data]="pageInfo.viewRecord"
     [pageIndex]="pageInfo.index"
     [pageSize]="pageInfo.size"
-    [total]="totalRecord"
+    [total]="pageInfo.totalRecord"
     (action)="onAction($event)"
     (check)="onCheckChange($event)"
     (sort)="onSortChange($event)"
@@ -42,49 +38,4 @@
     (pageSizeChange)="onPageSizeChange($event)">
 
   </sample-table>
-  <!--  -->
-  <!--  <nz-table #pageTable-->
-  <!--    nzTableLayout="fixed"-->
-  <!--    nzSize="small"-->
-  <!--    nzShowQuickJumper="true"-->
-  <!--    nzShowSizeChanger="true"-->
-  <!--    nzBordered="true"-->
-  <!--    nzFrontPagination="false"-->
-  <!--    nzHideOnSinglePage="false"-->
-  <!--    [nzData]="viewRecord"-->
-  <!--    [nzLoading]="loading"-->
-  <!--    [nzTotal]="totalRecord"-->
-  <!--    [nzPageIndex]="pageInfo.index"-->
-  <!--    [nzPageSize]="pageInfo.size"-->
-  <!--    (nzPageIndexChange)="onPageIndexChange($event)"-->
-  <!--    (nzPageSizeChange)="onPageSizeChange($event)"-->
-  <!--    [nzScroll]="tableScroll">-->
-  <!--    <thead>-->
-  <!--      <tr>-->
-  <!--        <th nzEllipsis-->
-  <!--          [title]="l('user.user-name')">{{l('user.user-name')}}</th>-->
-  <!--        <th nzEllipsis-->
-  <!--          [title]="l('user.nick-name')">{{l('user.nick-name')}}</th>-->
-  <!--        <th nzEllipsis-->
-  <!--          [title]="l('common.is-active')">{{l('common.is-active')}}</th>-->
-  <!--        <th nzEllipsis-->
-  <!--          [title]="l('common.action')">{{l('common.action')}}</th>-->
-  <!--      </tr>-->
-  <!--    </thead>-->
-  <!--    <tbody>-->
-  <!--      <tr *ngFor="let data of viewRecord">-->
-  <!--        <td nzEllipsis-->
-  <!--          [title]="data.userName">{{ data.userName }}</td>-->
-  <!--        <td nzEllipsis-->
-  <!--          [title]="data.nickname">{{ data.nickname }}</td>-->
-  <!--        <td nzEllipsis-->
-  <!--          [title]="data.isActive">{{ data.isActive }}</td>-->
-  <!--        <td nzEllipsis>-->
-  <!--          <a (click)="onClickCreateOrEdit(data)">{{l('common.edit')}}</a>-->
-  <!--          <nz-divider nzType="vertical"></nz-divider>-->
-  <!--          <a>{{l('common.delete')}}</a>-->
-  <!--        </td>-->
-  <!--      </tr>-->
-  <!--    </tbody>-->
-  <!--  </nz-table>-->
 </div>

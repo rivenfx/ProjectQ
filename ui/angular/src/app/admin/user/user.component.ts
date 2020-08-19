@@ -9,7 +9,7 @@ import {
   UserServiceProxy,
 } from '@service-proxies';
 import { ListViewComponentBase } from '@shared/common';
-import { ISampleTableAction, ISampleTableInfo } from '@shared/components/sample-components/sample-table';
+import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
@@ -22,26 +22,15 @@ import { CreateOrEditUserComponent } from './create-or-edit-user';
 export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
 
-  tableInfo: ISampleTableInfo = {};
-
   constructor(
     injector: Injector,
     private userSer: UserServiceProxy,
-    private listViewSer: ListViewServiceProxy,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-
-    this.listViewSer.getPageFilter(this.pageFilterName)
-      .subscribe((res) => {
-        this.tableInfo.columns = res.items;
-        if (this.tableInfo.columns && this.tableInfo.data) {
-          this.tableInfo = _.clone(this.tableInfo);
-        }
-      });
   }
 
 
@@ -59,10 +48,6 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       }))
       .subscribe((res) => {
         this.viewRecord = res.items;
-        this.tableInfo.data = this.viewRecord;
-        if (this.tableInfo.columns && this.tableInfo.data) {
-          this.tableInfo = _.clone(this.tableInfo);
-        }
         callback(res.total);
       });
   }

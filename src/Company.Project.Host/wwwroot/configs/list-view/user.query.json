@@ -16,7 +16,7 @@
     "title": "No", // 列名
     "type": "checkbox", // 类型
     "render": null, // 要使用的渲染器名称
-    "width": 50, // 宽度
+    "width": 30, // 宽度
     "order": 1, // 排序号
     "numberDigits": 2, // 列类型为number时保留小数位
     "dateFormat": null, // 列类型为datetime类型格式化规则
