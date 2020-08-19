@@ -1,7 +1,7 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
-import { ColumnItemDto, ListViewServiceProxy, QueryCondition, SortCondition } from '@service-proxies';
+import { ColumnItemDto, ListViewServiceProxy, PageFilterItemDto, PageFilterServiceProxy, QueryCondition, SortCondition } from '@service-proxies';
 import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
@@ -17,6 +17,8 @@ export interface IPageInfo<T> {
   /** 一页最大数据量 */
   size: number;
   // ==========================================
+  /** 筛选条件数据 */
+  pageFilters?: PageFilterItemDto[];
   /** 列表列配置 */
   columns?: ColumnItemDto[];
   /** 列表数据 */
@@ -73,6 +75,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     index: 1,
     size: 20,
     //
+    pageFilters: [],
     columns: [],
     viewRecord: [],
     totalRecord: 0,
@@ -107,6 +110,10 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 模态框帮助类 */
   modalHelper: ModalHelper;
 
+
+  /** pageFilter查询器 */
+  pageFilterSer: PageFilterServiceProxy;
+
   /** 列表配置查询器 */
   listViewSer: ListViewServiceProxy;
 
@@ -123,6 +130,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     super(injector);
 
     this.modalHelper = injector.get(ModalHelper);
+    this.pageFilterSer = injector.get(PageFilterServiceProxy);
     this.listViewSer = injector.get(ListViewServiceProxy);
 
     // 获取筛选条件配置名称名称
