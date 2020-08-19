@@ -25,7 +25,8 @@
 
   </page-filter>
 
-  <sample-table [page]="pageInfo"
+  <sample-table [loading]="loading"
+    [page]="pageInfo"
     [columns]="pageInfo.columns"
     [data]="pageInfo.viewRecord"
     [pageIndex]="pageInfo.index"
