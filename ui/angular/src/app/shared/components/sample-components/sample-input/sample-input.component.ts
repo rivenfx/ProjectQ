@@ -38,6 +38,7 @@ export class SampleInputComponent extends PageFilterItemComponentBase<any> {
       this.placeholder = this.l(this.argsObject.placeholder);
     }
     this.cdr.detectChanges();
+    this.imReady();
   }
 
   onExternalArgsChange(externalArgs: any) {

@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  Injector,
-  Input, OnChanges,
+  EventEmitter,
+  Injector, Input,
+  OnChanges,
   OnInit,
+  Output,
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
@@ -33,6 +35,9 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   /** 基本筛选条件显示列,超出的将属于高级筛选条件 */
   @Input() basicRow = 1;
 
+  /** 控件加载完成 */
+  @Output() readyChange = new EventEmitter<any>();
+
   /** 基本筛选条件 */
   basicFilters: PageFilterItemDto[] = [];
 
@@ -50,6 +55,11 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   existAdvancedFilter: boolean;
   /** 是否展开高级搜索 */
   isCollapsed = true;
+
+  /** 已经准备好的组件 */
+  private _readyName: string[] = [];
+  /*** 启用的filter数量 */
+  private _enabledFilterCount = 0;
 
   constructor(
     injector: Injector,
@@ -80,6 +90,18 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
 
   onDestroy(): void {
 
+  }
+
+
+  /** 当控件准备好 */
+  onReadyChange(name: string) {
+    this._readyName.push(name);
+
+    this._readyName = _.uniq(this._readyName);
+
+    if (this._enabledFilterCount === this._readyName.length) {
+      this.readyChange.emit(true);
+    }
   }
 
   onClickCollapse() {
@@ -132,6 +154,8 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     this.existBasicFilter = false;
     this.existAdvancedFilter = false;
     this.isCollapsed = true;
+    this._enabledFilterCount = 0;
+
     if (typeof (this.basicRow) !== 'number' || this.basicRow <= 0) {
       this.basicRow = 1;
     }
@@ -214,6 +238,8 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     if (this.advancedFilters.length > 0) {
       this.existAdvancedFilter = true;
     }
+
+    this._enabledFilterCount = this.basicFilters.length + this.advancedFilters.length;
 
     this.cdr.detectChanges();
   }

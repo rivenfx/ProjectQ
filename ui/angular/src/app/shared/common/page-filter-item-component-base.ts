@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Injector, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Injector, Input, OnChanges, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { ControlComponentBase } from '@shared/common/control-component-base';
 import { SampleDataSourceService } from '@shared/components/sample-components/sample-data-source.service';
 
@@ -17,6 +17,12 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
 
   /** 数据源服务 */
   sampleDataSourceSer: SampleDataSourceService;
+
+  /** 控件准备好 */
+  protected _ready: boolean;
+
+  /** 控件加载完成 */
+  @Output() readyChange = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
@@ -39,6 +45,17 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
     if (changes.externalArgs && changes.externalArgs.currentValue) {
       this.onExternalArgsChange(changes.externalArgs.currentValue);
     }
+  }
+
+  /** 表示控件已经准备就绪 */
+  protected imReady() {
+    if (this._ready) {
+      return;
+    }
+
+    this._ready = true;
+    this.readyChange.emit(this.name);
+    this.emitValueChange(this.value);
   }
 
   /** 参数发生更改 */

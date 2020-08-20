@@ -53,6 +53,7 @@ export class SampleSelectComponent extends PageFilterItemComponentBase<any> {
       obs.subscribe((res) => {
         this.souceData = res;
         this.cdr.detectChanges();
+        this.imReady();
       });
     }
     this.cdr.detectChanges();
