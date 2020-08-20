@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using System.Text;
 
-namespace Company.Project.Common.ListView.Dtos
+namespace Company.Project.Common.DynamicPage.Dtos
 {
     public class ColumnItemDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Company.Project.Common.ListView.Dtos
+﻿namespace Company.Project.Common.DynamicPage.Dtos
 {
     /// <summary>
     /// 列表控件
