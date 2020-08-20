@@ -9,7 +9,7 @@ import {
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { PageFilterItemDto, PageFilterServiceProxy, QueryCondition } from '@service-proxies';
+import { PageFilterItemDto, QueryCondition } from '@service-proxies';
 import { SampleControlComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
@@ -21,10 +21,6 @@ import { finalize } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageFilterComponent extends SampleControlComponentBase<QueryCondition[]> {
-
-
-  /** 筛选条件配置文件名称 */
-  @Input() pageFilterName: string;
 
   /** 筛选条件 */
   @Input() pageFilters: PageFilterItemDto[] = [];
@@ -63,7 +59,6 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
 
   constructor(
     injector: Injector,
-    private pageFilterSer: PageFilterServiceProxy,
   ) {
     super(injector);
   }
@@ -77,9 +72,6 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   }
 
   onInputChange(changes: { [P in keyof this]?: SimpleChange; } & SimpleChanges) {
-    if (changes.pageFilterName && changes.pageFilterName.currentValue && changes.pageFilterName.currentValue.trim() !== '') {
-      this.fetchData();
-    }
     if (changes.pageFilters) {
       if (!Array.isArray(changes.pageFilters.currentValue)) {
         this.pageFilters = [];
@@ -130,19 +122,6 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
       tmpValue.push(this.pageFilterData[key]);
     }
     this.emitValueChange(tmpValue);
-  }
-
-  /** 查询配置 */
-  protected fetchData() {
-    this.pageFilterSer.getPageFilter(this.pageFilterName)
-      .pipe(finalize(() => {
-
-      }))
-      .subscribe((res) => {
-        this.pageFilters = res.items;
-
-        this.processFilters();
-      });
   }
 
   /** 处理page-filter配置 */

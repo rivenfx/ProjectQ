@@ -3,9 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
 import {
   ColumnItemDto,
-  ListViewServiceProxy,
+  DynamicPageServiceProxy,
   PageFilterItemDto,
-  PageFilterServiceProxy,
   QueryCondition,
   SortCondition
 } from '@service-proxies/service-proxies';
@@ -51,6 +50,14 @@ export interface ITableScroll {
   x: string;
   /** 高度 */
   y: string;
+}
+
+export interface IFetchData {
+  skipCount: number;
+  pageSize: number;
+  queryConditions: QueryCondition[];
+  sortConditions: SortCondition[];
+  callback?: (total: number) => void;
 }
 
 export abstract class ListViewComponentBase<T> extends AppComponentBase
@@ -117,12 +124,8 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 模态框帮助类 */
   modalHelper: ModalHelper;
 
-
-  /** pageFilter查询器 */
-  pageFilterSer: PageFilterServiceProxy;
-
-  /** 列表配置查询器 */
-  listViewSer: ListViewServiceProxy;
+  /** 动态页面服务 */
+  dynamicPageSer: DynamicPageServiceProxy;
 
   /** 筛选条件 */
   queryConditions: QueryCondition[] = [];
@@ -137,8 +140,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     super(injector);
 
     this.modalHelper = injector.get(ModalHelper);
-    this.pageFilterSer = injector.get(PageFilterServiceProxy);
-    this.listViewSer = injector.get(ListViewServiceProxy);
+    this.dynamicPageSer = injector.get(DynamicPageServiceProxy);
 
     // 获取筛选条件配置名称名称
     const activatedRoute = injector.get(ActivatedRoute);
@@ -191,9 +193,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 筛选条件初始化完成 */
   onFilterReady(queryConditions: QueryCondition[]) {
     this.onFilterChange(queryConditions);
-    this.fetchListView(this.pageInfo.name, () => {
-      this.refresh();
-    });
+    this.refresh();
   }
 
   /** 查询条件发生改变 */
@@ -215,20 +215,42 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     }
 
     const skipCount = (this.pageInfo.index - 1) * this.pageInfo.size;
-    this.fetchData(
-      skipCount,
-      this.pageInfo.size,
-      this.queryConditions,
-      this.sortConditions,
-      (totalRecord) => {
+    this.fetchData({
+      // tslint:disable-next-line: object-literal-shorthand
+      skipCount: skipCount,
+      pageSize: this.pageInfo.size,
+      queryConditions: this.queryConditions,
+      sortConditions: this.sortConditions,
+      callback: (totalRecord) => {
         this.pageInfo.totalRecord = totalRecord;
+      }
+    });
+  }
+
+  /** 当 pageName 发生修改 */
+  protected onPageNameChange(name: string) {
+    this.fetchDynamicPageInfo(name);
+  }
+
+  /** 获取动态页面信息 pageFilter和columns */
+  protected fetchDynamicPageInfo(name: string, callback?: () => void) {
+    this.dynamicPageSer.getDynamicPageInfo(name)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((res) => {
+        this.pageInfo.pageFilters = res.pageFilters;
+        this.pageInfo.columns = res.columns;
+        if (callback) {
+          callback();
+        }
       });
   }
 
   /** 获取pageFilterList */
-  fetchPageFilter(name: string, callback?: () => void) {
+  protected fetchPageFilter(name: string, callback?: () => void) {
     this.loading = true;
-    this.pageFilterSer.getPageFilter(name)
+    this.dynamicPageSer.getPageFilters(name)
       .pipe(finalize(() => {
         this.loading = false;
       }))
@@ -245,9 +267,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   }
 
   /** 获取列表配置 */
-  fetchListView(name: string, callback?: () => void) {
+  protected fetchColumn(name: string, callback?: () => void) {
     this.loading = true;
-    this.listViewSer.getListView(name)
+    this.dynamicPageSer.getColumns(name)
       .pipe(finalize(() => {
         this.loading = false;
       }))
@@ -263,15 +285,8 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
       });
   }
 
-  /** pageName发生修改 */
-  abstract onPageNameChange(name: string);
+
 
   /** 加载列表数据 */
-  abstract fetchData(
-    skipCount: number,
-    pageSize: number,
-    queryConditions: QueryCondition[],
-    sortConditions: SortCondition[],
-    callback: (totalRecord: number) => void
-  );
+  abstract fetchData(arg: IFetchData);
 }

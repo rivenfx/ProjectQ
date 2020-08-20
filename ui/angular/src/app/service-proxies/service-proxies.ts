@@ -139,7 +139,7 @@ export class ClaimsServiceProxy {
 }
 
 @Injectable()
-export class ListViewServiceProxy {
+export class DynamicPageServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -153,8 +153,8 @@ export class ListViewServiceProxy {
      * @param name (optional) 
      * @return Success
      */
-    getListView(name: string | null | undefined): Observable<ColumnItemDtoListResultDto> {
-        let url_ = this.baseUrl + "/apis/ListView/GetListView?";
+    getDynamicPageInfo(name: string | null | undefined): Observable<DynamicPageDto> {
+        let url_ = this.baseUrl + "/apis/DynamicPage/GetDynamicPageInfo?";
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -168,20 +168,20 @@ export class ListViewServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetListView(response_);
+            return this.processGetDynamicPageInfo(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetListView(<any>response_);
+                    return this.processGetDynamicPageInfo(<any>response_);
                 } catch (e) {
-                    return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(e);
+                    return <Observable<DynamicPageDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(response_);
+                return <Observable<DynamicPageDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetListView(response: HttpResponseBase): Observable<ColumnItemDtoListResultDto> {
+    protected processGetDynamicPageInfo(response: HttpResponseBase): Observable<DynamicPageDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -192,7 +192,7 @@ export class ListViewServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ColumnItemDtoListResultDto.fromJS(resultData200);
+            result200 = DynamicPageDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -200,27 +200,15 @@ export class ListViewServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ColumnItemDtoListResultDto>(<any>null);
-    }
-}
-
-@Injectable()
-export class PageFilterServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
+        return _observableOf<DynamicPageDto>(<any>null);
     }
 
     /**
      * @param name (optional) 
      * @return Success
      */
-    getPageFilter(name: string | null | undefined): Observable<PageFilterItemDtoListResultDto> {
-        let url_ = this.baseUrl + "/apis/PageFilter/GetPageFilter?";
+    getPageFilters(name: string | null | undefined): Observable<PageFilterItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/DynamicPage/GetPageFilters?";
         if (name !== undefined && name !== null)
             url_ += "name=" + encodeURIComponent("" + name) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -234,11 +222,11 @@ export class PageFilterServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetPageFilter(response_);
+            return this.processGetPageFilters(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetPageFilter(<any>response_);
+                    return this.processGetPageFilters(<any>response_);
                 } catch (e) {
                     return <Observable<PageFilterItemDtoListResultDto>><any>_observableThrow(e);
                 }
@@ -247,7 +235,7 @@ export class PageFilterServiceProxy {
         }));
     }
 
-    protected processGetPageFilter(response: HttpResponseBase): Observable<PageFilterItemDtoListResultDto> {
+    protected processGetPageFilters(response: HttpResponseBase): Observable<PageFilterItemDtoListResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -267,6 +255,60 @@ export class PageFilterServiceProxy {
             }));
         }
         return _observableOf<PageFilterItemDtoListResultDto>(<any>null);
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getColumns(name: string | null | undefined): Observable<ColumnItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/DynamicPage/GetColumns?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumns(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumns(<any>response_);
+                } catch (e) {
+                    return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumns(response: HttpResponseBase): Observable<ColumnItemDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ColumnItemDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ColumnItemDtoListResultDto>(<any>null);
     }
 }
 
@@ -1512,6 +1554,151 @@ export interface IClaimItemDto {
     sort: number;
 }
 
+export enum QueryOperator {
+    Equal = <any>"Equal",
+    NotEqual = <any>"NotEqual",
+    Greater = <any>"Greater",
+    GreaterEqual = <any>"GreaterEqual",
+    Less = <any>"Less",
+    LessEqual = <any>"LessEqual",
+    StartsWith = <any>"StartsWith",
+    EndsWith = <any>"EndsWith",
+    In = <any>"In",
+    NotIn = <any>"NotIn",
+    Contains = <any>"Contains",
+    Between = <any>"Between",
+    BetweenEqualStart = <any>"BetweenEqualStart",
+    BetweenEqualEnd = <any>"BetweenEqualEnd",
+    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
+}
+
+export class PageFilterItemDto implements IPageFilterItemDto {
+    order: number;
+    label: string | undefined;
+    componentName: string | undefined;
+    args: { [key: string]: any; } | undefined;
+    valueChange: string[] | undefined;
+    enabled: boolean;
+    width: number;
+    xsWidth: number | undefined;
+    smWidth: number | undefined;
+    mdWidth: number | undefined;
+    lgWidth: number | undefined;
+    xlWidth: number | undefined;
+    xxlWidth: number | undefined;
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+
+    constructor(data?: IPageFilterItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.order = _data["order"];
+            this.label = _data["label"];
+            this.componentName = _data["componentName"];
+            if (_data["args"]) {
+                this.args = {} as any;
+                for (let key in _data["args"]) {
+                    if (_data["args"].hasOwnProperty(key))
+                        this.args[key] = _data["args"][key];
+                }
+            }
+            if (Array.isArray(_data["valueChange"])) {
+                this.valueChange = [] as any;
+                for (let item of _data["valueChange"])
+                    this.valueChange.push(item);
+            }
+            this.enabled = _data["enabled"];
+            this.width = _data["width"];
+            this.xsWidth = _data["xsWidth"];
+            this.smWidth = _data["smWidth"];
+            this.mdWidth = _data["mdWidth"];
+            this.lgWidth = _data["lgWidth"];
+            this.xlWidth = _data["xlWidth"];
+            this.xxlWidth = _data["xxlWidth"];
+            this.field = _data["field"];
+            this.value = _data["value"];
+            this.operator = _data["operator"];
+            this.skipValueIsNull = _data["skipValueIsNull"];
+        }
+    }
+
+    static fromJS(data: any): PageFilterItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PageFilterItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["order"] = this.order;
+        data["label"] = this.label;
+        data["componentName"] = this.componentName;
+        if (this.args) {
+            data["args"] = {};
+            for (let key in this.args) {
+                if (this.args.hasOwnProperty(key))
+                    data["args"][key] = this.args[key];
+            }
+        }
+        if (Array.isArray(this.valueChange)) {
+            data["valueChange"] = [];
+            for (let item of this.valueChange)
+                data["valueChange"].push(item);
+        }
+        data["enabled"] = this.enabled;
+        data["width"] = this.width;
+        data["xsWidth"] = this.xsWidth;
+        data["smWidth"] = this.smWidth;
+        data["mdWidth"] = this.mdWidth;
+        data["lgWidth"] = this.lgWidth;
+        data["xlWidth"] = this.xlWidth;
+        data["xxlWidth"] = this.xxlWidth;
+        data["field"] = this.field;
+        data["value"] = this.value;
+        data["operator"] = this.operator;
+        data["skipValueIsNull"] = this.skipValueIsNull;
+        return data; 
+    }
+
+    clone(): PageFilterItemDto {
+        const json = this.toJSON();
+        let result = new PageFilterItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPageFilterItemDto {
+    order: number;
+    label: string | undefined;
+    componentName: string | undefined;
+    args: { [key: string]: any; } | undefined;
+    valueChange: string[] | undefined;
+    enabled: boolean;
+    width: number;
+    xsWidth: number | undefined;
+    smWidth: number | undefined;
+    mdWidth: number | undefined;
+    lgWidth: number | undefined;
+    xlWidth: number | undefined;
+    xxlWidth: number | undefined;
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+}
+
 export enum ColumnItemStatistical {
     None = <any>"None",
     Count = <any>"Count",
@@ -1695,10 +1882,11 @@ export interface IColumnItemDto {
     actions: ColumnActionItemDto[] | undefined;
 }
 
-export class ColumnItemDtoListResultDto implements IColumnItemDtoListResultDto {
-    items: ColumnItemDto[] | undefined;
+export class DynamicPageDto implements IDynamicPageDto {
+    pageFilters: PageFilterItemDto[] | undefined;
+    columns: ColumnItemDto[] | undefined;
 
-    constructor(data?: IColumnItemDtoListResultDto) {
+    constructor(data?: IDynamicPageDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1709,186 +1897,52 @@ export class ColumnItemDtoListResultDto implements IColumnItemDtoListResultDto {
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(ColumnItemDto.fromJS(item));
+            if (Array.isArray(_data["pageFilters"])) {
+                this.pageFilters = [] as any;
+                for (let item of _data["pageFilters"])
+                    this.pageFilters.push(PageFilterItemDto.fromJS(item));
+            }
+            if (Array.isArray(_data["columns"])) {
+                this.columns = [] as any;
+                for (let item of _data["columns"])
+                    this.columns.push(ColumnItemDto.fromJS(item));
             }
         }
     }
 
-    static fromJS(data: any): ColumnItemDtoListResultDto {
+    static fromJS(data: any): DynamicPageDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ColumnItemDtoListResultDto();
+        let result = new DynamicPageDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
+        if (Array.isArray(this.pageFilters)) {
+            data["pageFilters"] = [];
+            for (let item of this.pageFilters)
+                data["pageFilters"].push(item.toJSON());
+        }
+        if (Array.isArray(this.columns)) {
+            data["columns"] = [];
+            for (let item of this.columns)
+                data["columns"].push(item.toJSON());
         }
         return data; 
     }
 
-    clone(): ColumnItemDtoListResultDto {
+    clone(): DynamicPageDto {
         const json = this.toJSON();
-        let result = new ColumnItemDtoListResultDto();
+        let result = new DynamicPageDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IColumnItemDtoListResultDto {
-    items: ColumnItemDto[] | undefined;
-}
-
-export enum QueryOperator {
-    Equal = <any>"Equal",
-    NotEqual = <any>"NotEqual",
-    Greater = <any>"Greater",
-    GreaterEqual = <any>"GreaterEqual",
-    Less = <any>"Less",
-    LessEqual = <any>"LessEqual",
-    StartsWith = <any>"StartsWith",
-    EndsWith = <any>"EndsWith",
-    In = <any>"In",
-    NotIn = <any>"NotIn",
-    Contains = <any>"Contains",
-    Between = <any>"Between",
-    BetweenEqualStart = <any>"BetweenEqualStart",
-    BetweenEqualEnd = <any>"BetweenEqualEnd",
-    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
-}
-
-export class PageFilterItemDto implements IPageFilterItemDto {
-    order: number;
-    label: string | undefined;
-    componentName: string | undefined;
-    args: { [key: string]: any; } | undefined;
-    valueChange: string[] | undefined;
-    enabled: boolean;
-    width: number;
-    xsWidth: number | undefined;
-    smWidth: number | undefined;
-    mdWidth: number | undefined;
-    lgWidth: number | undefined;
-    xlWidth: number | undefined;
-    xxlWidth: number | undefined;
-    field: string | undefined;
-    value: string | undefined;
-    operator: QueryOperator;
-    skipValueIsNull: boolean;
-
-    constructor(data?: IPageFilterItemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.order = _data["order"];
-            this.label = _data["label"];
-            this.componentName = _data["componentName"];
-            if (_data["args"]) {
-                this.args = {} as any;
-                for (let key in _data["args"]) {
-                    if (_data["args"].hasOwnProperty(key))
-                        this.args[key] = _data["args"][key];
-                }
-            }
-            if (Array.isArray(_data["valueChange"])) {
-                this.valueChange = [] as any;
-                for (let item of _data["valueChange"])
-                    this.valueChange.push(item);
-            }
-            this.enabled = _data["enabled"];
-            this.width = _data["width"];
-            this.xsWidth = _data["xsWidth"];
-            this.smWidth = _data["smWidth"];
-            this.mdWidth = _data["mdWidth"];
-            this.lgWidth = _data["lgWidth"];
-            this.xlWidth = _data["xlWidth"];
-            this.xxlWidth = _data["xxlWidth"];
-            this.field = _data["field"];
-            this.value = _data["value"];
-            this.operator = _data["operator"];
-            this.skipValueIsNull = _data["skipValueIsNull"];
-        }
-    }
-
-    static fromJS(data: any): PageFilterItemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PageFilterItemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["order"] = this.order;
-        data["label"] = this.label;
-        data["componentName"] = this.componentName;
-        if (this.args) {
-            data["args"] = {};
-            for (let key in this.args) {
-                if (this.args.hasOwnProperty(key))
-                    data["args"][key] = this.args[key];
-            }
-        }
-        if (Array.isArray(this.valueChange)) {
-            data["valueChange"] = [];
-            for (let item of this.valueChange)
-                data["valueChange"].push(item);
-        }
-        data["enabled"] = this.enabled;
-        data["width"] = this.width;
-        data["xsWidth"] = this.xsWidth;
-        data["smWidth"] = this.smWidth;
-        data["mdWidth"] = this.mdWidth;
-        data["lgWidth"] = this.lgWidth;
-        data["xlWidth"] = this.xlWidth;
-        data["xxlWidth"] = this.xxlWidth;
-        data["field"] = this.field;
-        data["value"] = this.value;
-        data["operator"] = this.operator;
-        data["skipValueIsNull"] = this.skipValueIsNull;
-        return data; 
-    }
-
-    clone(): PageFilterItemDto {
-        const json = this.toJSON();
-        let result = new PageFilterItemDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPageFilterItemDto {
-    order: number;
-    label: string | undefined;
-    componentName: string | undefined;
-    args: { [key: string]: any; } | undefined;
-    valueChange: string[] | undefined;
-    enabled: boolean;
-    width: number;
-    xsWidth: number | undefined;
-    smWidth: number | undefined;
-    mdWidth: number | undefined;
-    lgWidth: number | undefined;
-    xlWidth: number | undefined;
-    xxlWidth: number | undefined;
-    field: string | undefined;
-    value: string | undefined;
-    operator: QueryOperator;
-    skipValueIsNull: boolean;
+export interface IDynamicPageDto {
+    pageFilters: PageFilterItemDto[] | undefined;
+    columns: ColumnItemDto[] | undefined;
 }
 
 export class PageFilterItemDtoListResultDto implements IPageFilterItemDtoListResultDto {
@@ -1940,6 +1994,57 @@ export class PageFilterItemDtoListResultDto implements IPageFilterItemDtoListRes
 
 export interface IPageFilterItemDtoListResultDto {
     items: PageFilterItemDto[] | undefined;
+}
+
+export class ColumnItemDtoListResultDto implements IColumnItemDtoListResultDto {
+    items: ColumnItemDto[] | undefined;
+
+    constructor(data?: IColumnItemDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(ColumnItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColumnItemDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnItemDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ColumnItemDtoListResultDto {
+        const json = this.toJSON();
+        let result = new ColumnItemDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnItemDtoListResultDto {
+    items: ColumnItemDto[] | undefined;
 }
 
 export class QueryCondition implements IQueryCondition {

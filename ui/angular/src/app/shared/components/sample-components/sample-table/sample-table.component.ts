@@ -77,7 +77,15 @@ export class SampleTableComponent extends AppComponentBase
   tableData: any = [];
 
   /** 列表配置 */
-  tableColumns: STColumn[] = [];
+  tableColumns: STColumn[] = [
+    {
+      index: '',
+      title: 'No',
+      type: 'no',
+      width: 40,
+      fixed: 'left'
+    }
+  ];
 
   /** 排序配置 */
   sortData: STMultiSort = {
@@ -185,7 +193,25 @@ export class SampleTableComponent extends AppComponentBase
 
   /** 处理列表信息 */
   protected processColumns(input: ColumnItemDto[]) {
-    this.tableColumns = [];
+    // {
+    //   "field": "", // 字段,支持嵌套 aa.bb
+    //   "title": "No", // 列名
+    //   "type": "no", // 类型
+    //   "render": null, // 要使用的渲染器名称
+    //   "width": 40, // 宽度
+    //   "order": 0, // 排序号
+    //   "numberDigits": 2, // 列类型为number时保留小数位
+    //   "dateFormat": null, // 列类型为datetime类型格式化规则
+    //   "statistical": null, // 统计类型
+    //   "fixed": "left" // 固定列 left或right,必须指定width
+    // },
+    this.tableColumns = [{
+      index: '',
+      title: 'No',
+      type: 'no',
+      width: 40,
+      fixed: 'left'
+    }];
     if (!input || input.length === 0) {
       this.cdr.detectChanges();
       return;
