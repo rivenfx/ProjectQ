@@ -168,17 +168,22 @@ export class SampleTableComponent extends AppComponentBase
 
     const sortConditions: SortCondition[] = [];
     const sorts = evnet.sort.map.sort.split('-');
-    let sortField;
+    let sortField: string;
     let sortType: SortType = SortType.None;
     let index = 0;
     for (const sort of sorts) {
       const lastIndex = sort.lastIndexOf('.');
       sortField = sort.substring(0, lastIndex);
+      if (sortField.trim() === '') {
+        continue;
+      }
+
       if (sort.endsWith('.descend')) {
         sortType = SortType.Desc;
       } else if (sort.endsWith('.ascend')) {
         sortType = SortType.Asc;
       }
+
       sortConditions.push(
         new SortCondition({
           field: sortField,
