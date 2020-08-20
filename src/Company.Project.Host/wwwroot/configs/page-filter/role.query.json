@@ -5,7 +5,7 @@
     "skipValueIsNull": true,
     "order": 0,
     "label": "role.name",
-    "componentName": "basic-input",
+    "componentName": "sample-input",
     "args": {
       "type": "text"
     },

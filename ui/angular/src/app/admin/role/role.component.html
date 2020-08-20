@@ -20,51 +20,28 @@
 
 <div class="page-body">
 
-  <page-filter [pageFilterName]="pageInfo.name"
+
+  <page-filter [pageFilters]="pageInfo.pageFilters"
     [displayLabel]="true"
+    (readyChange)="onFilterReady($event)"
     (valueChange)="onFilterChange($event)">
 
   </page-filter>
 
+  <sample-table [loading]="loading"
+    [page]="pageInfo"
+    [columns]="pageInfo.columns"
+    [data]="pageInfo.viewRecord"
+    [pageIndex]="pageInfo.index"
+    [pageSize]="pageInfo.size"
+    [total]="pageInfo.totalRecord"
+    (action)="onAction($event)"
+    (check)="onCheckChange($event)"
+    (sort)="onSortChange($event)"
+    (pageIndexChange)="onPageIndexChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
 
-  <nz-table #pageTable
-    nzTableLayout="fixed"
-    nzSize="small"
-    nzShowQuickJumper="true"
-    nzShowSizeChanger="true"
-    nzBordered="true"
-    nzFrontPagination="false"
-    nzHideOnSinglePage="false"
-    [nzData]="viewRecord"
-    [nzLoading]="loading"
-    [nzTotal]="totalRecord"
-    [nzPageIndex]="pageInfo.index"
-    [nzPageSize]="pageInfo.size"
-    (nzPageIndexChange)="onPageIndexChange($event)"
-    (nzPageSizeChange)="onPageSizeChange($event)"
-    [nzScroll]="tableScroll">
-    <thead>
-      <tr>
-        <th nzEllipsis
-          [title]="l('role.name')">{{l('role.name')}}</th>
-        <th nzEllipsis
-          [title]="l('role.display-name')">{{l('role.display-name')}}</th>
-        <th nzEllipsis
-          [title]="l('common.action')">{{l('common.action')}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of viewRecord">
-        <td nzEllipsis
-          [title]="data.name">{{ data.name }}</td>
-        <td nzEllipsis
-          [title]="data.displayName">{{ data.displayName }}</td>
-        <td nzEllipsis>
-          <a (click)="onClickCreateOrEdit(data)">{{l('common.edit')}}</a>
-          <nz-divider nzType="vertical"></nz-divider>
-          <a>{{l('common.delete')}}</a>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
+  </sample-table>
+
+
 </div>

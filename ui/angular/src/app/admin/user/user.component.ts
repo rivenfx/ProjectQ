@@ -1,14 +1,12 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import {
-  ListViewServiceProxy,
-  PageFilterItemDto,
   QueryCondition,
   QueryInput,
   SortCondition,
   UserDto,
   UserServiceProxy,
 } from '@service-proxies';
-import { ListViewComponentBase } from '@shared/common';
+import { IFetchData, ListViewComponentBase } from '@shared/common';
 import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
@@ -34,17 +32,13 @@ export class UserComponent extends ListViewComponentBase<UserDto>
     super.ngOnInit();
   }
 
-  onPageNameChange(name: string) {
-    this.fetchPageFilter(name);
-  }
-
-  fetchData(skipCount: number, pageSize: number, queryConditions: QueryCondition[], sortConditions: SortCondition[], callback: (total: number) => void) {
+  fetchData(arg: IFetchData) {
     const queryInput = new QueryInput();
-    queryInput.skipCount = skipCount;
-    queryInput.pageSize = pageSize;
+    queryInput.skipCount = arg.skipCount;
+    queryInput.pageSize = arg.pageSize;
 
-    queryInput.queryConditions = queryConditions;
-    queryInput.sortConditions = sortConditions;
+    queryInput.queryConditions = arg.queryConditions;
+    queryInput.sortConditions = arg.sortConditions;
 
     this.userSer.getPage(queryInput)
       .pipe(finalize(() => {
@@ -52,7 +46,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       }))
       .subscribe((res) => {
         this.viewRecord = res.items;
-        callback(res.total);
+        arg.callback(res.total);
       });
   }
 
