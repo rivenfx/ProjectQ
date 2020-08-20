@@ -35,11 +35,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
   }
 
   onPageNameChange(name: string) {
-    this.fetchPageFilter(name, () => {
-      this.fetchListView(name, () => {
-        this.refresh();
-      });
-    });
+    this.fetchPageFilter(name);
   }
 
   fetchData(skipCount: number, pageSize: number, queryConditions: QueryCondition[], sortConditions: SortCondition[], callback: (total: number) => void) {

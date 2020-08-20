@@ -36,7 +36,7 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   @Input() basicRow = 1;
 
   /** 控件加载完成 */
-  @Output() readyChange = new EventEmitter<any>();
+  @Output() readyChange = new EventEmitter<QueryCondition[]>();
 
   /** 基本筛选条件 */
   basicFilters: PageFilterItemDto[] = [];
@@ -100,7 +100,7 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     this._readyName = _.uniq(this._readyName);
 
     if (this._enabledFilterCount === this._readyName.length) {
-      this.readyChange.emit(true);
+      this.readyChange.emit(this.value);
     }
   }
 

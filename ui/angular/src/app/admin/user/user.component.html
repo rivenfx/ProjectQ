@@ -21,6 +21,7 @@
 
   <page-filter [pageFilters]="pageInfo.pageFilters"
     [displayLabel]="true"
+    (readyChange)="onFilterReady($event)"
     (valueChange)="onFilterChange($event)">
 
   </page-filter>

@@ -22,7 +22,7 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
   protected _ready: boolean;
 
   /** 控件加载完成 */
-  @Output() readyChange = new EventEmitter<any>();
+  @Output() readyChange = new EventEmitter<string>();
 
   constructor(
     injector: Injector,

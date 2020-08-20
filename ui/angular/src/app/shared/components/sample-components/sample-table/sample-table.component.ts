@@ -27,6 +27,7 @@ import { ISampleTableAction } from './interfaces';
 export class SampleTableComponent extends AppComponentBase
   implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
+  @Input() loading: boolean;
 
   /** 列表列配置 */
   @Input() columns: ColumnItemDto[] = [];

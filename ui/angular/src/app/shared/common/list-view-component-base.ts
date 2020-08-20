@@ -188,6 +188,14 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     this.checkedData = data;
   }
 
+  /** 筛选条件初始化完成 */
+  onFilterReady(queryConditions: QueryCondition[]) {
+    this.onFilterChange(queryConditions);
+    this.fetchListView(this.pageInfo.name, () => {
+      this.refresh();
+    });
+  }
+
   /** 查询条件发生改变 */
   onFilterChange(queryConditions: QueryCondition[]) {
     this.queryConditions = queryConditions;
