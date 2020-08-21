@@ -36,18 +36,23 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
         width: item.width,
         sort: true,
       };
-      if (item.type && item.type !== '' && item.type !== 'yn') {
+
+      if (item.type && item.type !== '' && item.type !== 'yesOrNo') {
         newItem.type = item.type.toLowerCase() as any;
-        if (newItem.type === 'no'
-          || newItem.type === 'checkbox') {
-          newItem.sort = undefined;
-        } else if (newItem.type === ('action' as any)) {
-          newItem.type = undefined;
-          newItem.sort = undefined;
-          newItem.index = 'actions';
-          newItem.render = 'actions';
+        switch (newItem.type as any) {
+          case 'no':
+          case 'checkbox':
+            newItem.sort = undefined;
+            break;
+          case 'action':
+            newItem.type = undefined;
+            newItem.sort = undefined;
+            newItem.index = 'actions';
+            newItem.render = 'actions';
+            break;
         }
       }
+
       if (item.statistical && item.statistical !== ColumnItemStatistical.None) {
         newItem.statistical = item.statistical.toString().toLowerCase() as any;
       }
@@ -125,7 +130,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
             }
             needSetValue = true;
             break;
-          case 'yn':
+          case 'yesOrNo':
             if (typeof (fieldValue) === 'boolean') {
               fieldValue = fieldValue ? this.l('label.yes') : this.l('label.no');
               needSetValue = true;

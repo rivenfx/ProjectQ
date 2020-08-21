@@ -50,7 +50,7 @@
   {
     "field": "isActive", // 字段,支持嵌套 aa.bb 
     "title": "user.is-active", // 列名
-    "type": "yn", // 类型
+    "type": "yesOrNo", // 类型
     "render": null, // 要使用的渲染器名称
     "width": null, // 宽度
     "order": 4, // 排序号
