@@ -43,8 +43,10 @@
   (change)="onTableChange($event)"
   size="small"
   virtualScroll
+  [ps]="pageSize"
+  [virtualItemSize]="virtualItemSize"
   [multiSort]="sortData"
-  [scroll]="{ x: '1300px', y: '240px' }">
+  [scroll]="{ x: '1800px', y: '240px' }">
 
 
   <!-- actions 渲染模板 -->
