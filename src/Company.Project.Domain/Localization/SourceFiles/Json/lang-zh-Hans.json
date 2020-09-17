@@ -43,6 +43,7 @@
     "common.refresh": "刷新",
 
     // message
+    "message.confirm.operation": "确认操作?",
     "message.tenant.in-active": "租户 {0} 未激活",
     "message.tenant.not-found": "未找到租户 {0}",
     "message.operate.successfully": "操作成功",
