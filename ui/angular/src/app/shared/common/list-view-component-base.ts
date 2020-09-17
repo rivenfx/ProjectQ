@@ -8,7 +8,7 @@ import {
   QueryCondition,
   SortCondition
 } from '@service-proxies/service-proxies';
-import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
+import { ISampleTableAction } from '@shared/components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from './app-component-base';
@@ -38,10 +38,10 @@ export interface IPageInfo<T> {
   front?: boolean;
   /** 是否显示快速跳转 */
   showQuickJumper?: boolean;
+  /** 显示页数据量切换 */
+  showSize?: boolean;
   /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
   pageSizes?: number[];
-
-
 }
 
 /** 页面滚动信息 */
@@ -52,12 +52,20 @@ export interface ITableScroll {
   y: string;
 }
 
-export interface IFetchData {
+/** 查询分页数据 */
+export interface IFetchPageData {
   skipCount: number;
   pageSize: number;
   queryConditions: QueryCondition[];
   sortConditions: SortCondition[];
-  callback?: (total: number) => void;
+  finishedCallback?: () => void;
+  successCallback?: (result: IPagedResultDto) => void;
+}
+
+/** 分页响应结果 */
+export interface IPagedResultDto {
+  items: any[];
+  total: number;
 }
 
 export abstract class ListViewComponentBase<T> extends AppComponentBase
@@ -97,6 +105,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     show: true,
     front: false,
     showQuickJumper: true,
+    showSize: true,
     pageSizes: [10, 20, 30, 40, 50],
   };
 
@@ -113,12 +122,15 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
       this.onPageNameChange(val);
     }
   }
+
   /** 筛选条件/列表 配置名称 */
   get pageName(): string {
     return this.pageInfo.name;
   }
 
+
   /** 页面表格组件实例 */
+  // @ts-ignore
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
 
   /** 模态框帮助类 */
@@ -126,6 +138,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
   /** 动态页面服务 */
   dynamicPageSer: DynamicPageServiceProxy;
+
+  /** 激活路由 */
+  activatedRoute: ActivatedRoute;
 
   /** 筛选条件 */
   queryConditions: QueryCondition[] = [];
@@ -141,17 +156,17 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
     this.modalHelper = injector.get(ModalHelper);
     this.dynamicPageSer = injector.get(DynamicPageServiceProxy);
+    this.activatedRoute = injector.get(ActivatedRoute);
 
     // 获取筛选条件配置名称名称
-    const activatedRoute = injector.get(ActivatedRoute);
-    if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
-      const claims = activatedRoute.snapshot.data.claims;
-      if (Array.isArray(claims) && claims.length > 0) {
-        this.pageName = claims[0];
-      } else if (typeof (claims) === 'string') {
-        this.pageName = claims;
-      }
-    }
+    // if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
+    //   const claims = activatedRoute.snapshot.data.claims;
+    //   if (Array.isArray(claims) && claims.length > 0) {
+    //     this.pageName = claims[0];
+    //   } else if (typeof (claims) === 'string') {
+    //     this.pageName = claims;
+    //   }
+    // }
   }
 
   ngOnInit(): void {
@@ -188,6 +203,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 选中的数据发生更改 */
   onCheckChange(data: T[]) {
     this.checkedData = data;
+    if (!Array.isArray(this.checkedData)) {
+      this.checkedData = [];
+    }
   }
 
   /** 筛选条件初始化完成 */
@@ -216,14 +234,22 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
     const skipCount = (this.pageInfo.index - 1) * this.pageInfo.size;
     this.fetchData({
-      // tslint:disable-next-line: object-literal-shorthand
       skipCount: skipCount,
       pageSize: this.pageInfo.size,
       queryConditions: this.queryConditions,
       sortConditions: this.sortConditions,
-      callback: (totalRecord) => {
-        this.pageInfo.totalRecord = totalRecord;
-      }
+      finishedCallback: () => {
+        this.loading = false;
+      },
+      successCallback: (result) => {
+        if (!result || !result.items) {
+          this.pageInfo.viewRecord = [];
+          this.pageInfo.totalRecord = 0;
+        } else {
+          this.pageInfo.viewRecord = result.items;
+          this.pageInfo.totalRecord = result.total;
+        }
+      },
     });
   }
 
@@ -286,7 +312,6 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   }
 
 
-
   /** 加载列表数据 */
-  abstract fetchData(arg: IFetchData);
+  abstract fetchData(fetch: IFetchPageData);
 }
