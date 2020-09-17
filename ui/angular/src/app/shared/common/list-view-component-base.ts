@@ -159,14 +159,15 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     this.activatedRoute = injector.get(ActivatedRoute);
 
     // 获取筛选条件配置名称名称
-    // if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
-    //   const claims = activatedRoute.snapshot.data.claims;
-    //   if (Array.isArray(claims) && claims.length > 0) {
-    //     this.pageName = claims[0];
-    //   } else if (typeof (claims) === 'string') {
-    //     this.pageName = claims;
-    //   }
-    // }
+    const activatedRoute = injector.get(ActivatedRoute);
+    if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
+      const claims = activatedRoute.snapshot.data.claims;
+      if (Array.isArray(claims) && claims.length > 0) {
+        this.pageName = claims[0];
+      } else if (typeof (claims) === 'string') {
+        this.pageName = claims;
+      }
+    }
   }
 
   ngOnInit(): void {
