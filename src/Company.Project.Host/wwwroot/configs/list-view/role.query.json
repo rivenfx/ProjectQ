@@ -1,16 +1,85 @@
 [
   {
-    "key": "",
-    "title": "", // ����
-    "field": "", // �ֶ�,֧��Ƕ�� aa.bb 
-    "type": "", // ����
-    "click": "", // ����¼������������� 
-    "render": "", // Ҫʹ�õ���Ⱦ������
-    "width": "", // ����
-    "sort": "", // �����
-    "numberDigits": 2, // ������Ϊnumberʱ����С��λ
-    "dateFormat": "yyyy-MM-dd HH:mm:ss", // ������Ϊdatetime���͸�ʽ������
-    "statistical": "", // ͳ������
-    "fixed": null, // �̶��� left��right,����ָ��width
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "No", // 列名
+    "type": "no", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": 40, // 宽度
+    "order": 0, // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": "left" // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "", // 列名
+    "type": "checkbox", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": 30, // 宽度
+    "order": 1, // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": "Left" // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "name",
+    "title": "role.name",
+    "type": null,
+    "render": null,
+    "width": null,
+    "order": 2,
+    "numberDigits": 2,
+    "dateFormat": null,
+    "statistical": null,
+    "fixed": null
+  },
+  {
+    "field": "isStatic", // 字段,支持嵌套 aa.bb 
+    "title": "role.is-static", // 列名
+    "type": "yn", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 4, // 排序号
+    "numberDigits": 0, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "common.action", // 列名
+    "type": "action", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 5, // 排序号
+    "numberDigits": 0, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null, // 固定列 left或right,必须指定width
+    "actions": [
+      {
+        "name": "edit",
+        "type": "button",
+        "label": "common.edit",
+        "icon": "",
+        "acl": "role.edit"
+      },
+      {
+        "name": null,
+        "type": "select",
+        "label": "common.action",
+        "buttons": [
+          {
+            "name": "delete",
+            "type": "button",
+            "label": "common.delete",
+            "icon": "",
+            "acl": "role.delete"
+          }
+        ]
+      }
+    ]
   }
 ]
