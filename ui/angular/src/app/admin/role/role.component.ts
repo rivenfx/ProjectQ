@@ -21,10 +21,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
   }
 
   ngOnInit(): void {
-    this.pageInfo.scroll = {
-      x: '600px',
-      y: '240px'
-    };
+
   }
 
   fetchData(fetch: IFetchPageData) {
