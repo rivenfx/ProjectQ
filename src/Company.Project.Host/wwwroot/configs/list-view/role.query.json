@@ -60,7 +60,7 @@
     "fixed": null, // 固定列 left或right,必须指定width
     "actions": [
       {
-        "name": "edit",
+        "name": "onClickCreateOrEdit",
         "type": "button",
         "label": "common.edit",
         "icon": "",
@@ -72,7 +72,7 @@
         "label": "common.action",
         "buttons": [
           {
-            "name": "delete",
+            "name": "onDelete",
             "type": "button",
             "label": "common.delete",
             "icon": "",
