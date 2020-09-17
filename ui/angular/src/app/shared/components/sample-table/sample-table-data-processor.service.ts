@@ -100,7 +100,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
         let fieldValue = this.getFieldValue(newItem, fields);
         if (isNaN(fieldValue)
           || typeof (fieldValue) === 'undefined'
-          || (!fieldValue && fieldValue !== 0)) {
+          || (!fieldValue && fieldValue !== 0 && fieldValue !== false)) {
           continue;
         }
 
@@ -126,6 +126,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
             needSetValue = true;
             break;
           case 'yn':
+            debugger;
             if (typeof (fieldValue) === 'boolean') {
               fieldValue = fieldValue ? this.l('label.yes') : this.l('label.no');
               needSetValue = true;
