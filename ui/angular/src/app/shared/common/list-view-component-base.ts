@@ -43,15 +43,16 @@ export interface IPageInfo<T> {
   showSize?: boolean;
   /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
   pageSizes?: number[];
+  // ==========================================
+  /** 表格滚动空间 */
+  scroll?: {
+    /** 宽度 */
+    x: string;
+    /** 高度 */
+    y: string;
+  };
 }
 
-/** 页面滚动信息 */
-export interface ITableScroll {
-  /** 宽度 */
-  x: string;
-  /** 高度 */
-  y: string;
-}
 
 /** 查询分页数据 */
 export interface IFetchPageData {
@@ -108,12 +109,11 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     showQuickJumper: true,
     showSize: true,
     pageSizes: [10, 20, 30, 40, 50],
-  };
-
-  /** 表格滚动 */
-  tableScroll: ITableScroll = {
-    x: '100%',
-    y: '100%',
+    //
+    scroll: {
+      x: '1000px',
+      y: '240px',
+    }
   };
 
   /** 筛选条件/列表 配置名称 */
