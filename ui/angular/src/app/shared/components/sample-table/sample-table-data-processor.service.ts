@@ -126,7 +126,6 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
             needSetValue = true;
             break;
           case 'yn':
-            debugger;
             if (typeof (fieldValue) === 'boolean') {
               fieldValue = fieldValue ? this.l('label.yes') : this.l('label.no');
               needSetValue = true;
