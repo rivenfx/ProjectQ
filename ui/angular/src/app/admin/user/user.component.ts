@@ -6,8 +6,7 @@ import {
   UserDto,
   UserServiceProxy,
 } from '@service-proxies';
-import { IFetchData, ListViewComponentBase } from '@shared/common';
-import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
+import { IFetchPageData, ListViewComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
@@ -32,21 +31,20 @@ export class UserComponent extends ListViewComponentBase<UserDto>
     super.ngOnInit();
   }
 
-  fetchData(arg: IFetchData) {
+  fetchData(fetch: IFetchPageData) {
     const queryInput = new QueryInput();
-    queryInput.skipCount = arg.skipCount;
-    queryInput.pageSize = arg.pageSize;
+    queryInput.skipCount = fetch.skipCount;
+    queryInput.pageSize = fetch.pageSize;
 
-    queryInput.queryConditions = arg.queryConditions;
-    queryInput.sortConditions = arg.sortConditions;
+    queryInput.queryConditions = fetch.queryConditions;
+    queryInput.sortConditions = fetch.sortConditions;
 
     this.userSer.getPage(queryInput)
       .pipe(finalize(() => {
-        this.loading = false;
+        fetch!.finishedCallback();
       }))
       .subscribe((res) => {
-        this.viewRecord = res.items;
-        arg.callback(res.total);
+        fetch!.successCallback(res);
       });
   }
 
