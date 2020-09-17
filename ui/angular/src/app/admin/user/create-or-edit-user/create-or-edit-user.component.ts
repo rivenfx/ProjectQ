@@ -67,7 +67,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
           this.loading = false;
         }))
         .subscribe(() => {
-          this.message.success(this.l(AppConsts.message.success));
+          this.notify.success(this.l(AppConsts.message.success));
           this.success();
         });
     } else {
@@ -76,7 +76,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
           this.loading = false;
         }))
         .subscribe(() => {
-          this.message.success(this.l(AppConsts.message.success));
+          this.notify.success(this.l(AppConsts.message.success));
           this.success();
         });
     }
