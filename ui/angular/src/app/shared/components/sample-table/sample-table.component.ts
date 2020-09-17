@@ -15,7 +15,7 @@ import { ColumnItemDto, SortCondition, SortType } from '@service-proxies';
 import { AppComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
-import { SampleTableDataProcessorService } from '../sample-table-data-processor.service';
+import { SampleTableDataProcessorService } from './sample-table-data-processor.service';
 import { ISampleTableAction } from './interfaces';
 
 @Component({
