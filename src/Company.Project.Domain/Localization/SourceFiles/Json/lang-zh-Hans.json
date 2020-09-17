@@ -98,7 +98,8 @@
     "user.is-static": "内置",
     "role.name": "角色名称",
     "role.display-name": "角色显示名称",
-    "role.description": "角色描述"
+    "role.description": "角色描述",
+    "role.is-static": "系统内置"
 
 
   }
