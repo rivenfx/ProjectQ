@@ -27,6 +27,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 
 export const SHARED_ZORRO_MODULES = [
   NzFormModule,
@@ -57,5 +58,6 @@ export const SHARED_ZORRO_MODULES = [
   NzRadioModule,
   NzCheckboxModule,
   NzTreeModule,
-  NzTreeSelectModule
+  NzTreeSelectModule,
+  NzNotificationModule
 ];
