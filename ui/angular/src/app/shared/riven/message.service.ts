@@ -86,7 +86,7 @@ export class MessageService {
       });
     } else {
       this.nzModalSer.confirm({
-        nzTitle: this.i18n.fanyi('MessageConfirmOperation'),
+        nzTitle: this.i18n.fanyi('message.confirm.operation'),
         nzContent: message,
         nzOnOk() {
           if (titleOrCallBack) {
