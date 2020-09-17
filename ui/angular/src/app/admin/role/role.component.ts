@@ -4,6 +4,7 @@ import { QueryCondition, QueryInput, RoleDto, RoleServiceProxy, SortCondition, U
 import { IFetchPageData, ListViewComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditRoleComponent } from './create-or-edit-role';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'role',
@@ -56,6 +57,27 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
     ).subscribe((res) => {
       if (res) {
         this.refresh();
+      }
+    });
+  }
+
+  onDelete(data?: RoleDto) {
+    if (data.isStatic) {
+      this.message.warn(this.l('不能删除系统角色'));
+      return;
+    }
+
+    this.message.confirm(this.l('删除角色 {0}', data.name), (res) => {
+      if (res) {
+        this.loading = true;
+        this.roleSer.delete([data.id])
+          .pipe(finalize(() => {
+            this.loading = false;
+          }))
+          .subscribe(() => {
+            this.message.success(this.l(AppConsts.message.success));
+            this.refresh();
+          });
       }
     });
   }

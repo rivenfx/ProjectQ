@@ -10,6 +10,7 @@ import { IFetchPageData, ListViewComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'user',
@@ -57,7 +58,12 @@ export class UserComponent extends ListViewComponentBase<UserDto>
   }
 
   delete(data: UserDto) {
-    this.message.confirm(this.l('是否删除'), (res) => {
+    if (data.isStatic) {
+      this.message.warn(this.l('不能删除系统用户'));
+      return;
+    }
+
+    this.message.confirm(this.l('删除用户 {0}', data.userName), (res) => {
       if (res) {
         this.loading = true;
         this.userSer.delete([data.id])
@@ -65,10 +71,9 @@ export class UserComponent extends ListViewComponentBase<UserDto>
             this.loading = false;
           }))
           .subscribe(() => {
-            this.message.success(this.l(this.appConsts.message.success));
+            this.message.success(this.l(AppConsts.message.success));
+            this.refresh();
           });
-      } else {
-        this.message.success(this.l(this.appConsts.message.cancelled));
       }
     });
   }
