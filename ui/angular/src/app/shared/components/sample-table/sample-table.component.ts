@@ -62,6 +62,9 @@ export class SampleTableComponent extends AppComponentBase
   /** 边框 */
   @Input() bordered = true;
 
+  /** 滚动宽高 */
+  @Input() scroll: { y?: string; x?: string; } = { x: '1800px', y: '240px' };
+
   /** 列被触发 */
   @Output() action = new EventEmitter<ISampleTableAction>();
 
