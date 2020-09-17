@@ -12,6 +12,7 @@ import { ISampleTableAction } from '@shared/components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from './app-component-base';
+import { ReuseTabService } from '@delon/abc';
 
 /** 页面信息 */
 export interface IPageInfo<T> {
@@ -142,6 +143,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 激活路由 */
   activatedRoute: ActivatedRoute;
 
+  /** 复用标签服务 */
+  reuseTabSer: ReuseTabService;
+
   /** 筛选条件 */
   queryConditions: QueryCondition[] = [];
 
@@ -157,6 +161,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     this.modalHelper = injector.get(ModalHelper);
     this.dynamicPageSer = injector.get(DynamicPageServiceProxy);
     this.activatedRoute = injector.get(ActivatedRoute);
+    this.reuseTabSer = injector.get(ReuseTabService);
 
     // 获取筛选条件配置名称名称
     const activatedRoute = injector.get(ActivatedRoute);
@@ -168,6 +173,11 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
         this.pageName = claims;
       }
     }
+
+    setTimeout(() => {
+      // 刷新复用标签
+      this.reuseTabSer.refresh();
+    }, 500);
   }
 
   ngOnInit(): void {
