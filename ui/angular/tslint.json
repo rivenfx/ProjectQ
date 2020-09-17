@@ -26,20 +26,34 @@
     "directive-selector": [
       true,
       "attribute",
-      ["app", "passport", "exception", "layout", "header", ""],
+      [
+        "app",
+        "passport",
+        "exception",
+        "layout",
+        "header",
+        ""
+      ],
       "kebab-case",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      ["app", "passport", "exception", "layout", "header", ""],
+      [
+        "app",
+        "passport",
+        "exception",
+        "layout",
+        "header",
+        ""
+      ],
       "kebab-case",
       "camelCase"
     ],
-    "eofline": true,
+    "eofline": false,
     "import-blacklist": [
-      true,
+      false,
       "rxjs/Rx",
       "ng-zorro-antd",
       "@delon/abc",
@@ -85,9 +99,10 @@
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
     "object-literal-key-quotes": [
-      true,
+      false,
       "as-needed"
     ],
+    "object-literal-shorthand": false,
     "quotemark": [
       true,
       "single"
@@ -154,7 +169,7 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "ordered-imports": [
-      true,
+      false,
       {
         "import-sources-order": "case-insensitive",
         "named-imports-order": "case-insensitive"
