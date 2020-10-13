@@ -1,7 +1,7 @@
-import { MessageService } from '@shared/riven';
-import { IAjaxResponse, IErrorInfo } from '@service-proxies/interceptor/interfaces';
-import { Observable, of, Subject } from 'rxjs';
 import { HttpEvent, HttpResponse } from '@angular/common/http';
+import { IAjaxResponse, IErrorInfo } from '@service-proxies/interceptor/interfaces';
+import { MessageService } from '@shared/riven';
+import { Observable, of, Subject } from 'rxjs';
 
 /** 响应帮助类 */
 export class ResponseHelper {
@@ -15,28 +15,28 @@ export class ResponseHelper {
   /** 预定义的错误 */
   static predefineErrors = {
     /** 默认 - 错误 */
-    default: <IErrorInfo>{
+    default: {
       message: 'An error has occurred!',
       details: 'Error details were not sent by server.',
-    },
+    } as IErrorInfo,
 
     /** 默认 - 未授权错误 */
-    error401: <IErrorInfo>{
+    error401: {
       message: 'You are not authenticated!',
       details: 'You should be authenticated (sign in) in order to perform this operation.',
-    },
+    } as IErrorInfo,
 
     /** 默认 - 没有操作权限错误 */
-    error403: <IErrorInfo>{
+    error403: {
       message: 'You are not authorized!',
       details: 'You are not allowed to perform this operation.',
-    },
+    } as IErrorInfo,
 
     /** 默认 - 未找到错误 */
-    error404: <IErrorInfo>{
+    error404: {
       message: 'Resource not found!',
       details: 'The resource requested could not be found on the server.',
-    },
+    } as IErrorInfo,
   };
 
   /** 初始化 ResponseHelper */
@@ -54,12 +54,12 @@ export class ResponseHelper {
 
     if (event instanceof HttpResponse) {
       if (event.body instanceof Blob && event.body.type && event.body.type.indexOf('application/json') >= 0) {
-        var clonedResponse = event.clone();
+        const clonedResponse = event.clone();
 
         ResponseHelper.blobToText(event.body).subscribe(json => {
-          const responseBody = json == 'null' ? {} : JSON.parse(json);
+          const responseBody = json === 'null' ? {} : JSON.parse(json);
 
-          var modifiedResponse = ResponseHelper.handleResponse(event.clone({
+          const modifiedResponse = ResponseHelper.handleResponse(event.clone({
             body: responseBody,
           }));
 
@@ -80,7 +80,7 @@ export class ResponseHelper {
 
   /** 处理失败的响应 */
   static handleErrorResponse(error: any, interceptObservable: Subject<HttpEvent<any>>): Observable<any> {
-    var errorObservable = new Subject<any>();
+    const errorObservable = new Subject<any>();
 
     if (!(error.error instanceof Blob)) {
       interceptObservable.error(error);
@@ -89,7 +89,7 @@ export class ResponseHelper {
     }
 
     ResponseHelper.blobToText(error.error).subscribe(json => {
-      const errorBody = (json == '' || json == 'null') ? {} : JSON.parse(json);
+      const errorBody = (json === '' || json === 'null') ? {} : JSON.parse(json);
       const errorResponse = new HttpResponse({
         headers: error.headers,
         status: error.status,
@@ -141,7 +141,7 @@ export class ResponseHelper {
         observer.next('');
         observer.complete();
       } else {
-        let reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function() {
           observer.next(this.result);
           observer.complete();
@@ -153,7 +153,7 @@ export class ResponseHelper {
 
   /** 处理响应 */
   static handleResponse(response: HttpResponse<any>): HttpResponse<any> {
-    let ajaxResponse = ResponseHelper.getAjaxResponseOrNull(response);
+    const ajaxResponse = ResponseHelper.getAjaxResponseOrNull(response);
     if (typeof (ajaxResponse) === 'undefined') {
       return response;
     }
@@ -234,11 +234,13 @@ export class ResponseHelper {
 
   /** 处理目标地址 */
   static handleTargetUrl(targetUrl: string): void {
-    if (!targetUrl) {
-      location.href = '/';
-    } else {
-      location.href = targetUrl;
-    }
+    setTimeout(() => {
+      if (!targetUrl) {
+        location.href = '/';
+      } else {
+        location.href = targetUrl;
+      }
+    }, 5000);
   }
 
   /** 日志 - 错误 */

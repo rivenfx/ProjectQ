@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd';
-import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { I18nService } from '@core/i18n/i18n.service';
+import { ALAIN_I18N_TOKEN } from '@delon/theme';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Injectable()
 export class MessageService {
@@ -86,7 +86,7 @@ export class MessageService {
       });
     } else {
       this.nzModalSer.confirm({
-        nzTitle: this.i18n.fanyi('MessageConfirmOperation'),
+        nzTitle: this.i18n.fanyi('message.confirm.operation'),
         nzContent: message,
         nzOnOk() {
           if (titleOrCallBack) {

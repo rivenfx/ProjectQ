@@ -139,6 +139,180 @@ export class ClaimsServiceProxy {
 }
 
 @Injectable()
+export class DynamicPageServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getDynamicPageInfo(name: string | null | undefined): Observable<DynamicPageDto> {
+        let url_ = this.baseUrl + "/apis/DynamicPage/GetDynamicPageInfo?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDynamicPageInfo(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDynamicPageInfo(<any>response_);
+                } catch (e) {
+                    return <Observable<DynamicPageDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<DynamicPageDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetDynamicPageInfo(response: HttpResponseBase): Observable<DynamicPageDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DynamicPageDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<DynamicPageDto>(<any>null);
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getPageFilters(name: string | null | undefined): Observable<PageFilterItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/DynamicPage/GetPageFilters?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPageFilters(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPageFilters(<any>response_);
+                } catch (e) {
+                    return <Observable<PageFilterItemDtoListResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PageFilterItemDtoListResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetPageFilters(response: HttpResponseBase): Observable<PageFilterItemDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PageFilterItemDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PageFilterItemDtoListResultDto>(<any>null);
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    getColumns(name: string | null | undefined): Observable<ColumnItemDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/DynamicPage/GetColumns?";
+        if (name !== undefined && name !== null)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetColumns(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetColumns(<any>response_);
+                } catch (e) {
+                    return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<ColumnItemDtoListResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetColumns(response: HttpResponseBase): Observable<ColumnItemDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ColumnItemDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ColumnItemDtoListResultDto>(<any>null);
+    }
+}
+
+@Injectable()
 export class RoleServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -153,8 +327,8 @@ export class RoleServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getAll(body: QueryInput | undefined): Observable<RoleDtoPageResultDto> {
-        let url_ = this.baseUrl + "/apis/Role/GetAll";
+    getPage(body: QueryInput | undefined): Observable<RoleDtoPageResultDto> {
+        let url_ = this.baseUrl + "/apis/Role/GetPage";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -170,11 +344,11 @@ export class RoleServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
+            return this.processGetPage(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAll(<any>response_);
+                    return this.processGetPage(<any>response_);
                 } catch (e) {
                     return <Observable<RoleDtoPageResultDto>><any>_observableThrow(e);
                 }
@@ -183,7 +357,7 @@ export class RoleServiceProxy {
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<RoleDtoPageResultDto> {
+    protected processGetPage(response: HttpResponseBase): Observable<RoleDtoPageResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -203,6 +377,113 @@ export class RoleServiceProxy {
             }));
         }
         return _observableOf<RoleDtoPageResultDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAll(): Observable<RoleDtoListResultDto> {
+        let url_ = this.baseUrl + "/apis/Role/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(<any>response_);
+                } catch (e) {
+                    return <Observable<RoleDtoListResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<RoleDtoListResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<RoleDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RoleDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<RoleDtoListResultDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    getEditById(input: string | undefined): Observable<RoleEditDto> {
+        let url_ = this.baseUrl + "/apis/Role/GetEditById?";
+        if (input === null)
+            throw new Error("The parameter 'input' cannot be null.");
+        else if (input !== undefined)
+            url_ += "input=" + encodeURIComponent("" + input) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEditById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEditById(<any>response_);
+                } catch (e) {
+                    return <Observable<RoleEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<RoleEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEditById(response: HttpResponseBase): Observable<RoleEditDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RoleEditDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<RoleEditDto>(<any>null);
     }
 
     /**
@@ -889,6 +1170,57 @@ export class TokenAuthServiceProxy {
         }
         return _observableOf<AuthenticateResultDto>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    refreshToken(): Observable<AuthenticateResultDto> {
+        let url_ = this.baseUrl + "/api/TokenAuth/RefreshToken";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRefreshToken(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRefreshToken(<any>response_);
+                } catch (e) {
+                    return <Observable<AuthenticateResultDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<AuthenticateResultDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processRefreshToken(response: HttpResponseBase): Observable<AuthenticateResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthenticateResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<AuthenticateResultDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -906,8 +1238,8 @@ export class UserServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getAll(body: QueryInput | undefined): Observable<UserDtoPageResultDto> {
-        let url_ = this.baseUrl + "/apis/User/GetAll";
+    getPage(body: QueryInput | undefined): Observable<UserDtoPageResultDto> {
+        let url_ = this.baseUrl + "/apis/User/GetPage";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -923,11 +1255,11 @@ export class UserServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAll(response_);
+            return this.processGetPage(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetAll(<any>response_);
+                    return this.processGetPage(<any>response_);
                 } catch (e) {
                     return <Observable<UserDtoPageResultDto>><any>_observableThrow(e);
                 }
@@ -936,7 +1268,7 @@ export class UserServiceProxy {
         }));
     }
 
-    protected processGetAll(response: HttpResponseBase): Observable<UserDtoPageResultDto> {
+    protected processGetPage(response: HttpResponseBase): Observable<UserDtoPageResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -956,6 +1288,62 @@ export class UserServiceProxy {
             }));
         }
         return _observableOf<UserDtoPageResultDto>(<any>null);
+    }
+
+    /**
+     * @param input (optional) 
+     * @return Success
+     */
+    getEditById(input: string | undefined): Observable<UserEditDto> {
+        let url_ = this.baseUrl + "/apis/User/GetEditById?";
+        if (input === null)
+            throw new Error("The parameter 'input' cannot be null.");
+        else if (input !== undefined)
+            url_ += "input=" + encodeURIComponent("" + input) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetEditById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetEditById(<any>response_);
+                } catch (e) {
+                    return <Observable<UserEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEditById(response: HttpResponseBase): Observable<UserEditDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserEditDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserEditDto>(<any>null);
     }
 
     /**
@@ -1166,9 +1554,616 @@ export interface IClaimItemDto {
     sort: number;
 }
 
+export enum QueryOperator {
+    Equal = <any>"Equal",
+    NotEqual = <any>"NotEqual",
+    Greater = <any>"Greater",
+    GreaterEqual = <any>"GreaterEqual",
+    Less = <any>"Less",
+    LessEqual = <any>"LessEqual",
+    StartsWith = <any>"StartsWith",
+    EndsWith = <any>"EndsWith",
+    In = <any>"In",
+    NotIn = <any>"NotIn",
+    Contains = <any>"Contains",
+    Between = <any>"Between",
+    BetweenEqualStart = <any>"BetweenEqualStart",
+    BetweenEqualEnd = <any>"BetweenEqualEnd",
+    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
+}
+
+export class PageFilterItemDto implements IPageFilterItemDto {
+    order: number;
+    label: string | undefined;
+    componentName: string | undefined;
+    args: { [key: string]: any; } | undefined;
+    valueChange: string[] | undefined;
+    enabled: boolean;
+    width: number;
+    xsWidth: number | undefined;
+    smWidth: number | undefined;
+    mdWidth: number | undefined;
+    lgWidth: number | undefined;
+    xlWidth: number | undefined;
+    xxlWidth: number | undefined;
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+
+    constructor(data?: IPageFilterItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.order = _data["order"];
+            this.label = _data["label"];
+            this.componentName = _data["componentName"];
+            if (_data["args"]) {
+                this.args = {} as any;
+                for (let key in _data["args"]) {
+                    if (_data["args"].hasOwnProperty(key))
+                        this.args[key] = _data["args"][key];
+                }
+            }
+            if (Array.isArray(_data["valueChange"])) {
+                this.valueChange = [] as any;
+                for (let item of _data["valueChange"])
+                    this.valueChange.push(item);
+            }
+            this.enabled = _data["enabled"];
+            this.width = _data["width"];
+            this.xsWidth = _data["xsWidth"];
+            this.smWidth = _data["smWidth"];
+            this.mdWidth = _data["mdWidth"];
+            this.lgWidth = _data["lgWidth"];
+            this.xlWidth = _data["xlWidth"];
+            this.xxlWidth = _data["xxlWidth"];
+            this.field = _data["field"];
+            this.value = _data["value"];
+            this.operator = _data["operator"];
+            this.skipValueIsNull = _data["skipValueIsNull"];
+        }
+    }
+
+    static fromJS(data: any): PageFilterItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PageFilterItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["order"] = this.order;
+        data["label"] = this.label;
+        data["componentName"] = this.componentName;
+        if (this.args) {
+            data["args"] = {};
+            for (let key in this.args) {
+                if (this.args.hasOwnProperty(key))
+                    data["args"][key] = this.args[key];
+            }
+        }
+        if (Array.isArray(this.valueChange)) {
+            data["valueChange"] = [];
+            for (let item of this.valueChange)
+                data["valueChange"].push(item);
+        }
+        data["enabled"] = this.enabled;
+        data["width"] = this.width;
+        data["xsWidth"] = this.xsWidth;
+        data["smWidth"] = this.smWidth;
+        data["mdWidth"] = this.mdWidth;
+        data["lgWidth"] = this.lgWidth;
+        data["xlWidth"] = this.xlWidth;
+        data["xxlWidth"] = this.xxlWidth;
+        data["field"] = this.field;
+        data["value"] = this.value;
+        data["operator"] = this.operator;
+        data["skipValueIsNull"] = this.skipValueIsNull;
+        return data; 
+    }
+
+    clone(): PageFilterItemDto {
+        const json = this.toJSON();
+        let result = new PageFilterItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPageFilterItemDto {
+    order: number;
+    label: string | undefined;
+    componentName: string | undefined;
+    args: { [key: string]: any; } | undefined;
+    valueChange: string[] | undefined;
+    enabled: boolean;
+    width: number;
+    xsWidth: number | undefined;
+    smWidth: number | undefined;
+    mdWidth: number | undefined;
+    lgWidth: number | undefined;
+    xlWidth: number | undefined;
+    xxlWidth: number | undefined;
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+}
+
+export enum ColumnItemStatistical {
+    None = <any>"None",
+    Count = <any>"Count",
+    DistinctCount = <any>"DistinctCount",
+    Sum = <any>"Sum",
+    Average = <any>"Average",
+    Max = <any>"Max",
+    Min = <any>"Min",
+}
+
+export enum ColumnItemFixed {
+    None = <any>"None",
+    Left = <any>"Left",
+    Right = <any>"Right",
+}
+
+export enum ColumnControl {
+    Button = <any>"Button",
+    Select = <any>"Select",
+}
+
+export class ColumnActionItemDto implements IColumnActionItemDto {
+    name: string | undefined;
+    label: string | undefined;
+    icon: string | undefined;
+    type: ColumnControl;
+    acl: string | undefined;
+    buttons: ColumnActionItemDto[] | undefined;
+
+    constructor(data?: IColumnActionItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.label = _data["label"];
+            this.icon = _data["icon"];
+            this.type = _data["type"];
+            this.acl = _data["acl"];
+            if (Array.isArray(_data["buttons"])) {
+                this.buttons = [] as any;
+                for (let item of _data["buttons"])
+                    this.buttons.push(ColumnActionItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColumnActionItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnActionItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["label"] = this.label;
+        data["icon"] = this.icon;
+        data["type"] = this.type;
+        data["acl"] = this.acl;
+        if (Array.isArray(this.buttons)) {
+            data["buttons"] = [];
+            for (let item of this.buttons)
+                data["buttons"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ColumnActionItemDto {
+        const json = this.toJSON();
+        let result = new ColumnActionItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnActionItemDto {
+    name: string | undefined;
+    label: string | undefined;
+    icon: string | undefined;
+    type: ColumnControl;
+    acl: string | undefined;
+    buttons: ColumnActionItemDto[] | undefined;
+}
+
+export class ColumnItemDto implements IColumnItemDto {
+    field: string | undefined;
+    type: string | undefined;
+    title: string | undefined;
+    render: string | undefined;
+    order: number | undefined;
+    width: number | undefined;
+    numberDigits: number;
+    dateFormat: string | undefined;
+    statistical: ColumnItemStatistical;
+    fixed: ColumnItemFixed;
+    actions: ColumnActionItemDto[] | undefined;
+
+    constructor(data?: IColumnItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.field = _data["field"];
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.render = _data["render"];
+            this.order = _data["order"];
+            this.width = _data["width"];
+            this.numberDigits = _data["numberDigits"];
+            this.dateFormat = _data["dateFormat"];
+            this.statistical = _data["statistical"];
+            this.fixed = _data["fixed"];
+            if (Array.isArray(_data["actions"])) {
+                this.actions = [] as any;
+                for (let item of _data["actions"])
+                    this.actions.push(ColumnActionItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColumnItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["field"] = this.field;
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["render"] = this.render;
+        data["order"] = this.order;
+        data["width"] = this.width;
+        data["numberDigits"] = this.numberDigits;
+        data["dateFormat"] = this.dateFormat;
+        data["statistical"] = this.statistical;
+        data["fixed"] = this.fixed;
+        if (Array.isArray(this.actions)) {
+            data["actions"] = [];
+            for (let item of this.actions)
+                data["actions"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ColumnItemDto {
+        const json = this.toJSON();
+        let result = new ColumnItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnItemDto {
+    field: string | undefined;
+    type: string | undefined;
+    title: string | undefined;
+    render: string | undefined;
+    order: number | undefined;
+    width: number | undefined;
+    numberDigits: number;
+    dateFormat: string | undefined;
+    statistical: ColumnItemStatistical;
+    fixed: ColumnItemFixed;
+    actions: ColumnActionItemDto[] | undefined;
+}
+
+export class DynamicPageDto implements IDynamicPageDto {
+    pageFilters: PageFilterItemDto[] | undefined;
+    columns: ColumnItemDto[] | undefined;
+
+    constructor(data?: IDynamicPageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["pageFilters"])) {
+                this.pageFilters = [] as any;
+                for (let item of _data["pageFilters"])
+                    this.pageFilters.push(PageFilterItemDto.fromJS(item));
+            }
+            if (Array.isArray(_data["columns"])) {
+                this.columns = [] as any;
+                for (let item of _data["columns"])
+                    this.columns.push(ColumnItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): DynamicPageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DynamicPageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.pageFilters)) {
+            data["pageFilters"] = [];
+            for (let item of this.pageFilters)
+                data["pageFilters"].push(item.toJSON());
+        }
+        if (Array.isArray(this.columns)) {
+            data["columns"] = [];
+            for (let item of this.columns)
+                data["columns"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): DynamicPageDto {
+        const json = this.toJSON();
+        let result = new DynamicPageDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDynamicPageDto {
+    pageFilters: PageFilterItemDto[] | undefined;
+    columns: ColumnItemDto[] | undefined;
+}
+
+export class PageFilterItemDtoListResultDto implements IPageFilterItemDtoListResultDto {
+    items: PageFilterItemDto[] | undefined;
+
+    constructor(data?: IPageFilterItemDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(PageFilterItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PageFilterItemDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PageFilterItemDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): PageFilterItemDtoListResultDto {
+        const json = this.toJSON();
+        let result = new PageFilterItemDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPageFilterItemDtoListResultDto {
+    items: PageFilterItemDto[] | undefined;
+}
+
+export class ColumnItemDtoListResultDto implements IColumnItemDtoListResultDto {
+    items: ColumnItemDto[] | undefined;
+
+    constructor(data?: IColumnItemDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(ColumnItemDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColumnItemDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColumnItemDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): ColumnItemDtoListResultDto {
+        const json = this.toJSON();
+        let result = new ColumnItemDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColumnItemDtoListResultDto {
+    items: ColumnItemDto[] | undefined;
+}
+
+export class QueryCondition implements IQueryCondition {
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+
+    constructor(data?: IQueryCondition) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.field = _data["field"];
+            this.value = _data["value"];
+            this.operator = _data["operator"];
+            this.skipValueIsNull = _data["skipValueIsNull"];
+        }
+    }
+
+    static fromJS(data: any): QueryCondition {
+        data = typeof data === 'object' ? data : {};
+        let result = new QueryCondition();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["field"] = this.field;
+        data["value"] = this.value;
+        data["operator"] = this.operator;
+        data["skipValueIsNull"] = this.skipValueIsNull;
+        return data; 
+    }
+
+    clone(): QueryCondition {
+        const json = this.toJSON();
+        let result = new QueryCondition();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IQueryCondition {
+    field: string | undefined;
+    value: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+}
+
+export enum SortType {
+    None = <any>"None",
+    Asc = <any>"Asc",
+    Desc = <any>"Desc",
+}
+
+export class SortCondition implements ISortCondition {
+    field: string | undefined;
+    order: number;
+    type: SortType;
+
+    constructor(data?: ISortCondition) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.field = _data["field"];
+            this.order = _data["order"];
+            this.type = _data["type"];
+        }
+    }
+
+    static fromJS(data: any): SortCondition {
+        data = typeof data === 'object' ? data : {};
+        let result = new SortCondition();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["field"] = this.field;
+        data["order"] = this.order;
+        data["type"] = this.type;
+        return data; 
+    }
+
+    clone(): SortCondition {
+        const json = this.toJSON();
+        let result = new SortCondition();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISortCondition {
+    field: string | undefined;
+    order: number;
+    type: SortType;
+}
+
 export class QueryInput implements IQueryInput {
     pageSize: number;
     skipCount: number;
+    queryConditions: QueryCondition[] | undefined;
+    sortConditions: SortCondition[] | undefined;
 
     constructor(data?: IQueryInput) {
         if (data) {
@@ -1183,6 +2178,16 @@ export class QueryInput implements IQueryInput {
         if (_data) {
             this.pageSize = _data["pageSize"];
             this.skipCount = _data["skipCount"];
+            if (Array.isArray(_data["queryConditions"])) {
+                this.queryConditions = [] as any;
+                for (let item of _data["queryConditions"])
+                    this.queryConditions.push(QueryCondition.fromJS(item));
+            }
+            if (Array.isArray(_data["sortConditions"])) {
+                this.sortConditions = [] as any;
+                for (let item of _data["sortConditions"])
+                    this.sortConditions.push(SortCondition.fromJS(item));
+            }
         }
     }
 
@@ -1197,6 +2202,16 @@ export class QueryInput implements IQueryInput {
         data = typeof data === 'object' ? data : {};
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
+        if (Array.isArray(this.queryConditions)) {
+            data["queryConditions"] = [];
+            for (let item of this.queryConditions)
+                data["queryConditions"].push(item.toJSON());
+        }
+        if (Array.isArray(this.sortConditions)) {
+            data["sortConditions"] = [];
+            for (let item of this.sortConditions)
+                data["sortConditions"].push(item.toJSON());
+        }
         return data; 
     }
 
@@ -1211,12 +2226,15 @@ export class QueryInput implements IQueryInput {
 export interface IQueryInput {
     pageSize: number;
     skipCount: number;
+    queryConditions: QueryCondition[] | undefined;
+    sortConditions: SortCondition[] | undefined;
 }
 
 export class RoleDto implements IRoleDto {
     name: string | undefined;
     displayName: string | undefined;
     description: string | undefined;
+    isStatic: boolean;
     id: string | undefined;
 
     constructor(data?: IRoleDto) {
@@ -1233,6 +2251,7 @@ export class RoleDto implements IRoleDto {
             this.name = _data["name"];
             this.displayName = _data["displayName"];
             this.description = _data["description"];
+            this.isStatic = _data["isStatic"];
             this.id = _data["id"];
         }
     }
@@ -1249,6 +2268,7 @@ export class RoleDto implements IRoleDto {
         data["name"] = this.name;
         data["displayName"] = this.displayName;
         data["description"] = this.description;
+        data["isStatic"] = this.isStatic;
         data["id"] = this.id;
         return data; 
     }
@@ -1265,6 +2285,7 @@ export interface IRoleDto {
     name: string | undefined;
     displayName: string | undefined;
     description: string | undefined;
+    isStatic: boolean;
     id: string | undefined;
 }
 
@@ -1321,6 +2342,112 @@ export class RoleDtoPageResultDto implements IRoleDtoPageResultDto {
 export interface IRoleDtoPageResultDto {
     items: RoleDto[] | undefined;
     total: number;
+}
+
+export class RoleDtoListResultDto implements IRoleDtoListResultDto {
+    items: RoleDto[] | undefined;
+
+    constructor(data?: IRoleDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(RoleDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): RoleDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): RoleDtoListResultDto {
+        const json = this.toJSON();
+        let result = new RoleDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRoleDtoListResultDto {
+    items: RoleDto[] | undefined;
+}
+
+export class RoleEditDto implements IRoleEditDto {
+    entityDto: RoleDto;
+    claims: string[] | undefined;
+
+    constructor(data?: IRoleEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.entityDto = _data["entityDto"] ? RoleDto.fromJS(_data["entityDto"]) : <any>undefined;
+            if (Array.isArray(_data["claims"])) {
+                this.claims = [] as any;
+                for (let item of _data["claims"])
+                    this.claims.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): RoleEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new RoleEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
+        if (Array.isArray(this.claims)) {
+            data["claims"] = [];
+            for (let item of this.claims)
+                data["claims"].push(item);
+        }
+        return data; 
+    }
+
+    clone(): RoleEditDto {
+        const json = this.toJSON();
+        let result = new RoleEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRoleEditDto {
+    entityDto: RoleDto;
+    claims: string[] | undefined;
 }
 
 export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
@@ -1980,6 +3107,7 @@ export class UserDto implements IUserDto {
     lockoutEnabled: boolean;
     isActive: boolean;
     twoFactorEnabled: boolean;
+    isStatic: boolean;
     id: string | undefined;
 
     constructor(data?: IUserDto) {
@@ -2002,6 +3130,7 @@ export class UserDto implements IUserDto {
             this.lockoutEnabled = _data["lockoutEnabled"];
             this.isActive = _data["isActive"];
             this.twoFactorEnabled = _data["twoFactorEnabled"];
+            this.isStatic = _data["isStatic"];
             this.id = _data["id"];
         }
     }
@@ -2024,6 +3153,7 @@ export class UserDto implements IUserDto {
         data["lockoutEnabled"] = this.lockoutEnabled;
         data["isActive"] = this.isActive;
         data["twoFactorEnabled"] = this.twoFactorEnabled;
+        data["isStatic"] = this.isStatic;
         data["id"] = this.id;
         return data; 
     }
@@ -2046,6 +3176,7 @@ export interface IUserDto {
     lockoutEnabled: boolean;
     isActive: boolean;
     twoFactorEnabled: boolean;
+    isStatic: boolean;
     id: string | undefined;
 }
 
@@ -2104,9 +3235,65 @@ export interface IUserDtoPageResultDto {
     total: number;
 }
 
-export class CreateOrEditUserInput implements ICreateOrEditUserInput {
+export class UserEditDto implements IUserEditDto {
     entityDto: UserDto;
+    roles: string[] | undefined;
+
+    constructor(data?: IUserEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.entityDto = _data["entityDto"] ? UserDto.fromJS(_data["entityDto"]) : <any>undefined;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UserEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+
+    clone(): UserEditDto {
+        const json = this.toJSON();
+        let result = new UserEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserEditDto {
+    entityDto: UserDto;
+    roles: string[] | undefined;
+}
+
+export class CreateOrEditUserInput implements ICreateOrEditUserInput {
     password: string | undefined;
+    entityDto: UserDto;
+    roles: string[] | undefined;
 
     constructor(data?: ICreateOrEditUserInput) {
         if (data) {
@@ -2119,8 +3306,13 @@ export class CreateOrEditUserInput implements ICreateOrEditUserInput {
 
     init(_data?: any) {
         if (_data) {
-            this.entityDto = _data["entityDto"] ? UserDto.fromJS(_data["entityDto"]) : <any>undefined;
             this.password = _data["password"];
+            this.entityDto = _data["entityDto"] ? UserDto.fromJS(_data["entityDto"]) : <any>undefined;
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles.push(item);
+            }
         }
     }
 
@@ -2133,8 +3325,13 @@ export class CreateOrEditUserInput implements ICreateOrEditUserInput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
         data["password"] = this.password;
+        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
         return data; 
     }
 
@@ -2147,8 +3344,9 @@ export class CreateOrEditUserInput implements ICreateOrEditUserInput {
 }
 
 export interface ICreateOrEditUserInput {
-    entityDto: UserDto;
     password: string | undefined;
+    entityDto: UserDto;
+    roles: string[] | undefined;
 }
 
 export class SwaggerException extends Error {

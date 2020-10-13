@@ -40,8 +40,7 @@ export class PermissionCheckerService {
     }
 
     if (Array.isArray(permissionName)) {
-      for (let i = 0; i < permissionName.length; i++) {
-        const tmpPermissionName = permissionName[i];
+      for (const tmpPermissionName of permissionName) {
         if (
           this.aclService.data.abilities.find(
             item => item === tmpPermissionName,
@@ -85,12 +84,10 @@ export class PermissionCheckerService {
     this.removePermission(tmpPermissionNames);
   }
 
-  /**
-   * 填充数据
-   * @param input
-   */
+  /** 填充数据 */
   extend(input: IClaims) {
     const permissions: string[] = [];
+    // tslint:disable-next-line:forin
     for (const permission in input.grantedClaims) {
       permissions.push(permission);
     }

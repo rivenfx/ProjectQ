@@ -22,5 +22,10 @@ namespace Company.Project.Authorization.Roles.Dtos
         /// 描述
         /// </summary>
         public virtual string Description { get; set; }
+
+        /// <summary>
+        /// 是否为系统内置
+        /// </summary>
+        public virtual bool IsStatic { get; set; }
     }
 }

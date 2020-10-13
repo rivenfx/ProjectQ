@@ -1,0 +1,19 @@
+<ng-container *ngIf="argsObject"
+              [ngSwitch]="argsObject.type">
+  <ng-container *ngSwitchCase="'text'">
+    <input nz-input
+           [placeholder]="placeholder"
+           [disabled]="disabled"
+           [(ngModel)]="value"
+           (ngModelChange)="emitValueChange($event)"/>
+  </ng-container>
+  <ng-container *ngSwitchCase="'number'">
+    <nz-input-number [nzMin]="argsObject.min"
+                     [nzMax]="argsObject.max"
+                     [nzStep]="argsObject.step"
+                     [disabled]="disabled"
+                     [(ngModel)]="value"
+                     (ngModelChange)="emitValueChange($event)">
+    </nz-input-number>
+  </ng-container>
+</ng-container>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostListener, Injector } from '@angular/core';
-import * as screenfull from 'screenfull';
 import { SampleComponentBase } from '@shared/common';
+import * as screenfull from 'screenfull';
 
 @Component({
   selector: 'header-fullscreen',

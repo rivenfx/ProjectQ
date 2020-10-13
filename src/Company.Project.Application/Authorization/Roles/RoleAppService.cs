@@ -13,9 +13,12 @@ using Riven.Identity.Authorization;
 using Company.Project.Authorization.Users.Dtos;
 using Company.Project.Dtos;
 using Mapster;
+using JetBrains.Annotations;
 
 namespace Company.Project.Authorization.Roles
 {
+
+    [ClaimsAuthorize]
     public class RoleAppService : IApplicationService
     {
         readonly RoleManager _roleManager;
@@ -27,24 +30,63 @@ namespace Company.Project.Authorization.Roles
 
 
         /// <summary>
-        /// 查询所有角色
+        /// 分页查询所有角色
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
-        public virtual async Task<PageResultDto<RoleDto>> GetAll(QueryInput input)
+        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        public virtual async Task<PageResultDto<RoleDto>> GetPage(QueryInput input)
         {
             var query = _roleManager.QueryAsNoTracking
-                .Skip(input.SkipCount)
-                .Take(input.PageSize);
+                .Where(input.QueryConditions);
 
             var entityTotal = await query.LongCountAsync();
 
             var entityList = await query
+                .OrderBy(input.SortConditions)
+                .Skip(input.SkipCount)
+                .Take(input.PageSize)
                 .ProjectToType<RoleDto>()
                 .ToListAsync();
 
             return new PageResultDto<RoleDto>(entityList, entityTotal);
+        }
+
+
+        /// <summary>
+        /// 查询所有角色
+        /// </summary>
+        /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        public virtual async Task<ListResultDto<RoleDto>> GetAll()
+        {
+            var entityList = await _roleManager.QueryAsNoTracking
+                .ProjectToType<RoleDto>()
+                .ToListAsync();
+
+            return new ListResultDto<RoleDto>(entityList);
+        }
+
+
+        /// <summary>
+        /// 根据角色id获取编辑dto
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        public virtual async Task<RoleEditDto> GetEditById(Guid input)
+        {
+            var entity = await _roleManager.QueryAsNoTracking
+                .FirstOrDefaultAsync(o => o.Id == input);
+
+            var claims = await _roleManager.GetClaimsByRoleIdAsync(entity?.Id.ToString());
+
+            return new RoleEditDto()
+            {
+                EntityDto = entity.Adapt<RoleDto>(),
+                Claims = claims.Select(o => o.Type).ToList()
+            };
+
         }
 
         /// <summary>

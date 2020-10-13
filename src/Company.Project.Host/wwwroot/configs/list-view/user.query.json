@@ -1,0 +1,118 @@
+[
+  {
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "No", // 列名
+    "type": "no", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": 40, // 宽度
+    "order": 0, // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": "left" // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "No", // 列名
+    "type": "checkbox", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": 30, // 宽度
+    "order": 1, // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": "Left" // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "userName", // 字段,支持嵌套 aa.bb 
+    "title": "user.user-name", // 列名
+    "type": null, // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 2, // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "nickname", // 字段,支持嵌套 aa.bb 
+    "title": "user.nick-name", // 列名
+    "type": null, // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 3, // 排序号
+    "numberDigits": 2, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "isActive", // 字段,支持嵌套 aa.bb 
+    "title": "user.is-active", // 列名
+    "type": "yesOrNo", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 4, // 排序号
+    "numberDigits": 0, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null // 固定列 left或right,必须指定width
+  },
+  {
+    "field": "", // 字段,支持嵌套 aa.bb 
+    "title": "common.action", // 列名
+    "type": "action", // 类型
+    "render": null, // 要使用的渲染器名称
+    "width": null, // 宽度
+    "order": 5, // 排序号
+    "numberDigits": 0, // 列类型为number时保留小数位
+    "dateFormat": null, // 列类型为datetime类型格式化规则
+    "statistical": null, // 统计类型
+    "fixed": null, // 固定列 left或right,必须指定width
+    "actions": [
+      //{
+      //  "name": "edit",
+      //  "type": "button",
+      //  "label": "common.edit",
+      //  "icon": "",
+      //  "acl": "user.edit"
+      //},
+      //{
+      //  "name": "delete",
+      //  "type": "button",
+      //  "label": "common.delete",
+      //  "icon": "",
+      //  "acl": "user.delete"
+      //},
+      {
+        "name": null,
+        "type": "select",
+        "label": "common.action",
+        "buttons": [
+          {
+            "name": "edit",
+            "type": "button",
+            "label": "common.edit",
+            "icon": "",
+            "acl": "user.edit"
+          },
+          {
+            "name": "view",
+            "type": "button",
+            "label": "common.view",
+            "icon": "",
+            "acl": "user.delete"
+          },
+          {
+            "name": "delete",
+            "type": "button",
+            "label": "common.delete",
+            "icon": "",
+            "acl": "user.delete"
+          }
+        ]
+      }
+    ]
+  }
+]

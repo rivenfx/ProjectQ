@@ -10,7 +10,7 @@ export interface IAppInfo {
   version: string;
 
   /** 设置 */
-  settings: { key: string, value: any }
+  settings: { key: string, value: any };
 
   /** 本地化 */
   localization: ILocalization;
@@ -44,7 +44,7 @@ export interface ILanguage {
   /** 图标 */
   icon: string;
   /** 本地化键值 */
-  texts: { key: string, value: string }
+  texts: { key: string, value: string };
 }
 
 /** 授权信息 */

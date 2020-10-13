@@ -1,81 +1,202 @@
 import { Injector, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ModalHelper } from '@delon/theme';
+import {
+  ColumnItemDto,
+  DynamicPageServiceProxy,
+  PageFilterItemDto,
+  QueryCondition,
+  SortCondition
+} from '@service-proxies/service-proxies';
+import { ISampleTableAction } from '@shared/components/sample-table';
+import { NzTableComponent } from 'ng-zorro-antd/table';
+import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from './app-component-base';
-import { NzTableComponent } from 'ng-zorro-antd';
+import { ReuseTabService } from '@delon/abc';
 
 /** 页面信息 */
-export interface IPageInfo {
+export interface IPageInfo<T> {
+  /** 名称 */
+  name: string;
+  // ==========================================
   /** 页码 */
   index: number;
   /** 一页最大数据量 */
   size: number;
+  // ==========================================
+  /** 筛选条件数据 */
+  pageFilters?: PageFilterItemDto[];
+  /** 列表列配置 */
+  columns?: ColumnItemDto[];
+  /** 列表数据 */
+  viewRecord?: T[];
+  /** 总数据量 */
+  totalRecord?: number;
+  // ==========================================
+  /** 是否显示分页 */
+  show?: boolean;
+  /** 是否前端分页 */
+  front?: boolean;
+  /** 是否显示快速跳转 */
+  showQuickJumper?: boolean;
+  /** 显示页数据量切换 */
+  showSize?: boolean;
+  /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
+  pageSizes?: number[];
+  // ==========================================
+  /** 表格滚动空间 */
+  scroll?: {
+    /** 宽度 */
+    x: string;
+    /** 高度 */
+    y: string;
+  };
 }
 
-/** 页面滚动信息 */
-export interface ITableScroll {
-  /** 宽度 */
-  x: string;
-  /** 高度 */
-  y: string;
+
+/** 查询分页数据 */
+export interface IFetchPageData {
+  skipCount: number;
+  pageSize: number;
+  queryConditions: QueryCondition[];
+  sortConditions: SortCondition[];
+  finishedCallback?: () => void;
+  successCallback?: (result: IPagedResultDto) => void;
+}
+
+/** 分页响应结果 */
+export interface IPagedResultDto {
+  items: any[];
+  total: number;
 }
 
 export abstract class ListViewComponentBase<T> extends AppComponentBase
   implements OnInit {
 
   /** 视图数据 */
-  private _viewRecord: T[];
-
-  /** 数据总量 */
-  private _totalRecord: number = 0;
-
-  /** 视图数据 */
   get viewRecord(): T[] {
-    return this._viewRecord;
+    return this.pageInfo.viewRecord;
   }
 
   /** 视图数据 */
   set viewRecord(input) {
     if (Array.isArray(input)) {
-      this._viewRecord = input;
+      this.pageInfo.viewRecord = input;
     } else {
-      this._viewRecord = [];
+      this.pageInfo.viewRecord = [];
     }
   }
 
   /** 数据总量 */
   get totalRecord(): number {
-    return this._totalRecord;
-  }
-
-  /** 总页数 */
-  get totalPage(): number {
-    if (this.totalRecord <= 0) {
-      return 0;
-    } else {
-      return (this.totalRecord + this.pageInfo.size - 1) / this.pageInfo.size;
-    }
+    return this.pageInfo.totalRecord;
   }
 
   /** 页面信息 */
-  pageInfo: IPageInfo = {
+  pageInfo: IPageInfo<T> = {
+    name: undefined,
+    //
     index: 1,
     size: 20,
+    //
+    pageFilters: [],
+    columns: [],
+    viewRecord: [],
+    totalRecord: 0,
+    //
+    show: true,
+    front: false,
+    showQuickJumper: true,
+    showSize: true,
+    pageSizes: [10, 20, 30, 40, 50],
+    //
+    scroll: {
+      x: '1000px',
+      y: '240px',
+    }
   };
 
-  /** 表格滚动 */
-  tableScroll: ITableScroll = {
-    x: '100%',
-    y: '100%',
-  };
+  /** 筛选条件/列表 配置名称 */
+  set pageName(val: string) {
+    this.pageInfo.name = val;
+    if (val && val.trim() !== '') {
+      this.onPageNameChange(val);
+    }
+  }
+
+  /** 筛选条件/列表 配置名称 */
+  get pageName(): string {
+    return this.pageInfo.name;
+  }
+
 
   /** 页面表格组件实例 */
+  // @ts-ignore
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
+
+  /** 模态框帮助类 */
+  modalHelper: ModalHelper;
+
+  /** 动态页面服务 */
+  dynamicPageSer: DynamicPageServiceProxy;
+
+  /** 激活路由 */
+  activatedRoute: ActivatedRoute;
+
+  /** 复用标签服务 */
+  reuseTabSer: ReuseTabService;
+
+  /** 筛选条件 */
+  queryConditions: QueryCondition[] = [];
+
+  /** 排序条件 */
+  sortConditions: SortCondition[] = [];
+
+  /** 选中的数据 */
+  checkedData: T[] = [];
 
   constructor(injector: Injector) {
     super(injector);
+
+    this.modalHelper = injector.get(ModalHelper);
+    this.dynamicPageSer = injector.get(DynamicPageServiceProxy);
+    this.activatedRoute = injector.get(ActivatedRoute);
+    this.reuseTabSer = injector.get(ReuseTabService);
+
+    // 获取筛选条件配置名称名称
+    const activatedRoute = injector.get(ActivatedRoute);
+    if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
+      const claims = activatedRoute.snapshot.data.claims;
+      if (Array.isArray(claims) && claims.length > 0) {
+        this.pageName = claims[0];
+      } else if (typeof (claims) === 'string') {
+        this.pageName = claims;
+      }
+    }
+
+    setTimeout(() => {
+      // 刷新复用标签
+      this.reuseTabSer.refresh();
+    }, 500);
   }
 
   ngOnInit(): void {
-    this.refresh();
+
+  }
+
+  /** 当触发操作事件 */
+  onAction(event: ISampleTableAction) {
+    if (!event) {
+      return;
+    }
+
+    const eventFunc = (this as any)[event.name];
+    if (eventFunc) {
+      eventFunc.apply(this, [event.record]);
+    } else {
+      // tslint:disable-next-line: no-console
+      console.debug(`action没有此函数 ${event.name}`);
+    }
   }
 
   /** 页码发生更改 */
@@ -90,6 +211,31 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     this.refresh(true);
   }
 
+  /** 选中的数据发生更改 */
+  onCheckChange(data: T[]) {
+    this.checkedData = data;
+    if (!Array.isArray(this.checkedData)) {
+      this.checkedData = [];
+    }
+  }
+
+  /** 筛选条件初始化完成 */
+  onFilterReady(queryConditions: QueryCondition[]) {
+    this.onFilterChange(queryConditions);
+    this.refresh();
+  }
+
+  /** 查询条件发生改变 */
+  onFilterChange(queryConditions: QueryCondition[]) {
+    this.queryConditions = queryConditions;
+  }
+
+  /** 排序条件发生改变 */
+  onSortChange(sortConditions: SortCondition[]) {
+    this.sortConditions = sortConditions;
+    this.refresh();
+  }
+
   /** 刷新页面 */
   refresh(gotoFirstPage: boolean = false) {
     this.loading = true;
@@ -98,11 +244,85 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     }
 
     const skipCount = (this.pageInfo.index - 1) * this.pageInfo.size;
-    this.fetchData(skipCount, this.pageInfo.size, (totalRecord) => {
-      this._totalRecord = totalRecord;
+    this.fetchData({
+      skipCount: skipCount,
+      pageSize: this.pageInfo.size,
+      queryConditions: this.queryConditions,
+      sortConditions: this.sortConditions,
+      finishedCallback: () => {
+        this.loading = false;
+      },
+      successCallback: (result) => {
+        if (!result || !result.items) {
+          this.pageInfo.viewRecord = [];
+          this.pageInfo.totalRecord = 0;
+        } else {
+          this.pageInfo.viewRecord = result.items;
+          this.pageInfo.totalRecord = result.total;
+        }
+      },
     });
   }
 
-  /** 加载数据 */
-  abstract fetchData(skipCount: number, pageSize: number, callback: (totalRecord: number) => void);
+  /** 当 pageName 发生修改 */
+  protected onPageNameChange(name: string) {
+    this.fetchDynamicPageInfo(name);
+  }
+
+  /** 获取动态页面信息 pageFilter和columns */
+  protected fetchDynamicPageInfo(name: string, callback?: () => void) {
+    this.dynamicPageSer.getDynamicPageInfo(name)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((res) => {
+        this.pageInfo.pageFilters = res.pageFilters;
+        this.pageInfo.columns = res.columns;
+        if (callback) {
+          callback();
+        }
+      });
+  }
+
+  /** 获取pageFilterList */
+  protected fetchPageFilter(name: string, callback?: () => void) {
+    this.loading = true;
+    this.dynamicPageSer.getPageFilters(name)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((res) => {
+        if (!res || !res.items) {
+          this.pageInfo.pageFilters = [];
+        } else {
+          this.pageInfo.pageFilters = res.items;
+        }
+        if (callback) {
+          callback();
+        }
+      });
+  }
+
+  /** 获取列表配置 */
+  protected fetchColumn(name: string, callback?: () => void) {
+    this.loading = true;
+    this.dynamicPageSer.getColumns(name)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe((res) => {
+        if (!res || !res.items) {
+          this.pageInfo.columns = [];
+        } else {
+          this.pageInfo.columns = res.items;
+        }
+        if (callback) {
+          callback();
+        }
+      });
+  }
+
+
+  /** 加载列表数据 */
+  abstract fetchData(fetch: IFetchPageData);
 }

@@ -171,10 +171,12 @@
       "flat": false,
       "inlineStyle": false,
       "inlineTemplate": false,
-      "style": "less"
+      "style": "less",
+      "prefix": ""
     },
     "@schematics/angular:directive": {
-      "spec": false
+      "spec": false,
+      "prefix": ""
     },
     "@schematics/angular:service": {
       "spec": false

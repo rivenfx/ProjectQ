@@ -1,0 +1,23 @@
+[
+  {
+    "field": "", // 字段名称  xx或xx.xx
+    "operator": "Equal", // 操作条件 Equal/NotEqual/Greater/GreaterEqual/Less/LessEqual/StartsWith/EndsWith/In/NotIn/Contains/Between/BetweenEqualStart/BetweenEqualEnd/BetweenEqualStartAndEnd
+    "skipValueIsNull": true, // true:值为空则跳过筛选 false:值为空不跳过筛选
+
+    "order": 0, // 顺序,越小越靠前
+    "label": "", // 显示名称
+    "componentName": "", // 前端组件名称
+    "args": { // 前端组件参数
+
+    },
+    "valueChange": [ "" ], // 值发生改变通知的page-filter组件名称集合
+    "enabled": false, // 是否启用,不启用将隐藏
+    "width": 12, // 默认宽度 , 一行24
+    "xsWidth": 12, // 宽度, 当屏幕宽度: <576px, 一行24
+    "smWidth": 12, // 宽度, 当屏幕宽度: ≥576px, 一行24
+    "mdWidth": 12, // 宽度, 当屏幕宽度: ≥768px, 一行24
+    "lgWidth": 12, // 宽度, 当屏幕宽度: ≥992px, 一行24
+    "xlWidth": 12, // 宽度, 当屏幕宽度: ≥1200px, 一行24
+    "xxlWidth": 12 // 宽度, 当屏幕宽度: ≥1600px, 一行24
+  }
+]

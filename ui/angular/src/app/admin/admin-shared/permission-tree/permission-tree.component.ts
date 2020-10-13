@@ -1,14 +1,24 @@
-import { Component, forwardRef, Injector, Input, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
-import { ControlComponentBase } from '@shared/common';
-import { ClaimsServiceProxy } from '@service-proxies';
-import { NzTreeNodeOptions } from 'ng-zorro-antd';
-import { ArrayService } from '@delon/util';
-import { finalize } from 'rxjs/operators';
-import { NzTreeNode } from 'ng-zorro-antd/core/tree';
+import {
+  Component,
+  forwardRef,
+  Injector,
+  Input,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+  ViewChildren,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ArrayService } from '@delon/util';
+import { ClaimsServiceProxy } from '@service-proxies';
+import { ControlComponentBase } from '@shared/common';
+import * as _ from 'loadsh';
+import { NzSafeAny } from 'ng-zorro-antd/core/types/any';
+import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
+import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-permission-tree',
+  selector: 'permission-tree',
   templateUrl: './permission-tree.component.html',
   styleUrls: ['./permission-tree.component.less'],
   providers: [{
@@ -19,7 +29,16 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class PermissionTreeComponent extends ControlComponentBase<string[]> implements OnInit {
 
+
+  // @ViewChildren('tree') treeRef: NzTreeComponent;
+
+
   treeData: NzTreeNode[];
+
+  treeSearchVal: string;
+
+  /** 禁用模式下选中的映射 */
+  disabledCheckedMap: { [P in string]: boolean } = {};
 
   constructor(
     injector: Injector,
@@ -36,12 +55,23 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
         this.loading = false;
       }))
       .subscribe((res) => {
+
+        res.forEach(o => {
+          o.claim = this.l(o.claim);
+        });
+
         this.treeData = this.arraySer.arrToTreeNode(res, {
           idMapName: 'claim',
           parentIdMapName: 'parent',
           titleMapName: 'claim',
+          cb: (item: NzSafeAny, parent: NzSafeAny, deep: number) => {
+
+          }
         });
-        debugger
+
+        if (Array.isArray(this.value)) {
+          this.writeValue(_.clone(this.value));
+        }
       });
   }
 
@@ -55,6 +85,25 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
   }
 
   onInputChange(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges) {
+
   }
 
+  writeValue(obj: any): void {
+    this.value = obj;
+
+    if (this.disabled) {
+      this.disabledCheckedMap = {};
+      if (Array.isArray(this.value)) {
+        for (const item of this.value) {
+          this.disabledCheckedMap[item] = true;
+        }
+      }
+    }
+  }
+
+  onNzCheckBoxChange(event: NzFormatEmitEvent) {
+    const checkedKeys = this.arraySer.getKeysByTreeNode(event.checkedKeys);
+    this.emitValueChange(checkedKeys);
+  }
 }
+

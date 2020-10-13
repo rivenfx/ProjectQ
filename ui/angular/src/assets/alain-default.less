@@ -3265,6 +3265,21 @@ this.tinycolor = tinycolor;
 :host ::ng-deep .desc {
   color: rgba(0, 0, 0, 0.45);
 }
+:host ::ng-deep .nz-table-hide-scrollbar::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  -webkit-border-radius: 6px;
+}
+:host ::ng-deep .nz-table-hide-scrollbar::-webkit-scrollbar-thumb:vertical {
+  background-color: transparent;
+  -webkit-border-radius: 6px;
+}
+:host ::ng-deep .nz-table-hide-scrollbar::-webkit-scrollbar-thumb:horizontal {
+  background-color: transparent;
+  -webkit-border-radius: 6px;
+}
+:host ::ng-deep .ant-table-ping-right:not(.ant-table-has-fix-right) .ant-table-container::after {
+  box-shadow: inset -10px 0 8px -8px transparent;
+}
 .cdk-overlay-backdrop {
   -webkit-tap-highlight-color: transparent;
 }
@@ -11991,6 +12006,18 @@ nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-thumb:hover {
 nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-corner {
   background: transparent;
 }
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
 nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 10px;
@@ -12004,6 +12031,44 @@ nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-thumb:hover {
 }
 nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-corner {
   background: transparent;
+}
+nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border-radius: 10px;
+}
+nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
 }
 html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -28543,5 +28608,17 @@ nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-thumb:hover {
 }
 nz-table-inner-scroll .ant-table-body::-webkit-scrollbar-corner {
   background: transparent;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
 }
 

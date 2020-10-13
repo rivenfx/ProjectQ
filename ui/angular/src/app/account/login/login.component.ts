@@ -1,17 +1,14 @@
 import { AfterViewInit, Component, Inject, Injector, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '../../service-proxies';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { Router } from '@angular/router';
-import { SessionService } from '@shared/riven';
-import { ALAIN_I18N_TOKEN, TitleService } from '@delon/theme';
-import { I18nService } from '@core/i18n';
+import { SettingsService } from '@delon/theme';
+import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '@service-proxies';
+import { AppConsts } from '@shared';
 import { AppComponentBase } from '@shared/common';
-import { NgForm } from '@angular/forms';
-import { ACLService } from '@delon/acl';
+import { SessionService } from '@shared/riven';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.less'],
 })
@@ -35,11 +32,10 @@ export class LoginComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    @Inject(DA_SERVICE_TOKEN) public tokenService: ITokenService,
     public tokenAuthSer: TokenAuthServiceProxy,
     public router: Router,
     public sessionSer: SessionService,
-    private aclService: ACLService,
+    private settingSer: SettingsService,
   ) {
     super(injector);
 
@@ -47,11 +43,14 @@ export class LoginComponent extends AppComponentBase
   }
 
   ngOnInit(): void {
-
+    // 重置token过期时间
+    this.settingSer.setData(AppConsts.settings.tokenExpiration, false);
   }
 
   ngAfterViewInit(): void {
-    this.tokenService.clear();
+    // 重置token
+    this.settingSer.setData(AppConsts.settings.token, false);
+    this.settingSer.setData(AppConsts.settings.encryptedToken, false);
   }
 
 
@@ -64,9 +63,13 @@ export class LoginComponent extends AppComponentBase
         this.loading = false;
       }))
       .subscribe((result) => {
-        this.tokenService.set({
-          token: result.accessToken,
-        });
+        // 更新token
+        this.settingSer.setData(AppConsts.settings.token, result.accessToken);
+        this.settingSer.setData(AppConsts.settings.encryptedToken, result.encryptedAccessToken);
+        // 更新token过期时间
+        const date = new Date();
+        date.setSeconds(date.getSeconds() + result.expireInSeconds);
+        this.settingSer.setData(AppConsts.settings.tokenExpiration, date.valueOf());
 
         this.sessionSer.loadOrUpdateAppInfo((state, data) => {
           if (state) {

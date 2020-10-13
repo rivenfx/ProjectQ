@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TenantChangeModal.ComponentComponent } from './tenant-change-modal.component';
+import { ComponentComponent.TenantChangeModal } from './tenant-change-modal.component';
 
 describe('TenantChangeModal.ComponentComponent', () => {
   let component: TenantChangeModal.ComponentComponent;

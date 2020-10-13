@@ -1,16 +1,16 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ModalComponentBase } from '@shared/common';
-import { IsTenantAvailableInput, TenantAvailabilityState, TenantServiceProxy } from '@service-proxies';
-import { finalize } from 'rxjs/operators';
 import { SettingsService } from '@delon/theme';
+import { IsTenantAvailableInput, TenantAvailabilityState, TenantServiceProxy } from '@service-proxies';
+import { ModalComponentBase } from '@shared/common';
 import { RequestHelper } from '@shared/riven/helper';
+import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-tenant-change-modal.component',
+  selector: 'tenant-change-modal',
   templateUrl: './tenant-change-modal.component.html',
   styleUrls: ['./tenant-change-modal.component.less'],
 })
-export class TenantChangeModalComponent extends ModalComponentBase implements OnInit {
+export class TenantChangeModalComponent extends ModalComponentBase<any> implements OnInit {
 
   input = new IsTenantAvailableInput();
 

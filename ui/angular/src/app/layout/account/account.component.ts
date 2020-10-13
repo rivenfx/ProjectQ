@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'layout-account',
   templateUrl: './account.component.html',
-  styleUrls:['./account.component.less']
+  styleUrls: ['./account.component.less']
 })
 export class LayoutAccountComponent implements OnInit {
 

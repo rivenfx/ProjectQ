@@ -1,3 +1,4 @@
+import { EllipsisModule } from '@delon/abc/ellipsis';
 import { ExceptionModule } from '@delon/abc/exception';
 import { GlobalFooterModule } from '@delon/abc/global-footer';
 import { NoticeIconModule } from '@delon/abc/notice-icon';
@@ -20,4 +21,5 @@ export const SHARED_DELON_MODULES = [
   SEModule,
   SVModule,
   ReuseTabModule,
+  EllipsisModule,
 ];

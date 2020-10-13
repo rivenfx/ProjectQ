@@ -1,49 +1,44 @@
 <page-header [title]="l('menu.user')"
-             [breadcrumb]="breadcrumb"
-             [action]="action">
+  [breadcrumb]="breadcrumb"
+  [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
-    <button nz-button (click)="refresh()" [title]="l('common.refresh')">
+    <button nz-button
+      (click)="onClickCreateOrEdit()"
+      [title]="l('common.create')">
+      <i class="icon iconfont icon-add"></i>
+    </button>
+    <button nz-button
+      (click)="refresh()"
+      [title]="l('common.refresh')">
       <i class="icon iconfont icon-refresh"></i>
     </button>
   </ng-template>
 </page-header>
 
-<nz-table #pageTable
-          nzTableLayout="fixed"
-          nzSize="small"
-          nzShowQuickJumper="true"
-          nzShowSizeChanger="true"
-          nzBordered="true"
-          nzFrontPagination="false"
-          nzHideOnSinglePage="false"
-          [nzData]="viewRecord"
-          [nzLoading]="loading"
-          [nzTotal]="totalRecord"
-          [nzPageIndex]="pageInfo.index"
-          [nzPageSize]="pageInfo.size"
-          (nzPageIndexChange)="onPageIndexChange($event)"
-          (nzPageSizeChange)="onPageSizeChange($event)"
-          [nzScroll]="tableScroll"
->
-  <thead>
-  <tr>
-    <th nzEllipsis [title]="l('user.user-name')">{{l('user.user-name')}}</th>
-    <th nzEllipsis [title]="l('user.nick-name')">{{l('user.nick-name')}}</th>
-    <th nzEllipsis [title]="l('common.is-active')">{{l('common.is-active')}}</th>
-    <th nzEllipsis [title]="l('common.action')">{{l('common.action')}}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let data of viewRecord">
-    <td nzEllipsis [title]="data.userName">{{ data.userName }}</td>
-    <td nzEllipsis [title]="data.nickname">{{ data.nickname }}</td>
-    <td nzEllipsis [title]="data.isActive">{{ data.isActive }}</td>
-    <td nzEllipsis>
-      <a>{{l('common.edit')}}</a>
-      <nz-divider nzType="vertical"></nz-divider>
-      <a>{{l('common.delete')}}</a>
-    </td>
-  </tr>
-  </tbody>
-</nz-table>
+
+<div class="page-body">
+
+  <page-filter [pageFilters]="pageInfo.pageFilters"
+    [displayLabel]="true"
+    (readyChange)="onFilterReady($event)"
+    (valueChange)="onFilterChange($event)">
+
+  </page-filter>
+
+  <sample-table [loading]="loading"
+    [page]="pageInfo"
+    [columns]="pageInfo.columns"
+    [data]="pageInfo.viewRecord"
+    [pageIndex]="pageInfo.index"
+    [pageSize]="pageInfo.size"
+    [total]="pageInfo.totalRecord"
+    [scroll]="pageInfo.scroll"
+    (action)="onAction($event)"
+    (check)="onCheckChange($event)"
+    (sort)="onSortChange($event)"
+    (pageIndexChange)="onPageIndexChange($event)"
+    (pageSizeChange)="onPageSizeChange($event)">
+
+  </sample-table>
+</div>

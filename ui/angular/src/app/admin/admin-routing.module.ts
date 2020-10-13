@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { ClaimsGuard } from '@shared/riven';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
 import { RoleComponent } from './role';
 import { UserComponent } from './user';
-import { ClaimsGuard } from '@shared/riven';
 
 
 const routes: Routes = [
@@ -21,7 +21,7 @@ const routes: Routes = [
       {
         path: 'role',
         component: RoleComponent,
-        data: { claims: ['role.query'] },
+        data: { claims: 'role.query' },
       },
       {
         path: 'user',

@@ -1,4 +1,5 @@
 ﻿using Riven.Dtos;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -45,11 +46,16 @@ namespace Company.Project.Authorization.Users.Dtos
         /// <summary>
         /// 是否已激活
         /// </summary>
-        public bool IsActive { get; set; }
+        public virtual bool IsActive { get; set; }
 
         /// <summary>
         /// 是否启用双重校验
         /// </summary>
         public virtual bool TwoFactorEnabled { get; set; }
+
+        /// <summary>
+        /// 是否为系统内置
+        /// </summary>
+        public virtual bool IsStatic { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Company.Project.Authenticate.Dtos;
+using Company.Project.Authorization;
 using Company.Project.Authorization.Users;
 using Company.Project.Configuration;
 
@@ -19,24 +20,36 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 using Riven.Exceptions;
+using Riven.Identity.Authorization;
 using Riven.Identity.Users;
+using Riven.Security;
 
 namespace Company.Project.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class TokenAuthController : Controller
     {
+        static TimeSpan expiration = new TimeSpan(0, 30, 0);
+
         readonly IConfiguration _configuration;
         readonly SignInManager _signInManager;
         readonly IHttpClientFactory _httpClientFactory;
+        readonly IAppSession _appSession;
 
-        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory)
+
+        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory, IAppSession appSession)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _httpClientFactory = httpClientFactory;
+            _appSession = appSession;
         }
 
+        /// <summary>
+        /// 校验
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<AuthenticateResultDto> Authenticate([FromBody] AuthenticateModelInput input)
         {
@@ -57,13 +70,33 @@ namespace Company.Project.Controllers
             }
             if (input.UseToken)
             {
-                result.AccessToken = CreateAccessToken(loginResult.Identity.Claims);
+                result.AccessToken = CreateAccessToken(loginResult.Identity.Claims, expiration);
+                result.EncryptedAccessToken = SimpleStringCipher.Instance.Encrypt(result.AccessToken);
+                result.ExpireInSeconds = expiration.TotalSeconds;
             }
 
             return result;
         }
 
+        /// <summary>
+        /// 刷新Token
+        /// </summary>
+        /// <returns></returns>
+        [ClaimsAuthorize]
+        [HttpPost]
+        public async Task<AuthenticateResultDto> RefreshToken()
+        {
+            var result = new AuthenticateResultDto();
 
+            var userId = _appSession.UserId.Value.ToString();
+
+            var loginResult = await _signInManager.LoginByUserIdAsync(userId);
+
+            result.AccessToken = CreateAccessToken(loginResult.Identity.Claims, expiration);
+            result.ExpireInSeconds = expiration.TotalSeconds;
+
+            return result;
+        }
 
         /// <summary>
         /// 创建token
@@ -71,7 +104,7 @@ namespace Company.Project.Controllers
         /// <param name="claims">携带信息</param>
         /// <param name="expiration">过期时间</param>
         /// <returns></returns>
-        private string CreateAccessToken(IEnumerable<Claim> claims, TimeSpan? expiration = null)
+        private string CreateAccessToken(IEnumerable<Claim> claims, TimeSpan expiration)
         {
             /*
                 iss: jwt签发者
@@ -105,7 +138,7 @@ namespace Company.Project.Controllers
                     audience: jwtBearerInfo.Audience,   // 接收方
                     claims: claimsList,                 // 
                     notBefore: now,
-                    expires: now.Add(expiration ?? new TimeSpan(0, 30, 0)),
+                    expires: now.Add(expiration),
                     signingCredentials: signingCredentials
             );
 

@@ -91,11 +91,14 @@ namespace Company.Project.Authorization
                     ValidateAudience = true,
                     ValidAudience = jwtBearerInfo.Audience,
 
+                    // 必须指定过期时间
+                    RequireExpirationTime = true,
+
                     // 验证过期
                     ValidateLifetime = true,
 
                     // 时间偏移
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.FromSeconds(30)
                 };
             });
 

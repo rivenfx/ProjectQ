@@ -106,6 +106,52 @@ namespace Company.Project.Authorization.Users
         }
 
         /// <summary>
+        /// 根据用户id直接创建登录成功结果
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<LoginResult> LoginByUserIdAsync(string userId)
+        {
+
+            var user = await this.UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return new LoginResult(LoginResultType.InvalidUserNameOrEmailAddressOrPhoneNumber);
+            }
+
+            if (await this.UserManager.IsLockedOutAsync(user))
+            {
+                return new LoginResult(LoginResultType.LockedOut, user);
+            }
+
+            return await this.CreateLoginResultAsync(user);
+        }
+
+        /// <summary>
+        /// 根据用户名/邮箱/手机号直接创建登录成功结果
+        /// </summary>
+        /// <param name="userNameOrEmailOrPhoneNumber"></param>
+        /// <returns></returns>
+        public async Task<LoginResult> LoginByUserNameOrEmailOrPhoneNumberAsync(string userNameOrEmailOrPhoneNumber)
+        {
+
+            var user = await this.UserManager.FindByNameOrEmailOrPhoneNumberAsync(userNameOrEmailOrPhoneNumber);
+
+            if (user == null)
+            {
+                return new LoginResult(LoginResultType.InvalidUserNameOrEmailAddressOrPhoneNumber);
+            }
+
+            if (await this.UserManager.IsLockedOutAsync(user))
+            {
+                return new LoginResult(LoginResultType.LockedOut, user);
+            }
+
+            return await this.CreateLoginResultAsync(user);
+        }
+
+        /// <summary>
         /// 创建登陆成功的结果
         /// </summary>
         /// <param name="user"></param>

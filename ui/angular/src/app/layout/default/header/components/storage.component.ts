@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, Injector } from '@angular/core';
+import { SampleComponentBase } from '@shared/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { SampleComponentBase } from '@shared/common';
 
 @Component({
   selector: 'header-storage',

@@ -18,7 +18,7 @@
         /// <summary>
         /// 过期时间(秒)
         /// </summary>
-        public int ExpireInSeconds { get; set; }
+        public double ExpireInSeconds { get; set; }
 
         /// <summary>
         /// 用户id

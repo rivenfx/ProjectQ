@@ -1,7 +1,13 @@
-<span *ngIf="formCtrl&&formCtrl.invalid && (formCtrl.dirty || formCtrl.touched)">
-  <ng-container *ngFor="let errorDef of errorDefsInternal">
-    <span *ngIf="getErrorDefinitionIsInValid(errorDef)">
-      {{getErrorDefinitionMessage(errorDef)}}
-    </span>
-  </ng-container>
-</span>
+<!--<span *ngIf="formCtrl&&formCtrl.invalid && (formCtrl.dirty || formCtrl.touched)">-->
+<!--  <ng-container *ngFor="let errorDef of errorDefsInternal">-->
+<!--    <span *ngIf="getErrorDefinitionIsInValid(errorDef)">-->
+<!--      {{getErrorDefinitionMessage(errorDef)}}-->
+<!--    </span>-->
+<!--  </ng-container>-->
+<!--</span>-->
+
+<ng-container *ngFor="let error of viewErrors">
+  <div>
+    {{error}}
+  </div>
+</ng-container>

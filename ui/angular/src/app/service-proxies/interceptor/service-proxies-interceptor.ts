@@ -2,12 +2,11 @@ import { Inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import {
-  HttpInterceptor,
-  HttpHandler,
-  HttpRequest,
   HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
 } from '@angular/common/http';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
 import { MessageService } from '@shared/riven';
 import { RequestHelper, ResponseHelper } from '@shared/riven/helper';
@@ -20,11 +19,10 @@ import { RequestHelper, ResponseHelper } from '@shared/riven/helper';
 export class ServiceProxiesInterceptor implements HttpInterceptor {
 
   constructor(
-    @Inject(DA_SERVICE_TOKEN) public tokenSer: ITokenService,
     private settingsSer: SettingsService,
     public messageSer: MessageService,
   ) {
-    RequestHelper.init(tokenSer, settingsSer);
+    RequestHelper.init(settingsSer);
     ResponseHelper.init(messageSer);
   }
 

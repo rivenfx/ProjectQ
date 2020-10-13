@@ -1,13 +1,48 @@
-<nz-spin [nzSpinning]="loading">
-  <nz-tree
-    #nzTreeComponent
-    [nzData]="treeData"
-    nzCheckable
-    [nzCheckedKeys]="value"
+<!-- 搜索框 -->
+<div>
+  <nz-input-group [nzSuffix]="suffixIconSearch"
+    [nzSize]="'small'">
+    <input type="text"
+      nz-input
+      [placeholder]="placeholder"
+      [nzSize]="'small'"
+      [disabled]="loading"
+      [(ngModel)]="treeSearchVal" />
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+    <i nz-icon
+      nzType="search"></i>
+  </ng-template>
+</div>
 
-  >
-<!--    <ng-template #nzTreeTemplate let-node let-origin="origin">-->
-<!--      {{l(origin.claim)}}-->
-<!--    </ng-template>-->
-  </nz-tree>
+<!-- 树形控件 -->
+<nz-spin [nzSpinning]="loading">
+
+  <ng-container [ngSwitch]="disabled">
+    <ng-container *ngSwitchCase="true">
+      <nz-tree #tree
+        [nzData]="treeData"
+        [nzSearchValue]="treeSearchVal"
+        [nzTreeTemplate]="nzTreeTemplate"
+        (nzCheckBoxChange)="onNzCheckBoxChange($event)">
+        <ng-template #nzTreeTemplate
+          let-node
+          let-origin="origin">
+          <label nz-checkbox
+            nzDisabled
+            [nzChecked]="disabledCheckedMap[origin.claim]"></label>
+          {{ node.title }}
+        </ng-template>
+      </nz-tree>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <nz-tree #tree
+        [nzData]="treeData"
+        [nzSearchValue]="treeSearchVal"
+        nzCheckable
+        [nzCheckedKeys]="value"
+        (nzCheckBoxChange)="onNzCheckBoxChange($event)">
+      </nz-tree>
+    </ng-container>
+  </ng-container>
 </nz-spin>
