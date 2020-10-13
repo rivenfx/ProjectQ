@@ -13,6 +13,7 @@ import { RoleComponent } from './role';
 import { CreateOrEditRoleComponent } from './role/create-or-edit-role';
 import { UserComponent } from './user';
 import { CreateOrEditUserComponent } from './user/create-or-edit-user';
+import { SampleTableModule } from '@shared/components/sample-table';
 
 const entryComponents = [
   CreateOrEditRoleComponent,
@@ -29,6 +30,7 @@ const entryComponents = [
     PageFilterModule,
     TableBarModule,
     SampleComponentsModule,
+    SampleTableModule,
   ],
   declarations: [
     DashboardComponent,

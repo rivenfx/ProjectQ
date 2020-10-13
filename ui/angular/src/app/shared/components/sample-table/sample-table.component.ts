@@ -10,12 +10,12 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { STChange, STColumn, STComponent, STMultiSort, STPage } from '@delon/abc/st';
+import { STChange, STColumn, STComponent, STMultiSort, STPage } from '@delon/abc';
 import { ColumnItemDto, SortCondition, SortType } from '@service-proxies';
 import { AppComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { Subject } from 'rxjs';
-import { SampleTableDataProcessorService } from '../sample-table-data-processor.service';
+import { SampleTableDataProcessorService } from './sample-table-data-processor.service';
 import { ISampleTableAction } from './interfaces';
 
 @Component({
@@ -40,8 +40,12 @@ export class SampleTableComponent extends AppComponentBase
     front: false,
     show: true,
     showQuickJumper: true,
-    pageSizes: [10, 20, 30, 40, 50]
+    pageSizes: [10, 20, 30, 40, 50],
+    showSize: true
   };
+
+  /** 项高度 */
+  @Input() virtualItemSize = 31;
 
   /** 页码 */
   @Input() pageIndex = 1;
@@ -57,6 +61,9 @@ export class SampleTableComponent extends AppComponentBase
 
   /** 边框 */
   @Input() bordered = true;
+
+  /** 滚动宽高 */
+  @Input() scroll: { y?: string; x?: string; } = { x: '1800px', y: '240px' };
 
   /** 列被触发 */
   @Output() action = new EventEmitter<ISampleTableAction>();
@@ -83,8 +90,8 @@ export class SampleTableComponent extends AppComponentBase
       title: 'No',
       type: 'no',
       width: 40,
-      fixed: 'left'
-    }
+      fixed: 'left',
+    },
   ];
 
   /** 排序配置 */
@@ -93,11 +100,11 @@ export class SampleTableComponent extends AppComponentBase
     separator: '-',
     nameSeparator: '.',
     keepEmptyKey: true,
-    global: true
+    global: true,
   };
 
   private destroy$ = new Subject();
-  @ViewChild('st', { static: false }) stRef: STComponent;
+  @ViewChild('st') stRef: STComponent;
 
   constructor(
     injector: Injector,
@@ -215,7 +222,7 @@ export class SampleTableComponent extends AppComponentBase
       title: 'No',
       type: 'no',
       width: 40,
-      fixed: 'left'
+      fixed: 'left',
     }];
     if (!input || input.length === 0) {
       this.cdr.detectChanges();

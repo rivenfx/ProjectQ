@@ -6,11 +6,11 @@ import {
   UserDto,
   UserServiceProxy,
 } from '@service-proxies';
-import { IFetchData, ListViewComponentBase } from '@shared/common';
-import { ISampleTableAction } from '@shared/components/sample-components/sample-table';
+import { IFetchPageData, ListViewComponentBase } from '@shared/common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'user',
@@ -32,21 +32,20 @@ export class UserComponent extends ListViewComponentBase<UserDto>
     super.ngOnInit();
   }
 
-  fetchData(arg: IFetchData) {
+  fetchData(fetch: IFetchPageData) {
     const queryInput = new QueryInput();
-    queryInput.skipCount = arg.skipCount;
-    queryInput.pageSize = arg.pageSize;
+    queryInput.skipCount = fetch.skipCount;
+    queryInput.pageSize = fetch.pageSize;
 
-    queryInput.queryConditions = arg.queryConditions;
-    queryInput.sortConditions = arg.sortConditions;
+    queryInput.queryConditions = fetch.queryConditions;
+    queryInput.sortConditions = fetch.sortConditions;
 
     this.userSer.getPage(queryInput)
       .pipe(finalize(() => {
-        this.loading = false;
+        fetch!.finishedCallback();
       }))
       .subscribe((res) => {
-        this.viewRecord = res.items;
-        arg.callback(res.total);
+        fetch!.successCallback(res);
       });
   }
 
@@ -59,7 +58,12 @@ export class UserComponent extends ListViewComponentBase<UserDto>
   }
 
   delete(data: UserDto) {
-    this.message.confirm(this.l('是否删除'), (res) => {
+    if (data.isStatic) {
+      this.message.warn(this.l('不能删除系统用户'));
+      return;
+    }
+
+    this.message.confirm(this.l('删除用户 {0}', data.userName), (res) => {
       if (res) {
         this.loading = true;
         this.userSer.delete([data.id])
@@ -67,10 +71,9 @@ export class UserComponent extends ListViewComponentBase<UserDto>
             this.loading = false;
           }))
           .subscribe(() => {
-            this.message.success(this.l(this.appConsts.message.success));
+            this.notify.success(this.l(AppConsts.message.success));
+            this.refresh();
           });
-      } else {
-        this.message.success(this.l(this.appConsts.message.cancelled));
       }
     });
   }

@@ -105,7 +105,7 @@ export class SampleTableDataProcessorService extends SampleComponentBase {
         let fieldValue = this.getFieldValue(newItem, fields);
         if (isNaN(fieldValue)
           || typeof (fieldValue) === 'undefined'
-          || (!fieldValue && fieldValue !== 0)) {
+          || (!fieldValue && fieldValue !== 0 && fieldValue !== false)) {
           continue;
         }
 

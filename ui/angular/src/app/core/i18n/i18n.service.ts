@@ -36,7 +36,7 @@ export class I18nService implements AlainI18NService {
   ) {
     this.sessionSer.localizationChange
       .subscribe((result) => {
-        if (result){
+        if (result) {
           this._localization = result;
           this._curLang = result.languages.find(o => o.culture === result.currentCulture);
         }
@@ -64,8 +64,8 @@ export class I18nService implements AlainI18NService {
 
   /** 获取语言列表 */
   getLangs() {
-    if (!this._localization){
-      return  [];
+    if (!this._localization) {
+      return [];
     }
     return this._localization.languages;
   }
@@ -97,7 +97,7 @@ export class I18nService implements AlainI18NService {
 
     let value = this.curLang.texts[key];
     if (!value) {
-      return key;
+      value = key;
     }
 
     if (Array.isArray(interpolateParams) && interpolateParams.length > 0) {

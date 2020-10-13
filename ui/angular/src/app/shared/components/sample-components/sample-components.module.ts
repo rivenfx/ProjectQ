@@ -7,14 +7,10 @@ import { SHARED_ZORRO_MODULES } from '@shared/shared-zorro.module';
 import { SampleDataSourceService } from './sample-data-source.service';
 import { SampleInputComponent } from './sample-input';
 import { SampleSelectComponent } from './sample-select';
-import { SampleTableComponent } from './sample-table';
-import { SampleTableDataProcessorService } from './sample-table-data-processor.service';
-
 
 const COMPONENTS = [
   SampleInputComponent,
   SampleSelectComponent,
-  SampleTableComponent,
 ];
 
 @NgModule({
@@ -31,8 +27,7 @@ const COMPONENTS = [
     ...COMPONENTS,
   ],
   providers: [
-    SampleDataSourceService,
-    SampleTableDataProcessorService,
+    SampleDataSourceService
   ],
 })
 export class SampleComponentsModule {

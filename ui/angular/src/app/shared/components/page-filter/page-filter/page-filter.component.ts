@@ -12,7 +12,6 @@ import {
 import { PageFilterItemDto, QueryCondition } from '@service-proxies';
 import { SampleControlComponentBase } from '@shared/common';
 import * as _ from 'lodash';
-import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'page-filter',
@@ -119,6 +118,9 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     const tmpValue = [];
     // tslint:disable-next-line: forin
     for (const key in this.pageFilterData) {
+      if (this.pageFilterData[key].value === '') {
+        continue;
+      }
       tmpValue.push(this.pageFilterData[key]);
     }
     this.emitValueChange(tmpValue);
@@ -198,7 +200,7 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
         field: item.field,
         operator: item.operator,
         value: undefined,
-        skipValueIsNull: !!item.skipValueIsNull,
+        skipValueIsNull: item.skipValueIsNull === true,
       });
       this.pageFilterExternalArgsData[item.field] = undefined;
 

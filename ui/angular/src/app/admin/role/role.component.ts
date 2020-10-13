@@ -1,9 +1,10 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ModalHelper } from '@delon/theme';
 import { QueryCondition, QueryInput, RoleDto, RoleServiceProxy, SortCondition, UserDto, UserServiceProxy } from '@service-proxies';
-import { IFetchData, ListViewComponentBase } from '@shared/common';
+import { IFetchPageData, ListViewComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditRoleComponent } from './create-or-edit-role';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'role',
@@ -24,21 +25,20 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
 
   }
 
-  fetchData(arg: IFetchData) {
+  fetchData(fetch: IFetchPageData) {
     const queryInput = new QueryInput();
-    queryInput.skipCount = arg.skipCount;
-    queryInput.pageSize = arg.pageSize;
+    queryInput.skipCount = fetch.skipCount;
+    queryInput.pageSize = fetch.pageSize;
 
-    queryInput.queryConditions = arg.queryConditions;
-    queryInput.sortConditions = arg.sortConditions;
+    queryInput.queryConditions = fetch.queryConditions;
+    queryInput.sortConditions = fetch.sortConditions;
 
     this.roleSer.getPage(queryInput)
       .pipe(finalize(() => {
-        this.loading = false;
+        fetch!.finishedCallback();
       }))
       .subscribe((res) => {
-        this.viewRecord = res.items;
-        arg.callback(res.total);
+        fetch!.successCallback(res);
       });
   }
 
@@ -57,6 +57,27 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
     ).subscribe((res) => {
       if (res) {
         this.refresh();
+      }
+    });
+  }
+
+  onDelete(data?: RoleDto) {
+    if (data.isStatic) {
+      this.message.warn(this.l('不能删除系统角色'));
+      return;
+    }
+
+    this.message.confirm(this.l('删除角色 {0}', data.name), (res) => {
+      if (res) {
+        this.loading = true;
+        this.roleSer.delete([data.id])
+          .pipe(finalize(() => {
+            this.loading = false;
+          }))
+          .subscribe(() => {
+            this.notify.success(this.l(AppConsts.message.success));
+            this.refresh();
+          });
       }
     });
   }
