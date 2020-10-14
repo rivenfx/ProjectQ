@@ -17,6 +17,9 @@ variables:
   migratorName: '0_migrator'
   hostName: '1_host'
   uiName: '2_ui'
+  migratorPath: './src/Company.Project.Migrator'
+  hostPath: './src/Company.Project.Host'
+  uiPath: './ui/angular'
 
 steps:
 - task: PowerShell@2
@@ -26,7 +29,7 @@ steps:
     targetType: 'inline'
     script: |
       dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(migratorName)
-    workingDirectory: './src/Company.Project.Migrator'
+    workingDirectory: '$(migratorPath)'
 
 
 - task: PowerShell@2
@@ -35,8 +38,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-      dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)/$(hostName)
-    workingDirectory: './src/Company.Project.Host'
+      dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(hostName)
+    workingDirectory: '$(hostPath)'
 
 - task: PowerShell@2
   name: "admin_ui_remove_npmrc"
@@ -45,14 +48,14 @@ steps:
     targetType: 'inline'
     script: | 
       Remove-Item -Force .npmrc
-    workingDirectory: './ui/angular'
+    workingDirectory: '$(uiPath)'
 
 - task: Npm@1
   name: "admin_ui_npm_install"
   displayName: '还原admin ui的node_modules'
   inputs:
     command: 'custom'
-    workingDir: './ui/angular'
+    workingDir: '$(uiPath)'
     customCommand: ' install'
 
 - task: Npm@1
@@ -60,34 +63,23 @@ steps:
   displayName: '编译admin ui'
   inputs:
     command: 'custom'
-    workingDir: './ui/angular'
+    workingDir: '$(uiPath)'
     customCommand: ' run build'
 
 - task: PowerShell@2
   name: "admin_ui_move"
-  displayName: '移动admin ui'
+  displayName: '移动admin ui编译结果'
   inputs:
     targetType: 'inline'
     script: |
       Copy-Item -Force -Recurse  ./dist $(Build.ArtifactStagingDirectory)
       Set-Location $(Build.ArtifactStagingDirectory)
-      ls
       Rename-Item ./dist $(uiName)
-    workingDirectory: './ui/angular'
-
-# - task: ArchiveFiles@2
-#   name: "archive_files_build"
-#   displayName: '打包编译结果'
-#   inputs:
-#     rootFolderOrFile: '$(Build.BinariesDirectory)'
-#     includeRootFolder: true
-#     archiveType: 'zip'
-#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-#     replaceExistingArchive: true
+    workingDirectory: '$(uiPath)'
 
 - task: PublishBuildArtifacts@1
   name: "build_save_artifacts"
   displayName: '保存编译结果'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'project_q_$(Build.BuildId).zip'
+    artifactName: 'project_q_$(Build.BuildId)'
