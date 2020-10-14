@@ -14,14 +14,17 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  projectName: 'Company.Project'
   migratorName: '0_migrator'
   hostName: '1_host'
   uiName: '2_ui'
-  migratorPath: './src/Company.Project.Migrator'
-  hostPath: './src/Company.Project.Host'
   uiPath: './ui/angular'
+  migratorDockerImageName: 'project_q_migrator'
+  hostDockerImageName: 'project_q_host'
+  uiDockerImageName: 'project_q_ui'
 
 steps:
+# ---------------------- basic
 - task: PowerShell@2
   name: "publish_web_migrator"
   displayName: '编译 Migrator'
@@ -29,7 +32,7 @@ steps:
     targetType: 'inline'
     script: |
       dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(migratorName)
-    workingDirectory: '$(migratorPath)'
+    workingDirectory: './src/${projectName}.Migrator'
 
 
 - task: PowerShell@2
@@ -39,7 +42,7 @@ steps:
     targetType: 'inline'
     script: | 
       dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(hostName)
-    workingDirectory: '$(hostPath)'
+    workingDirectory: './src/${projectName}.Host'
 
 - task: PowerShell@2
   name: "admin_ui_remove_npmrc"
@@ -83,3 +86,29 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
     artifactName: 'project_q_$(Build.BuildId)'
+
+# ---------------- docker ---------------------------
+
+# - task: PowerShell@2
+#   name: "docker_build_and_push_migrator"
+#   displayName: 'docker 编译发布 migrator 镜像'
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
+
+# - task: PowerShell@2
+#   name: "docker_build_and_push_host"
+#   displayName: 'docker 编译发布 host 镜像'
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
+
+# - task: PowerShell@2
+#   name: "docker_build_and_push_admin_ui"
+#   displayName: 'docker 编译发布 admin ui 镜像'
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
