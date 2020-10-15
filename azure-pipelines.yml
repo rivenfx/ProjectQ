@@ -37,7 +37,7 @@ steps:
     targetType: 'inline'
     script: |
       dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(migratorName)
-    workingDirectory: './src/${projectName}.Migrator'
+    workingDirectory: './src/$(projectName).Migrator'
 
 
 - task: PowerShell@2
@@ -47,7 +47,7 @@ steps:
     targetType: 'inline'
     script: | 
       dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(hostName)
-    workingDirectory: './src/${projectName}.Host'
+    workingDirectory: './src/$(projectName).Host'
 
 - task: PowerShell@2
   name: "admin_ui_remove_npmrc"
