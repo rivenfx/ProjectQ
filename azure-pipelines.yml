@@ -1,0 +1,141 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  projectName: 'Company.Project'
+  migratorName: '0_migrator'
+  hostName: '1_host'
+  uiName: '2_ui'
+  uiPath: './ui/angular'
+  migratorDockerImageName: 'project_q_migrator'
+  hostDockerImageName: 'project_q_host'
+  uiDockerImageName: 'project_q_ui'
+  # The relevant configuration of Docker Registry is set to variable or variable groups
+  # dockerRegistry: ''
+  # dockerRegisterNamespace: ''
+  # dockerRegistryId: ''
+  # dockerRegistryPwd: ''
+
+steps:
+# ---------------------- basic
+- task: PowerShell@2
+  name: "publish_web_migrator"
+  displayName: '编译 Migrator'
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(migratorName)
+    workingDirectory: './src/${projectName}.Migrator'
+
+
+- task: PowerShell@2
+  name: "publish_web_host"
+  displayName: '编译 WebHost'
+  inputs:
+    targetType: 'inline'
+    script: | 
+      dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(hostName)
+    workingDirectory: './src/${projectName}.Host'
+
+- task: PowerShell@2
+  name: "admin_ui_remove_npmrc"
+  displayName: '删除admin ui的npmrc'
+  inputs:
+    targetType: 'inline'
+    script: | 
+      Remove-Item -Force .npmrc
+    workingDirectory: '$(uiPath)'
+
+- task: Npm@1
+  name: "admin_ui_npm_install"
+  displayName: '还原admin ui的node_modules'
+  inputs:
+    command: 'custom'
+    workingDir: '$(uiPath)'
+    customCommand: ' install'
+
+- task: Npm@1
+  name: "admin_ui_npm_build"
+  displayName: '编译admin ui'
+  inputs:
+    command: 'custom'
+    workingDir: '$(uiPath)'
+    customCommand: ' run build'
+
+- task: PowerShell@2
+  name: "admin_ui_move"
+  displayName: '移动admin ui编译结果'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Copy-Item -Force -Recurse  ./dist $(Build.ArtifactStagingDirectory)
+      Set-Location $(Build.ArtifactStagingDirectory)
+      Rename-Item ./dist $(uiName)
+    workingDirectory: '$(uiPath)'
+
+- task: PublishBuildArtifacts@1
+  name: "build_save_artifacts"
+  displayName: '保存编译结果'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'project_q_$(Build.BuildId)'
+
+# ---------------- docker ---------------------------
+
+- task: PowerShell@2
+  name: "docker_login"
+  displayName: 'docker 登录到镜像仓库'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker login --username=$(dockerRegistryId) --password=$(dockerRegistryPwd) $(dockerRegistry)
+
+- task: PowerShell@2
+  name: "docker_build_and_push_migrator"
+  displayName: 'docker 编译发布 migrator 镜像'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
+      docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+
+- task: PowerShell@2
+  name: "docker_build_and_push_host"
+  displayName: 'docker 编译发布 host 镜像'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
+      docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+
+- task: PowerShell@2
+  name: "docker_build_and_push_admin_ui"
+  displayName: 'docker 编译发布 admin ui 镜像'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
+      docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+
+- task: PowerShell@2
+  name: "docker_logout"
+  displayName: 'docker 退出登录'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker logout $(dockerRegistry)
