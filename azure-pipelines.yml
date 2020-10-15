@@ -22,6 +22,11 @@ variables:
   migratorDockerImageName: 'project_q_migrator'
   hostDockerImageName: 'project_q_host'
   uiDockerImageName: 'project_q_ui'
+  # The relevant configuration of Docker Registry is set to variable or variable groups
+  # dockerRegistry: ''
+  # dockerRegisterNamespace: ''
+  # dockerRegistryId: ''
+  # dockerRegistryPwd: ''
 
 steps:
 # ---------------------- basic
@@ -89,26 +94,48 @@ steps:
 
 # ---------------- docker ---------------------------
 
-# - task: PowerShell@2
-#   name: "docker_build_and_push_migrator"
-#   displayName: 'docker 编译发布 migrator 镜像'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
+- task: PowerShell@2
+  name: "docker_login"
+  displayName: 'docker 登录到镜像仓库'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker login --username=$(dockerRegistryId) --password=$(dockerRegistryPwd) $(dockerRegistry)
 
-# - task: PowerShell@2
-#   name: "docker_build_and_push_host"
-#   displayName: 'docker 编译发布 host 镜像'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
+- task: PowerShell@2
+  name: "docker_build_and_push_migrator"
+  displayName: 'docker 编译发布 migrator 镜像'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
+      docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):dev
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):dev
 
-# - task: PowerShell@2
-#   name: "docker_build_and_push_admin_ui"
-#   displayName: 'docker 编译发布 admin ui 镜像'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
+- task: PowerShell@2
+  name: "docker_build_and_push_host"
+  displayName: 'docker 编译发布 host 镜像'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
+      docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):dev
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):dev
+
+- task: PowerShell@2
+  name: "docker_build_and_push_admin_ui"
+  displayName: 'docker 编译发布 admin ui 镜像'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
+      docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):dev
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):dev
+
+- task: PowerShell@2
+  name: "docker_logout"
+  displayName: 'docker 退出登录'
+  inputs:
+    targetType: 'inline'
+    script: |
+      docker logout $(dockerRegistry)
