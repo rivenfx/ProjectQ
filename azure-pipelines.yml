@@ -108,9 +108,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
       docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
-      docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
-      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
 
 - task: PowerShell@2
   name: "docker_build_and_push_host"
@@ -118,9 +119,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
       docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
-      docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
-      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
 
 - task: PowerShell@2
   name: "docker_build_and_push_admin_ui"
@@ -128,9 +130,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
       docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
-      docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
-      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):(Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
+      docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
 
 - task: PowerShell@2
   name: "docker_logout"
