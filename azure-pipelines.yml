@@ -110,7 +110,10 @@ steps:
     script: |
       $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
       docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
+      Write-Host $tag
       docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
+
+      docker images
       docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
 
 - task: PowerShell@2
@@ -122,6 +125,7 @@ steps:
       $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
       docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
       docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
+      docker images
       docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
 
 - task: PowerShell@2
@@ -133,6 +137,7 @@ steps:
       $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
       docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
       docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
+      docker images
       docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
 
 - task: PowerShell@2
