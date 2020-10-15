@@ -108,7 +108,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      $tag = (Get-Date).ToString("yyyyMMdd_") + $(Build.BuildId)
       docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
       Write-Host $tag
       docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
@@ -122,7 +122,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      $tag = (Get-Date).ToString("yyyyMMdd_") + $(Build.BuildId)
       docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
       docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
       docker images
@@ -134,7 +134,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $tag = (Get-Date).ToString("yyyyMMdd_")$(Build.BuildId)
+      $tag = (Get-Date).ToString("yyyyMMdd_") + $(Build.BuildId)
       docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
       docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
       docker images
