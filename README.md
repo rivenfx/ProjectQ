@@ -1,6 +1,9 @@
 # ProjectQ
 
+[![Build Status](https://dev.azure.com/rivenfx/RivenFx/_apis/build/status/rivenfx.ProjectQ?branchName=master)](https://dev.azure.com/rivenfx/RivenFx/_build/latest?definitionId=6&branchName=master)
+
 轻量级、模块化、多租户 单体程序开发模板
+
 
 
 ## 996.ICU LICENSE
