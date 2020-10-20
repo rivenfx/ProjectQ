@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import {
@@ -7,20 +7,25 @@ import {
   SessionDto,
   SessionServiceProxy,
 } from '../../service-proxies/service-proxies';
+import { LazyInit } from '@shared/utils';
 
 @Injectable()
 export class SessionService {
 
   private _sessionChange$ = new BehaviorSubject<SessionDto | null>(null);
-  private localizationChange$ = new BehaviorSubject<LocalizationDto | null>(null);
+  private _localizationChange$ = new BehaviorSubject<LocalizationDto | null>(null);
 
-
+  private _sessionSrv: LazyInit<SessionServiceProxy>;
   private _session: SessionDto;
 
 
+
   constructor(
-    private sessionSrv: SessionServiceProxy,
+    injector: Injector
   ) {
+    this._sessionSrv = new LazyInit<SessionServiceProxy>(() => {
+      return injector.get(SessionServiceProxy);
+    });
   }
 
 
@@ -33,18 +38,18 @@ export class SessionService {
   }
 
   get localizationChange(): Observable<LocalizationDto | null> {
-    return this.localizationChange$.asObservable();
+    return this._localizationChange$.asObservable();
   }
 
   /**
    * 加载或更新AppInfo
    */
   loadOrUpdateAppInfo(callback?: (state: boolean, data: SessionDto | any) => void) {
-    this.sessionSrv.getCurrentSession()
+    this._sessionSrv.instance.getCurrentSession()
       .subscribe({
         next: (res) => {
           this._session = res;
-          this.localizationChange$.next(this._session.localization);
+          this._localizationChange$.next(this._session.localization);
           this._sessionChange$.next(this._session);
           callback(true, this._session);
         },
@@ -61,17 +66,17 @@ export class SessionService {
         && this.session.localization
         && this.session.localization.currentCulture
         && this.session.localization.currentCulture === culture) {
-        this.localizationChange$.next(this.session.localization);
+        this._localizationChange$.next(this.session.localization);
         obs.next(this.session.localization);
         obs.complete();
       } else {
-        this.sessionSrv.getLocalization()
+        this._sessionSrv.instance.getLocalization()
           .pipe(finalize(() => {
             obs.complete();
           }))
           .subscribe((res) => {
             this.session.localization = res;
-            this.localizationChange$.next(this.session.localization);
+            this._localizationChange$.next(this.session.localization);
             obs.next(this.session.localization);
           });
       }

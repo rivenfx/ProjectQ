@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import {
@@ -10,6 +10,7 @@ import {
 import { SettingsService } from '@delon/theme';
 import { MessageService } from '@shared/riven';
 import { RequestHelper, ResponseHelper } from '@shared/riven/helper';
+import { AppConsts } from '@shared';
 
 
 /**
@@ -19,14 +20,14 @@ import { RequestHelper, ResponseHelper } from '@shared/riven/helper';
 export class ServiceProxiesInterceptor implements HttpInterceptor {
 
   constructor(
-    private settingsSer: SettingsService,
-    public messageSer: MessageService,
+    injector: Injector
   ) {
-    RequestHelper.init(settingsSer);
-    ResponseHelper.init(messageSer);
+    RequestHelper.init(injector);
+    ResponseHelper.init(injector);
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
     const interceptObservable = new Subject<HttpEvent<any>>();
     const modifiedRequest = RequestHelper.normalizeRequestHeaders(request);
 
