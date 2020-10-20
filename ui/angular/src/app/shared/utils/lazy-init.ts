@@ -7,10 +7,9 @@ export class LazyInit<T>{
   }
 
   get instance(): T {
-    if (this._instance) {
-      return this._instance;
+    if (!this._instance) {
+      this._instance = this._factory();
     }
-
-    this._instance = this._factory();
+    return this._instance;
   }
 }
