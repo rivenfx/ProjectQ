@@ -2,6 +2,8 @@ import { HttpEvent, HttpResponse } from '@angular/common/http';
 import { IAjaxResponse, IErrorInfo } from '@service-proxies/interceptor/interfaces';
 import { MessageService } from '@shared/riven';
 import { Observable, of, Subject } from 'rxjs';
+import { Injector } from '@angular/core';
+import { LazyInit } from '@shared/utils';
 
 /** 响应帮助类 */
 export class ResponseHelper {
@@ -10,7 +12,8 @@ export class ResponseHelper {
   protected static inited = false;
 
   /** 消息服务 */
-  protected static messageSer: MessageService;
+  protected static messageSer: LazyInit<MessageService>;
+
 
   /** 预定义的错误 */
   static predefineErrors = {
@@ -40,13 +43,15 @@ export class ResponseHelper {
   };
 
   /** 初始化 ResponseHelper */
-  static init(messageSer: MessageService) {
+  static init(injector: Injector) {
     if (ResponseHelper.inited) {
       return;
     }
     ResponseHelper.inited = true;
 
-    ResponseHelper.messageSer = messageSer;
+    ResponseHelper.messageSer = new LazyInit<MessageService>(() => {
+      return injector.get(MessageService);
+    });
   }
 
   /** 处理成功的响应 */
@@ -142,7 +147,8 @@ export class ResponseHelper {
         observer.complete();
       } else {
         const reader = new FileReader();
-        reader.onload = function() {
+        // tslint:disable-next-line: space-before-function-paren
+        reader.onload = function () {
           observer.next(this.result);
           observer.complete();
         };
@@ -251,9 +257,9 @@ export class ResponseHelper {
   /** 提示 - 错误 */
   static showError(error: IErrorInfo) {
     if (error.details) {
-      ResponseHelper.messageSer.error(error.details, error.message || ResponseHelper.predefineErrors.default.message);
+      ResponseHelper.messageSer.instance.error(error.details, error.message || ResponseHelper.predefineErrors.default.message);
     } else {
-      ResponseHelper.messageSer.error(error.message || ResponseHelper.predefineErrors.default.message);
+      ResponseHelper.messageSer.instance.error(error.message || ResponseHelper.predefineErrors.default.message);
     }
   }
 

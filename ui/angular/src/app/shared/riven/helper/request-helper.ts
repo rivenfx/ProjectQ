@@ -2,6 +2,8 @@ import { HttpHeaders, HttpRequest } from '@angular/common/http';
 import { ITokenService } from '@delon/auth';
 import { SettingsService } from '@delon/theme';
 import { AppConsts } from '@shared';
+import { Injector } from '@angular/core';
+import { LazyInit } from '@shared/utils';
 
 /** 请求帮助类 */
 export class RequestHelper {
@@ -15,16 +17,18 @@ export class RequestHelper {
   protected static inited = false;
 
   /** settings服务 */
-  protected static settingsSer: SettingsService;
+  protected static settingsSer: LazyInit<SettingsService>;
 
 
   /** 初始化 */
-  static init(settingsSer: SettingsService) {
+  static init(injector: Injector) {
     if (RequestHelper.inited) {
       return;
     }
     RequestHelper.inited = true;
-    RequestHelper.settingsSer = settingsSer;
+    RequestHelper.settingsSer = new LazyInit<SettingsService>(() => {
+      return injector.get(SettingsService);
+    });
   }
 
   /** 标准化请求头 */
@@ -65,7 +69,7 @@ export class RequestHelper {
 
     if (!this.itemExists(authorizationHeaders, (item) => item.startsWith(authorizationSchema))) {
 
-      const token = RequestHelper.settingsSer.getData(AppConsts.settings.token);
+      const token = RequestHelper.settingsSer.instance.getData(AppConsts.settings.token);
       if (headers && token) {
         headers = headers.set('Authorization', `${authorizationSchema} ${token}`);
       }
@@ -76,7 +80,7 @@ export class RequestHelper {
 
   /** 请求头添加 asp.net core .AspNetCore.Culture 国际化标识 */
   static addAspNetCoreCultureHeader(headers: HttpHeaders): HttpHeaders {
-    const lang = RequestHelper.settingsSer.layout.lang;
+    const lang = RequestHelper.settingsSer.instance.layout.lang;
     if (lang && headers && !headers.has('.AspNetCore.Culture')) {
       headers = headers.set('.AspNetCore.Culture', lang);
     }
@@ -86,7 +90,7 @@ export class RequestHelper {
 
   /** 请求头添加 Accept-Language 国际化标识 */
   static addAcceptLanguageHeader(headers: HttpHeaders): HttpHeaders {
-    const lang = RequestHelper.settingsSer.layout.lang;
+    const lang = RequestHelper.settingsSer.instance.layout.lang;
     if (lang && headers && !headers.has('Accept-Language')) {
       headers = headers.set('Accept-Language', lang);
     }
@@ -95,8 +99,8 @@ export class RequestHelper {
 
   /** 添加租户到请求头 */
   static addTenantHeader(headers: HttpHeaders): HttpHeaders {
-    if (RequestHelper.settingsSer.user) {
-      const tenant = RequestHelper.settingsSer.getData(RequestHelper.multiTenancy.key);
+    if (RequestHelper.settingsSer.instance.user) {
+      const tenant = RequestHelper.settingsSer.instance.getData(RequestHelper.multiTenancy.key);
       if (tenant && headers && !headers.has('Tenant')) {
         headers = headers.set('Tenant', tenant);
       }
