@@ -40,7 +40,11 @@ export class ServiceProxyModule {
     return {
       ngModule: ServiceProxyModule,
       providers: [
-        { provide: API_BASE_URL, useFactory: () => AppConsts.remoteServiceUrl },
+        {
+          provide: API_BASE_URL, useFactory: () => {
+            return AppConsts.remoteServiceUrl;
+          }
+        },
       ],
     };
   }
