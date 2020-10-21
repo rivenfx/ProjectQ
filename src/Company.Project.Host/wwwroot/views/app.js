@@ -4,7 +4,7 @@ app.appPath = app.appPath || '/';
 app.domain = null;
 
 app.multiTenancy = {
-    key: 'Riven.Tenant',
+    key: 'TenantName',
     setTenant: function (tenant) {
 
         if (tenant) {
