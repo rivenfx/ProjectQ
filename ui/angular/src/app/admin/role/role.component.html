@@ -1,16 +1,10 @@
-<page-header [title]="l('menu.role')"
-  [breadcrumb]="breadcrumb"
-  [action]="action">
+<page-header [title]="l('menu.role')" [breadcrumb]="breadcrumb" [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
-    <button nz-button
-      (click)="onClickCreateOrEdit()"
-      [title]="l('common.create')">
+    <button nz-button (click)="onClickCreateOrEdit()" [title]="l('common.create')">
       <i class="icon iconfont icon-add"></i>
     </button>
-    <button nz-button
-      (click)="refresh()"
-      [title]="l('common.refresh')">
+    <button nz-button (click)="refresh()" [title]="l('common.refresh')">
       <i class="icon iconfont icon-refresh"></i>
     </button>
   </ng-template>
@@ -21,28 +15,18 @@
 <div class="page-body">
 
 
-  <page-filter [pageFilters]="pageInfo.pageFilters"
-    [displayLabel]="true"
-    (readyChange)="onFilterReady($event)"
+  <page-filter [pageFilters]="pageInfo.pageFilters" [displayLabel]="true" (readyChange)="onFilterReady($event)"
     (valueChange)="onFilterChange($event)">
-
   </page-filter>
 
-  <sample-table [loading]="loading"
-    [page]="pageInfo"
-    [columns]="pageInfo.columns"
-    [data]="pageInfo.viewRecord"
-    [pageIndex]="pageInfo.index"
-    [pageSize]="pageInfo.size"
-    [total]="pageInfo.totalRecord"
-    [scroll]="pageInfo.scroll"
-    (action)="onAction($event)"
-    (check)="onCheckChange($event)"
-    (sort)="onSortChange($event)"
-    (pageIndexChange)="onPageIndexChange($event)"
+  <sample-table [loading]="loading" [page]="pageInfo" [columns]="pageInfo.columns" [data]="pageInfo.viewRecord"
+    [virtual]="pageInfo.virtual" [virtualItemSize]="pageInfo.virtualItemSize" [scroll]="pageInfo.scroll"
+    [pageIndex]="pageInfo.index" [pageSize]="pageInfo.size" [total]="pageInfo.totalRecord" (action)="onAction($event)"
+    (check)="onCheckChange($event)" (sort)="onSortChange($event)" (pageIndexChange)="onPageIndexChange($event)"
     (pageSizeChange)="onPageSizeChange($event)">
 
   </sample-table>
+
 
 
 </div>

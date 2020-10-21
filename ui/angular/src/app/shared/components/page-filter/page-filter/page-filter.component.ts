@@ -118,7 +118,7 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
     const tmpValue = [];
     // tslint:disable-next-line: forin
     for (const key in this.pageFilterData) {
-      if (this.pageFilterData[key].value === '') {
+      if (this.pageFilterData[key].value === '' || typeof (this.pageFilterData[key].value) === 'undefined') {
         continue;
       }
       tmpValue.push(this.pageFilterData[key]);
