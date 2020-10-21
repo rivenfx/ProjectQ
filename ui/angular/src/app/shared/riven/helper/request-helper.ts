@@ -10,7 +10,7 @@ export class RequestHelper {
 
   /** 多租户配置 */
   public static readonly multiTenancy = {
-    key: 'Riven.Tenant',
+    key: 'TenantName',
   };
 
   /** 是否已经被初始化 */
