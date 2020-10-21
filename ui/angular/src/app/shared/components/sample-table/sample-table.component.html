@@ -1,29 +1,22 @@
 <!-- 类型为 button 的 action -->
-<ng-template #actionWithButtonsTemplate
-  let-action
-  let-item="item">
+<ng-template #actionWithButtonsTemplate let-action let-item="item">
   <a (click)="onActionClick(action.name, item.original)">
-    <i *ngIf="action.icon"
-      [class]="action.icon"></i>
+    <i *ngIf="action.icon" [class]="action.icon"></i>
     {{l(action.label)}}
   </a>
 </ng-template>
 
 <!-- 类型为 select 的 action -->
-<ng-template #actionWithSelectTemplate
-  let-action
-  let-item="item">
-  <a nz-dropdown
-    [nzDropdownMenu]="menu">
+<ng-template #actionWithSelectTemplate let-action let-item="item">
+  <a nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click">
     {{l(action.label)}}
-    <i nz-icon
-      nzType="down"></i>
+    <i nz-icon nzType="down"></i>
   </a>
 
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <ng-container *ngFor="let btn of action.buttons">
-        <li nz-menu-item>
+        <li nz-menu-item *ngIf="isGranted(btn.acl)">
           <ng-container *ngTemplateOutlet="actionWithButtonsTemplate;context:{$implicit: btn, item: item}">
           </ng-container>
         </li>
@@ -33,26 +26,13 @@
 </ng-template>
 
 <!-- 列表模板 -->
-<st #st
-  [data]="tableData"
-  [columns]="tableColumns"
-  [page]="page"
-  [loading]="loading"
-  [total]="total"
-  [bordered]="bordered"
-  (change)="onTableChange($event)"
-  size="small"
-  virtualScroll
-  [ps]="pageSize"
-  [virtualItemSize]="virtualItemSize"
-  [multiSort]="sortData"
-  [scroll]="scroll">
+<st #st [data]="tableData" [columns]="tableColumns" [page]="page" [loading]="loading" [total]="total"
+  [bordered]="bordered" (change)="onTableChange($event)" size="small" [virtualScroll]="virtual" [ps]="pageSize"
+  [virtualItemSize]="virtualItemSize" [multiSort]="sortData" [scroll]="scroll">
 
 
   <!-- actions 渲染模板 -->
-  <ng-template st-row="actions"
-    let-item
-    let-index="index">
+  <ng-template st-row="actions" let-item let-index="index">
     <ng-container *ngIf="item.actions">
       <ng-container *ngFor="let action of item.actions; let i = index">
         <ng-container [ngSwitch]="action.type">
@@ -60,8 +40,7 @@
           <ng-container *ngSwitchCase="'Button'">
             <ng-container *ngTemplateOutlet="actionWithButtonsTemplate;context:{$implicit: action, item: item}">
             </ng-container>
-            <nz-divider nzType="vertical"
-              [hidden]="i===(item.actions.length-1)"></nz-divider>
+            <nz-divider nzType="vertical" [hidden]="i===(item.actions.length-1)"></nz-divider>
           </ng-container>
           <!-- 选择项 -->
           <ng-container *ngSwitchCase="'Select'">

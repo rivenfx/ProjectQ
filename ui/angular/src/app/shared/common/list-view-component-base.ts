@@ -32,6 +32,12 @@ export interface IPageInfo<T> {
   viewRecord?: T[];
   /** 总数据量 */
   totalRecord?: number;
+  /** 虚拟滚动 */
+  virtual?: boolean;
+  /** 虚拟项高度 */
+  virtualItemSize?: number;
+  /** 滚动 */
+  scroll?: { y?: string; x?: string; };
   // ==========================================
   /** 是否显示分页 */
   show?: boolean;
@@ -43,14 +49,6 @@ export interface IPageInfo<T> {
   showSize?: boolean;
   /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
   pageSizes?: number[];
-  // ==========================================
-  /** 表格滚动空间 */
-  scroll?: {
-    /** 宽度 */
-    x: string;
-    /** 高度 */
-    y: string;
-  };
 }
 
 
@@ -72,6 +70,13 @@ export interface IPagedResultDto {
 
 export abstract class ListViewComponentBase<T> extends AppComponentBase
   implements OnInit {
+
+  /** 自动计算表格高度 */
+  protected autoTableHeight = true;
+  /** 表格高度 */
+  protected tableHeight = 240;
+  /** 误差计算高度 */
+  protected errorHeight = 0;
 
   /** 视图数据 */
   get viewRecord(): T[] {
@@ -103,17 +108,15 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     columns: [],
     viewRecord: [],
     totalRecord: 0,
+    virtual: true,
+    virtualItemSize: 30.6,
+    scroll: { x: '1300px', y: '240px' },
     //
     show: true,
     front: false,
     showQuickJumper: true,
     showSize: true,
     pageSizes: [10, 20, 30, 40, 50],
-    //
-    scroll: {
-      x: '1000px',
-      y: '240px',
-    }
   };
 
   /** 筛选条件/列表 配置名称 */
@@ -199,6 +202,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     }
   }
 
+
   /** 页码发生更改 */
   onPageIndexChange(pageIndex: number) {
     this.pageInfo.index = pageIndex;
@@ -245,6 +249,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
     const skipCount = (this.pageInfo.index - 1) * this.pageInfo.size;
     this.fetchData({
+      // tslint:disable-next-line: object-literal-shorthand
       skipCount: skipCount,
       pageSize: this.pageInfo.size,
       queryConditions: this.queryConditions,
@@ -320,6 +325,20 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
           callback();
         }
       });
+  }
+
+  /** 计算列表高度 */
+  protected calculatedHeight() {
+    // TODO: 动态计算高度需要兼容移动端
+    this.tableHeight = window.innerHeight - 64 - 41.6 - 101.8 - 32 - 32 - 120 - this.errorHeight;
+    if (this.autoTableHeight) {
+      const oldScroll = this.pageInfo.scroll;
+      this.pageInfo.scroll = {
+        x: oldScroll.x,
+        y: this.tableHeight + 'px',
+      };
+    }
+
   }
 
 
