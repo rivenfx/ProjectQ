@@ -41,8 +41,14 @@ export class SampleTableComponent extends AppComponentBase
     show: true,
     showQuickJumper: true,
     pageSizes: [10, 20, 30, 40, 50],
-    showSize: true
+    showSize: true,
   };
+
+  /** 虚拟滚动 */
+  @Input() virtual = true;
+
+  /** 滚动宽高 */
+  @Input() scroll: { y?: string; x?: string; } = { x: '1800px', y: '240px' };
 
   /** 项高度 */
   @Input() virtualItemSize = 31;
@@ -61,9 +67,6 @@ export class SampleTableComponent extends AppComponentBase
 
   /** 边框 */
   @Input() bordered = true;
-
-  /** 滚动宽高 */
-  @Input() scroll: { y?: string; x?: string; } = { x: '1800px', y: '240px' };
 
   /** 列被触发 */
   @Output() action = new EventEmitter<ISampleTableAction>();
