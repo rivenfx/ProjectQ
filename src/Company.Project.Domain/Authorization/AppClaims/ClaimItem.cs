@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components.Forms;
 
 using Riven;
-
+using Riven.Identity.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,40 +20,36 @@ namespace Company.Project.Authorization.AppClaims
 
         public virtual string Claim { get; protected set; }
 
-        public virtual ClaimItemType Type { get; protected set; }
+        public virtual ClaimsAuthorizeScope Scope { get; protected set; }
 
         public virtual int Sort { get; protected set; }
 
 
 
-        public ClaimItem([NotNull] string claim, ClaimItemType type, string parent = null)
+        public ClaimItem([NotNull] string claim, ClaimsAuthorizeScope scope, string parent = null)
         {
             Check.NotNull(claim, nameof(claim));
 
             this.Claim = claim;
-            this.Type = type;
+            this.Scope = scope;
             this.Parent = parent;
 
             this.Sort = _sort++;
 
-            this.HashCode = this.Claim.GetHashCode() + this.Type.GetHashCode();
+            this.HashCode = this.Claim.GetHashCode() + this.Scope.GetHashCode();
         }
 
 
         public static ClaimItem CreateWithCommon(string claim, string parent = null)
         {
-            return new ClaimItem(claim, ClaimItemType.Common, parent);
+            return new ClaimItem(claim, ClaimsAuthorizeScope.Common, parent);
         }
 
         public static ClaimItem CreateWithHost(string claim, string parent = null)
         {
-            return new ClaimItem(claim, ClaimItemType.Host, parent);
+            return new ClaimItem(claim, ClaimsAuthorizeScope.Host, parent);
         }
 
-        public static ClaimItem CreateWithTenant(string claim, string parent = null)
-        {
-            return new ClaimItem(claim, ClaimItemType.Tenant, parent);
-        }
 
         public override bool Equals(object obj)
         {
