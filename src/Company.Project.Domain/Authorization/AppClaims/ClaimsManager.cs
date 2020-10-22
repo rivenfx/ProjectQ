@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using Riven.Dependency;
@@ -31,7 +31,7 @@ namespace Company.Project.Authorization.AppClaims
                 claimItemType = ClaimItemType.Tenant;
             }
 
-            return _claims.Where(o => o.Type == ClaimItemType.Common || o.Type == claimItemType)
+            return _claims.Where(o => o.Scope == ClaimItemType.Common || o.Scope == claimItemType)
                 .OrderBy(o => o.Sort)
                 .AsQueryable();
         }
