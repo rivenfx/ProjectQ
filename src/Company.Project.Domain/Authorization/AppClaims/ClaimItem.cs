@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -14,13 +14,15 @@ namespace Company.Project.Authorization.AppClaims
     {
         static int _sort = 0;
 
-        public string Parent { get; private set; }
+        public virtual int HashCode { get; protected set; }
 
-        public string Claim { get; private set; }
+        public virtual string Parent { get; protected set; }
 
-        public ClaimItemType Type { get; private set; }
+        public virtual string Claim { get; protected set; }
 
-        public int Sort { get; private set; }
+        public virtual ClaimItemType Type { get; protected set; }
+
+        public virtual int Sort { get; protected set; }
 
 
 
@@ -33,6 +35,8 @@ namespace Company.Project.Authorization.AppClaims
             this.Parent = parent;
 
             this.Sort = _sort++;
+
+            this.HashCode = this.Claim.GetHashCode() + this.Type.GetHashCode();
         }
 
 
@@ -58,14 +62,17 @@ namespace Company.Project.Authorization.AppClaims
                 return false;
             }
 
-            var input = obj as ClaimItem;
+            if (obj is ClaimItem input)
+            {
+                return input.GetHashCode() == this.GetHashCode();
+            }
 
-            return this.Claim == input.Claim && this.Type == input.Type;
+            return false;
         }
 
         public override int GetHashCode()
         {
-            return this.Claim.GetHashCode() + this.Type.GetHashCode();
+            return this.HashCode;
         }
     }
 }
