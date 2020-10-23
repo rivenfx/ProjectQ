@@ -112,12 +112,10 @@ namespace Company.Project.Session
             {
                 var userIdString = _appSession.UserId.Value.ToString();
 
-                var userPermissions = (await _userManager.GetPermissionsByUserIdAsync(userIdString))
-                    .Select(o => o.Value);
+                var userPermissions = await _userManager.GetPermissionsByUserIdAsync(userIdString);
 
-                var userRoleNames = (await _userManager.GetRolesByUserIdAsync(userIdString));
-                var rolePermissions = (await _roleManager.GetPermissionsByRoleNamesAsync(userRoleNames.ToArray()))
-                    .Select(o => o.Value);
+                var userRoleNames = await _userManager.GetRolesByUserIdAsync(userIdString);
+                var rolePermissions = await _roleManager.GetPermissionsByRoleNamesAsync(userRoleNames.ToArray());
 
                 authDto.GrantedPermissions = userPermissions.Union(rolePermissions).Distinct().ToList();
 

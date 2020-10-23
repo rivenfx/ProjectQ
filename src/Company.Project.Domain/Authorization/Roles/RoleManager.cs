@@ -24,7 +24,7 @@ namespace Company.Project.Authorization.Roles
 {
     public class RoleManager : RoleManager<Role>, IRolePermissionAccessor
     {
-        static IList<Claim> _nullRoleClaims = new List<Claim>();
+        static IEnumerable<string> _nullRoleClaims = new List<string>();
 
 
         public IQueryable<Role> Query => this.Roles.AsNoTracking();
@@ -54,7 +54,7 @@ namespace Company.Project.Authorization.Roles
         /// <param name="isStatic">是否为内置</param>
         /// <param name="permissions">角色拥有的 Permission 集合</param>
         /// <returns></returns>
-        public async Task<Role> CreateAsync([NotNull] string name, [NotNull] string displayName, string description, bool isStatic = false,  params string[] permissions)
+        public async Task<Role> CreateAsync([NotNull] string name, [NotNull] string displayName, string description, bool isStatic = false, params string[] permissions)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -241,26 +241,26 @@ namespace Company.Project.Authorization.Roles
             return await this.GetClaimsAsync(role);
         }
 
-        public async Task<IList<Claim>> GetPermissionsByRoleIdAsync([NotNull] string roleId)
+        public async Task<IEnumerable<string>> GetPermissionsByRoleIdAsync([NotNull] string roleId)
         {
             Check.NotNullOrWhiteSpace(roleId, nameof(roleId));
 
             var role = await this.FindByIdAsync(roleId);
 
-            return await this.GetIdentityPermissionsAsync(role);
+            return (await this.GetIdentityPermissionsAsync(role)).Select(o => o.Value);
 
         }
 
-        public async Task<IList<Claim>> GetPermissionsByRoleNameAsync([NotNull] string roleName)
+        public async Task<IEnumerable<string>> GetPermissionsByRoleNameAsync([NotNull] string roleName)
         {
             Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
 
             var role = await this.FindByNameAsync(roleName);
 
-            return await this.GetIdentityPermissionsAsync(role);
+            return (await this.GetIdentityPermissionsAsync(role)).Select(o => o.Value);
         }
 
-        public async Task<IList<Claim>> GetPermissionsByRoleNamesAsync([NotNull] string[] roleNames)
+        public async Task<IEnumerable<string>> GetPermissionsByRoleNamesAsync([NotNull] string[] roleNames)
         {
             Check.NotNull(roleNames, nameof(roleNames));
             if (roleNames.Length == 0)
@@ -268,13 +268,13 @@ namespace Company.Project.Authorization.Roles
                 return _nullRoleClaims;
             }
 
-            var result = new List<Claim>();
+            var result = new List<string>();
 
 
 
             foreach (var roleName in roleNames)
             {
-                var rolePermissions = await this.GetPermissionsByRoleNameAsync(roleName);
+                var rolePermissions = (await this.GetPermissionsByRoleNameAsync(roleName));
 
                 result.AddRange(rolePermissions);
             }

@@ -307,25 +307,25 @@ namespace Company.Project.Authorization.Users
             return FindByNameOrEmailOrPhoneNumberAsync(email);
         }
 
-        public async Task<IList<Claim>> GetPermissionsByUserIdAsync([NotNull] string userId)
+        public async Task<IEnumerable<string>> GetPermissionsByUserIdAsync([NotNull] string userId)
         {
             Check.NotNullOrWhiteSpace(userId, nameof(userId));
 
             var user = await this.FindByIdAsync(userId);
 
-            return await this.GetClaimsAsync(user);
+            return (await this.GetClaimsAsync(user)).Select(o => o.Value);
         }
 
-        public async Task<IList<Claim>> GetPermissionsByUserNameAsync([NotNull] string userName)
+        public async Task<IEnumerable<string>> GetPermissionsByUserNameAsync([NotNull] string userName)
         {
             Check.NotNullOrWhiteSpace(userName, nameof(userName));
 
             var user = await this.FindByNameAsync(userName);
 
-            return await this.GetClaimsAsync(user);
+            return (await this.GetClaimsAsync(user)).Select(o => o.Value);
         }
 
-        public async Task<IList<string>> GetRolesByUserIdAsync([NotNull] string userId)
+        public async Task<IEnumerable<string>> GetRolesByUserIdAsync([NotNull] string userId)
         {
             Check.NotNullOrWhiteSpace(userId, nameof(userId));
 
@@ -334,7 +334,7 @@ namespace Company.Project.Authorization.Users
             return await this.GetRolesAsync(user);
         }
 
-        public async Task<IList<string>> GetRolesByUserNameAsync([NotNull] string userName)
+        public async Task<IEnumerable<string>> GetRolesByUserNameAsync([NotNull] string userName)
         {
             Check.NotNullOrWhiteSpace(userName, nameof(userName));
 

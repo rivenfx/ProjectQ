@@ -84,7 +84,7 @@ namespace Company.Project.Authorization.Roles
             return new RoleEditDto()
             {
                 EntityDto = entity.Adapt<RoleDto>(),
-                Permissions = permissions.Select(o => o.Type).ToList()
+                Permissions = permissions.ToList()
             };
 
         }
