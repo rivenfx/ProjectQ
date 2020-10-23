@@ -82,7 +82,7 @@ namespace Company.Project.Controllers
         /// 刷新Token
         /// </summary>
         /// <returns></returns>
-        [ClaimsAuthorize]
+        [PermissionAuthorize]
         [HttpPost]
         public async Task<AuthenticateResultDto> RefreshToken()
         {

@@ -17,128 +17,6 @@ import * as moment from 'moment';
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
-export class ClaimsServiceProxy {
-    private http: HttpClient;
-    private baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
-
-    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @return Success
-     */
-    getAllClaims(): Observable<string[]> {
-        let url_ = this.baseUrl + "/apis/Claims/GetAllClaims";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllClaims(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllClaims(<any>response_);
-                } catch (e) {
-                    return <Observable<string[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<string[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllClaims(response: HttpResponseBase): Observable<string[]> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(item);
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<string[]>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getAllClaimsWithTree(): Observable<ClaimItemDto[]> {
-        let url_ = this.baseUrl + "/apis/Claims/GetAllClaimsWithTree";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllClaimsWithTree(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllClaimsWithTree(<any>response_);
-                } catch (e) {
-                    return <Observable<ClaimItemDto[]>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<ClaimItemDto[]>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllClaimsWithTree(response: HttpResponseBase): Observable<ClaimItemDto[]> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(ClaimItemDto.fromJS(item));
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ClaimItemDto[]>(<any>null);
-    }
-}
-
-@Injectable()
 export class DynamicPageServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -309,6 +187,128 @@ export class DynamicPageServiceProxy {
             }));
         }
         return _observableOf<ColumnItemDtoListResultDto>(<any>null);
+    }
+}
+
+@Injectable()
+export class PermissionServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAllPermissions(): Observable<string[]> {
+        let url_ = this.baseUrl + "/apis/Permission/GetAllPermissions";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllPermissions(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllPermissions(<any>response_);
+                } catch (e) {
+                    return <Observable<string[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<string[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllPermissions(response: HttpResponseBase): Observable<string[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<string[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllPermissionsWithTree(): Observable<PermissionItemDto[]> {
+        let url_ = this.baseUrl + "/apis/Permission/GetAllPermissionsWithTree";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllPermissionsWithTree(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllPermissionsWithTree(<any>response_);
+                } catch (e) {
+                    return <Observable<PermissionItemDto[]>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<PermissionItemDto[]>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetAllPermissionsWithTree(response: HttpResponseBase): Observable<PermissionItemDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(PermissionItemDto.fromJS(item));
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PermissionItemDto[]>(<any>null);
     }
 }
 
@@ -936,8 +936,8 @@ export class SessionServiceProxy {
     /**
      * @return Success
      */
-    getClaims(): Observable<ClaimsDto> {
-        let url_ = this.baseUrl + "/apis/Session/GetClaims";
+    getAuth(): Observable<AuthDto> {
+        let url_ = this.baseUrl + "/apis/Session/GetAuth";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -949,20 +949,20 @@ export class SessionServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetClaims(response_);
+            return this.processGetAuth(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processGetClaims(<any>response_);
+                    return this.processGetAuth(<any>response_);
                 } catch (e) {
-                    return <Observable<ClaimsDto>><any>_observableThrow(e);
+                    return <Observable<AuthDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<ClaimsDto>><any>_observableThrow(response_);
+                return <Observable<AuthDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processGetClaims(response: HttpResponseBase): Observable<ClaimsDto> {
+    protected processGetAuth(response: HttpResponseBase): Observable<AuthDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -973,7 +973,7 @@ export class SessionServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ClaimsDto.fromJS(resultData200);
+            result200 = AuthDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -981,7 +981,7 @@ export class SessionServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<ClaimsDto>(<any>null);
+        return _observableOf<AuthDto>(<any>null);
     }
 
     /**
@@ -1503,57 +1503,6 @@ export class UserServiceProxy {
     }
 }
 
-export class ClaimItemDto implements IClaimItemDto {
-    parent: string | undefined;
-    claim: string | undefined;
-    sort: number;
-
-    constructor(data?: IClaimItemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.parent = _data["parent"];
-            this.claim = _data["claim"];
-            this.sort = _data["sort"];
-        }
-    }
-
-    static fromJS(data: any): ClaimItemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ClaimItemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["parent"] = this.parent;
-        data["claim"] = this.claim;
-        data["sort"] = this.sort;
-        return data; 
-    }
-
-    clone(): ClaimItemDto {
-        const json = this.toJSON();
-        let result = new ClaimItemDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IClaimItemDto {
-    parent: string | undefined;
-    claim: string | undefined;
-    sort: number;
-}
-
 export enum QueryOperator {
     Equal = <any>"Equal",
     NotEqual = <any>"NotEqual",
@@ -2047,6 +1996,57 @@ export interface IColumnItemDtoListResultDto {
     items: ColumnItemDto[] | undefined;
 }
 
+export class PermissionItemDto implements IPermissionItemDto {
+    parent: string | undefined;
+    name: string | undefined;
+    sort: number;
+
+    constructor(data?: IPermissionItemDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.parent = _data["parent"];
+            this.name = _data["name"];
+            this.sort = _data["sort"];
+        }
+    }
+
+    static fromJS(data: any): PermissionItemDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PermissionItemDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["parent"] = this.parent;
+        data["name"] = this.name;
+        data["sort"] = this.sort;
+        return data; 
+    }
+
+    clone(): PermissionItemDto {
+        const json = this.toJSON();
+        let result = new PermissionItemDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPermissionItemDto {
+    parent: string | undefined;
+    name: string | undefined;
+    sort: number;
+}
+
 export class QueryCondition implements IQueryCondition {
     field: string | undefined;
     value: string | undefined;
@@ -2397,7 +2397,7 @@ export interface IRoleDtoListResultDto {
 
 export class RoleEditDto implements IRoleEditDto {
     entityDto: RoleDto;
-    claims: string[] | undefined;
+    permissions: string[] | undefined;
 
     constructor(data?: IRoleEditDto) {
         if (data) {
@@ -2411,10 +2411,10 @@ export class RoleEditDto implements IRoleEditDto {
     init(_data?: any) {
         if (_data) {
             this.entityDto = _data["entityDto"] ? RoleDto.fromJS(_data["entityDto"]) : <any>undefined;
-            if (Array.isArray(_data["claims"])) {
-                this.claims = [] as any;
-                for (let item of _data["claims"])
-                    this.claims.push(item);
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions.push(item);
             }
         }
     }
@@ -2429,10 +2429,10 @@ export class RoleEditDto implements IRoleEditDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
-        if (Array.isArray(this.claims)) {
-            data["claims"] = [];
-            for (let item of this.claims)
-                data["claims"].push(item);
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item);
         }
         return data; 
     }
@@ -2447,12 +2447,12 @@ export class RoleEditDto implements IRoleEditDto {
 
 export interface IRoleEditDto {
     entityDto: RoleDto;
-    claims: string[] | undefined;
+    permissions: string[] | undefined;
 }
 
 export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
     entityDto: RoleDto;
-    claims: string[] | undefined;
+    permissions: string[] | undefined;
 
     constructor(data?: ICreateOrUpdateRoleInput) {
         if (data) {
@@ -2466,10 +2466,10 @@ export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
     init(_data?: any) {
         if (_data) {
             this.entityDto = _data["entityDto"] ? RoleDto.fromJS(_data["entityDto"]) : <any>undefined;
-            if (Array.isArray(_data["claims"])) {
-                this.claims = [] as any;
-                for (let item of _data["claims"])
-                    this.claims.push(item);
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions.push(item);
             }
         }
     }
@@ -2484,10 +2484,10 @@ export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
-        if (Array.isArray(this.claims)) {
-            data["claims"] = [];
-            for (let item of this.claims)
-                data["claims"].push(item);
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item);
         }
         return data; 
     }
@@ -2502,7 +2502,7 @@ export class CreateOrUpdateRoleInput implements ICreateOrUpdateRoleInput {
 
 export interface ICreateOrUpdateRoleInput {
     entityDto: RoleDto;
-    claims: string[] | undefined;
+    permissions: string[] | undefined;
 }
 
 export class SampleEntity implements ISampleEntity {
@@ -2599,11 +2599,11 @@ export interface IMultiTenancyDto {
     tenantName: string | undefined;
 }
 
-export class ClaimsDto implements IClaimsDto {
-    allClaims: string[] | undefined;
-    grantedClaims: string[] | undefined;
+export class AuthDto implements IAuthDto {
+    allPermissions: string[] | undefined;
+    grantedPermissions: string[] | undefined;
 
-    constructor(data?: IClaimsDto) {
+    constructor(data?: IAuthDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2614,52 +2614,52 @@ export class ClaimsDto implements IClaimsDto {
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["allClaims"])) {
-                this.allClaims = [] as any;
-                for (let item of _data["allClaims"])
-                    this.allClaims.push(item);
+            if (Array.isArray(_data["allPermissions"])) {
+                this.allPermissions = [] as any;
+                for (let item of _data["allPermissions"])
+                    this.allPermissions.push(item);
             }
-            if (Array.isArray(_data["grantedClaims"])) {
-                this.grantedClaims = [] as any;
-                for (let item of _data["grantedClaims"])
-                    this.grantedClaims.push(item);
+            if (Array.isArray(_data["grantedPermissions"])) {
+                this.grantedPermissions = [] as any;
+                for (let item of _data["grantedPermissions"])
+                    this.grantedPermissions.push(item);
             }
         }
     }
 
-    static fromJS(data: any): ClaimsDto {
+    static fromJS(data: any): AuthDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ClaimsDto();
+        let result = new AuthDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.allClaims)) {
-            data["allClaims"] = [];
-            for (let item of this.allClaims)
-                data["allClaims"].push(item);
+        if (Array.isArray(this.allPermissions)) {
+            data["allPermissions"] = [];
+            for (let item of this.allPermissions)
+                data["allPermissions"].push(item);
         }
-        if (Array.isArray(this.grantedClaims)) {
-            data["grantedClaims"] = [];
-            for (let item of this.grantedClaims)
-                data["grantedClaims"].push(item);
+        if (Array.isArray(this.grantedPermissions)) {
+            data["grantedPermissions"] = [];
+            for (let item of this.grantedPermissions)
+                data["grantedPermissions"].push(item);
         }
         return data; 
     }
 
-    clone(): ClaimsDto {
+    clone(): AuthDto {
         const json = this.toJSON();
-        let result = new ClaimsDto();
+        let result = new AuthDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IClaimsDto {
-    allClaims: string[] | undefined;
-    grantedClaims: string[] | undefined;
+export interface IAuthDto {
+    allPermissions: string[] | undefined;
+    grantedPermissions: string[] | undefined;
 }
 
 export class LanguageInfoDto implements ILanguageInfoDto {
@@ -2798,7 +2798,7 @@ export class SessionDto implements ISessionDto {
     version: string | undefined;
     userId: string | undefined;
     multiTenancy: MultiTenancyDto;
-    auth: ClaimsDto;
+    auth: AuthDto;
     localization: LocalizationDto;
     menu: string | undefined;
 
@@ -2818,7 +2818,7 @@ export class SessionDto implements ISessionDto {
             this.version = _data["version"];
             this.userId = _data["userId"];
             this.multiTenancy = _data["multiTenancy"] ? MultiTenancyDto.fromJS(_data["multiTenancy"]) : <any>undefined;
-            this.auth = _data["auth"] ? ClaimsDto.fromJS(_data["auth"]) : <any>undefined;
+            this.auth = _data["auth"] ? AuthDto.fromJS(_data["auth"]) : <any>undefined;
             this.localization = _data["localization"] ? LocalizationDto.fromJS(_data["localization"]) : <any>undefined;
             this.menu = _data["menu"];
         }
@@ -2858,7 +2858,7 @@ export interface ISessionDto {
     version: string | undefined;
     userId: string | undefined;
     multiTenancy: MultiTenancyDto;
-    auth: ClaimsDto;
+    auth: AuthDto;
     localization: LocalizationDto;
     menu: string | undefined;
 }

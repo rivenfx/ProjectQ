@@ -16,7 +16,7 @@ export interface IAppInfo {
   localization: ILocalization;
 
   /** 权限 */
-  claims: IClaims;
+  auth: IAuth;
 }
 
 /** 当前登录用户信息 */
@@ -48,9 +48,9 @@ export interface ILanguage {
 }
 
 /** 授权信息 */
-export interface IClaims {
+export interface IAuth {
   /** 所有权限名称 */
-  allClaims: string[];
+  allPermissions: string[];
   /** 拥有的权限名称 */
-  grantedClaims: string[];
+  grantedPermissions: string[];
 }

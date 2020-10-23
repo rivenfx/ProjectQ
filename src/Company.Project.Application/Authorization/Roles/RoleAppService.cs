@@ -18,7 +18,7 @@ using JetBrains.Annotations;
 namespace Company.Project.Authorization.Roles
 {
 
-    [ClaimsAuthorize]
+    [PermissionAuthorize]
     public class RoleAppService : IApplicationService
     {
         readonly RoleManager _roleManager;
@@ -34,7 +34,7 @@ namespace Company.Project.Authorization.Roles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        [PermissionAuthorize(AppPermissions.Role.Query)]
         public virtual async Task<PageResultDto<RoleDto>> GetPage(QueryInput input)
         {
             var query = _roleManager.QueryAsNoTracking
@@ -57,7 +57,7 @@ namespace Company.Project.Authorization.Roles
         /// 查询所有角色
         /// </summary>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        [PermissionAuthorize(AppPermissions.Role.Query)]
         public virtual async Task<ListResultDto<RoleDto>> GetAll()
         {
             var entityList = await _roleManager.QueryAsNoTracking
@@ -73,18 +73,18 @@ namespace Company.Project.Authorization.Roles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Query)]
+        [PermissionAuthorize(AppPermissions.Role.Query)]
         public virtual async Task<RoleEditDto> GetEditById(Guid input)
         {
             var entity = await _roleManager.QueryAsNoTracking
                 .FirstOrDefaultAsync(o => o.Id == input);
 
-            var claims = await _roleManager.GetClaimsByRoleIdAsync(entity?.Id.ToString());
+            var permissions = await _roleManager.GetPermissionsByRoleIdAsync(entity?.Id.ToString());
 
             return new RoleEditDto()
             {
                 EntityDto = entity.Adapt<RoleDto>(),
-                Claims = claims.Select(o => o.Type).ToList()
+                Permissions = permissions.ToList()
             };
 
         }
@@ -94,14 +94,14 @@ namespace Company.Project.Authorization.Roles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Create)]
+        [PermissionAuthorize(AppPermissions.Role.Create)]
         public virtual async Task Create(CreateOrUpdateRoleInput input)
         {
             await _roleManager.CreateAsync(
                 input.EntityDto.Name,
                 input.EntityDto.DisplayName,
                 input.EntityDto.Description,
-                claims: input.Claims?.ToArray()
+                permissions: input.Permissions?.ToArray()
                 );
         }
 
@@ -110,7 +110,7 @@ namespace Company.Project.Authorization.Roles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Edit)]
+        [PermissionAuthorize(AppPermissions.Role.Edit)]
         public virtual async Task Update(CreateOrUpdateRoleInput input)
         {
             if (!input.EntityDto.Id.HasValue)
@@ -118,7 +118,7 @@ namespace Company.Project.Authorization.Roles
                 return;
             }
 
-            await _roleManager.UpdateAsync(input.EntityDto.Id, input.EntityDto.DisplayName, input.EntityDto.Description, input.Claims?.ToArray());
+            await _roleManager.UpdateAsync(input.EntityDto.Id, input.EntityDto.DisplayName, input.EntityDto.Description, input.Permissions?.ToArray());
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Company.Project.Authorization.Roles
         /// </summary>
         /// <param name="idList">角色id集合</param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Delete)]
+        [PermissionAuthorize(AppPermissions.Role.Delete)]
         public virtual async Task Delete(List<Guid> idList)
         {
             if (idList == null || idList.Count == 0)

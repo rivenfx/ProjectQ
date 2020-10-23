@@ -6,8 +6,8 @@
   "texts": {
     // asp.net core identiy
     "NotLoggedIn": "unlogged system",
-    "SomeClaimDoNotExist": "some claims do not exist",
-    "WithoutAnyClaim": "no claim",
+    "SomePermissionDoNotExist": "some permission do not exist",
+    "WithoutAnyPermission": "no permission",
 
     // menu
     "menu.search.placeholder": "search",

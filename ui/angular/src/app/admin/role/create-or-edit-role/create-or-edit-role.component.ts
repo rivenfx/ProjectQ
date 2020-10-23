@@ -13,7 +13,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
   implements OnInit {
 
   role = new RoleDto();
-  claims: string[] = [];
+  permissions: string[] = [];
 
   constructor(
     injector: Injector,
@@ -32,7 +32,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
         }))
         .subscribe((res) => {
           this.role = res.entityDto;
-          this.claims = res.claims;
+          this.permissions = res.permissions;
 
           if (!this.readonly) {
             this.readonly = this.role.isStatic;
@@ -46,7 +46,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
   submitForm(event?: any) {
     const input = new CreateOrUpdateRoleInput({
       entityDto: this.role,
-      claims: this.claims,
+      permissions: this.permissions,
     });
 
     this.loading = true;

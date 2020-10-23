@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using Company.Project.Authorization.AppClaims;
 using Company.Project.Configuration;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +22,7 @@ namespace Company.Project
     {
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
-            // ¶à×â»§ÅäÖÃ
+            // å¤šç§Ÿæˆ·é…ç½®
             MultiTenancyConfig.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
 
 
@@ -37,14 +36,14 @@ namespace Company.Project
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.ServiceProvider.RegisterBasicClaims();
+            context.ServiceProvider.RegisterPermissions();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
 
 
-            #region Riven - ³õÊ¼»¯±¾µØ»¯
+            #region Riven - åˆå§‹åŒ–æœ¬åœ°åŒ–
 
             this.InitLocalization(context);
 
@@ -52,10 +51,10 @@ namespace Company.Project
 
         }
 
-        #region ÄÚ²¿¸¨Öúº¯Êı
+        #region å†…éƒ¨è¾…åŠ©å‡½æ•°
 
         /// <summary>
-        /// ³õÊ¼»¯±¾µØ»¯
+        /// åˆå§‹åŒ–æœ¬åœ°åŒ–
         /// </summary>
         /// <param name="context"></param>
         protected void InitLocalization(ApplicationInitializationContext context)
@@ -69,7 +68,7 @@ namespace Company.Project
             var languageManager = context.ServiceProvider.GetService<ILanguageManager>();
             if (languageManager.GetEnabledLanguages().Count == 0)
             {
-                throw new ArgumentException($"ÆôÓÃÓïÑÔÊıÁ¿Îª0");
+                throw new ArgumentException($"å¯ç”¨è¯­è¨€æ•°é‡ä¸º0");
             }
 
             languageManager.ChangeDefaultLanguage(AppConsts.Settings.DefaultLanguage);

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
-
-using Company.Project.Authorization.AppClaims;
-
+using Company.Project.Authorization.Permissions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -65,7 +63,7 @@ namespace Company.Project.Authorization
 
         Guid? GetImpersonatedUserId()
         {
-            var userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedUserIdNameIdentifier);
+            var userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimsTypes.ImpersonatedUserIdNameIdentifier);
             if (userIdString.IsNullOrWhiteSpace())
             {
                 return null;
@@ -82,7 +80,7 @@ namespace Company.Project.Authorization
 
         string GetImpersonatedTenantNameString()
         {
-            var tenantNameString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimTypes.ImpersonatedTenantNameIdentifier);
+            var tenantNameString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimsTypes.ImpersonatedTenantNameIdentifier);
 
             if (!tenantNameString.IsNullOrWhiteSpace())
             {

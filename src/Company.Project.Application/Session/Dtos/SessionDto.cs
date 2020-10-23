@@ -40,7 +40,7 @@ namespace Company.Project.Session.Dtos
         /// <summary>
         /// 权限
         /// </summary>
-        public ClaimsDto Auth { get; set; }
+        public AuthDto Auth { get; set; }
 
         /// <summary>
         /// 本地化
