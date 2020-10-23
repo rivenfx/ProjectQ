@@ -118,7 +118,7 @@ export class StartupService {
   /** 初始化权限信息 */
   private initAclInfo(input: SessionDto) {
     // 权限
-    this.aclService.setRole(input.auth.grantedClaims);
+    this.aclService.setRole(input.auth.grantedPermissions);
   }
 
   /** 初始化用户信息 */

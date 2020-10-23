@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ArrayService } from '@delon/util';
-import { ClaimsServiceProxy } from '@service-proxies';
+import { PermissionServiceProxy } from '@service-proxies';
 import { ControlComponentBase } from '@shared/common';
 import * as _ from 'loadsh';
 import { NzSafeAny } from 'ng-zorro-antd/core/types/any';
@@ -43,30 +43,29 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
   constructor(
     injector: Injector,
     public arraySer: ArrayService,
-    public claimsSer: ClaimsServiceProxy,
+    public permissionApiSer: PermissionServiceProxy,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.loading = true;
-    this.claimsSer.getAllClaimsWithTree()
+    this.permissionApiSer.getAllPermissionsWithTree()
       .pipe(finalize(() => {
         this.loading = false;
       }))
       .subscribe((res) => {
 
-        res.forEach(o => {
-          o.claim = this.l(o.claim);
+        (res as any[]).forEach(o => {
+          o.displayName = this.l(o.name);
         });
-
         this.treeData = this.arraySer.arrToTreeNode(res, {
-          idMapName: 'claim',
+          idMapName: 'name',
           parentIdMapName: 'parent',
-          titleMapName: 'claim',
+          titleMapName: 'displayName',
           cb: (item: NzSafeAny, parent: NzSafeAny, deep: number) => {
 
-          }
+          },
         });
 
         if (Array.isArray(this.value)) {
