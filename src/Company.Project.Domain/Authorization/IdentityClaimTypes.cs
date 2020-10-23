@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Company.Project.Authorization.Permissions
+namespace Company.Project.Authorization
 {
     /// <summary>
-    /// 应用的Claims类型键值
+    /// asp.net core identity ClaimType const
     /// </summary>
-    public static class AppClaimsTypes
+    public static class IdentityClaimTypes
     {
         /// <summary>
         /// 租户名称 键
@@ -23,7 +23,5 @@ namespace Company.Project.Authorization.Permissions
         /// 模拟登录租户名称 键
         /// </summary>
         public const string ImpersonatedTenantNameIdentifier = "RivenFx.ImpersonatedTenantIdNameIdentifier";
-
-
     }
 }
