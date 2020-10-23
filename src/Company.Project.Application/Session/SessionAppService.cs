@@ -90,7 +90,22 @@ namespace Company.Project.Session
         public async Task<ClaimsDto> GetClaims()
         {
             var claimsDto = new ClaimsDto();
-            //claimsDto.AllClaims = this._claimsManager.GetAll().ToList();
+
+            // 不同情况返回不同的claim
+            // 租户不为空时
+            var allClaims = this._claimsManager.GetAll();
+            if (!string.IsNullOrWhiteSpace(_appSession.TenantName) && MultiTenancyConfig.IsEnabled)
+            {
+                claimsDto.AllClaims = allClaims
+                    .Where(o => o.Scope != Riven.Identity.Authorization.ClaimsAuthorizeScope.Host)
+                    .Select(o => o.Name)
+                    .ToList();
+            }
+            else
+            {
+                claimsDto.AllClaims = allClaims.Select(o => o.Name).ToList();
+
+            }
 
             // 已登录
             if (_appSession.UserId.HasValue)

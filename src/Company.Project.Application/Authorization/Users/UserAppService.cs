@@ -123,7 +123,7 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="idList">用户id集合</param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.Role.Delete)]
+        [ClaimsAuthorize(AppClaimsConsts.User.Delete)]
         public virtual async Task Delete(List<Guid> idList)
         {
             if (idList == null || idList.Count == 0)

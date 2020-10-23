@@ -30,20 +30,18 @@ namespace Company.Project.Authorization.Claims
 
         public async Task<List<string>> GetAllClaims()
         {
-            var claimItemType = _appSession.TenantName.IsNullOrWhiteSpace() ? ClaimItemType.Host : ClaimItemType.Tenant;
+            await Task.Yield();
 
-            return await Task.FromResult(
-                _claimsManager.GetAll(claimItemType).Select(o => o.Claim).ToList()
-                );
+
+            return _claimsManager.GetAll().Select(o => o.Name).ToList();
         }
 
         public async Task<List<ClaimItemDto>> GetAllClaimsWithTree()
         {
-            var claimItemType = _appSession.TenantName.IsNullOrWhiteSpace() ? ClaimItemType.Host : ClaimItemType.Tenant;
+            await Task.Yield();
 
-            return await Task.FromResult(
-                _claimsManager.GetAll(claimItemType).ProjectTo<ClaimItemDto>().ToList()
-                );
+
+            return _claimsManager.GetAll().ProjectTo<ClaimItemDto>().ToList();
         }
 
     }
