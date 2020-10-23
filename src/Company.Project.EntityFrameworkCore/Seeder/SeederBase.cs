@@ -42,7 +42,7 @@ namespace Company.Project.Seeder
         protected virtual async Task<Role> CreateRoles(DbContext dbContext, string tenantName)
         {
             var roleStore = dbContext.Set<Role>();
-            var roleClaimStore = dbContext.Set<RoleClaim>();
+            var roleClaimStore = dbContext.Set<RolePermission>();
 
 
             var systemRole = await roleStore.IgnoreQueryFilters()
@@ -82,7 +82,7 @@ namespace Company.Project.Seeder
             }
             foreach (var item in claimItems)
             {
-                roleClaims.Add(new RoleClaim()
+                roleClaims.Add(new RolePermission()
                 {
                     RoleId = systemRole.Id,
                     TenantName = tenantName,
