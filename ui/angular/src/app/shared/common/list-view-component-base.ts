@@ -168,12 +168,12 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
     // 获取筛选条件配置名称名称
     const activatedRoute = injector.get(ActivatedRoute);
-    if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.claims) {
-      const claims = activatedRoute.snapshot.data.claims;
-      if (Array.isArray(claims) && claims.length > 0) {
-        this.pageName = claims[0];
-      } else if (typeof (claims) === 'string') {
-        this.pageName = claims;
+    if (activatedRoute.snapshot.data && activatedRoute.snapshot.data.permissions) {
+      const permissions = activatedRoute.snapshot.data.permissions;
+      if (Array.isArray(permissions) && permissions.length > 0) {
+        this.pageName = permissions[0];
+      } else if (typeof (permissions) === 'string') {
+        this.pageName = permissions;
       }
     }
 

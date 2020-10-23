@@ -29,9 +29,9 @@ namespace Company.Project.Database.Extenstions
                 // 创建复合索引
                 entityBuilder.HasIndex(o => new { o.NormalizedName, o.TenantName }).IsUnique();
             });
-            modelBuilder.Entity<RoleClaim>((entityBuilder) =>
+            modelBuilder.Entity<RolePermission>((entityBuilder) =>
             {
-                entityBuilder.ToTable($"{nameof(RoleClaim)}s");
+                entityBuilder.ToTable($"{nameof(RolePermission)}s");
             });
 
             modelBuilder.Entity<User>((entityBuilder) =>
@@ -55,9 +55,9 @@ namespace Company.Project.Database.Extenstions
                 })
                 .IsUnique();
             });
-            modelBuilder.Entity<UserClaim>((entityBuilder) =>
+            modelBuilder.Entity<UserPermission>((entityBuilder) =>
             {
-                entityBuilder.ToTable($"{nameof(UserClaim)}s");
+                entityBuilder.ToTable($"{nameof(UserPermission)}s");
             });
             modelBuilder.Entity<UserLogin>((entityBuilder) =>
             {

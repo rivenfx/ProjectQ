@@ -14,7 +14,7 @@ export const APIS = [
   ServiceProxies.RoleServiceProxy,
   ServiceProxies.TenantServiceProxy,
   ServiceProxies.SessionServiceProxy,
-  ServiceProxies.ClaimsServiceProxy,
+  ServiceProxies.PermissionServiceProxy,
   ServiceProxies.DynamicPageServiceProxy,
 ];
 

@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Company.Project.Authorization.AppClaims
+namespace Company.Project.Authorization.Permissions
 {
     /// <summary>
     /// 应用的Claims类型键值
     /// </summary>
-    public static class AppClaimTypes
+    public static class AppClaimsTypes
     {
         /// <summary>
         /// 租户名称 键

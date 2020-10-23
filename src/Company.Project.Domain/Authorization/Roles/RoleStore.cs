@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using Riven.Extensions;
@@ -10,7 +10,7 @@ using System;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleStore<TDbContext> : AppRoleStore<Role, TDbContext, Guid, UserRole, RoleClaim>
+    public class RoleStore<TDbContext> : AppRoleStore<Role, TDbContext, Guid, UserRole, RolePermission>
         where TDbContext : DbContext
     {
         protected readonly IUnitOfWorkManager _unitOfWorkManager;

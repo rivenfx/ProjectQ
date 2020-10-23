@@ -4,11 +4,12 @@ using Riven.Identity.Roles;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleClaim : AppRoleClaim<Guid>, IEntity<int>, IFullAudited, IMayHaveTenant
+    public class RolePermission : AppRolePermission<Guid>, IEntity<int>, IFullAudited, IMayHaveTenant
     {
         public virtual string Creator { get; set; }
         public virtual DateTime CreationTime { get; set; }
@@ -17,8 +18,8 @@ namespace Company.Project.Authorization.Roles
         public virtual string Deleter { get; set; }
         public virtual DateTime? DeletionTime { get; set; }
         public virtual bool IsDeleted { get; set; }
-
         public virtual string TenantName { get; set; }
+
         public virtual bool EntityEquals(object obj)
         {
             return EntityHelper.EntityEquals(this, obj);

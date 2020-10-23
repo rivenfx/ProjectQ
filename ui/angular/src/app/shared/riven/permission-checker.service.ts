@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ACLService } from '@delon/acl';
-import { IAppInfo, IClaims } from './interfaces';
+import { IAuth } from '@shared/riven/interfaces';
 
 @Injectable()
 export class PermissionCheckerService {
@@ -85,10 +85,10 @@ export class PermissionCheckerService {
   }
 
   /** 填充数据 */
-  extend(input: IClaims) {
+  extend(input: IAuth) {
     const permissions: string[] = [];
     // tslint:disable-next-line:forin
-    for (const permission in input.grantedClaims) {
+    for (const permission in input.grantedPermissions) {
       permissions.push(permission);
     }
     this.addPermission(permissions);

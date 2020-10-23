@@ -22,9 +22,9 @@ using System.Threading.Tasks;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleManager : RoleManager<Role>, IRoleClaimAccessor
+    public class RoleManager : RoleManager<Role>, IRolePermissionAccessor
     {
-        static IList<Claim> _nullRoleClaims = new List<Claim>();
+        static IEnumerable<string> _nullRoleClaims = new List<string>();
 
 
         public IQueryable<Role> Query => this.Roles.AsNoTracking();
@@ -46,15 +46,15 @@ namespace Company.Project.Authorization.Roles
         }
 
         /// <summary>
-        /// ´´½¨½ÇÉ«
+        /// åˆ›å»ºè§’è‰²
         /// </summary>
-        /// <param name="name">½ÇÉ«Ãû³Æ(Î¨Ò»±àÂë)</param>
-        /// <param name="displayName">ÏÔÊ¾Ãû³Æ</param>
-        /// <param name="description">ÃèÊö</param>
-        /// <param name="isStatic">ÊÇ·ñÎªÄÚÖÃ</param>
-        /// <param name="claims">½ÇÉ«ÓµÓĞµÄclaim¼¯ºÏ</param>
+        /// <param name="name">è§’è‰²åç§°(å”¯ä¸€ç¼–ç )</param>
+        /// <param name="displayName">æ˜¾ç¤ºåç§°</param>
+        /// <param name="description">æè¿°</param>
+        /// <param name="isStatic">æ˜¯å¦ä¸ºå†…ç½®</param>
+        /// <param name="permissions">è§’è‰²æ‹¥æœ‰çš„ Permission é›†åˆ</param>
         /// <returns></returns>
-        public async Task<Role> CreateAsync([NotNull] string name, [NotNull] string displayName, string description, bool isStatic = false,  params string[] claims)
+        public async Task<Role> CreateAsync([NotNull] string name, [NotNull] string displayName, string description, bool isStatic = false, params string[] permissions)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -73,23 +73,23 @@ namespace Company.Project.Authorization.Roles
                 {
                     detiles.AppendLine($"{error.Code}: {error.Description}");
                 }
-                throw new UserFriendlyException("´´½¨½ÇÉ«Ê±·¢Éú´íÎó", detiles.ToString());
+                throw new UserFriendlyException("åˆ›å»ºè§’è‰²æ—¶å‘ç”Ÿé”™è¯¯", detiles.ToString());
             }
 
-            await this.AddIdentityClaimsAsync(role, claims.ToArray());
+            await this.AddIdentityPermissionsAsync(role, permissions.ToArray());
 
             return role;
         }
 
         /// <summary>
-        /// ¸üĞÂ½ÇÉ«
+        /// æ›´æ–°è§’è‰²
         /// </summary>
-        /// <param name="id">½ÇÉ«id</param>
-        /// <param name="displayName">ÏÔÊ¾Ãû³Æ</param>
-        /// <param name="description">ÃèÊö</param>
-        /// <param name="claims">½ÇÉ«ÓµÓĞµÄclaim¼¯ºÏ</param>
+        /// <param name="id">è§’è‰²id</param>
+        /// <param name="displayName">æ˜¾ç¤ºåç§°</param>
+        /// <param name="description">æè¿°</param>
+        /// <param name="permissions">è§’è‰²æ‹¥æœ‰çš„ Permission é›†åˆ</param>
         /// <returns></returns>
-        public async Task<Role> UpdateAsync(Guid? id, [NotNull] string displayName, string description, params string[] claims)
+        public async Task<Role> UpdateAsync(Guid? id, [NotNull] string displayName, string description, params string[] permissions)
         {
             Check.NotNull(id, nameof(id));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -97,7 +97,7 @@ namespace Company.Project.Authorization.Roles
             var role = await this.FindByIdAsync(id.Value.ToString());
             if (role == null)
             {
-                throw new UserFriendlyException($"Î´ÕÒµ½½ÇÉ«: {displayName}");
+                throw new UserFriendlyException($"æœªæ‰¾åˆ°è§’è‰²: {displayName}");
             }
 
             role.DisplayName = displayName;
@@ -111,19 +111,19 @@ namespace Company.Project.Authorization.Roles
                 {
                     detiles.AppendLine($"{error.Code}: {error.Description}");
                 }
-                throw new UserFriendlyException("´´½¨½ÇÉ«Ê±·¢Éú´íÎó", detiles.ToString());
+                throw new UserFriendlyException("åˆ›å»ºè§’è‰²æ—¶å‘ç”Ÿé”™è¯¯", detiles.ToString());
             }
 
-            await this.AddIdentityClaimsAsync(role, claims.ToArray());
+            await this.AddIdentityPermissionsAsync(role, permissions.ToArray());
 
             return role;
         }
 
 
         /// <summary>
-        /// ¸ù¾İÌõ¼şÉ¾³ıÓÃ»§
+        /// æ ¹æ®æ¡ä»¶åˆ é™¤ç”¨æˆ·
         /// </summary>
-        /// <param name="predicate">Ìõ¼ş±í´ïÊ½</param>
+        /// <param name="predicate">æ¡ä»¶è¡¨è¾¾å¼</param>
         /// <returns></returns>
         public virtual async Task<IEnumerable<Role>> DeleteAsync([NotNull] Expression<Func<Role, bool>> predicate)
         {
@@ -145,7 +145,7 @@ namespace Company.Project.Authorization.Roles
                     {
                         detiles.AppendLine($"{error.Code}: {error.Description}");
                     }
-                    throw new UserFriendlyException("É¾³ı½ÇÉ«Ê§°Ü!", detiles.ToString());
+                    throw new UserFriendlyException("åˆ é™¤è§’è‰²å¤±è´¥!", detiles.ToString());
                 }
             }
 
@@ -153,25 +153,25 @@ namespace Company.Project.Authorization.Roles
         }
 
         /// <summary>
-        /// ¸ø½ÇÉ«Ìí¼Ó identity µÄ claims
+        /// ç»™è§’è‰²æ·»åŠ  identity çš„ permission
         /// </summary>
         /// <param name="role"></param>
-        /// <param name="claims"></param>
+        /// <param name="permissions"></param>
         /// <returns></returns>
-        public async Task AddIdentityClaimsAsync(Role role, params string[] claims)
+        public async Task AddIdentityPermissionsAsync(Role role, params string[] permissions)
         {
-            if (role == null || claims == null || claims.Length == 0)
+            if (role == null || permissions == null || permissions.Length == 0)
             {
                 return;
             }
 
-            var claimsDistinct = claims.Distinct().Where(o => !o.IsNullOrWhiteSpace());
-            if (claimsDistinct.Count() == 0)
+            var permissionsDistinct = permissions.Distinct().Where(o => !o.IsNullOrWhiteSpace());
+            if (permissionsDistinct.Count() == 0)
             {
                 return;
             }
 
-            foreach (var claim in claimsDistinct.ToClaims())
+            foreach (var claim in permissionsDistinct.ToClaims())
             {
                 var identityResult = await this.AddClaimAsync(role, claim);
                 if (!identityResult.Succeeded)
@@ -181,86 +181,86 @@ namespace Company.Project.Authorization.Roles
                     {
                         detiles.AppendLine($"{error.Code}: {error.Description}");
                     }
-                    throw new UserFriendlyException("½ÇÉ«Ìí¼ÓÈ¨ÏŞÊ§°Ü!", detiles.ToString());
+                    throw new UserFriendlyException("è§’è‰²æ·»åŠ æƒé™å¤±è´¥!", detiles.ToString());
                 }
             }
         }
 
         /// <summary>
-        /// ĞŞ¸Ä½ÇÉ«ÓµÓĞµÄ claims
+        /// ä¿®æ”¹è§’è‰²æ‹¥æœ‰çš„ Permission
         /// </summary>
         /// <param name="role"></param>
-        /// <param name="claims"></param>
+        /// <param name="permissions"></param>
         /// <returns></returns>
-        public async Task ChangeIdentityClaimsAsync(Role role, params string[] claims)
+        public async Task ChangeIdentityPermissionsAsync(Role role, params string[] permissions)
         {
             if (role == null)
             {
                 return;
             }
 
-            // ÒÆ³ı½ÇÉ«µ±Ç°ÓµÓĞµÄ identity claims
-            await this.ClearIdentityClaimsAsync(role);
+            // ç§»é™¤è§’è‰²å½“å‰æ‹¥æœ‰çš„ identity permission
+            await this.ClearIdentityPermissionsAsync(role);
 
 
-            // ÊäÈëµÄcliamsÎª¿Õ, ÒÆ³ı½ÇÉ«µ±Ç°ÓµÓĞµÄ identity claims
-            if (claims != null && claims.Length > 0)
+            // è¾“å…¥çš„ permission ä¸ºç©º, ç§»é™¤è§’è‰²å½“å‰æ‹¥æœ‰çš„ identity permission
+            if (permissions != null && permissions.Length > 0)
             {
-                // Ìí¼Ó½ÇÉ«ÓµÓĞµÄ identity claims
-                await this.AddIdentityClaimsAsync(role, claims);
+                // æ·»åŠ è§’è‰²æ‹¥æœ‰çš„ identity permissions
+                await this.AddIdentityPermissionsAsync(role, permissions);
             }
         }
 
         /// <summary>
-        /// ÒÆ³ı½ÇÉ«ÓµÓĞµÄËùÓĞ Identity Claims
+        /// ç§»é™¤è§’è‰²æ‹¥æœ‰çš„æ‰€æœ‰ Permissions
         /// </summary>
         /// <param name="role"></param>
         /// <returns></returns>
-        public async Task ClearIdentityClaimsAsync(Role role)
+        public async Task ClearIdentityPermissionsAsync(Role role)
         {
             Check.NotNull(role, nameof(role));
 
 
-            // ½ÇÉ«µ±Ç°ÓµÓĞµÄ claims
-            var currentlyHasClaims = await this.GetIdentityClaimsAsync(role);
+            // è§’è‰²å½“å‰æ‹¥æœ‰çš„ claims
+            var currentlyHasPermissions = await this.GetIdentityPermissionsAsync(role);
 
-            if (currentlyHasClaims == null || currentlyHasClaims.Count == 0)
+            if (currentlyHasPermissions == null || currentlyHasPermissions.Count == 0)
             {
                 return;
             }
 
 
-            foreach (var claim in currentlyHasClaims)
+            foreach (var permission in currentlyHasPermissions)
             {
-                await this.RemoveClaimAsync(role, claim);
+                await this.RemoveClaimAsync(role, permission);
             }
         }
 
-        public async Task<IList<Claim>> GetIdentityClaimsAsync(Role role)
+        public async Task<IList<Claim>> GetIdentityPermissionsAsync(Role role)
         {
             return await this.GetClaimsAsync(role);
         }
 
-        public async Task<IList<Claim>> GetClaimsByRoleIdAsync([NotNull] string roleId)
+        public async Task<IEnumerable<string>> GetPermissionsByRoleIdAsync([NotNull] string roleId)
         {
             Check.NotNullOrWhiteSpace(roleId, nameof(roleId));
 
             var role = await this.FindByIdAsync(roleId);
 
-            return await this.GetIdentityClaimsAsync(role);
+            return (await this.GetIdentityPermissionsAsync(role)).Select(o => o.Value);
 
         }
 
-        public async Task<IList<Claim>> GetClaimsByRoleNameAsync([NotNull] string roleName)
+        public async Task<IEnumerable<string>> GetPermissionsByRoleNameAsync([NotNull] string roleName)
         {
             Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
 
             var role = await this.FindByNameAsync(roleName);
 
-            return await this.GetIdentityClaimsAsync(role);
+            return (await this.GetIdentityPermissionsAsync(role)).Select(o => o.Value);
         }
 
-        public async Task<IList<Claim>> GetClaimsByRoleNamesAsync([NotNull] string[] roleNames)
+        public async Task<IEnumerable<string>> GetPermissionsByRoleNamesAsync([NotNull] string[] roleNames)
         {
             Check.NotNull(roleNames, nameof(roleNames));
             if (roleNames.Length == 0)
@@ -268,15 +268,15 @@ namespace Company.Project.Authorization.Roles
                 return _nullRoleClaims;
             }
 
-            var result = new List<Claim>();
+            var result = new List<string>();
 
 
 
             foreach (var roleName in roleNames)
             {
-                var roleClaims = await this.GetClaimsByRoleNameAsync(roleName);
+                var rolePermissions = (await this.GetPermissionsByRoleNameAsync(roleName));
 
-                result.AddRange(roleClaims);
+                result.AddRange(rolePermissions);
             }
 
             return result;

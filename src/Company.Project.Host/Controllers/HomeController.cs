@@ -11,7 +11,7 @@ using Riven.Identity.Authorization;
 
 namespace Company.Project.Controllers
 {
-    [ClaimsAuthorize]
+    [PermissionAuthorize]
     public class HomeController : Controller
     {
         public HomeController()
