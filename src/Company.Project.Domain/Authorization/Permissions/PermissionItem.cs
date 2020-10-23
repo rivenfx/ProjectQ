@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Company.Project.Authorization.AppClaims
+namespace Company.Project.Authorization.Permissions
 {
-    public class ClaimItem
+    public class PermissionItem
     {
         static int _sort = 0;
 
@@ -20,13 +20,13 @@ namespace Company.Project.Authorization.AppClaims
 
         public virtual string Name { get; protected set; }
 
-        public virtual ClaimsAuthorizeScope Scope { get; protected set; }
+        public virtual PermissionAuthorizeScope Scope { get; protected set; }
 
         public virtual int Sort { get; protected set; }
 
 
 
-        public ClaimItem([NotNull] string name, string parent = null, ClaimsAuthorizeScope scope = ClaimsAuthorizeScope.Common)
+        public PermissionItem([NotNull] string name, string parent = null, PermissionAuthorizeScope scope = PermissionAuthorizeScope.Common)
         {
             Check.NotNull(name, nameof(name));
 
@@ -46,7 +46,7 @@ namespace Company.Project.Authorization.AppClaims
                 return false;
             }
 
-            if (obj is ClaimItem input)
+            if (obj is PermissionItem input)
             {
                 return input.GetHashCode() == this.GetHashCode();
             }

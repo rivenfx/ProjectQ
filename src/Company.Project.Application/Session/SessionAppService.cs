@@ -1,5 +1,5 @@
 using Company.Project.Authorization;
-using Company.Project.Authorization.AppClaims;
+using Company.Project.Authorization.Permissions;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using Company.Project.Configuration;
@@ -29,17 +29,17 @@ namespace Company.Project.Session
         readonly IAppSession _appSession;
         readonly UserManager _userManager;
         readonly RoleManager _roleManager;
-        readonly IClaimsManager _claimsManager;
+        readonly IPermissionManager _permissionManager;
         readonly IConfiguration _configuration;
         readonly ILanguageManager _languageManager;
 
 
-        public SessionAppService(IAppSession appSession, UserManager userManager, RoleManager roleManager, IClaimsManager claimsManager, IConfiguration configuration, ILanguageManager languageManager)
+        public SessionAppService(IAppSession appSession, UserManager userManager, RoleManager roleManager, IPermissionManager permissionManager, IConfiguration configuration, ILanguageManager languageManager)
         {
             _appSession = appSession;
             _userManager = userManager;
             _roleManager = roleManager;
-            _claimsManager = claimsManager;
+            _permissionManager = permissionManager;
             _configuration = configuration;
             _languageManager = languageManager;
         }
@@ -58,7 +58,7 @@ namespace Company.Project.Session
                 Version = appInfo.Version,
                 UserId = _appSession.UserId?.ToString(),
                 MultiTenancy = this.GetMultiTenancy(),
-                Auth = await this.GetClaims(),
+                Auth = await this.GetAuth(),
                 Localization = this.GetLocalization(),
                 Menu = this.GetMenu()
             };
@@ -87,23 +87,23 @@ namespace Company.Project.Session
             return localzation;
         }
 
-        public async Task<ClaimsDto> GetClaims()
+        public async Task<AuthDto> GetAuth()
         {
-            var claimsDto = new ClaimsDto();
+            var authDto = new AuthDto();
 
-            // 不同情况返回不同的claim
+            // 不同情况返回不同的 Permission
             // 租户不为空时
-            var allClaims = this._claimsManager.GetAll();
+            var all = this._permissionManager.GetAll();
             if (!string.IsNullOrWhiteSpace(_appSession.TenantName) && MultiTenancyConfig.IsEnabled)
             {
-                claimsDto.AllClaims = allClaims
-                    .Where(o => o.Scope != Riven.Identity.Authorization.ClaimsAuthorizeScope.Host)
+                authDto.AllPermissions = all
+                    .Where(o => o.Scope != Riven.Identity.Authorization.PermissionAuthorizeScope.Host)
                     .Select(o => o.Name)
                     .ToList();
             }
             else
             {
-                claimsDto.AllClaims = allClaims.Select(o => o.Name).ToList();
+                authDto.AllPermissions = all.Select(o => o.Name).ToList();
 
             }
 
@@ -112,22 +112,22 @@ namespace Company.Project.Session
             {
                 var userIdString = _appSession.UserId.Value.ToString();
 
-                var userClaims = (await _userManager.GetClaimsByUserIdAsync(userIdString))
+                var userPermissions = (await _userManager.GetPermissionsByUserIdAsync(userIdString))
                     .Select(o => o.Value);
 
                 var userRoleNames = (await _userManager.GetRolesByUserIdAsync(userIdString));
-                var roleClaims = (await _roleManager.GetClaimsByRoleNamesAsync(userRoleNames.ToArray()))
+                var rolePermissions = (await _roleManager.GetPermissionsByRoleNamesAsync(userRoleNames.ToArray()))
                     .Select(o => o.Value);
 
-                claimsDto.GrantedClaims = userClaims.Union(roleClaims).Distinct().ToList();
+                authDto.GrantedPermissions = userPermissions.Union(rolePermissions).Distinct().ToList();
 
             }
             else // 未登录
             {
-                claimsDto.GrantedClaims = new List<string>();
+                authDto.GrantedPermissions = new List<string>();
             }
 
-            return claimsDto;
+            return authDto;
         }
 
         public MultiTenancyDto GetMultiTenancy()

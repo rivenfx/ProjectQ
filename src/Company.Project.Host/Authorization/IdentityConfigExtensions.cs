@@ -51,11 +51,11 @@ namespace Company.Project.Authorization
                 .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role, Guid>>()
                 .AddDefaultTokenProviders();
 
-            // 添加 Riven.Identity ClaimAccessor
-            services.AddRivenIdentityClaimAccesssor<RoleManager, UserManager>();
+            // 添加 Riven.Identity User and Role PermissionAccessor
+            services.AddRivenIdentityPermissionAccesssor<RoleManager, UserManager>();
 
-            // 添加 Claims 授权方式
-            services.AddRivenAspNetCoreClaimsAuthorization();
+            // 添加 Permission 授权方式
+            services.AddRivenAspNetCorePermissionAuthorization();
 
             return identityBuilder;
         }

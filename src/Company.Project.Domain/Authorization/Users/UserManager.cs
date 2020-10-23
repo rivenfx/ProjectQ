@@ -27,7 +27,7 @@ namespace Company.Project.Authorization.Users
     /// <summary>
     /// 用户管理器
     /// </summary>
-    public class UserManager : UserManager<User>, IUserRoleClaimAccessor
+    public class UserManager : UserManager<User>, IUserRolePermissionAccessor
     {
         public IQueryable<User> Query => this.Users;
         public IQueryable<User> QueryAsNoTracking => this.Users.AsNoTracking();
@@ -165,24 +165,24 @@ namespace Company.Project.Authorization.Users
         /// 添加 claims
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="claims"></param>
+        /// <param name="permissions"></param>
         /// <returns></returns>
-        public virtual async Task AddClaimsAsync([NotNull] User user, params string[] claims)
+        public virtual async Task AddPermissionsAsync([NotNull] User user, params string[] permissions)
         {
             Check.NotNull(user, nameof(user));
 
-            if (claims == null || claims.Length == 0)
+            if (permissions == null || permissions.Length == 0)
             {
                 return;
             }
 
-            var claimsDistinct = claims.Distinct().Where(o => !o.IsNullOrWhiteSpace());
-            if (claimsDistinct.Count() == 0)
+            var permissionsDistinct = permissions.Distinct().Where(o => !o.IsNullOrWhiteSpace());
+            if (permissionsDistinct.Count() == 0)
             {
                 return;
             }
 
-            var identityResult = await this.AddClaimsAsync(user, claimsDistinct.ToClaims());
+            var identityResult = await this.AddClaimsAsync(user, permissionsDistinct.ToClaims());
 
             if (!identityResult.Succeeded)
             {
@@ -307,7 +307,7 @@ namespace Company.Project.Authorization.Users
             return FindByNameOrEmailOrPhoneNumberAsync(email);
         }
 
-        public async Task<IList<Claim>> GetClaimsByUserIdAsync([NotNull] string userId)
+        public async Task<IList<Claim>> GetPermissionsByUserIdAsync([NotNull] string userId)
         {
             Check.NotNullOrWhiteSpace(userId, nameof(userId));
 
@@ -316,7 +316,7 @@ namespace Company.Project.Authorization.Users
             return await this.GetClaimsAsync(user);
         }
 
-        public async Task<IList<Claim>> GetClaimsByUserNameAsync([NotNull] string userName)
+        public async Task<IList<Claim>> GetPermissionsByUserNameAsync([NotNull] string userName)
         {
             Check.NotNullOrWhiteSpace(userName, nameof(userName));
 

@@ -3,9 +3,9 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
-namespace Company.Project.Authorization.AppClaims
+namespace Company.Project.Authorization.Permissions
 {
-    public interface IClaimsManager
+    public interface IPermissionManager
     {
         /// <summary>
         /// 初始化
@@ -16,21 +16,21 @@ namespace Company.Project.Authorization.AppClaims
         /// 查询
         /// </summary>
         /// <returns></returns>
-        IQueryable<ClaimItem> GetAll();
+        IQueryable<PermissionItem> GetAll();
 
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="claims"></param>
-        void Add(params ClaimItem[] claims);
+        void Add(params PermissionItem[] claims);
 
 
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="claims"></param>
-        void Remove(params ClaimItem[] claims);
+        void Remove(params PermissionItem[] claims);
 
 
         /// <summary>

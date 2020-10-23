@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Company.Project.Common.DynamicPage
 {
-    [ClaimsAuthorize]
+    [PermissionAuthorize]
     public class DynamicPageAppService : IApplicationService
     {
 

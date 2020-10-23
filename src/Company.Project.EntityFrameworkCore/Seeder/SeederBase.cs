@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
-using Company.Project.Authorization.AppClaims;
 using System.Linq.Dynamic.Core;
+using Company.Project.Authorization.Permissions;
 
 namespace Company.Project.Seeder
 {
@@ -22,14 +22,14 @@ namespace Company.Project.Seeder
 
         protected readonly UserManager _userManager;
 
-        protected readonly IClaimsManager _claimsManager;
+        protected readonly IPermissionManager _permissionManager;
 
         public SeederBase(IServiceProvider serviceProvider)
         {
             _lookupNormalizer = serviceProvider.GetService<ILookupNormalizer>();
             _passwordHasher = serviceProvider.GetService<IPasswordHasher<User>>();
             _userManager = serviceProvider.GetService<UserManager>();
-            _claimsManager = serviceProvider.GetService<IClaimsManager>();
+            _permissionManager = serviceProvider.GetService<IPermissionManager>();
         }
 
 
@@ -42,7 +42,7 @@ namespace Company.Project.Seeder
         protected virtual async Task<Role> CreateRoles(DbContext dbContext, string tenantName)
         {
             var roleStore = dbContext.Set<Role>();
-            var roleClaimStore = dbContext.Set<RolePermission>();
+            var rolePermissionStore = dbContext.Set<RolePermission>();
 
 
             var systemRole = await roleStore.IgnoreQueryFilters()
@@ -65,24 +65,24 @@ namespace Company.Project.Seeder
             }
 
             // 查询现有权限
-            var roleClaims = await roleClaimStore.IgnoreQueryFilters()
+            var rolePermissions = await rolePermissionStore.IgnoreQueryFilters()
                 .Where(o => o.RoleId == systemRole.Id && o.TenantName == tenantName)
                 .ToListAsync();
 
             // 移除权限
-            roleClaimStore.RemoveRange(roleClaims);
+            rolePermissionStore.RemoveRange(rolePermissions);
 
 
             // 添加权限
-            roleClaims.Clear();
-            var claimItems = _claimsManager.GetAll();
+            rolePermissions.Clear();
+            var permissionItems = _permissionManager.GetAll();
             if (!string.IsNullOrWhiteSpace(tenantName))
             {
-                claimItems = claimItems.Where(o => o.Scope == Riven.Identity.Authorization.ClaimsAuthorizeScope.Common);
+                permissionItems = permissionItems.Where(o => o.Scope == Riven.Identity.Authorization.PermissionAuthorizeScope.Common);
             }
-            foreach (var item in claimItems)
+            foreach (var item in permissionItems)
             {
-                roleClaims.Add(new RolePermission()
+                rolePermissions.Add(new RolePermission()
                 {
                     RoleId = systemRole.Id,
                     TenantName = tenantName,
@@ -90,7 +90,7 @@ namespace Company.Project.Seeder
                     ClaimValue = item.Name
                 });
             }
-            await roleClaimStore.AddRangeAsync(roleClaims);
+            await rolePermissionStore.AddRangeAsync(rolePermissions);
 
             await dbContext.SaveChangesAsync();
             return systemRole;

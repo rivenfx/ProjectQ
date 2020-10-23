@@ -1,5 +1,3 @@
-using Company.Project.Authorization.AppClaims;
-
 using Microsoft.Extensions.DependencyInjection;
 
 using Riven.Application;
@@ -12,13 +10,14 @@ using System.Text;
 using System.Linq;
 using Riven.Identity.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Company.Project.Authorization.Permissions;
 
 namespace Company.Project
 {
     /// <summary>
     /// 应用权限常量
     /// </summary>
-    public static class AppClaimsConsts
+    public static class AppPermissions
     {
         public const string RootNode = "root";
 
@@ -48,14 +47,14 @@ namespace Company.Project
 
 
         /// <summary>
-        /// 注册 claims
+        /// 注册 Permission
         /// </summary>
         /// <param name="serviceProvider">注入容器</param>
         /// <returns></returns>
-        public static IServiceProvider RegisterBasicClaims(this IServiceProvider serviceProvider)
+        public static IServiceProvider RegisterPermissions(this IServiceProvider serviceProvider)
         {
-            var claimsManager = serviceProvider.GetRequiredService<IClaimsManager>();
-            claimsManager.Init();
+            var permissionManager = serviceProvider.GetRequiredService<IPermissionManager>();
+            permissionManager.Init();
             return serviceProvider;
         }
     }

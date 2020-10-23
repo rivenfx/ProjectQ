@@ -8,8 +8,8 @@
 
     // asp.net core identiy
     "NotLoggedIn": "未登录系统",
-    "SomeClaimDoNotExist": "某些Claim不存在",
-    "WithoutAnyClaim": "没有任何Claim",
+    "SomePermissionDoNotExist": "某些权限不存在",
+    "WithoutAnyPermission": "没有任何权限",
 
     // menu
     "menu.search.placeholder": "搜索",

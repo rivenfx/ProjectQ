@@ -6,16 +6,16 @@ using Riven.Dependency;
 using Riven.Identity.Authorization;
 using Riven.Modular;
 
-namespace Company.Project.Authorization.AppClaims
+namespace Company.Project.Authorization.Permissions
 {
-    public class ClaimsManager : IClaimsManager, ISingletonDependency
+    public class PermissionManager : IPermissionManager, ISingletonDependency
     {
         bool _inited;
-        List<ClaimItem> _claims = new List<ClaimItem>();
+        List<PermissionItem> _permissions = new List<PermissionItem>();
 
         readonly IServiceProvider _serviceProvider;
 
-        public ClaimsManager(IServiceProvider serviceProvider)
+        public PermissionManager(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -34,63 +34,63 @@ namespace Company.Project.Authorization.AppClaims
             }
         }
 
-        public void Add(params ClaimItem[] claims)
+        public void Add(params PermissionItem[] permissions)
         {
-            if (claims == null || claims.Length == 0)
+            if (permissions == null || permissions.Length == 0)
             {
                 return;
             }
-            _claims = _claims.Union(claims).Distinct().ToList();
+            _permissions = _permissions.Union(permissions).Distinct().ToList();
         }
 
         public void Clear()
         {
-            _claims.Clear();
+            _permissions.Clear();
         }
 
-        public IQueryable<ClaimItem> GetAll()
+        public IQueryable<PermissionItem> GetAll()
         {
             // 未开启多租户只返回公共的
             if (!Riven.MultiTenancy.MultiTenancyConfig.IsEnabled)
             {
-                return _claims.Where(o => o.Scope == ClaimsAuthorizeScope.Common)
+                return _permissions.Where(o => o.Scope == PermissionAuthorizeScope.Common)
                             .OrderBy(o => o.Sort)
                             .AsQueryable();
             }
 
             // 开启多租户则返回所有的
-            return _claims
+            return _permissions
                 .OrderBy(o => o.Sort)
                 .AsQueryable();
         }
 
 
 
-        public void Remove(params ClaimItem[] claims)
+        public void Remove(params PermissionItem[] permissions)
         {
-            if (claims == null || claims.Length == 0)
+            if (permissions == null || permissions.Length == 0)
             {
                 return;
             }
-            _claims = _claims.Except(claims).ToList();
+            _permissions = _permissions.Except(permissions).ToList();
         }
 
-        #region 从模块初始化 Claims
+        #region 从模块初始化 Permissions
 
         /// <summary>
         /// 根据模块初始化权限
         /// </summary>
         /// <param name="moduleManager">模块管理器</param>
-        /// <param name="claimsManager">claim管理器</param>
-        static void InitForModules(IModuleManager moduleManager, IClaimsManager claimsManager)
+        /// <param name="permissionManager">claim管理器</param>
+        static void InitForModules(IModuleManager moduleManager, IPermissionManager permissionManager)
         {
             // 反射使用的几个类型
-            var claimsAuthorizeAttrType = typeof(ClaimsAuthorizeAttribute);
+            var claimsAuthorizeAttrType = typeof(PermissionAuthorizeAttribute);
             var controllerType = typeof(Microsoft.AspNetCore.Mvc.ControllerBase);
             var applicationServiceName = nameof(Riven.Application.IApplicationService);
 
-            // claim 字典集合
-            var claimDict = new Dictionary<ClaimInfo, ClaimsAuthorizeScope>();
+            // Permission 字典集合
+            var permissionDict = new Dictionary<PermissionInfo, PermissionAuthorizeScope>();
 
 
             // 模块信息
@@ -123,7 +123,7 @@ namespace Company.Project.Authorization.AppClaims
                     var methodInfos = type.GetMethods();
                     foreach (var methodInfo in methodInfos)
                     {
-                        // 获取方法上的 ClaimsAuthorizeAttribute 特性
+                        // 获取方法上的 PermissionAuthorizeAttribute 特性
                         var attrs = methodInfo
                             .GetCustomAttributes(claimsAuthorizeAttrType, false);
                         if (attrs.Length == 0)
@@ -131,89 +131,89 @@ namespace Company.Project.Authorization.AppClaims
                             continue;
                         }
 
-                        // 将特性中的Claim数据加入字典
-                        var claimsAuthorizeAttr = attrs[0] as ClaimsAuthorizeAttribute;
-                        var newItem = default(ClaimInfo);
-                        foreach (var claim in claimsAuthorizeAttr.Claims)
+                        // 将特性中的 Permission 数据加入字典
+                        var permissionAuthorizeAttr = attrs[0] as PermissionAuthorizeAttribute;
+                        var newItem = default(PermissionInfo);
+                        foreach (var permission in permissionAuthorizeAttr.Permissions)
                         {
-                            newItem = new ClaimInfo(claim, claimsAuthorizeAttr.Scope);
-                            if (claimDict.ContainsKey(newItem))
+                            newItem = new PermissionInfo(permission, permissionAuthorizeAttr.Scope);
+                            if (permissionDict.ContainsKey(newItem))
                             {
                                 continue;
                             }
-                            claimDict[newItem] = claimsAuthorizeAttr.Scope;
+                            permissionDict[newItem] = permissionAuthorizeAttr.Scope;
                         }
                     }
                 }
             }
 
             // 将数据进行分组
-            var groupClaims = claimDict.GroupBy(o => o.Value)
+            var groupPermissions = permissionDict.GroupBy(o => o.Value)
                 .Select(o =>
                 {
                     return new
                     {
                         Scope = o.Key,
-                        Claims = o.AsEnumerable().Select(p => p.Key)
+                        Permissions = o.AsEnumerable().Select(p => p.Key)
                     };
                 })
                 .ToList();
 
             // 遍历分组后的数据并生成结构添加到管理器
-            var claimItemDict = new Dictionary<ClaimItem, string>();
-            claimItemDict.Add(new ClaimItem(AppClaimsConsts.RootNode, null, ClaimsAuthorizeScope.Common), string.Empty);
-            foreach (var groupClaim in groupClaims)
+            var permissionItemDict = new Dictionary<PermissionItem, string>();
+            permissionItemDict.Add(new PermissionItem(AppPermissions.RootNode, null, PermissionAuthorizeScope.Common), string.Empty);
+            foreach (var groupPermission in groupPermissions)
             {
-                foreach (var claim in groupClaim.Claims)
+                foreach (var permission in groupPermission.Permissions)
                 {
-                    foreach (var claimItem in ClaimsToTree(claim.Name, groupClaim.Scope, AppClaimsConsts.RootNode))
+                    foreach (var permissionItem in PermissionToTree(permission.Name, groupPermission.Scope, AppPermissions.RootNode))
                     {
-                        if (claimItemDict.ContainsKey(claimItem))
+                        if (permissionItemDict.ContainsKey(permissionItem))
                         {
                             continue;
                         }
 
-                        claimItemDict.Add(claimItem, string.Empty);
+                        permissionItemDict.Add(permissionItem, string.Empty);
                     }
                 }
-                claimsManager.Add(claimItemDict.Keys.ToArray());
-                claimItemDict.Clear();
+                permissionManager.Add(permissionItemDict.Keys.ToArray());
+                permissionItemDict.Clear();
             }
         }
 
         /// <summary>
-        /// claim 转树形数据结构
+        /// Permission 转树形数据结构
         /// </summary>
-        /// <param name="claim"></param>
+        /// <param name="permission"></param>
         /// <param name="scope"></param>
         /// <param name="defaultParent"></param>
         /// <returns></returns>
-        static List<ClaimItem> ClaimsToTree(string claim, ClaimsAuthorizeScope scope, string defaultParent = null)
+        static List<PermissionItem> PermissionToTree(string permission, PermissionAuthorizeScope scope, string defaultParent = null)
         {
-            var result = new List<ClaimItem>();
-            var claimArray = ClaimToArray(claim).Reverse<string>().ToList();
-            if (claimArray.Count == 0)
+            var result = new List<PermissionItem>();
+            var permissionArray = PermissionToArray(permission).Reverse<string>().ToList();
+            if (permissionArray.Count == 0)
             {
                 return result;
             }
 
 
-            var maxCount = claimArray.Count;
+            var maxCount = permissionArray.Count;
             var index = 0;
             var parentIndex = index + 1;
             while (true)
             {
-                var newClaim = claimArray[index];
+                var newPermission = permissionArray[index];
                 if (maxCount == parentIndex)
                 {
                     result.Add(
-                        new ClaimItem(newClaim, defaultParent, scope)
+                        new PermissionItem(newPermission, defaultParent, scope)
                         );
                     break;
                 }
 
                 result.Add(
-                       new ClaimItem(newClaim, claimArray[parentIndex], scope)
+                       new PermissionItem(newPermission, permissionArray[parentIndex], scope)
                        );
 
                 index++;
@@ -225,25 +225,25 @@ namespace Company.Project.Authorization.AppClaims
         }
 
         /// <summary>
-        /// claim 转数组，如 "user.create" 输出 ["user","user.create"]
+        /// Permission 转数组，如 "user.create" 输出 ["user","user.create"]
         /// </summary>
-        /// <param name="claim">claim</param>
+        /// <param name="permission">claim</param>
         /// <returns></returns>
-        static List<string> ClaimToArray(string claim)
+        static List<string> PermissionToArray(string permission)
         {
             var result = new List<string>();
 
             var index = 0;
             while (true)
             {
-                index = claim.IndexOf(".", index);
+                index = permission.IndexOf(".", index);
                 if (index == -1)
                 {
-                    result.Add(claim);
+                    result.Add(permission);
                     break;
                 }
 
-                var subStr = claim.Substring(0, index);
+                var subStr = permission.Substring(0, index);
                 result.Add(subStr);
                 index += 1;
             }
@@ -251,15 +251,15 @@ namespace Company.Project.Authorization.AppClaims
             return result;
         }
 
-        protected class ClaimInfo
+        protected class PermissionInfo
         {
             public string Name { get; private set; }
 
-            public ClaimsAuthorizeScope Scope { get; private set; }
+            public PermissionAuthorizeScope Scope { get; private set; }
 
 
 
-            public ClaimInfo(string name, ClaimsAuthorizeScope scope)
+            public PermissionInfo(string name, PermissionAuthorizeScope scope)
             {
                 Name = name;
                 Scope = scope;

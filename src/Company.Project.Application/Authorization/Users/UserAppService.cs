@@ -14,7 +14,7 @@ using Mapster;
 
 namespace Company.Project.Authorization.Users
 {
-    [ClaimsAuthorize]
+    [PermissionAuthorize]
     public class UserAppService : IApplicationService
     {
         readonly UserManager _userManager;
@@ -29,7 +29,7 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
+        [PermissionAuthorize(AppPermissions.User.Query)]
         public virtual async Task<PageResultDto<UserDto>> GetPage(QueryInput input)
         {
             var query = _userManager.QueryAsNoTracking
@@ -53,7 +53,7 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Query)]
+        [PermissionAuthorize(AppPermissions.User.Query)]
         public virtual async Task<UserEditDto> GetEditById(Guid input)
         {
             var entity = await _userManager.QueryAsNoTracking
@@ -74,7 +74,7 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Create)]
+        [PermissionAuthorize(AppPermissions.User.Create)]
         public virtual async Task Create(CreateOrEditUserInput input)
         {
             await this._userManager.CreateAsync(
@@ -96,7 +96,7 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Edit)]
+        [PermissionAuthorize(AppPermissions.User.Edit)]
         public virtual async Task Update(CreateOrEditUserInput input)
         {
             if (!input.EntityDto.Id.HasValue)
@@ -123,7 +123,7 @@ namespace Company.Project.Authorization.Users
         /// </summary>
         /// <param name="idList">用户id集合</param>
         /// <returns></returns>
-        [ClaimsAuthorize(AppClaimsConsts.User.Delete)]
+        [PermissionAuthorize(AppPermissions.User.Delete)]
         public virtual async Task Delete(List<Guid> idList)
         {
             if (idList == null || idList.Count == 0)
