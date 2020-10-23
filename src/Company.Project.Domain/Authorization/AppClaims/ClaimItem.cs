@@ -18,7 +18,7 @@ namespace Company.Project.Authorization.AppClaims
 
         public virtual string Parent { get; protected set; }
 
-        public virtual string Claim { get; protected set; }
+        public virtual string Name { get; protected set; }
 
         public virtual ClaimsAuthorizeScope Scope { get; protected set; }
 
@@ -26,30 +26,18 @@ namespace Company.Project.Authorization.AppClaims
 
 
 
-        public ClaimItem([NotNull] string claim, ClaimsAuthorizeScope scope, string parent = null)
+        public ClaimItem([NotNull] string name, string parent = null, ClaimsAuthorizeScope scope = ClaimsAuthorizeScope.Common)
         {
-            Check.NotNull(claim, nameof(claim));
+            Check.NotNull(name, nameof(name));
 
-            this.Claim = claim;
+            this.Name = name;
             this.Scope = scope;
             this.Parent = parent;
 
             this.Sort = _sort++;
 
-            this.HashCode = this.Claim.GetHashCode() + this.Scope.GetHashCode();
+            this.HashCode = this.Name.GetHashCode() + this.Scope.GetHashCode();
         }
-
-
-        public static ClaimItem CreateWithCommon(string claim, string parent = null)
-        {
-            return new ClaimItem(claim, ClaimsAuthorizeScope.Common, parent);
-        }
-
-        public static ClaimItem CreateWithHost(string claim, string parent = null)
-        {
-            return new ClaimItem(claim, ClaimsAuthorizeScope.Host, parent);
-        }
-
 
         public override bool Equals(object obj)
         {

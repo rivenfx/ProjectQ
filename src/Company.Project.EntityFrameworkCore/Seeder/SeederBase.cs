@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using Company.Project.Authorization.AppClaims;
+using System.Linq.Dynamic.Core;
 
 namespace Company.Project.Seeder
 {
@@ -74,17 +75,19 @@ namespace Company.Project.Seeder
 
             // 添加权限
             roleClaims.Clear();
-            var claimItems = _claimsManager.GetAll(
-                string.IsNullOrWhiteSpace(tenantName) ? ClaimItemType.Host : ClaimItemType.Tenant
-                );
+            var claimItems = _claimsManager.GetAll();
+            if (!string.IsNullOrWhiteSpace(tenantName))
+            {
+                claimItems = claimItems.Where(o => o.Scope == Riven.Identity.Authorization.ClaimsAuthorizeScope.Common);
+            }
             foreach (var item in claimItems)
             {
                 roleClaims.Add(new RoleClaim()
                 {
                     RoleId = systemRole.Id,
                     TenantName = tenantName,
-                    ClaimType = item.Claim,
-                    ClaimValue = item.Claim
+                    ClaimType = item.Name,
+                    ClaimValue = item.Name
                 });
             }
             await roleClaimStore.AddRangeAsync(roleClaims);
