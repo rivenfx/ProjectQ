@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ClaimsGuard } from '@shared/riven';
+import { PermissionGuard } from '@shared/riven';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
 import { RoleComponent } from './role';
@@ -11,8 +11,8 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
-    canActivate: [ClaimsGuard],
-    canActivateChild: [ClaimsGuard],
+    canActivate: [PermissionGuard],
+    canActivateChild: [PermissionGuard],
     children: [
       {
         path: 'dashboard',
@@ -21,12 +21,12 @@ const routes: Routes = [
       {
         path: 'role',
         component: RoleComponent,
-        data: { claims: 'role.query' },
+        data: { permissions: 'role.query' },
       },
       {
         path: 'user',
         component: UserComponent,
-        data: { claims: 'user.query' },
+        data: { permissions: 'user.query' },
       },
       {
         path: '**',

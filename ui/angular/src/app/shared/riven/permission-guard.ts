@@ -17,7 +17,7 @@ import { map, tap } from 'rxjs/operators';
 
 
 @Injectable({ providedIn: 'root' })
-export class ClaimsGuard implements CanActivate, CanActivateChild, CanLoad {
+export class PermissionGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(
     private srv: ACLService,
     private router: Router,
@@ -39,14 +39,14 @@ export class ClaimsGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     // 已登录但路由未配置验证权限返回 true
-    if (!data.claims) {
+    if (!data.permissions) {
       return true;
     }
 
     // 有权限则进行判断，
-    if (Array.isArray(data.claims)) {
-      for (const claim of data.claims) {
-        if (!this.srv.can(claim)) {
+    if (Array.isArray(data.permissions)) {
+      for (const permission of data.permissions) {
+        if (!this.srv.can(permission)) {
           if (data.mode === 'allOf') {
             this.router.navigateByUrl(data.guard_url);
             return false;
@@ -60,7 +60,7 @@ export class ClaimsGuard implements CanActivate, CanActivateChild, CanLoad {
       return true;
     }
 
-    if (this.srv.can(data.claims)) {
+    if (this.srv.can(data.permissions)) {
       return true;
     }
     this.router.navigateByUrl(data.guard_url);
