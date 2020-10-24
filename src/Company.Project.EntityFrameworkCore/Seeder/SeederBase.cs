@@ -86,8 +86,7 @@ namespace Company.Project.Seeder
                 {
                     RoleId = systemRole.Id,
                     TenantName = tenantName,
-                    ClaimType = item.Name,
-                    ClaimValue = item.Name
+                    Name = item.Name,
                 });
             }
             await rolePermissionStore.AddRangeAsync(rolePermissions);
