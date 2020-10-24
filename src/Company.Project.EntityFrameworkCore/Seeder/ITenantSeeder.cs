@@ -16,11 +16,11 @@ using Company.Project.MultiTenancy;
 namespace Company.Project.Seeder
 {
     /// <summary>
-    /// 租户种子数据
+    /// 绉熸埛绉嶅瓙鏁版嵁
     /// </summary>
     public interface ITenantSeeder : IScopeDependency
     {
-        Task Create(DbContext dbContext, Tenant tenant);
+        Task Create(DbContext dbContext, string tenantName);
     }
 }
 

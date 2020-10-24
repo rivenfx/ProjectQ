@@ -45,7 +45,7 @@ namespace Company.Project.Seeder
 
 
                         var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
-                        await tenantSeeder.Create(appContext, defaultTenant);
+                        await tenantSeeder.Create(appContext, defaultTenant.Name);
 
                         await uow.CompleteAsync();
                     }
