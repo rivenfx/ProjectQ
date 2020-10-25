@@ -19,34 +19,13 @@ namespace Company.Project.Seeder
     /// </summary>
     public static class SeedHelper
     {
-        static bool _skipSeedDb;
-
-        /// <summary>
-        /// 是否跳过执行 <see cref="SeedHelper.SeedDb"/> 或 <see cref="SeedHelper.SeedDbAsync"/> 
-        /// </summary>
-        public static bool SkipSeedDb
-        {
-            get => SeedHelper._skipSeedDb;
-            set
-            {
-                if (value)
-                {
-                    SeedHelper._skipSeedDb = value;
-                }
-            }
-        }
-
+       
         /// <summary>
         /// 创建种子数据
         /// </summary>
         /// <param name="serviceProvider"></param>
         public static void SeedDb(IServiceProvider serviceProvider)
         {
-            if (SkipSeedDb)
-            {
-                return;
-            }
-
             AsyncHelper.RunSync(async () =>
             {
                 await SeedDbAsync(serviceProvider);
@@ -59,11 +38,6 @@ namespace Company.Project.Seeder
         /// <param name="serviceProvider"></param>
         public static async Task SeedDbAsync(IServiceProvider serviceProvider)
         {
-            if (SkipSeedDb)
-            {
-                return;
-            }
-
             try
             {
                 using (var scope = serviceProvider.CreateScope())
