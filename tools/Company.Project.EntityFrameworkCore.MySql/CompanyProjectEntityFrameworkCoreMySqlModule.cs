@@ -17,8 +17,7 @@ namespace Company.Project
         public override void OnPostConfigureServices(ServiceConfigurationContext context)
         {
             context.Services
-                  .AddUnitOfWorkWithEntityFrameworkCoreDbContext<AppDbContextForMySql>(
-                  nameof(DatabaseType.MySql),
+                  .AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContextForMySql>(
                   (config) =>
                   {
                       // 这个在每次需要创建DbContext的时候执行

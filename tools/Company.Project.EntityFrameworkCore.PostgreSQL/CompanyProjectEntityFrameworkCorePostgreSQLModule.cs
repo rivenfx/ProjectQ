@@ -18,8 +18,7 @@ namespace Company.Project
         {
 
             context.Services
-                .AddUnitOfWorkWithEntityFrameworkCoreDbContext<AppDbContextForPostgreSQL>(
-                nameof(DatabaseType.PostgreSQL),
+                .AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContextForPostgreSQL>(
                 (config) =>
                 {
                     // 这个在每次需要创建DbContext的时候执行
