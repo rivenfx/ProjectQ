@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -47,15 +47,13 @@ namespace Company.Project.Migrator
 
         public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
         {
-            return Host.CreateDefaultBuilder(args)
+            return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                   .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
                   .ConfigureLogging((context, logging) => logging.ClearProviders())
                   .ConfigureLogging((context, logging) => logging.AddSerilog())
-                  .ConfigureServices((hostContext, services) =>
+                  .ConfigureServices((services) =>
                   {
                       services.AddRivenModule<CompanyProjectMigratorModule>(configuration);
-
-                      services.AddHostedService<MigratorHostedService>();
                   });
         }
 

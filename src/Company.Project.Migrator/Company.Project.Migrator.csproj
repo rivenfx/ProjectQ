@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Company.Project.EntityFrameworkCore\Company.Project.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Company.Project.Host\Company.Project.Host.csproj" />
   </ItemGroup>
 
 </Project>
