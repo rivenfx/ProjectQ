@@ -8,34 +8,69 @@ using System.Transactions;
 using Riven.Uow.Providers;
 using Riven.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Company.Project.Seeder;
+using System.Threading.Tasks;
 
 namespace Company.Project.Database
 {
     public class AppDbMigrator : IDbMigrator, ITransientDependency
     {
         readonly IUnitOfWorkManager _unitOfWorkManager;
+        readonly IServiceProvider _serviceProvider;
 
-        public AppDbMigrator(IUnitOfWorkManager unitOfWorkManager)
+        public AppDbMigrator(IUnitOfWorkManager unitOfWorkManager, IServiceProvider serviceProvider)
         {
             _unitOfWorkManager = unitOfWorkManager;
+            _serviceProvider = serviceProvider;
         }
 
         public void CreateOrMigrateForHost()
         {
-            CreateOrMigrate(null);
+            CreateOrMigrateForHostAsync().GetAwaiter().GetResult();
         }
+
+       
 
         public void CreateOrMigrateForTenant(string tenantName)
         {
+            CreateOrMigrateForHostAsync(tenantName).GetAwaiter().GetResult();
+        }
+
+        public async Task CreateOrMigrateForHostAsync()
+        {
+            await CreateOrMigrateForHostAsync(null);
+        }
+
+        public async Task CreateOrMigrateForTenantAsync(string tenantName)
+        {
             if (tenantName.IsNullOrWhiteSpace())
             {
+                await this.CreateOrMigrate(null, async (appContext) =>
+                {
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var hostSeeder = scope.ServiceProvider.GetRequiredService<IHostSeeder>();
+                        var defaultTenant = await hostSeeder.Create(appContext);
+
+                        var tenantSeeder = scope.ServiceProvider.GetRequiredService<ITenantSeeder>();
+                        await tenantSeeder.Create(appContext, defaultTenant.Name);
+                    }
+                });
                 return;
             }
 
-            CreateOrMigrate(tenantName);
+            await this.CreateOrMigrate(tenantName, async (appContext) =>
+            {
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var tenantSeeder = scope.ServiceProvider.GetRequiredService<ITenantSeeder>();
+                    await tenantSeeder.Create(appContext, tenantName);
+                }
+            });
         }
 
-        protected virtual void CreateOrMigrate(string tenantName, Action<DbContext> seedAction = null)
+        protected virtual async Task CreateOrMigrate(string tenantName, Func<DbContext, Task> seedAction = null)
         {
             var unitOfWorkOptions = new UnitOfWorkOptions();
 
@@ -52,13 +87,13 @@ namespace Company.Project.Database
                 dbContext.Database.Migrate();
 
                 // 种子数据
-                seedAction?.Invoke(dbContext);
+                await seedAction?.Invoke(dbContext);
 
                 // 保存
                 _unitOfWorkManager.Current.SaveChanges();
 
                 // 提交工作单元
-                uow.Complete();
+                await uow.CompleteAsync();
             }
         }
     }
