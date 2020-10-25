@@ -11,18 +11,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Company.Project.Seeder;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Company.Project.Database
 {
     public class AppDbMigrator : IDbMigrator, ITransientDependency
     {
-        readonly IUnitOfWorkManager _unitOfWorkManager;
         readonly IServiceProvider _serviceProvider;
+        readonly ILogger<AppDbMigrator> _logger;
+        readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public AppDbMigrator(IUnitOfWorkManager unitOfWorkManager, IServiceProvider serviceProvider)
+        public AppDbMigrator(IServiceProvider serviceProvider, ILogger<AppDbMigrator> logger, IUnitOfWorkManager unitOfWorkManager)
         {
-            _unitOfWorkManager = unitOfWorkManager;
             _serviceProvider = serviceProvider;
+            _logger = logger;
+            _unitOfWorkManager = unitOfWorkManager;
         }
 
         public void CreateOrMigrateForHost()
@@ -30,16 +33,14 @@ namespace Company.Project.Database
             CreateOrMigrateForHostAsync().GetAwaiter().GetResult();
         }
 
-       
-
         public void CreateOrMigrateForTenant(string tenantName)
         {
-            CreateOrMigrateForHostAsync(tenantName).GetAwaiter().GetResult();
+            CreateOrMigrateForTenantAsync(tenantName).GetAwaiter().GetResult();
         }
 
         public async Task CreateOrMigrateForHostAsync()
         {
-            await CreateOrMigrateForHostAsync(null);
+            await CreateOrMigrateForTenantAsync(null);
         }
 
         public async Task CreateOrMigrateForTenantAsync(string tenantName)
@@ -76,6 +77,7 @@ namespace Company.Project.Database
 
             // 工作单元级别
             unitOfWorkOptions.Scope = TransactionScopeOption.Suppress;
+            unitOfWorkOptions.IsTransactional = false;
             // 当前连接字符串名称
             unitOfWorkOptions.ConnectionStringName = tenantName.IsNullOrWhiteSpace() ? RivenUnitOfWorkConsts.DefaultConnectionStringName : tenantName;
 
@@ -84,7 +86,16 @@ namespace Company.Project.Database
             {
                 // 获取当前数据库上下文
                 var dbContext = _unitOfWorkManager.Current.GetDbContext();
+
+
+                var migrations = dbContext.Database.GetMigrations().ToList();
+                var appliedMigrations = dbContext.Database.GetAppliedMigrations().ToList();
+                var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
+
+
+                // 迁移数据库结构
                 dbContext.Database.Migrate();
+
 
                 // 种子数据
                 await seedAction?.Invoke(dbContext);
