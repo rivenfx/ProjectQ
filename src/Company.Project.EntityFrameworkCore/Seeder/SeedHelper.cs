@@ -16,8 +16,18 @@ namespace Company.Project.Seeder
 {
     public static class SeedHelper
     {
+        /// <summary>
+        /// 跳过种子数据
+        /// </summary>
+        public static bool SkipSeedDb { get; set; }
+
         public static void SeedDb(IServiceProvider serviceProvider)
         {
+            if (SkipSeedDb)
+            {
+                return;
+            }
+
             AsyncHelper.RunSync(async () =>
             {
                 await SeedDbAsync(serviceProvider);
@@ -27,6 +37,11 @@ namespace Company.Project.Seeder
 
         static async Task SeedDbAsync(IServiceProvider serviceProvider)
         {
+            if (SkipSeedDb)
+            {
+                return;
+            }
+
             try
             {
                 using (var scope = serviceProvider.CreateScope())
