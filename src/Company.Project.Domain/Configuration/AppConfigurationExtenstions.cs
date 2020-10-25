@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,7 @@ namespace Company.Project.Configuration
     {
         public static class AppConfigurationConsts
         {
+            public const string DatabaseType = "ConnectionStrings:DatabaseType";
             public const string DefaultDatabaseConnectionString = "ConnectionStrings:Default";
             public const string AppName = "App:Name";
             public const string AppVersion = "App:Version";
@@ -24,6 +25,26 @@ namespace Company.Project.Configuration
             public const string AuthenticationJwtBearerIssuer = "Authentication:JwtBearer:Issuer";
             public const string AuthenticationJwtBearerSecurityKey = "Authentication:JwtBearer:SecurityKey";
 
+        }
+
+
+        /// <summary>
+        /// 获取默认数据库类型
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static DatabaseType GetDatabaseType(this IConfiguration configuration)
+        {
+            switch (configuration[AppConfigurationConsts.DatabaseType]?.Trim().ToLowerInvariant())
+            {
+                case "mysql":
+                    return DatabaseType.MySql;
+                case "postgresql":
+                    return DatabaseType.PostgreSQL;
+                case "sqlserver":
+                default:
+                    return DatabaseType.SqlServer;
+            }
         }
 
         /// <summary>
