@@ -20,7 +20,7 @@ namespace Company.Project.Authorization.Users
     {
         protected readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        protected virtual DbSet<UserPermission> UserPermissions { get { return Context.Set<UserPermission>(); } }
+        protected virtual DbSet<UserPermission> UserPermissions => Context.Set<UserPermission>();
 
         public UserStore(IUnitOfWorkManager unitOfWorkManager, IdentityErrorDescriber describer = null)
             : base()
@@ -91,7 +91,7 @@ namespace Company.Project.Authorization.Users
 
             var query = from userPermission in UserPermissions
                         join user in Users on userPermission.UserId equals user.Id
-                        where userPermission.ClaimValue == claim.Value
+                        where userPermission.Name == claim.Value
                         select user;
 
             return await query.ToListAsync(cancellationToken);
