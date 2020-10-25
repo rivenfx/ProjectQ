@@ -286,16 +286,6 @@ namespace Company.Project.Authorization.Users
             return users;
         }
 
-        public override string NormalizeEmail(string email)
-        {
-            return email?.ToLower();
-        }
-
-        public override string NormalizeName(string name)
-        {
-            return name?.ToLower();
-        }
-
         public override Task<User> FindByNameAsync(string userName)
         {
             return FindByNameOrEmailOrPhoneNumberAsync(userName);
