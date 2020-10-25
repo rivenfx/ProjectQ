@@ -67,11 +67,13 @@ namespace Company.Project
                   // 这个在每次需要创建DbContext的时候执行
                   if (config.ExistingConnection != null)
                   {
-                      config.DbContextOptions.Configure(config.ExistingConnection);
+                      config.DbContextOptions
+                            .Configure(context.Configuration,config.ExistingConnection);
                   }
                   else
                   {
-                      config.DbContextOptions.Configure(config.ConnectionString);
+                      config.DbContextOptions
+                            .Configure(context.Configuration,config.ConnectionString);
                   }
               });
 
