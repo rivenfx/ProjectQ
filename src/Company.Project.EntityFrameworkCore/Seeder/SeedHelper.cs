@@ -14,13 +14,32 @@ using Company.Project.Database;
 
 namespace Company.Project.Seeder
 {
+    /// <summary>
+    /// 种子数据帮助器
+    /// </summary>
     public static class SeedHelper
     {
-        /// <summary>
-        /// 跳过种子数据
-        /// </summary>
-        public static bool SkipSeedDb { get; set; }
+        static bool _skipSeedDb;
 
+        /// <summary>
+        /// 是否跳过执行 <see cref="SeedHelper.SeedDb"/> 或 <see cref="SeedHelper.SeedDbAsync"/> 
+        /// </summary>
+        public static bool SkipSeedDb
+        {
+            get => SeedHelper._skipSeedDb;
+            set
+            {
+                if (value)
+                {
+                    SeedHelper._skipSeedDb = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 创建种子数据
+        /// </summary>
+        /// <param name="serviceProvider"></param>
         public static void SeedDb(IServiceProvider serviceProvider)
         {
             if (SkipSeedDb)
@@ -34,8 +53,11 @@ namespace Company.Project.Seeder
             });
         }
 
-
-        static async Task SeedDbAsync(IServiceProvider serviceProvider)
+        /// <summary>
+        /// 创建种子数据 异步
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public static async Task SeedDbAsync(IServiceProvider serviceProvider)
         {
             if (SkipSeedDb)
             {
