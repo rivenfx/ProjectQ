@@ -162,7 +162,7 @@ namespace Company.Project.Authorization.Users
         }
 
         /// <summary>
-        /// 添加 claims
+        /// 给用户添加 权限
         /// </summary>
         /// <param name="user"></param>
         /// <param name="permissions"></param>
