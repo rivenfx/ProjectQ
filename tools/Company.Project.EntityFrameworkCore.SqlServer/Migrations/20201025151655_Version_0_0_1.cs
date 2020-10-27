@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Company.Project.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class Version_0_0_1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace Company.Project.Migrations
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    DispayName = table.Column<string>(maxLength: 512, nullable: true),
+                    DisplayName = table.Column<string>(maxLength: 512, nullable: true),
                     Description = table.Column<string>(maxLength: 1024, nullable: true),
                     IsStatic = table.Column<bool>(nullable: false),
                     Creator = table.Column<string>(nullable: true),
@@ -55,6 +55,7 @@ namespace Company.Project.Migrations
                     Description = table.Column<string>(nullable: true),
                     ConnectionString = table.Column<string>(nullable: true),
                     IsStatic = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     Creator = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     LastModifier = table.Column<string>(nullable: true),
@@ -106,14 +107,13 @@ namespace Company.Project.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleClaims",
+                name: "RolePermissions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<Guid>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     Creator = table.Column<string>(nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     LastModifier = table.Column<string>(nullable: true),
@@ -125,40 +125,11 @@ namespace Company.Project.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoleClaims_Roles_RoleId",
+                        name: "FK_RolePermissions_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(nullable: false),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    Creator = table.Column<string>(nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    LastModifier = table.Column<string>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    Deleter = table.Column<string>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    TenantName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserClaims_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -186,6 +157,34 @@ namespace Company.Project.Migrations
                     table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey, x.TenantName });
                     table.ForeignKey(
                         name: "FK_UserLogins_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Creator = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    LastModifier = table.Column<string>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    Deleter = table.Column<string>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    TenantName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -255,8 +254,8 @@ namespace Company.Project.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleClaims_RoleId",
-                table: "RoleClaims",
+                name: "IX_RolePermissions_RoleId",
+                table: "RolePermissions",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -274,13 +273,13 @@ namespace Company.Project.Migrations
                 filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserClaims_UserId",
-                table: "UserClaims",
+                name: "IX_UserLogins_UserId",
+                table: "UserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLogins_UserId",
-                table: "UserLogins",
+                name: "IX_UserPermissions_UserId",
+                table: "UserPermissions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -320,7 +319,7 @@ namespace Company.Project.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RoleClaims");
+                name: "RolePermissions");
 
             migrationBuilder.DropTable(
                 name: "SampleEntitys");
@@ -329,10 +328,10 @@ namespace Company.Project.Migrations
                 name: "Tenants");
 
             migrationBuilder.DropTable(
-                name: "UserClaims");
+                name: "UserLogins");
 
             migrationBuilder.DropTable(
-                name: "UserLogins");
+                name: "UserPermissions");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");

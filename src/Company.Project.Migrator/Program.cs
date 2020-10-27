@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+using Company.Project.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Company.Project.MigratorModules;
 
 namespace Company.Project.Migrator
 {
@@ -47,15 +49,25 @@ namespace Company.Project.Migrator
 
         public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
         {
-            return Host.CreateDefaultBuilder(args)
+            return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                   .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
                   .ConfigureLogging((context, logging) => logging.ClearProviders())
                   .ConfigureLogging((context, logging) => logging.AddSerilog())
-                  .ConfigureServices((hostContext, services) =>
+                  .ConfigureServices((services) =>
                   {
-                      services.AddRivenModule<CompanyProjectMigratorModule>(configuration);
-
-                      services.AddHostedService<MigratorHostedService>();
+                      switch (configuration.GetDatabaseType())
+                      {
+                          case DatabaseType.MySql:
+                              services.AddRivenModule<MySqlMigratorModule>(configuration);
+                              break;
+                          case DatabaseType.PostgreSQL:
+                              services.AddRivenModule<PostgreSQLMigratorModule>(configuration);
+                              break;
+                          case DatabaseType.SqlServer:
+                              services.AddRivenModule<SqlServerMigratorModule>(configuration);
+                              break;
+                      }
+                      
                   });
         }
 

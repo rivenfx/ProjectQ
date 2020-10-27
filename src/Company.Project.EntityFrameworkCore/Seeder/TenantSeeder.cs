@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Threading.Tasks;
 using Company.Project.Database;
@@ -14,7 +14,7 @@ namespace Company.Project.Seeder
         {
         }
 
-        public virtual async Task Create(DbContext dbContext, Tenant tenant)
+        public virtual async Task Create(DbContext dbContext, string tenantName)
         {
             if (!(dbContext is AppDbContext))
             {
@@ -22,7 +22,7 @@ namespace Company.Project.Seeder
             }
 
 
-            var defaultRole = await this.CreateRoles(dbContext, tenant.Name);
+            var defaultRole = await this.CreateRoles(dbContext, tenantName);
 
             var defaultUser = await this.CreateUsers(dbContext, defaultRole);
         }

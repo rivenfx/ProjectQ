@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Company.Project.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20200724122740_InitDb")]
-    partial class InitDb
+    [DbContext(typeof(AppDbContextForSqlServer))]
+    [Migration("20201025151655_Version_0_0_1")]
+    partial class Version_0_0_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,7 +47,7 @@ namespace Company.Project.Migrations
                         .HasColumnType("nvarchar(1024)")
                         .HasMaxLength(1024);
 
-                    b.Property<string>("DispayName")
+                    b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(512)")
                         .HasMaxLength(512);
 
@@ -83,18 +83,12 @@ namespace Company.Project.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("Company.Project.Authorization.Roles.RoleClaim", b =>
+            modelBuilder.Entity("Company.Project.Authorization.Roles.RolePermission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
@@ -117,6 +111,9 @@ namespace Company.Project.Migrations
                     b.Property<string>("LastModifier")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -127,7 +124,7 @@ namespace Company.Project.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims");
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Company.Project.Authorization.Users.User", b =>
@@ -235,53 +232,6 @@ namespace Company.Project.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Company.Project.Authorization.Users.UserClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Creator")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Deleter")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifier")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenantName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserClaims");
-                });
-
             modelBuilder.Entity("Company.Project.Authorization.Users.UserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
@@ -328,6 +278,50 @@ namespace Company.Project.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserLogins");
+                });
+
+            modelBuilder.Entity("Company.Project.Authorization.Users.UserPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Creator")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Deleter")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenantName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPermissions");
                 });
 
             modelBuilder.Entity("Company.Project.Authorization.Users.UserRole", b =>
@@ -455,6 +449,9 @@ namespace Company.Project.Migrations
                     b.Property<string>("DisplayName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -494,7 +491,7 @@ namespace Company.Project.Migrations
                     b.ToTable("SampleEntitys");
                 });
 
-            modelBuilder.Entity("Company.Project.Authorization.Roles.RoleClaim", b =>
+            modelBuilder.Entity("Company.Project.Authorization.Roles.RolePermission", b =>
                 {
                     b.HasOne("Company.Project.Authorization.Roles.Role", null)
                         .WithMany()
@@ -503,7 +500,7 @@ namespace Company.Project.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Company.Project.Authorization.Users.UserClaim", b =>
+            modelBuilder.Entity("Company.Project.Authorization.Users.UserLogin", b =>
                 {
                     b.HasOne("Company.Project.Authorization.Users.User", null)
                         .WithMany()
@@ -512,7 +509,7 @@ namespace Company.Project.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Company.Project.Authorization.Users.UserLogin", b =>
+            modelBuilder.Entity("Company.Project.Authorization.Users.UserPermission", b =>
                 {
                     b.HasOne("Company.Project.Authorization.Users.User", null)
                         .WithMany()

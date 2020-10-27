@@ -1,51 +1,81 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 using Riven;
-
+using Riven.MultiTenancy;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Riven.Uow;
+using System.Transactions;
+using Company.Project.MultiTenancy;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using NetTopologySuite.Operation.Buffer;
 
 namespace Company.Project
 {
     public class MigratorHostedService : IHostedService
     {
-        private readonly IHostApplicationLifetime _hostApplicationLifetime;
-
         readonly IServiceProvider _serviceProvider;
 
-        public MigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IServiceProvider serviceProvider)
+        readonly ILogger<MigratorHostedService> _logger;
+
+        readonly IHostApplicationLifetime _hostApplicationLifetime;
+
+        readonly IUnitOfWorkManager _unitOfWorkManager;
+
+        readonly IDbMigrator _dbMigrator;
+
+        public MigratorHostedService(IServiceProvider serviceProvider, ILogger<MigratorHostedService> logger, IHostApplicationLifetime hostApplicationLifetime, IUnitOfWorkManager unitOfWorkManager, IDbMigrator dbMigrator)
         {
-            _hostApplicationLifetime = hostApplicationLifetime;
             _serviceProvider = serviceProvider;
+            _logger = logger;
+            _hostApplicationLifetime = hostApplicationLifetime;
+            _unitOfWorkManager = unitOfWorkManager;
+            _dbMigrator = dbMigrator;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _serviceProvider.UseRivenModule();
-            _hostApplicationLifetime.StopApplication();
 
 
+            // 宿主数据库升级
+            _logger.LogInformation("Host数据库 正在升级");
+            await this._dbMigrator.CreateOrMigrateForHostAsync();
+            _logger.LogInformation("Host数据库 升级完成");
+            if (!MultiTenancyConfig.IsEnabled)
+            {
+                _logger.LogInformation("未启用多租户,跳过执行租户数据库升级");
+                goto end;
+            }
 
-            //using (var application = AbpApplicationFactory.Create<YourProjectNameDbMigratorModule>(options =>
-            //{
-            //    options.UseAutofac();
-            //    options.Services.AddLogging(c => c.AddSerilog());
-            //}))
-            //{
-            //    application.Initialize();
+            // 租户数据库升级
+            var tenants = default(List<Tenant>);
+            using (var uowHandle = _unitOfWorkManager.Begin(TransactionScopeOption.Suppress))
+            {
+                var tenantManager = _serviceProvider.GetRequiredService<ITenantManager>();
+                tenants = await tenantManager.QueryAsNoTracking.ToListAsync(cancellationToken);
+            }
+            _logger.LogInformation("开始升级 Tenant 数据库");
+            foreach (var tenant in tenants)
+            {
+                if (string.IsNullOrWhiteSpace(tenant.ConnectionString))
+                {
+                    continue;
+                }
 
-            //    await application
-            //        .ServiceProvider
-            //        .GetRequiredService<YourProjectNameDbMigrationService>()
-            //        .MigrateAsync();
+                _logger.LogInformation($"Tenant {tenant.Name} 数据库 正在升级");
+                await this._dbMigrator.CreateOrMigrateForTenantAsync(tenant.Name);
+                _logger.LogInformation($"Tenant {tenant.Name} 数据库 升级完成");
+            }
 
-            //    application.Shutdown();
-
-            //    _hostApplicationLifetime.StopApplication();
-            //}
+            end:
+            _logger.LogInformation("数据库升级结束!");
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

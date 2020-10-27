@@ -59,21 +59,26 @@ namespace Company.Project
             #endregion
 
 
+        }
 
+        public override void OnPostConfigureServices(ServiceConfigurationContext context)
+        {
             #region 添加默认DbContext
 
             context.Services.AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContext>((config) =>
-              {
-                  // 这个在每次需要创建DbContext的时候执行
-                  if (config.ExistingConnection != null)
-                  {
-                      config.DbContextOptions.Configure(config.ExistingConnection);
-                  }
-                  else
-                  {
-                      config.DbContextOptions.Configure(config.ConnectionString);
-                  }
-              });
+            {
+                // 这个在每次需要创建DbContext的时候执行
+                if (config.ExistingConnection != null)
+                {
+                    config.DbContextOptions
+                          .Configure(context.Configuration, config.ExistingConnection);
+                }
+                else
+                {
+                    config.DbContextOptions
+                          .Configure(context.Configuration, config.ConnectionString);
+                }
+            });
 
             #endregion
 
@@ -95,7 +100,6 @@ namespace Company.Project
             //}); 
 
             #endregion
-
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

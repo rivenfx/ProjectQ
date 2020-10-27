@@ -14,8 +14,16 @@ using Company.Project.Database;
 
 namespace Company.Project.Seeder
 {
+    /// <summary>
+    /// 种子数据帮助器
+    /// </summary>
     public static class SeedHelper
     {
+       
+        /// <summary>
+        /// 创建种子数据
+        /// </summary>
+        /// <param name="serviceProvider"></param>
         public static void SeedDb(IServiceProvider serviceProvider)
         {
             AsyncHelper.RunSync(async () =>
@@ -24,8 +32,11 @@ namespace Company.Project.Seeder
             });
         }
 
-
-        static async Task SeedDbAsync(IServiceProvider serviceProvider)
+        /// <summary>
+        /// 创建种子数据 异步
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public static async Task SeedDbAsync(IServiceProvider serviceProvider)
         {
             try
             {
@@ -45,7 +56,7 @@ namespace Company.Project.Seeder
 
 
                         var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
-                        await tenantSeeder.Create(appContext, defaultTenant);
+                        await tenantSeeder.Create(appContext, defaultTenant.Name);
 
                         await uow.CompleteAsync();
                     }

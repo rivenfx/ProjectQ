@@ -63,7 +63,7 @@ namespace Company.Project.Authorization
 
         Guid? GetImpersonatedUserId()
         {
-            var userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimsTypes.ImpersonatedUserIdNameIdentifier);
+            var userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(IdentityClaimTypes.ImpersonatedUserIdNameIdentifier);
             if (userIdString.IsNullOrWhiteSpace())
             {
                 return null;
@@ -80,7 +80,7 @@ namespace Company.Project.Authorization
 
         string GetImpersonatedTenantNameString()
         {
-            var tenantNameString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(AppClaimsTypes.ImpersonatedTenantNameIdentifier);
+            var tenantNameString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(IdentityClaimTypes.ImpersonatedTenantNameIdentifier);
 
             if (!tenantNameString.IsNullOrWhiteSpace())
             {

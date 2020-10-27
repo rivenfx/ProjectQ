@@ -59,13 +59,20 @@ namespace Company.Project
         /// <param name="context"></param>
         protected void InitLocalization(ApplicationInitializationContext context)
         {
+            // 如果是迁移工具调用,则会跳过这一步
+            var languageManager = context.ServiceProvider.GetService<ILanguageManager>();
+            if (languageManager == null)
+            {
+                return;
+            }
+
+
             var assemblyPath = Path.GetDirectoryName(this.GetType().Assembly.Location);
             var sourceFilePath = Path.Combine(assemblyPath, "Localization", "SourceFiles", "Json");
             var languageInfos = LanguageLoaderWithFile.FromFolderWithJson(sourceFilePath);
 
             context.ServiceProvider.AddOrUpdateLanguages(languageInfos);
 
-            var languageManager = context.ServiceProvider.GetService<ILanguageManager>();
             if (languageManager.GetEnabledLanguages().Count == 0)
             {
                 throw new ArgumentException($"启用语言数量为0");

@@ -24,7 +24,7 @@ namespace Company.Project.Authorization.Roles
 {
     public class RoleManager : RoleManager<Role>, IRolePermissionAccessor
     {
-        static IEnumerable<string> _nullRoleClaims = new List<string>();
+        static IEnumerable<string> _emptyRolePermissions = new List<string>();
 
 
         public IQueryable<Role> Query => this.Roles.AsNoTracking();
@@ -265,7 +265,7 @@ namespace Company.Project.Authorization.Roles
             Check.NotNull(roleNames, nameof(roleNames));
             if (roleNames.Length == 0)
             {
-                return _nullRoleClaims;
+                return _emptyRolePermissions;
             }
 
             var result = new List<string>();

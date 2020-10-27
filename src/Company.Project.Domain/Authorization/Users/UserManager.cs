@@ -162,7 +162,7 @@ namespace Company.Project.Authorization.Users
         }
 
         /// <summary>
-        /// 添加 claims
+        /// 给用户添加 权限
         /// </summary>
         /// <param name="user"></param>
         /// <param name="permissions"></param>
@@ -284,16 +284,6 @@ namespace Company.Project.Authorization.Users
             }
 
             return users;
-        }
-
-        public override string NormalizeEmail(string email)
-        {
-            return email?.ToLower();
-        }
-
-        public override string NormalizeName(string name)
-        {
-            return name?.ToLower();
         }
 
         public override Task<User> FindByNameAsync(string userName)

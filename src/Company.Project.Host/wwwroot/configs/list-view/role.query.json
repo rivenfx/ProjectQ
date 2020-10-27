@@ -36,6 +36,18 @@
     "fixed": null
   },
   {
+    "field": "displayName",
+    "title": "role.display-name",
+    "type": null,
+    "render": null,
+    "width": null,
+    "order": 2,
+    "numberDigits": 2,
+    "dateFormat": null,
+    "statistical": null,
+    "fixed": null
+  },
+  {
     "field": "isStatic", // 字段,支持嵌套 aa.bb 
     "title": "role.is-static", // 列名
     "type": "yn", // 类型
