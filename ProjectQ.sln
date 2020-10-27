@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riven.Domain.EntityFramewor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{25466D59-FA4B-4C3E-8C63-6D9302268EE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Project.Migrator", "src\Company.Project.Migrator\Company.Project.Migrator.csproj", "{508D1E38-865A-402D-8C9A-EFF016F14488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Project.Migrator", "tools\Company.Project.Migrator\Company.Project.Migrator.csproj", "{508D1E38-865A-402D-8C9A-EFF016F14488}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Project.EntityFrameworkCore.SqlServer", "tools\Company.Project.EntityFrameworkCore.SqlServer\Company.Project.EntityFrameworkCore.SqlServer.csproj", "{F0D3CEFE-FC56-48A7-8049-DFEF04CF05B0}"
 EndProject
