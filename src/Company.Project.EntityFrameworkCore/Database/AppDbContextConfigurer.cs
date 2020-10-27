@@ -29,7 +29,7 @@ namespace Company.Project.Database
                     });
                     break;
                 case DatabaseType.PostgreSQL:
-                    builder.UseNpgsql(connectionString, (options) =>
+                    builder.UseRivenPostgreSQL(connectionString, (options) =>
                     {
                         options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
                     });
@@ -62,7 +62,7 @@ namespace Company.Project.Database
                     });
                     break;
                 case DatabaseType.PostgreSQL:
-                    builder.UseNpgsql(connection, (options) =>
+                    builder.UseRivenPostgreSQL(connection, (options) =>
                     {
                         options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
                     });
