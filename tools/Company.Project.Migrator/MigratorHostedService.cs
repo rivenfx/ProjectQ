@@ -14,7 +14,6 @@ using Company.Project.MultiTenancy;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NetTopologySuite.Operation.Buffer;
 
 namespace Company.Project
 {
