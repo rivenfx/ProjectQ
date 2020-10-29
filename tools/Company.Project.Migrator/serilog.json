@@ -1,0 +1,32 @@
+{
+    "Serilog": {
+      "MinimumLevel": "Information",
+      "Properties": {
+        "Application": "ProjectQ 迁移工具"
+      },
+      "Enrich": [
+        "FromLogContext",
+        "WithMachineName",
+        "WithProcessId",
+        "WithThreadId",
+        "ApplicationContext"
+      ],
+      "Using": [
+        "Serilog.Sinks.Console",
+        "Serilog.Sinks.File"
+  
+      ],
+      "WriteTo": [
+        {
+          "Name": "Console"
+        },
+        {
+          "Name": "File",
+          "Args": {
+            "path": "logs/log.txt",
+            "rollingInterval": "Hour"
+          }
+        }
+      ]
+    }
+  }
