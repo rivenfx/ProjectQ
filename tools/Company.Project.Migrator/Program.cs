@@ -13,6 +13,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Company.Project.MigratorModules;
 
+using AppHost = Microsoft.Extensions.Hosting.Host;
+
 namespace Company.Project.Migrator
 {
     class Program
@@ -24,7 +26,7 @@ namespace Company.Project.Migrator
         {
             var configuration = GetConfiguration();
 
-            Log.Logger = CreateSerilogLogger(configuration);
+            Log.Logger = CreateSerilogLogger();
 
             try
             {
@@ -67,30 +69,37 @@ namespace Company.Project.Migrator
                               services.AddRivenModule<SqlServerMigratorModule>(configuration);
                               break;
                       }
-                      
+
                   });
         }
 
 
+        #region 日志配置
 
         /// <summary>
-        /// 创建 SerilogLogger 配置
+        /// 配置 SerilogLogger 配置
         /// </summary>
-        /// <param name="configuration"></param>
         /// <returns></returns>
-        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+        private static Serilog.ILogger CreateSerilogLogger()
         {
+            // 获取日志配置文件
+            var configuration = GetConfiguration("serilog");
+
+            // 构建日志对象
             var cfg = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
-                .WriteTo.File(Path.Join("logs", "log.txt"), rollingInterval: RollingInterval.Hour)
-                .WriteTo.Console();
+                .ReadFrom
+                .Configuration(configuration)
+                ;
 
 
             return cfg.CreateLogger();
         }
 
+        #endregion
+
+
+
+        #region 应用配置
 
         /// <summary>
         /// 获取 appsettings 配置
@@ -98,11 +107,54 @@ namespace Company.Project.Migrator
         /// <returns></returns>
         private static IConfiguration GetConfiguration()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
+            var configuration = GetConfiguration("appsettings");
+            return configuration;
+        }
 
+
+        #endregion
+
+
+        /// <summary>
+        /// 构建配置信息
+        /// </summary>
+        /// <param name="fileName">文件名称,不带扩展名</param>
+        /// <param name="basePath">根路径</param>
+        /// <param name="environmentName">环境变量名称</param>
+        /// <returns>配置信息</returns>
+        public static IConfiguration GetConfiguration(string fileName, string basePath = null, string environmentName = null)
+        {
+            var builder = (IConfigurationBuilder)new ConfigurationBuilder();
+            // 设置父级目录
+            if (string.IsNullOrWhiteSpace(basePath))
+            {
+                var defaultBasePath = Path.GetDirectoryName(typeof(Program).Assembly.Location);
+                builder = builder.SetBasePath(defaultBasePath);
+            }
+            else
+            {
+                builder = builder.SetBasePath(basePath);
+            }
+
+            // 添加基本文件
+            builder = builder
+                .AddJsonFile($"{fileName}.json", optional: false, reloadOnChange: true);
+
+            // 添加带环境的文件
+            if (!string.IsNullOrWhiteSpace(environmentName))
+            {
+                builder = builder
+                    .AddJsonFile(
+                        $"{fileName}.{environmentName}.json",
+                        optional: true,
+                        reloadOnChange: true
+                    );
+            }
+
+            // 添加环境变量
+            builder = builder.AddEnvironmentVariables();
+
+            // 构建 IConfiguration
             return builder.Build();
         }
     }
