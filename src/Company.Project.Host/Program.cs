@@ -7,39 +7,36 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using WebHost = Microsoft.Extensions.Hosting.Host;
+using AppHost = Microsoft.Extensions.Hosting.Host;
 
 using Serilog;
 using Serilog.Events;
 using System.IO;
+using Company.Project.Configuration;
 
 namespace Company.Project.Host
 {
     public class Program
     {
-        public static readonly string Namespace = typeof(Program).Namespace;
-        public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
-
-
         public static int Main(string[] args)
         {
-            var configuration = GetConfiguration();
-
-            Log.Logger = CreateSerilogLogger(configuration);
+            Log.Logger = CreateSerilogLogger();
 
             try
             {
-                Log.Information("Configuring web host ({ApplicationContext})...", AppName);
-                var host = CreateHostBuilder(args, configuration).Build();
+                Log.Information("Configuring web host ({ApplicationName})...");
 
-                Log.Information("Starting web host ({ApplicationContext})...", AppName);
+                var host = CreateHostBuilder(args).Build();
+
+                Log.Information("Starting web host ({ApplicationName})...");
+
                 host.Run();
 
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", AppName);
+                Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationName})!");
                 return 1;
             }
             finally
@@ -52,38 +49,55 @@ namespace Company.Project.Host
         /// 创建 HostBuilder
         /// </summary>
         /// <param name="args"></param>
-        /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
+            var configuration = GetConfiguration();
+
+            return AppHost.CreateDefaultBuilder(args)
                             .ConfigureWebHostDefaults(webBuilder =>
                             {
                                 webBuilder.UseStartup<Startup>();
                             })
-                            .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
-                            .UseSerilog();
+                            .ConfigureAppConfiguration(x =>
+                            {
+                                x.AddConfiguration(configuration);
+                            })
+                            .ConfigureLogging((context, logging) =>
+                            {
+                                logging
+                                  .ClearProviders()
+                                  .AddSerilog();
+                            });
         }
 
 
+        #region 日志配置
+
         /// <summary>
-        /// 创建 SerilogLogger 配置
+        /// 配置 SerilogLogger 配置
         /// </summary>
-        /// <param name="configuration"></param>
         /// <returns></returns>
-        private static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+        private static Serilog.ILogger CreateSerilogLogger()
         {
+            // 获取日志配置文件
+            var configuration = ConfigurationHelper.GetConfiguration("serilog");
+
+            // 构建日志对象
             var cfg = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .Enrich.WithProperty("ApplicationContext", AppName)
-                .Enrich.FromLogContext()
-                .WriteTo.File(Path.Join("logs", "log.txt"), rollingInterval: RollingInterval.Hour)
-                .WriteTo.Console();
+                .ReadFrom
+                .Configuration(configuration)
+                ;
 
 
             return cfg.CreateLogger();
         }
 
+        #endregion
+
+
+
+        #region 应用配置
 
         /// <summary>
         /// 获取 appsettings 配置
@@ -91,13 +105,12 @@ namespace Company.Project.Host
         /// <returns></returns>
         private static IConfiguration GetConfiguration()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
-
-            return builder.Build();
+            var configuration = ConfigurationHelper.GetConfiguration("appsettings");
+            return configuration;
         }
+
+
+        #endregion
 
     }
 }

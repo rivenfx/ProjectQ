@@ -2,7 +2,7 @@
   "Serilog": {
     "MinimumLevel": "Information",
     "Properties": {
-      "ApplicationName": "ProjectQ 迁移工具"
+      "ApplicationName": "ProjectQ Host"
     },
     "Enrich": [
       "FromLogContext",
