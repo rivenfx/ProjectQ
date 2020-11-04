@@ -9,7 +9,10 @@ using Company.Project.Authorization;
 
 namespace Company.Project.MigratorModules
 {
-    public abstract class MigratorModuleBase : AppModule
+    [DependsOn(
+        typeof(CompanyProjectEntityFrameworkCoreMigratorModule)
+        )]
+    public class MigratorModule : AppModule
     {
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {

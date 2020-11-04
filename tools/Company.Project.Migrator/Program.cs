@@ -30,7 +30,7 @@ namespace Company.Project.Migrator
                 var host = CreateHostBuilder(args).Build();
 
                 Log.Information("Starting web host ({ApplicationName})...");
-                
+
                 host.Run();
 
                 return 0;
@@ -63,19 +63,7 @@ namespace Company.Project.Migrator
                   })
                   .ConfigureServices((services) =>
                   {
-                      switch (configuration.GetDatabaseType())
-                      {
-                          case DatabaseType.MySql:
-                              services.AddRivenModule<MySqlMigratorModule>(configuration);
-                              break;
-                          case DatabaseType.PostgreSQL:
-                              services.AddRivenModule<PostgreSQLMigratorModule>(configuration);
-                              break;
-                          case DatabaseType.SqlServer:
-                              services.AddRivenModule<SqlServerMigratorModule>(configuration);
-                              break;
-                      }
-
+                      services.AddRivenModule<MigratorModule>(configuration);
                   });
         }
 

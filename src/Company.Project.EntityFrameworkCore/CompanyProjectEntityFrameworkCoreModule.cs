@@ -65,20 +65,21 @@ namespace Company.Project
         {
             #region 添加默认DbContext
 
-            context.Services.AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContext>((config) =>
-            {
-                // 这个在每次需要创建DbContext的时候执行
-                if (config.ExistingConnection != null)
+            context.Services
+                .AddUnitOfWorkWithEntityFrameworkCoreDefaultDbContext<AppDbContext>((config) =>
                 {
-                    config.DbContextOptions
-                          .Configure(context.Configuration, config.ExistingConnection);
-                }
-                else
-                {
-                    config.DbContextOptions
-                          .Configure(context.Configuration, config.ConnectionString);
-                }
-            });
+                    // 这个在每次需要创建DbContext的时候执行
+                    if (config.ExistingConnection != null)
+                    {
+                        config.DbContextOptions
+                              .Configure(context.Configuration, config.ExistingConnection);
+                    }
+                    else
+                    {
+                        config.DbContextOptions
+                              .Configure(context.Configuration, config.ConnectionString);
+                    }
+                });
 
             #endregion
 
