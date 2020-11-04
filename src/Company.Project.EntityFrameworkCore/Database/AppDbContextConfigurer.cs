@@ -11,7 +11,7 @@ namespace Company.Project.Database
 {
     public static class AppDbContextConfigurer
     {
-        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+        public static readonly ILoggerFactory DbLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
         /// <summary>
         /// 配置DbContext
@@ -45,7 +45,7 @@ namespace Company.Project.Database
                     break;
             }
 
-            builder.UseLoggerFactory(MyLoggerFactory);
+            builder.AddDbLogger();
         }
 
         /// <summary>
@@ -80,7 +80,19 @@ namespace Company.Project.Database
                     break;
             }
 
-            builder.UseLoggerFactory(MyLoggerFactory);
+            builder.AddDbLogger();
+        }
+
+
+        /// <summary>
+        /// 添加日志, Debug时生效
+        /// </summary>
+        /// <param name="builder"></param>
+        public static void AddDbLogger(this DbContextOptionsBuilder builder)
+        {
+            #region DEBUG
+            builder.UseLoggerFactory(DbLoggerFactory); 
+            #endregion
         }
     }
 }
