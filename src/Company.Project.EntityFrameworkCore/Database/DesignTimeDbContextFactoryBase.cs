@@ -67,11 +67,7 @@ namespace Company.Project.Database
 
         protected virtual IConfiguration BuildConfiguration()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false);
-
-            return builder.Build();
+            return ConfigurationHelper.GetConfiguration("appsettings");
         }
     }
 }
