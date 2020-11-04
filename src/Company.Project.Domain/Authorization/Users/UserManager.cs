@@ -258,13 +258,13 @@ namespace Company.Project.Authorization.Users
         {
             Check.NotNull(predicate, nameof(predicate));
 
-            var users = this.Users.AsNoTracking().Where(o => !o.IsStatic).Where(predicate);
-            if ((await users.CountAsync()) == 0)
+            var users = await this.Users.AsNoTracking().Where(o => !o.IsStatic).Where(predicate).ToListAsync();
+            if (users.Count == 0)
             {
                 return users;
             }
 
-            foreach (var user in await users.ToListAsync())
+            foreach (var user in users)
             {
                 if (user.IsStatic)
                 {

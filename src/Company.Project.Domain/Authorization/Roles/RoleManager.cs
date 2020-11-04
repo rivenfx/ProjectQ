@@ -129,8 +129,8 @@ namespace Company.Project.Authorization.Roles
         {
             Check.NotNull(predicate, nameof(predicate));
 
-            var roles = this.Roles.AsNoTracking().Where(o => !o.IsStatic).Where(predicate);
-            if ((await roles.CountAsync()) == 0)
+            var roles = await this.Roles.AsNoTracking().Where(o => !o.IsStatic).Where(predicate).ToListAsync();
+            if (roles.Count == 0)
             {
                 return roles;
             }
