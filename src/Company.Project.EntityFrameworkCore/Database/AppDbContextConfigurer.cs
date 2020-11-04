@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using Company.Project.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Company.Project.Database
 {
     public static class AppDbContextConfigurer
     {
+        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+
         /// <summary>
         /// 配置DbContext
         /// </summary>
@@ -41,6 +44,8 @@ namespace Company.Project.Database
                     });
                     break;
             }
+
+            builder.UseLoggerFactory(MyLoggerFactory);
         }
 
         /// <summary>
@@ -74,6 +79,8 @@ namespace Company.Project.Database
                     });
                     break;
             }
+
+            builder.UseLoggerFactory(MyLoggerFactory);
         }
     }
 }

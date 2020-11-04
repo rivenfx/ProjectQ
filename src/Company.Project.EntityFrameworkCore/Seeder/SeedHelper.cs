@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Riven.Uow.Extensions;
 using Riven.Extensions;
 using Company.Project.Database;
+using Riven.MultiTenancy;
 
 namespace Company.Project.Seeder
 {
@@ -19,7 +20,7 @@ namespace Company.Project.Seeder
     /// </summary>
     public static class SeedHelper
     {
-       
+
         /// <summary>
         /// 创建种子数据
         /// </summary>
@@ -49,14 +50,20 @@ namespace Company.Project.Seeder
                     using (var uow = unitOfWorkManager.Begin())
                     {
 
-                        var appContext = unitOfWorkManager.Current.GetDbContext<AppDbContext>();
+                        var appContext = unitOfWorkManager.Current
+                            .GetDbContext<AppDbContext>();
 
-                        var hostSeeder = scopeServiceProvider.GetService<IHostSeeder>();
-                        var defaultTenant = await hostSeeder.Create(appContext);
-
+                        if (MultiTenancyConfig.IsEnabled)
+                        {
+                            var hostSeeder = scopeServiceProvider.GetService<IHostSeeder>();
+                            await hostSeeder.Create(appContext);
+                        }
 
                         var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
-                        await tenantSeeder.Create(appContext, defaultTenant.Name);
+                        await tenantSeeder.Create(
+                            appContext, 
+                            AppConsts.MultiTenancy.DefaultTenantName
+                            );
 
                         await uow.CompleteAsync();
                     }
