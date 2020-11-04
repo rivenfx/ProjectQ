@@ -44,12 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Company.Project.EntityFrameworkCore.MySql\Company.Project.EntityFrameworkCore.MySql.csproj" />
-    <ProjectReference Include="..\Company.Project.EntityFrameworkCore.PostgreSQL\Company.Project.EntityFrameworkCore.PostgreSQL.csproj" />
-    <ProjectReference Include="..\\Company.Project.EntityFrameworkCore.SqlServer\Company.Project.EntityFrameworkCore.SqlServer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Company.Project.Host\Company.Project.Host.csproj" />
   </ItemGroup>
 
