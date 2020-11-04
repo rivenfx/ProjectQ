@@ -264,7 +264,7 @@ namespace Company.Project.Authorization.Users
                 return users;
             }
 
-            foreach (var user in users)
+            foreach (var user in await users.ToListAsync())
             {
                 if (user.IsStatic)
                 {
