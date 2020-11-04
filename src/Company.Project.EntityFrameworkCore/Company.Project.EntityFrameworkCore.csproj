@@ -20,8 +20,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Riven.EntityFrameworkCore.DevartOracle" Version="0.0.3" />
-		<PackageReference Include="Riven.EntityFrameworkCore.Oracle" Version="0.0.1" />
-		<PackageReference Include="Riven.EntityFrameworkCore.PostgreSQL" Version="0.0.1" />
+		<PackageReference Include="Riven.EntityFrameworkCore.Oracle" Version="0.0.3" />
+		<PackageReference Include="Riven.EntityFrameworkCore.PostgreSQL" Version="0.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
