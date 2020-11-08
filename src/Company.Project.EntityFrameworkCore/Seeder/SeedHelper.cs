@@ -1,8 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-
 using Riven.Threading;
 using Riven.Uow;
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -20,17 +18,13 @@ namespace Company.Project.Seeder
     /// </summary>
     public static class SeedHelper
     {
-
         /// <summary>
         /// 创建种子数据
         /// </summary>
         /// <param name="serviceProvider"></param>
         public static void SeedDb(IServiceProvider serviceProvider)
         {
-            AsyncHelper.RunSync(async () =>
-            {
-                await SeedDbAsync(serviceProvider);
-            });
+            AsyncHelper.RunSync(async () => { await SeedDbAsync(serviceProvider); });
         }
 
         /// <summary>
@@ -43,27 +37,29 @@ namespace Company.Project.Seeder
             {
                 using (var scope = serviceProvider.CreateScope())
                 {
-
                     var scopeServiceProvider = scope.ServiceProvider;
 
                     var unitOfWorkManager = scopeServiceProvider.GetService<IUnitOfWorkManager>();
                     using (var uow = unitOfWorkManager.Begin())
                     {
+                        var currentUow = unitOfWorkManager.Current;
 
-                        var appContext = unitOfWorkManager.Current
-                            .GetDbContext<AppDbContext>();
 
-                        if (MultiTenancyConfig.IsEnabled)
+                        var hostContext = currentUow.GetDbContext<AppDbContext>();
+
+                        var hostSeeder = scopeServiceProvider.GetService<IHostSeeder>();
+                        var tenant = await hostSeeder.Create(hostContext);
+
+                        using (currentUow.SetConnectionStringName(tenant.Name))
                         {
-                            var hostSeeder = scopeServiceProvider.GetService<IHostSeeder>();
-                            await hostSeeder.Create(appContext);
+                            var tenantContext = currentUow.GetDbContext<AppDbContext>();
+                            var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
+                            await tenantSeeder.Create(
+                                tenantContext,
+                                tenant.Name
+                            );
                         }
 
-                        var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
-                        await tenantSeeder.Create(
-                            appContext, 
-                            AppConsts.MultiTenancy.DefaultTenantName
-                            );
 
                         await uow.CompleteAsync();
                     }
