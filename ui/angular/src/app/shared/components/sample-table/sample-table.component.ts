@@ -84,7 +84,7 @@ export class SampleTableComponent extends AppComponentBase
   @Output() pageIndexChange = new EventEmitter<number>();
 
   /** 列表数据 */
-  tableData: any = [];
+  tableData: any[] = [];
 
   /** 列表配置 */
   tableColumns: STColumn[] = [
@@ -132,6 +132,20 @@ export class SampleTableComponent extends AppComponentBase
     if (changes.data && changes.data.currentValue) {
       this.processDatas(changes.data.currentValue);
     }
+    if (changes.scroll && changes.scroll.currentValue && this.stRef) {
+      // 重新计算表格渲染内容
+      const y = parseInt(changes.scroll.currentValue.y.replace('px'));
+      const timer = setInterval(() => {
+        const tmpViewportSize = this.stRef.cdkVirtualScrollViewport.getViewportSize();
+        if (tmpViewportSize === y) {
+          this.cdr.detectChanges();
+          clearInterval(timer);
+        } else {
+          this.stRef.cdkVirtualScrollViewport.checkViewportSize();
+        }
+      }, 800);
+    }
+
   }
 
   ngOnDestroy(): void {
