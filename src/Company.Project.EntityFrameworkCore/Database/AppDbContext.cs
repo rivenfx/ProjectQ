@@ -4,20 +4,16 @@ using Company.Project.Authorization.Users;
 using Company.Project.Database.Extenstions;
 using Company.Project.MultiTenancy;
 using Company.Project.Samples;
-
 using JetBrains.Annotations;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-
 using Riven;
 using Riven.Identity.Roles;
 using Riven.Identity.Users;
-
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -31,30 +27,27 @@ namespace Company.Project.Database
 {
     public class AppDbContext
         : IdentityDbContext<User, Role, Guid, UserPermission, UserRole, UserLogin, RolePermission, UserToken>,
-        IRivenDbContext
+            IRivenDbContext
     {
         #region IRivenDbContext 属性实现
 
-        [NotMapped]
-        public virtual bool AuditSuppressAutoSetTenantName => true;
+        [NotMapped] public virtual bool AuditSuppressAutoSetTenantName => true;
+
+        [NotMapped] public virtual IServiceProvider ServiceProvider { get; }
 
         [NotMapped]
-        public virtual IServiceProvider ServiceProvider { get; }
+        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap =>
+            new ConcurrentDictionary<Type, object>();
 
-        [NotMapped]
-        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap => new ConcurrentDictionary<Type, object>();
-
-        [NotMapped]
+        [NotMapped] 
         public virtual IRivenDbContext Self => this;
 
         #endregion
 
         #region AppSession 实例
 
-
-        [NotMapped]
-        public virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
-
+        [NotMapped] 
+        protected virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
 
         #endregion
 
@@ -115,7 +108,8 @@ namespace Company.Project.Database
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default)
         {
             this.Self.ApplyAudit(ChangeTracker);
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
@@ -125,11 +119,6 @@ namespace Company.Project.Database
 
         #region IRivenDbContext 接口函数实现
 
-        public virtual string GetCurrentTenantNameOrNull()
-        {
-            return AppSession?.TenantName;
-        }
-
         public virtual string GetCurrentUserIdOrNull()
         {
             return AppSession?.UserId?.ToString();
@@ -138,6 +127,22 @@ namespace Company.Project.Database
         public virtual EntityEntry ConvertToEntry(object obj)
         {
             return Entry(obj);
+        }
+
+        #endregion
+
+        #region 释放资源
+
+        public override void Dispose()
+        {
+            this.Self.DisposeRivenDbContext();
+            base.Dispose();
+        }
+
+        public override ValueTask DisposeAsync()
+        {
+            this.Self.DisposeRivenDbContext();
+            return base.DisposeAsync();
         }
 
         #endregion
