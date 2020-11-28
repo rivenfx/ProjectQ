@@ -43,8 +43,9 @@
     </PackageReference>
   </ItemGroup>
 
+
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Company.Project.Host\Company.Project.Host.csproj" />
+    <ProjectReference Include="..\..\src\Company.Project.Host.Core\Company.Project.Host.Core.csproj" />
   </ItemGroup>
 
 </Project>
