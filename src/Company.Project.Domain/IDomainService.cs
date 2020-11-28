@@ -25,7 +25,7 @@ namespace Company.Project
 
         IQueryable<TEntity> Query { get; }
 
-        IQueryable<TEntity> QuerAsNoTracing { get; }
+        IQueryable<TEntity> QueryAsNoTracking { get; }
 
         /// <summary>
         /// 根据id查找
