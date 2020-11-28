@@ -24,29 +24,28 @@ using System.Threading.Tasks;
 
 namespace Company.Project.Session
 {
-    public class SessionAppService : IApplicationService
+    public class SessionAppService : AppServiceBase
     {
-        readonly IAppSession _appSession;
         readonly UserManager _userManager;
         readonly RoleManager _roleManager;
         readonly IPermissionManager _permissionManager;
-        readonly IConfiguration _configuration;
-        readonly ILanguageManager _languageManager;
 
 
-        public SessionAppService(IAppSession appSession, UserManager userManager, RoleManager roleManager, IPermissionManager permissionManager, IConfiguration configuration, ILanguageManager languageManager)
+        public SessionAppService(
+            IServiceProvider serviceProvider,
+            UserManager userManager,
+            RoleManager roleManager,
+            IPermissionManager permissionManager
+            ) : base(serviceProvider)
         {
-            _appSession = appSession;
             _userManager = userManager;
             _roleManager = roleManager;
             _permissionManager = permissionManager;
-            _configuration = configuration;
-            _languageManager = languageManager;
         }
 
         public async Task<SessionDto> GetCurrentSession()
         {
-            var appInfo = this._configuration.GetAppInfo();
+            var appInfo = this.Configuration.GetAppInfo();
 
 
 
@@ -56,7 +55,7 @@ namespace Company.Project.Session
             {
                 Name = appInfo.Name,
                 Version = appInfo.Version,
-                UserId = _appSession.UserId?.ToString(),
+                UserId = AppSession.UserId?.ToString(),
                 MultiTenancy = this.GetMultiTenancy(),
                 Auth = await this.GetAuth(),
                 Localization = this.GetLocalization(),
@@ -68,10 +67,10 @@ namespace Company.Project.Session
         {
             var localzation = new LocalizationDto();
 
-            localzation.DefaultCulture = this._languageManager.GetDefaultLanguage().Culture;
-            localzation.CurrentCulture = _appSession.CurrentLanguage.Culture;
+            localzation.DefaultCulture = this.LanguageManager.GetDefaultLanguage().Culture;
+            localzation.CurrentCulture = AppSession.CurrentLanguage.Culture;
 
-            localzation.Languages = this._languageManager.GetEnabledLanguages()
+            localzation.Languages = this.LanguageManager.GetEnabledLanguages()
                 .Select(o =>
                 {
                     var dto = o.MapTo<LanguageInfoDto>();
@@ -94,7 +93,7 @@ namespace Company.Project.Session
             // 不同情况返回不同的 Permission
             // 租户不为空时
             var all = this._permissionManager.GetAll();
-            if (!string.IsNullOrWhiteSpace(_appSession.TenantName) && MultiTenancyConfig.IsEnabled)
+            if (!string.IsNullOrWhiteSpace(AppSession.TenantName) && MultiTenancyConfig.IsEnabled)
             {
                 authDto.AllPermissions = all
                     .Where(o => o.Scope != Riven.Identity.Authorization.PermissionAuthorizeScope.Host)
@@ -108,9 +107,9 @@ namespace Company.Project.Session
             }
 
             // 已登录
-            if (_appSession.UserId.HasValue)
+            if (AppSession.UserId.HasValue)
             {
-                var userIdString = _appSession.UserId.Value.ToString();
+                var userIdString = AppSession.UserId.Value.ToString();
 
                 var userPermissions = await _userManager.GetPermissionsByUserIdAsync(userIdString);
 
@@ -133,7 +132,7 @@ namespace Company.Project.Session
             return new MultiTenancyDto()
             {
                 IsEnabled = MultiTenancyConfig.IsEnabled,
-                TenantName = _appSession.TenantName
+                TenantName = AppSession.TenantName
             };
         }
 
