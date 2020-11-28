@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace>Company.Project</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+		<PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Company.Project.Application\Company.Project.Application.csproj" />
+		<ProjectReference Include="..\Company.Project.Domain\Company.Project.Domain.csproj" />
+		<ProjectReference Include="..\Company.Project.EntityFrameworkCore\Company.Project.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

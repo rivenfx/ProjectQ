@@ -24,8 +24,7 @@ using Company.Project.Debugger;
 namespace Company.Project
 {
     [DependsOn(
-        typeof(CompanyProjectApplicationModule),
-        typeof(CompanyProjectEntityFrameworkCoreModule)
+        typeof(CompanyProjectHostCoreModule)
         )]
     public class CompanyProjectHostModule : AppModule
     {
