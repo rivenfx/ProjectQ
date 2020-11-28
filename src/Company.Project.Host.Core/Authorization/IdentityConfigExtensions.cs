@@ -1,22 +1,15 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using Riven;
+using Riven.Authorization;
 
 using Company.Project.Database;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
-using System;
-using Microsoft.AspNetCore.Http;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
-
-using Riven;
-using Riven.Extensions;
-using Riven.Authorization;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Company.Project.Authorization
 {
