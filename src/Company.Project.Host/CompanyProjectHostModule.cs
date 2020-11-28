@@ -24,7 +24,8 @@ using Company.Project.Debugger;
 namespace Company.Project
 {
     [DependsOn(
-        typeof(CompanyProjectHostCoreModule)
+        typeof(CompanyProjectHostCoreModule),
+        typeof(EasyCachingModule)
         )]
     public class CompanyProjectHostModule : AppModule
     {
