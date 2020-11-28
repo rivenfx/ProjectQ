@@ -12,23 +12,12 @@ using Riven.Uow;
 
 namespace Company.Project.MultiTenancy
 {
-    public class TenantMananger : ITenantManager
+    public class TenantMananger : DomainService<Tenant, Guid>, ITenantManager
     {
-        readonly IRepository<Tenant, Guid> _entityRep;
-        readonly IUnitOfWorkManager _unitOfWorkManager;
-
-        IActiveUnitOfWork CurrentUnitOfWork => this._unitOfWorkManager.Current;
-
-        public TenantMananger(IRepository<Tenant, Guid> entityRep, IUnitOfWorkManager unitOfWorkManager)
+        public TenantMananger(IServiceProvider serviceProvider)
+            : base(serviceProvider)
         {
-            _entityRep = entityRep;
-            _unitOfWorkManager = unitOfWorkManager;
         }
-
-        public IQueryable<Tenant> Query => _entityRep.GetAll();
-
-        public IQueryable<Tenant> QueryAsNoTracking => this.Query.AsNoTracking();
-
 
         public virtual async Task<Tenant> Create(string name, string displayName, string description = null, string connectionString = null, bool isStatic = false)
         {
@@ -41,12 +30,14 @@ namespace Company.Project.MultiTenancy
                 IsStatic = isStatic
             };
 
-            return await _entityRep.InsertAsync(tenant);
+            await this.Create(tenant);
+
+            return tenant;
         }
 
         public virtual async Task Delete(string name)
         {
-            await _entityRep.DeleteAsync(o => o.Name == name);
+            await this.Delete(o => o.Name == name);
         }
 
         public virtual async Task<Tenant> GetByName(string name)
@@ -64,7 +55,9 @@ namespace Company.Project.MultiTenancy
             tenant.DisplayName = displayName;
             tenant.Description = description;
 
-            return await this._entityRep.UpdateAsync(tenant);
+            await this.Update(tenant);
+
+            return tenant;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,40 +11,37 @@ using Riven.Repositories;
 
 namespace Company.Project.MultiTenancy
 {
-    public interface ITenantManager : ITransientDependency
+    public interface ITenantManager : IDomainService<Tenant, Guid>
     {
-        IQueryable<Tenant> Query { get; }
-        IQueryable<Tenant> QueryAsNoTracking { get; }
-
         /// <summary>
-        /// ´´½¨×â»§
+        /// åˆ›å»ºç§Ÿæˆ·
         /// </summary>
-        /// <param name="name">Ãû³Æ(Î¨Ò»)</param>
-        /// <param name="displayName">ÏÔÊ¾Ãû³Æ</param>
-        /// <param name="description">ÃèÊö</param>
-        /// <param name="connectionString">Êı¾İ¿âÁ¬½Ó×Ö·û´®</param>
-        /// <param name="isStatic">ÊÇ·ñÎªÏµÍ³ÄÚÖÃ</param>
+        /// <param name="name">åç§°(å”¯ä¸€)</param>
+        /// <param name="displayName">æ˜¾ç¤ºåç§°</param>
+        /// <param name="description">æè¿°</param>
+        /// <param name="connectionString">æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²</param>
+        /// <param name="isStatic">æ˜¯å¦ä¸ºç³»ç»Ÿå†…ç½®</param>
         /// <returns></returns>
         Task<Tenant> Create(string name, string displayName, string description = null, string connectionString = null, bool isStatic = false);
 
         /// <summary>
-        /// ¸ù¾İ×â»§Ãû³Æ»ñÈ¡×â»§
+        /// æ ¹æ®ç§Ÿæˆ·åç§°è·å–ç§Ÿæˆ·
         /// </summary>
-        /// <param name="name">Ãû³Æ</param>
+        /// <param name="name">åç§°</param>
         /// <returns></returns>
         Task<Tenant> GetByName(string name);
 
         /// <summary>
-        /// ¸üĞÂ×â»§
+        /// æ›´æ–°ç§Ÿæˆ·
         /// </summary>
-        /// <param name="name">×â»§Ãû³Æ</param>
-        /// <param name="displayName">ÏÔÊ¾Ãû³Æ</param>
-        /// <param name="description">Ã÷Ï¸</param>
+        /// <param name="name">ç§Ÿæˆ·åç§°</param>
+        /// <param name="displayName">æ˜¾ç¤ºåç§°</param>
+        /// <param name="description">æ˜ç»†</param>
         /// <returns></returns>
         Task<Tenant> Update(string name, string displayName, string description);
 
         /// <summary>
-        /// ¸ù¾İÃû³ÆÉ¾³ı×â»§
+        /// æ ¹æ®åç§°åˆ é™¤ç§Ÿæˆ·
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
