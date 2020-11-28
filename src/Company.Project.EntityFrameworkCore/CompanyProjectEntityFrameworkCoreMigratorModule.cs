@@ -34,7 +34,7 @@ namespace Company.Project
 
         public override void OnPostConfigureServices(ServiceConfigurationContext context)
         {
-
+            base.OnPostConfigureServices(context);
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
