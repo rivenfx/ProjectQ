@@ -1,47 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Company.Project</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RootNamespace>Company.Project</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Localization\SourceFiles\Json\lang-en.json" />
-    <None Remove="Localization\SourceFiles\Json\lang-zh-Hans.json" />
-  </ItemGroup>
+	<PropertyGroup>
+		<RivenFxFrameworkVersion>0.1.7</RivenFxFrameworkVersion>
+	</PropertyGroup>
 
-
-  <ItemGroup>
-    <PackageReference Include="Riven.AspNetCore.Localization" Version="0.1.4" />
-    <PackageReference Include="Riven.AspNetCore.Modular" Version="0.1.4" />
-    <PackageReference Include="Riven.AspNetCore.Identity" Version="0.1.4" />
-    <PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="0.1.4" />
-    <PackageReference Include="Riven.Domain.EntityFrameworkCore" Version="0.1.4" />
-    <PackageReference Include="Riven.Domain" Version="0.1.4" />
-    <PackageReference Include="Riven.AspNetCore.Uow" Version="0.1.4" />
-    <PackageReference Include="Riven.Mapster" Version="0.1.4" />
-    <PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="0.1.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Localization\SourceFiles\Json\lang-en.json" />
+		<None Remove="Localization\SourceFiles\Json\lang-zh-Hans.json" />
+	</ItemGroup>
 
 
-  <ItemGroup>
-    <Content Include="Localization\SourceFiles\Json\lang-en.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Localization\SourceFiles\Json\lang-zh-Hans.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Riven.System.Linq.Dynamic.Core.Extensions" Version="0.1.1" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Riven.AspNetCore.Localization" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.AspNetCore.Modular" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.AspNetCore.Identity" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.AspNetCore.Swashbuckle" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.Domain.EntityFrameworkCore" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.Domain" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.AspNetCore.Uow" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.Mapster" Version="$(RivenFxFrameworkVersion)" />
+		<PackageReference Include="Riven.UnitOfWork.EntityFrameworkCore" Version="$(RivenFxFrameworkVersion)" />
+	</ItemGroup>
 
 
-  <ItemGroup>
-    <Folder Include="Organizations\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Localization\SourceFiles\Json\lang-en.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Localization\SourceFiles\Json\lang-zh-Hans.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="Riven.System.Linq.Dynamic.Core.Extensions" Version="0.1.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Organizations\" />
+	</ItemGroup>
+
+
 
 
 </Project>
