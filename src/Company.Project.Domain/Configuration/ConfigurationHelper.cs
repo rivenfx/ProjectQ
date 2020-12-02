@@ -23,7 +23,7 @@ namespace Company.Project.Configuration
         /// 构建配置信息
         /// </summary>
         /// <param name="fileName">文件名称,不带扩展名</param>
-        /// <param name="basePath">根路径</param>
+        /// <param name="basePath">根路径,默认为 <see cref="AppContext.BaseDirectory"/> </param>
         /// <param name="environmentName">环境变量名称</param>
         /// <param name="configurationBuilderAction">自定义配置流程</param>
         /// <param name="cache">启用缓存,默认为true</param>
@@ -48,7 +48,7 @@ namespace Company.Project.Configuration
             // 设置父级目录
             if (string.IsNullOrWhiteSpace(basePath))
             {
-                var defaultBasePath = Path.GetDirectoryName(typeof(ConfigurationHelper).Assembly.Location);
+                var defaultBasePath = AppContext.BaseDirectory;
                 builder = builder.SetBasePath(defaultBasePath);
             }
             else
