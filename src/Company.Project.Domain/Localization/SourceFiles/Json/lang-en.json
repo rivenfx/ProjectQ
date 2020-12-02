@@ -26,10 +26,8 @@
     "menu.fullscreen.exit": "exit full screen",
     "menu.clear.local.storage": "clear local storage",
     "menu.lang": "languages",
-    "menu.main": "main page",
-    "menu.dashboard": "dashboard",
-    "menu.role": "roles",
-    "menu.user": "users",
+    "main": "main page",
+    "dashboard": "dashboard",
 
     // common
     "common.creater": "creater",

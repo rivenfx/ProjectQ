@@ -28,10 +28,8 @@
     "menu.fullscreen.exit": "退出全屏",
     "menu.clear.local.storage": "清理本地缓存",
     "menu.lang": "语言",
-    "menu.main": "主导航",
-    "menu.dashboard": "仪表盘",
-    "menu.role": "角色",
-    "menu.user": "用户",
+    "main": "主导航",
+    "dashboard": "仪表盘",
 
     // common
     "common.creater": "创建者",
