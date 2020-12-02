@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { NoticeIconList, NoticeItem } from '@delon/abc/notice-icon';
 import add from 'date-fns/add';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -52,7 +52,12 @@ export class HeaderNotifyComponent {
   count = 5;
   loading = false;
 
-  constructor(private msg: NzMessageService, private nzI18n: NzI18nService) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private msg: NzMessageService,
+    private nzI18n: NzI18nService,
+  ) {
+  }
 
   updateNoticeData(notices: NoticeIconList[]): NoticeItem[] {
     const data = this.data.slice();
@@ -181,6 +186,7 @@ export class HeaderNotifyComponent {
         },
       ]);
 
+      this.cdr.detectChanges();
       this.loading = false;
     }, 500);
   }
