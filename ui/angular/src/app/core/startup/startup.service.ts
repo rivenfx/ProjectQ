@@ -126,7 +126,7 @@ export class StartupService {
     const user: any = {
       name: 'Admin',
       avatar: './assets/tmp/img/avatar.jpg',
-      email: 'cipchk@qq.com',
+      email: 'msmadaoe@msn.com',
       token: '123456789',
     };
     this.settingService.setUser(user);
