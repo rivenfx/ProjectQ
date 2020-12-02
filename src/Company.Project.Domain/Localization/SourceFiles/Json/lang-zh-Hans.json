@@ -11,6 +11,17 @@
     "SomePermissionDoNotExist": "某些权限不存在",
     "WithoutAnyPermission": "没有任何权限",
 
+    // permission common
+    "query": "查询",
+    "create": "创建",
+    "edit": "修改",
+    "delete": "删除",
+
+    // permission
+    "root": "所有权限",
+    "user": "用户",
+    "role": "角色",
+
     // menu
     "menu.search.placeholder": "搜索",
     "menu.fullscreen": "全屏",

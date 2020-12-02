@@ -9,6 +9,17 @@
     "SomePermissionDoNotExist": "some permission do not exist",
     "WithoutAnyPermission": "no permission",
 
+    // permission common
+    "query": "Query",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+
+    // permission
+    "root": "All Permission",
+    "user": "User",
+    "role": "Role",
+
     // menu
     "menu.search.placeholder": "search",
     "menu.fullscreen": "full screen",
