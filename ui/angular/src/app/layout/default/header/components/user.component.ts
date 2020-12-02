@@ -18,18 +18,18 @@ import { SampleComponentBase } from '@shared/common';
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">
       <div nz-menu class="width-sm">
-        <div nz-menu-item routerLink="/pro/account/center">
-          <i nz-icon nzType="user" class="mr-sm"></i>
-          {{ l('menu.account.center') }}
-        </div>
-        <div nz-menu-item routerLink="/pro/account/settings">
-          <i nz-icon nzType="setting" class="mr-sm"></i>
-          {{ l('menu.account.settings') }}
-        </div>
-        <div nz-menu-item routerLink="/exception/trigger">
-          <i nz-icon nzType="close-circle" class="mr-sm"></i>
-          {{ l('menu.account.trigger') }}
-        </div>menu.
+        <!--        <div nz-menu-item routerLink="/pro/account/center">-->
+        <!--          <i nz-icon nzType="user" class="mr-sm"></i>-->
+        <!--          {{ l('menu.account.center') }}-->
+        <!--        </div>-->
+        <!--        <div nz-menu-item routerLink="/pro/account/settings">-->
+        <!--          <i nz-icon nzType="setting" class="mr-sm"></i>-->
+        <!--          {{ l('menu.account.settings') }}-->
+        <!--        </div>-->
+        <!--        <div nz-menu-item routerLink="/exception/trigger">-->
+        <!--          <i nz-icon nzType="close-circle" class="mr-sm"></i>-->
+        <!--          {{ l('menu.account.trigger') }}-->
+        <!--        </div>-->
         <li nz-menu-divider></li>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
