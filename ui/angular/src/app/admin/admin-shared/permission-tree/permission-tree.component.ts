@@ -57,7 +57,7 @@ export class PermissionTreeComponent extends ControlComponentBase<string[]> impl
       .subscribe((res) => {
 
         (res as any[]).forEach(o => {
-          o.displayName = this.l(o.name);
+          o.displayName = this.ls(o.name);
         });
         this.treeData = this.arraySer.arrToTreeNode(res, {
           idMapName: 'name',
