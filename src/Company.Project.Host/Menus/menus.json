@@ -1,20 +1,20 @@
-﻿[
+[
   {
     "text": "主导航",
-    "i18n": "menu.main",
+    "i18n": "main",
     "group": true,
     "hideInBreadcrumb": true,
     "children": [
       {
         "text": "工作台",
-        "i18n": "menu.dashboard",
+        "i18n": "dashboard",
         "link": "/admin/dashboard",
         "icon": "anticon-dashboard",
         "hideInBreadcrumb": true
       },
       {
         "text": "角色",
-        "i18n": "menu.role",
+        "i18n": "role",
         "link": "/admin/role",
         "icon": "icon iconfont icon-role",
         "acl": "role.query",
@@ -22,7 +22,7 @@
       },
       {
         "text": "用户",
-        "i18n": "menu.user",
+        "i18n": "user",
         "link": "/admin/user",
         "icon": "icon iconfont icon-user",
         "acl": "user.query",
