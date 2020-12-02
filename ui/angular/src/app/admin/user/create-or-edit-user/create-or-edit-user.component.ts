@@ -26,7 +26,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
   }
 
   ngOnInit(): void {
-    this.title = this.l('menu.user');
+    this.title = this.l('user');
     if (this.modalInput) {
       this.loading = true;
       this.userSer.getEditById(this.modalInput)

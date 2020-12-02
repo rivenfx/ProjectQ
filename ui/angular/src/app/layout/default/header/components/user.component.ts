@@ -29,7 +29,7 @@ import { SampleComponentBase } from '@shared/common';
         <div nz-menu-item routerLink="/exception/trigger">
           <i nz-icon nzType="close-circle" class="mr-sm"></i>
           {{ l('menu.account.trigger') }}
-        </div>
+        </div>menu.
         <li nz-menu-divider></li>
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
