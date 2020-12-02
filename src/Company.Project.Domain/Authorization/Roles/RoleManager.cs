@@ -281,10 +281,5 @@ namespace Company.Project.Authorization.Roles
 
             return result;
         }
-
-        public override string NormalizeKey(string key)
-        {
-            return key?.ToLower();
-        }
     }
 }
