@@ -125,7 +125,7 @@ export class StartupService {
   private initUserInfo(input: SessionDto) {
     const user: any = {
       name: 'Admin',
-      avatar: './assets/tmp/img/avatar.jpg',
+      avatar: 'assets/images/avatar.png',
       email: 'msmadaoe@msn.com',
       token: '123456789',
     };
