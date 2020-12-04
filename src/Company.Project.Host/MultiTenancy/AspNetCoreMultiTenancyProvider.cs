@@ -5,7 +5,7 @@ using Riven.Extensions;
 using Company.Project;
 
 
-namespace Riven.Uow
+namespace Riven.MultiTenancy
 {
     /// <summary>
     /// 多租户信息提供者
