@@ -32,24 +32,30 @@ namespace Company.Project
 
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
-          
+            context.Services.RegisterAssemblyOf<CompanyProjectHostCoreModule>();
+
+            // 多租户系统相关配置
+            context.Services.AddRivenMultiTenancyOptions((options) =>
+            {
+                options.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
+            });
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
-            
+
 
 
         }
 
         public override void OnPostConfigureServices(ServiceConfigurationContext context)
         {
-            
+
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            
+
 
         }
     }

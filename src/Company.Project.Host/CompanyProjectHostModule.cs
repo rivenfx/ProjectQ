@@ -33,11 +33,7 @@ namespace Company.Project
         {
             context.Services.RegisterAssemblyOf<CompanyProjectHostModule>();
 
-            // 多租户配置
-            context.Services.AddRivenMultiTenancyOptions((options) =>
-            {
-                options.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
-            });
+            // 多租户信息提供者
             context.Services
                 .AddRivenMultiTenancyProvider<AspNetCoreMultiTenancyProvider>();
             // 添加获取当前连接字符串提供者
