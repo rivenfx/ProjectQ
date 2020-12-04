@@ -29,13 +29,16 @@ namespace Company.Project
 
         readonly IDbMigrator _dbMigrator;
 
-        public MigratorHostedService(IServiceProvider serviceProvider, ILogger<MigratorHostedService> logger, IHostApplicationLifetime hostApplicationLifetime, IUnitOfWorkManager unitOfWorkManager, IDbMigrator dbMigrator)
+        readonly IMultiTenancyOptions _multiTenancyOptions;
+
+        public MigratorHostedService(IServiceProvider serviceProvider, ILogger<MigratorHostedService> logger, IHostApplicationLifetime hostApplicationLifetime, IUnitOfWorkManager unitOfWorkManager, IDbMigrator dbMigrator, IMultiTenancyOptions multiTenancyOptions)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
             _hostApplicationLifetime = hostApplicationLifetime;
             _unitOfWorkManager = unitOfWorkManager;
             _dbMigrator = dbMigrator;
+            _multiTenancyOptions = multiTenancyOptions;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -47,7 +50,7 @@ namespace Company.Project
             _logger.LogInformation("Host数据库 正在升级");
             await this._dbMigrator.CreateOrMigrateForHostAsync();
             _logger.LogInformation("Host数据库 升级完成");
-            if (!MultiTenancyConfig.IsEnabled)
+            if (!_multiTenancyOptions.IsEnabled)
             {
                 _logger.LogInformation("未启用多租户,跳过执行租户数据库升级");
                 goto end;

@@ -9,22 +9,25 @@ using Company.Project.Models;
 using Microsoft.AspNetCore.Authorization;
 using Company.Project.Authenticate.Dtos;
 using Company.Project.Authorization.Users;
+using Riven.MultiTenancy;
 
 namespace Company.Project.Controllers
 {
     public class AccountController : Controller
     {
         private readonly SignInManager _signInManager;
+        private readonly IMultiTenancyOptions _multiTenancyOptions;
 
-        public AccountController(SignInManager signInManager)
+        public AccountController(SignInManager signInManager, IMultiTenancyOptions multiTenancyOptions)
         {
             _signInManager = signInManager;
+            _multiTenancyOptions = multiTenancyOptions;
         }
 
         [HttpGet]
         public IActionResult Login()
         {
-            ViewBag.IsEnabledMultiTenancy = Riven.MultiTenancy.MultiTenancyConfig.IsEnabled;
+            ViewBag.IsEnabledMultiTenancy = _multiTenancyOptions.IsEnabled;
 
             return View();
         }

@@ -130,7 +130,7 @@ namespace Company.Project.Session
         {
             return new MultiTenancyDto()
             {
-                IsEnabled = MultiTenancyConfig.IsEnabled,
+                IsEnabled = this._multiTenancyOptions.IsEnabled,
                 TenantName = AppSession.TenantName
             };
         }
