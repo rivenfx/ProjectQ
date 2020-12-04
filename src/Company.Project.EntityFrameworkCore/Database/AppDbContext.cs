@@ -4,16 +4,20 @@ using Company.Project.Authorization.Users;
 using Company.Project.Database.Extenstions;
 using Company.Project.MultiTenancy;
 using Company.Project.Samples;
+
 using JetBrains.Annotations;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+
 using Riven;
 using Riven.Identity.Roles;
 using Riven.Identity.Users;
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -36,17 +40,17 @@ namespace Company.Project.Database
         [NotMapped] public virtual IServiceProvider ServiceProvider { get; }
 
         [NotMapped]
-        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap =>
-            new ConcurrentDictionary<Type, object>();
+        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap { get; }
 
-        [NotMapped] 
+
+        [NotMapped]
         public virtual IRivenDbContext Self => this;
 
         #endregion
 
         #region AppSession 实例
 
-        [NotMapped] 
+        [NotMapped]
         protected virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
 
         #endregion
@@ -61,6 +65,8 @@ namespace Company.Project.Database
             : base(options)
         {
             ServiceProvider = serviceProvider;
+            this.SerivceInstanceMap = new ConcurrentDictionary<Type, object>();
+
         }
 
         #region 租户
