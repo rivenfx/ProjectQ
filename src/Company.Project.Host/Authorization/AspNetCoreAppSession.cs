@@ -1,16 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
-using Company.Project.Authorization.Permissions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-using Riven.Dependency;
+using Riven.MultiTenancy;
 using Riven.Extensions;
 using Riven.Localization;
-using Riven.Uow;
 
 namespace Company.Project.Authorization
 {
@@ -20,7 +16,7 @@ namespace Company.Project.Authorization
 
         public string UserName => _httpContextAccessor?.HttpContext?.User.GetUserName(_options.Value);
 
-        public string TenantName => _currentConnectionStringNameProvider.Current;
+        public string TenantName => _multiTenancyProvider.CurrentTenantNameOrNull();
 
         public Guid? ImpersonatedUserId => this.GetImpersonatedUserId();
 
@@ -31,14 +27,14 @@ namespace Company.Project.Authorization
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly IOptions<IdentityOptions> _options;
         readonly ICurrentLanguage _currentLanguage;
-        readonly ICurrentConnectionStringNameProvider _currentConnectionStringNameProvider;
+        readonly IMultiTenancyProvider _multiTenancyProvider;
 
-        public AspNetCoreAppSession(IHttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage, ICurrentConnectionStringNameProvider currentConnectionStringNameProvider)
+        public AspNetCoreAppSession(IHttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage, IMultiTenancyProvider multiTenancyProvider)
         {
             _httpContextAccessor = httpContextAccessor;
             _options = options;
             _currentLanguage = currentLanguage;
-            _currentConnectionStringNameProvider = currentConnectionStringNameProvider;
+            _multiTenancyProvider = multiTenancyProvider;
         }
 
 
