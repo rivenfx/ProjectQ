@@ -30,7 +30,7 @@ import { SampleComponentBase } from '@shared/common';
         <!--          <i nz-icon nzType="close-circle" class="mr-sm"></i>-->
         <!--          {{ l('menu.account.trigger') }}-->
         <!--        </div>-->
-        <li nz-menu-divider></li>
+        <!-- <li nz-menu-divider></li> -->
         <div nz-menu-item (click)="logout()">
           <i nz-icon nzType="logout" class="mr-sm"></i>
           {{ l('label.log-out') }}
