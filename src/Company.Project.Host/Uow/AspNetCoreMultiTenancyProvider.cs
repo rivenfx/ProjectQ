@@ -7,15 +7,15 @@ using Company.Project;
 
 namespace Riven.Uow
 {
-    public class AspNetCoreMultiTenancyCurrentConnectionStringNameProvider : ICurrentConnectionStringNameProvider, IMultiTenancyProvider
+    /// <summary>
+    /// 多租户信息提供者
+    /// </summary>
+    public class AspNetCoreMultiTenancyProvider : IMultiTenancyProvider
     {
-        public string Current => this.CurrentTenantNameOrNull();
+        protected readonly IHttpContextAccessor _httpContextAccessor;
+        protected readonly IMultiTenancyOptions _multiTenancyOptions;
 
-
-        readonly IHttpContextAccessor _httpContextAccessor;
-        readonly IMultiTenancyOptions _multiTenancyOptions;
-
-        public AspNetCoreMultiTenancyCurrentConnectionStringNameProvider(IHttpContextAccessor httpContextAccessor, IMultiTenancyOptions multiTenancyOptions)
+        public AspNetCoreMultiTenancyProvider(IHttpContextAccessor httpContextAccessor, IMultiTenancyOptions multiTenancyOptions)
         {
             _httpContextAccessor = httpContextAccessor;
             _multiTenancyOptions = multiTenancyOptions;
@@ -24,18 +24,13 @@ namespace Riven.Uow
         public virtual string CurrentTenantNameOrNull()
         {
             // 未启用多租户,则返回系统默认创建的多租户名称
-            if (this.GetMultiTenancyEnabled())
+            if (_multiTenancyOptions.IsEnabled)
             {
                 // 启用多租户，返回当前请求头中携带的租户名称
                 return _httpContextAccessor?.HttpContext?.Request?.Headers?.GetTenantName();
 
             }
             return AppConsts.MultiTenancy.DefaultTenantName;
-        }
-
-        public virtual bool GetMultiTenancyEnabled()
-        {
-            return _multiTenancyOptions.IsEnabled;
         }
     }
 }
