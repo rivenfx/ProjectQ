@@ -36,7 +36,7 @@ namespace Company.Project
             context.Services.RegisterAssemblyOf<CompanyProjectHostModule>();
 
             // 添加获取当前连接字符串提供者
-            context.Services.AddRivenCurrentConnectionStringNameProvider<AspNetCoreCurrentConnectionStringNameProvider>();
+            context.Services.AddRivenCurrentConnectionStringNameProvider<AspNetCoreMultiTenancyCurrentConnectionStringNameProvider>();
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)

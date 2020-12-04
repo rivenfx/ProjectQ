@@ -1,7 +1,10 @@
 using System;
+
 using Company.Project.Authorization;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Riven.Application;
 using Riven.Localization;
 using Riven.Uow;
@@ -29,5 +32,11 @@ namespace Company.Project
         protected virtual IConfiguration Configuration { get; }
         protected virtual ILanguageManager LanguageManager { get; }
         protected virtual ICurrentLanguage CurrentLanguage { get; }
+
+
+        protected virtual TService GetService<TService>()
+        {
+            return this._serviceProvider.GetRequiredService<TService>();
+        }
     }
 }

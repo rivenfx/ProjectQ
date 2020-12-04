@@ -29,18 +29,17 @@ namespace Company.Project.Session
         readonly UserManager _userManager;
         readonly RoleManager _roleManager;
         readonly IPermissionManager _permissionManager;
+        readonly IMultiTenancyOptions _multiTenancyOptions;
 
 
         public SessionAppService(
-            IServiceProvider serviceProvider,
-            UserManager userManager,
-            RoleManager roleManager,
-            IPermissionManager permissionManager
+            IServiceProvider serviceProvider
             ) : base(serviceProvider)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _permissionManager = permissionManager;
+            _userManager = GetService<UserManager>();
+            _roleManager = GetService<RoleManager>();
+            _permissionManager = GetService<IPermissionManager>();
+            _multiTenancyOptions = GetService<IMultiTenancyOptions>();
         }
 
         public async Task<SessionDto> GetCurrentSession()
@@ -93,7 +92,7 @@ namespace Company.Project.Session
             // 不同情况返回不同的 Permission
             // 租户不为空时
             var all = this._permissionManager.GetAll();
-            if (!string.IsNullOrWhiteSpace(AppSession.TenantName) && MultiTenancyConfig.IsEnabled)
+            if (!string.IsNullOrWhiteSpace(AppSession.TenantName) && _multiTenancyOptions.IsEnabled)
             {
                 authDto.AllPermissions = all
                     .Where(o => o.Scope != Riven.Identity.Authorization.PermissionAuthorizeScope.Host)

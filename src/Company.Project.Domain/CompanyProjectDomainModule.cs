@@ -25,7 +25,10 @@ namespace Company.Project
             // 多租户配置
             MultiTenancyConfig.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
 
-
+            context.Services.AddRivenMultiTenancyOptions((options) =>
+            {
+                options.IsEnabled = context.Configuration.GetMultiTenancyInfo().IsEnabled;
+            });
             context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
         }
 

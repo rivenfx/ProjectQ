@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Riven.Dependency;
 using Riven.Identity.Authorization;
 using Riven.Modular;
+using Riven.MultiTenancy;
 
 namespace Company.Project.Authorization.Permissions
 {
@@ -14,10 +15,12 @@ namespace Company.Project.Authorization.Permissions
         List<PermissionItem> _permissions = new List<PermissionItem>();
 
         readonly IServiceProvider _serviceProvider;
+        readonly IMultiTenancyOptions _multiTenancyOptions;
 
-        public PermissionManager(IServiceProvider serviceProvider)
+        public PermissionManager(IServiceProvider serviceProvider, IMultiTenancyOptions multiTenancyOptions)
         {
             _serviceProvider = serviceProvider;
+            _multiTenancyOptions = multiTenancyOptions;
         }
 
         public void Init()
@@ -51,7 +54,7 @@ namespace Company.Project.Authorization.Permissions
         public IQueryable<PermissionItem> GetAll()
         {
             // 未开启多租户只返回公共的
-            if (!Riven.MultiTenancy.MultiTenancyConfig.IsEnabled)
+            if (!_multiTenancyOptions.IsEnabled)
             {
                 return _permissions.Where(o => o.Scope == PermissionAuthorizeScope.Common)
                             .OrderBy(o => o.Sort)
