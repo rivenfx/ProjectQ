@@ -5,9 +5,9 @@
 
 trigger:
   batch: true
-  branches:
+  tags:
     include:
-    - master
+    - v*
   paths:
     exclude:
     - README.md
@@ -111,7 +111,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $tag = $(Build.BuildId)
+      git fetch --tags
+      git tag -l -n
+      $latestTag = git describe --tags (git rev-list --tags --max-count=1)
+      $tag = $latestTag.Replace("v","").Replace("V","")
       docker build -f ./src/$(projectName).Migrator/Dockerfile -t $(migratorDockerImageName) .
       docker tag  $(migratorDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
       docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(migratorDockerImageName):$tag
@@ -122,7 +125,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $tag = $(Build.BuildId)
+      git fetch --tags
+      git tag -l -n
+      $latestTag = git describe --tags (git rev-list --tags --max-count=1)
+      $tag = $latestTag.Replace("v","").Replace("V","")
       docker build -f ./src/$(projectName).Host/Dockerfile -t $(hostDockerImageName) .
       docker tag  $(hostDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
       docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(hostDockerImageName):$tag
@@ -133,7 +139,10 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $tag = $(Build.BuildId)
+      git fetch --tags
+      git tag -l -n
+      $latestTag = git describe --tags (git rev-list --tags --max-count=1)
+      $tag = $latestTag.Replace("v","").Replace("V","")
       docker build -f $(uiPath)/Dockerfile -t $(uiDockerImageName) .
       docker tag  $(uiDockerImageName) $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
       docker push $(dockerRegistry)/$(dockerRegisterNamespace)/$(uiDockerImageName):$tag
