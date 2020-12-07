@@ -167,4 +167,33 @@ namespace Company.Project
         }
 
     }
+
+
+    public interface ISampleDomainService<TEntity, TPrimaryKey> : IDomainService<TEntity, TPrimaryKey>
+        where TEntity : class, IEntity<TPrimaryKey>
+    {
+
+    }
+
+    public interface ISampleDomainService<TEntity> : ISampleDomainService<TEntity, long>
+         where TEntity : class, IEntity<long>
+    {
+
+    }
+
+    public class SampleDomainService<TEntity, TPrimaryKey> : DomainService<TEntity, TPrimaryKey>, ISampleDomainService<TEntity, TPrimaryKey>
+        where TEntity : class, IEntity<TPrimaryKey>
+    {
+        public SampleDomainService(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+    }
+
+    public class SampleDomainService<TEntity> : DomainService<TEntity>, ISampleDomainService<TEntity>
+        where TEntity : class, IEntity<long>
+    {
+        public SampleDomainService(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+    }
 }
