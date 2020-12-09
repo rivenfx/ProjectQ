@@ -62,6 +62,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{206D57AE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Project.Host.Core", "src\Company.Project.Host.Core\Company.Project.Host.Core.csproj", "{1AA72FDB-106F-4D2F-8A5B-E3222BBFC4FF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Riven.Dependency", "..\Framework\src\Riven.Dependency\Riven.Dependency.csproj", "{A9484775-9653-49A1-B96E-D4EBCAE9321D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +154,10 @@ Global
 		{1AA72FDB-106F-4D2F-8A5B-E3222BBFC4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AA72FDB-106F-4D2F-8A5B-E3222BBFC4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AA72FDB-106F-4D2F-8A5B-E3222BBFC4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9484775-9653-49A1-B96E-D4EBCAE9321D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9484775-9653-49A1-B96E-D4EBCAE9321D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9484775-9653-49A1-B96E-D4EBCAE9321D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9484775-9653-49A1-B96E-D4EBCAE9321D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,6 +184,7 @@ Global
 		{831BA1CA-7B3C-45D8-A54B-1EACAE5A250A} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
 		{508D1E38-865A-402D-8C9A-EFF016F14488} = {25466D59-FA4B-4C3E-8C63-6D9302268EE4}
 		{1AA72FDB-106F-4D2F-8A5B-E3222BBFC4FF} = {65AA0668-A884-461B-8BDF-757D8539A74C}
+		{A9484775-9653-49A1-B96E-D4EBCAE9321D} = {0E1D2208-0B07-4CB2-9001-348C8635209B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EEDD240-EA84-4E40-8C5C-F7EB34BC22B3}
