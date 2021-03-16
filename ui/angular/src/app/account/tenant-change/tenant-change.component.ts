@@ -37,4 +37,9 @@ export class TenantChangeComponent extends AppComponentBase
         this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
       });
   }
+
+  resetMultiTenancy() {
+    this.tenantName = '';
+    this.settingsSer.setData(RequestHelper.multiTenancy.key, this.tenantName);
+  }
 }

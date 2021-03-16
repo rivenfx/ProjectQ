@@ -1,10 +1,15 @@
-<div (click)="openChangeModal()">
+<div>
   <ng-container [ngSwitch]="!!tenantName">
     <ng-container *ngSwitchCase="true">
-      {{tenantName}}
+      <div (click)="openChangeModal()" style="display: inline-block;margin-right: 5px;">
+        {{tenantName}}
+      </div>
+      <i nz-icon nzType="reload" nzTheme="outline" (click)="resetMultiTenancy()"></i>
     </ng-container>
     <ng-container *ngSwitchDefault>
-      {{l('label.change-tenant')}}
+      <div (click)="openChangeModal()">
+        {{l('label.change-tenant')}}
+      </div>
     </ng-container>
   </ng-container>
 </div>
