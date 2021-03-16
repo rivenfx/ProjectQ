@@ -113,7 +113,7 @@ namespace Company.Project
 
 
             // 种子数据
-            SeedHelper.SeedDb(context.ServiceProvider);
+            //SeedHelper.SeedDb(context.ServiceProvider);
         }
     }
 }
