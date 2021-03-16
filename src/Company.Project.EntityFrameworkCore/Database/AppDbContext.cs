@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Riven;
 using Riven.Identity.Roles;
 using Riven.Identity.Users;
+using Riven.MultiTenancy;
 
 using System;
 using System.Collections.Concurrent;
@@ -35,23 +36,22 @@ namespace Company.Project.Database
     {
         #region IRivenDbContext 属性实现
 
-        [NotMapped] public virtual bool AuditSuppressAutoSetTenantName => true;
-
         [NotMapped] public virtual IServiceProvider ServiceProvider { get; }
 
-        [NotMapped]
-        public virtual ConcurrentDictionary<Type, object> SerivceInstanceMap { get; }
+        [NotMapped] public virtual IRivenDbContext Self => this;
+
+        [NotMapped] public virtual bool AuditSuppressAutoSetTenantName => true;
+
+        [NotMapped] public string CurrentUserId => AppSession?.UserId?.ToString();
 
 
-        [NotMapped]
-        public virtual IRivenDbContext Self => this;
 
         #endregion
 
         #region AppSession 实例
 
         [NotMapped]
-        protected virtual IAppSession AppSession => Self.GetApplicationService<IAppSession>();
+        protected virtual IAppSession AppSession => Self.GetT<IAppSession>();
 
         #endregion
 
@@ -65,8 +65,6 @@ namespace Company.Project.Database
             : base(options)
         {
             ServiceProvider = serviceProvider;
-            this.SerivceInstanceMap = new ConcurrentDictionary<Type, object>();
-
         }
 
         #region 租户
@@ -125,11 +123,6 @@ namespace Company.Project.Database
 
         #region IRivenDbContext 接口函数实现
 
-        public virtual string GetCurrentUserIdOrNull()
-        {
-            return AppSession?.UserId?.ToString();
-        }
-
         public virtual EntityEntry ConvertToEntry(object obj)
         {
             return Entry(obj);
@@ -137,20 +130,5 @@ namespace Company.Project.Database
 
         #endregion
 
-        #region 释放资源
-
-        public override void Dispose()
-        {
-            this.Self.DisposeRivenDbContext();
-            base.Dispose();
-        }
-
-        public override ValueTask DisposeAsync()
-        {
-            this.Self.DisposeRivenDbContext();
-            return base.DisposeAsync();
-        }
-
-        #endregion
     }
 }
