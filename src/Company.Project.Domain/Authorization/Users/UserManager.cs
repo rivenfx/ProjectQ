@@ -241,7 +241,7 @@ namespace Company.Project.Authorization.Users
             var userName = this.NormalizeName(userNameOrEmailOrPhoneNumber);
             var email = this.NormalizeEmail(userNameOrEmailOrPhoneNumber);
 
-            var user = await this.Query
+            var user = await this.QueryAsNoTracking
                 .FirstOrDefaultAsync(o => o.NormalizedUserName == userName
                                     || o.NormalizedEmail == email
                                     || o.PhoneNumber == userNameOrEmailOrPhoneNumber);
