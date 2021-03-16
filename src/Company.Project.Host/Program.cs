@@ -13,6 +13,7 @@ using Serilog;
 using Serilog.Events;
 using System.IO;
 using Company.Project.Configuration;
+using Company.Project.Debugger;
 
 namespace Company.Project.Host
 {
@@ -105,7 +106,11 @@ namespace Company.Project.Host
         /// <returns></returns>
         private static IConfiguration GetConfiguration()
         {
-            var configuration = ConfigurationHelper.GetConfiguration("appsettings");
+            var environmentName = DebugHelper.IsDebug ? "Development" : null;
+            var configuration = ConfigurationHelper.GetConfiguration(
+                fileName: "appsettings",
+                environmentName: environmentName
+                );
             return configuration;
         }
 
