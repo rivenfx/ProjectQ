@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 using Riven.Entities;
 using Riven.Entities.Auditing;
 using Riven.Identity.Users;
@@ -8,16 +10,10 @@ using System.Text;
 
 namespace Company.Project.Authorization.Users
 {
-    public class UserPermission : AppUserPermission<Guid>, IEntity<int>, IFullAudited, IMayHaveTenant
+    public class UserClaim : IdentityUserClaim<Guid>, IEntity<int>, IMayHaveTenant
     {
-        public virtual string Creator { get; set; }
-        public virtual DateTime CreationTime { get; set; }
-        public virtual string LastModifier { get; set; }
-        public virtual DateTime? LastModificationTime { get; set; }
-        public virtual string Deleter { get; set; }
-        public virtual DateTime? DeletionTime { get; set; }
-        public virtual bool IsDeleted { get; set; }
         public virtual string TenantName { get; set; }
+
         public virtual bool EntityEquals(object obj)
         {
             return EntityHelper.EntityEquals(this, obj);

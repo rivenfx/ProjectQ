@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Microsoft.Extensions.DependencyInjection;
+
+using Riven.Authorization;
 using Riven.Dependency;
-using Riven.Identity.Authorization;
 using Riven.Modular;
 using Riven.MultiTenancy;
 

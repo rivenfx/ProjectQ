@@ -69,46 +69,6 @@ namespace Company.Project.Seeder
             {
                 throw ex;
             }
-
-            return;
-
-
-            try
-            {
-                using (var scope = serviceProvider.CreateScope())
-                {
-                    var scopeServiceProvider = scope.ServiceProvider;
-
-                    var unitOfWorkManager = scopeServiceProvider.GetService<IUnitOfWorkManager>();
-                    using (var uow = unitOfWorkManager.Begin())
-                    {
-                        var currentUow = unitOfWorkManager.Current;
-
-
-                        var hostContext = currentUow.GetDbContext<AppDbContext>();
-
-                        var hostSeeder = scopeServiceProvider.GetService<IHostSeeder>();
-                        var tenant = await hostSeeder.Create(hostContext);
-
-                        using (currentUow.SetConnectionStringName(tenant.Name))
-                        {
-                            var tenantContext = currentUow.GetDbContext<AppDbContext>();
-                            var tenantSeeder = scopeServiceProvider.GetService<ITenantSeeder>();
-                            await tenantSeeder.Create(
-                                tenantContext,
-                                tenant.Name
-                            );
-                        }
-
-
-                        await uow.CompleteAsync();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
     }
 }

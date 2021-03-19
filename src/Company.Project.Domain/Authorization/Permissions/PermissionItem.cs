@@ -1,12 +1,7 @@
 using JetBrains.Annotations;
 
-using Microsoft.AspNetCore.Components.Forms;
-
 using Riven;
-using Riven.Identity.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Riven.Authorization;
 
 namespace Company.Project.Authorization.Permissions
 {

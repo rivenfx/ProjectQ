@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Company.Project.Authorization.Roles
 {
-    public class RoleManager : RoleManager<Role>, IRolePermissionAccessor
+    public class RoleManager : RoleManager<Role>
     {
         static IEnumerable<string> _emptyRolePermissions = new List<string>();
 

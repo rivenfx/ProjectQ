@@ -14,13 +14,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Localization\Riven.AspNetCore.Localization.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Modular\Riven.AspNetCore.Modular.csproj" />
-    <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Identity\Riven.AspNetCore.Identity.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Swashbuckle\Riven.AspNetCore.Swashbuckle.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Data\Riven.Data.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Dependency\Riven.Dependency.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Domain.EntityFrameworkCore\Riven.Domain.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Domain\Riven.Domain.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.AspNetCore.Uow\Riven.AspNetCore.Uow.csproj" />
+    <ProjectReference Include="..\..\..\Framework\src\Riven.Identity.AspNetCore\Riven.Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\Framework\src\Riven.Identity.EntityFrameworkCore\Riven.Identity.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\Framework\src\Riven.Identity\Riven.Identity.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Mapster\Riven.Mapster.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.UnitOfWork.EntityFrameworkCore\Riven.UnitOfWork.EntityFrameworkCore.csproj" />
   </ItemGroup>

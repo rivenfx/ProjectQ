@@ -1,4 +1,4 @@
-﻿using Riven.Entities;
+using Riven.Entities;
 using Riven.Identity.Permissions;
 
 using System;
@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Company.Project.Authorization.Permissions
 {
-    public class Permission : AppPermission, IEntity<Guid>, IMayHaveTenant
+    public class Permission : IdentityPermission, IEntity<string>, IMayHaveTenant
     {
         public virtual string TenantName { get; set; }
 

@@ -45,67 +45,70 @@ namespace Company.Project.Database
 
         public async Task CreateOrMigrateForTenantAsync(string tenantName)
         {
-            if (tenantName.IsNullOrWhiteSpace())
-            {
-                await this.CreateOrMigrate(null, async (appContext) =>
-                {
-                    using (var scope = _serviceProvider.CreateScope())
-                    {
-                        var hostSeeder = scope.ServiceProvider.GetRequiredService<IHostSeeder>();
-                        var defaultTenant = await hostSeeder.Create(appContext);
 
-                        var tenantSeeder = scope.ServiceProvider.GetRequiredService<ITenantSeeder>();
-                        await tenantSeeder.Create(appContext, defaultTenant.Name);
-                    }
-                });
-                return;
-            }
-
-            await this.CreateOrMigrate(tenantName, async (appContext) =>
-            {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var tenantSeeder = scope.ServiceProvider.GetRequiredService<ITenantSeeder>();
-                    await tenantSeeder.Create(appContext, tenantName);
-                }
-            });
         }
+        //{
+        //    if (tenantName.IsNullOrWhiteSpace())
+        //    {
+        //        await this.CreateOrMigrate(null, async (appContext) =>
+        //        {
+        //            using (var scope = _serviceProvider.CreateScope())
+        //            {
+        //                var hostSeeder = scope.ServiceProvider.GetRequiredService<IHostSeeder>();
+        //                var defaultTenant = await hostSeeder.Create(appContext);
 
-        protected virtual async Task CreateOrMigrate(string tenantName, Func<DbContext, Task> seedAction = null)
-        {
-            var unitOfWorkOptions = new UnitOfWorkOptions();
+        //                var tenantSeeder = scope.ServiceProvider.GetRequiredService<ITenantSeeder>();
+        //                await tenantSeeder.Create(appContext, defaultTenant.Name);
+        //            }
+        //        });
+        //        return;
+        //    }
 
-            // 工作单元级别
-            unitOfWorkOptions.Scope = TransactionScopeOption.Suppress;
-            unitOfWorkOptions.IsTransactional = false;
-            // 当前连接字符串名称
-            unitOfWorkOptions.ConnectionStringName = tenantName.IsNullOrWhiteSpace() ? RivenUnitOfWorkConsts.DefaultConnectionStringName : tenantName;
+        //    await this.CreateOrMigrate(tenantName, async (appContext) =>
+        //    {
+        //        using (var scope = _serviceProvider.CreateScope())
+        //        {
+        //            var tenantSeeder = scope.ServiceProvider.GetRequiredService<ITenantSeeder>();
+        //            await tenantSeeder.Create(appContext, tenantName);
+        //        }
+        //    });
+        //}
+
+        //protected virtual async Task CreateOrMigrate(string tenantName, Func<DbContext, Task> seedAction = null)
+        //{
+        //    var unitOfWorkOptions = new UnitOfWorkOptions();
+
+        //    // 工作单元级别
+        //    unitOfWorkOptions.Scope = TransactionScopeOption.Suppress;
+        //    unitOfWorkOptions.IsTransactional = false;
+        //    // 当前连接字符串名称
+        //    unitOfWorkOptions.ConnectionStringName = tenantName.IsNullOrWhiteSpace() ? RivenUnitOfWorkConsts.DefaultConnectionStringName : tenantName;
 
 
-            using (var uow = _unitOfWorkManager.Begin(unitOfWorkOptions))
-            {
-                // 获取当前数据库上下文
-                var dbContext = _unitOfWorkManager.Current.GetDbContext();
+        //    using (var uow = _unitOfWorkManager.Begin(unitOfWorkOptions))
+        //    {
+        //        // 获取当前数据库上下文
+        //        var dbContext = _unitOfWorkManager.Current.GetDbContext();
 
 
-                var migrations = dbContext.Database.GetMigrations().ToList();
-                var appliedMigrations = dbContext.Database.GetAppliedMigrations().ToList();
-                var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
+        //        var migrations = dbContext.Database.GetMigrations().ToList();
+        //        var appliedMigrations = dbContext.Database.GetAppliedMigrations().ToList();
+        //        var pendingMigrations = dbContext.Database.GetPendingMigrations().ToList();
 
 
-                // 迁移数据库结构
-                dbContext.Database.Migrate();
+        //        // 迁移数据库结构
+        //        dbContext.Database.Migrate();
 
 
-                // 种子数据
-                await seedAction?.Invoke(dbContext);
+        //        // 种子数据
+        //        await seedAction?.Invoke(dbContext);
 
-                // 保存
-                _unitOfWorkManager.Current.SaveChanges();
+        //        // 保存
+        //        _unitOfWorkManager.Current.SaveChanges();
 
-                // 提交工作单元
-                await uow.CompleteAsync();
-            }
-        }
+        //        // 提交工作单元
+        //        await uow.CompleteAsync();
+        //    }
+        //}
     }
 }

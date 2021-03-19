@@ -12,6 +12,7 @@ using Riven;
 using Riven.Authorization;
 using Riven.Exceptions;
 using Riven.Extensions;
+using Riven.Identity.Users;
 
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Company.Project.Authorization.Users
     /// <summary>
     /// 用户管理器
     /// </summary>
-    public class UserManager : UserManager<User>, IUserRolePermissionAccessor
+    public class UserManager : UserManager<User>
     {
         public IQueryable<User> Query => this.Users;
         public IQueryable<User> QueryAsNoTracking => this.Users.AsNoTracking();
@@ -86,7 +87,6 @@ namespace Company.Project.Authorization.Users
                 LockoutEnabled = lockoutEnabled,
                 IsActive = isActive,
                 TwoFactorEnabled = twoFactorEnabled,
-                Code = Guid.NewGuid().ToString(),
                 IsStatic = isStatic
             };
 
@@ -161,73 +161,6 @@ namespace Company.Project.Authorization.Users
             return user;
         }
 
-        /// <summary>
-        /// 给用户添加 权限
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="permissions"></param>
-        /// <returns></returns>
-        public virtual async Task AddPermissionsAsync([NotNull] User user, params string[] permissions)
-        {
-            Check.NotNull(user, nameof(user));
-
-            if (permissions == null || permissions.Length == 0)
-            {
-                return;
-            }
-
-            var permissionsDistinct = permissions.Distinct().Where(o => !o.IsNullOrWhiteSpace());
-            if (permissionsDistinct.Count() == 0)
-            {
-                return;
-            }
-
-            var identityResult = await this.AddClaimsAsync(user, permissionsDistinct.ToClaims());
-
-            if (!identityResult.Succeeded)
-            {
-                var detiles = new StringBuilder();
-                foreach (var error in identityResult.Errors)
-                {
-                    detiles.AppendLine($"{error.Code}: {error.Description}");
-                }
-                throw new UserFriendlyException("用户添加权限失败!", detiles.ToString());
-            }
-
-        }
-
-        /// <summary>
-        /// 添加 Roles, 不要直接使用 AddToRoleAsync
-        /// </summary>
-        /// <param name="user">用户</param>
-        /// <param name="roles">角色名称</param>
-        /// <returns></returns>
-        public virtual async Task AddToRolesAsync([NotNull] User user, params string[] roles)
-        {
-            Check.NotNull(user, nameof(user));
-            if (roles == null || roles.Length == 0)
-            {
-                return;
-            }
-
-            var rolesDistinct = roles.Distinct().Where(o => !o.IsNullOrWhiteSpace());
-            if (rolesDistinct.Count() == 0)
-            {
-                return;
-            }
-
-            var identityResult = await this.AddToRolesAsync(user, rolesDistinct);
-            if (!identityResult.Succeeded)
-            {
-                var detiles = new StringBuilder();
-                foreach (var error in identityResult.Errors)
-                {
-                    detiles.AppendLine($"{error.Code}: {error.Description}");
-                }
-                throw new UserFriendlyException("用户添加角色失败!", detiles.ToString());
-            }
-        }
-
 
         /// <summary>
         /// 根据用户名/邮箱/手机号码查找用户
@@ -289,7 +222,6 @@ namespace Company.Project.Authorization.Users
         public override Task<User> FindByNameAsync(string userName)
         {
             return FindByNameOrEmailOrPhoneNumberAsync(userName);
-            //return base.FindByNameAsync(userName);
         }
 
         public override Task<User> FindByEmailAsync(string email)
@@ -297,40 +229,11 @@ namespace Company.Project.Authorization.Users
             return FindByNameOrEmailOrPhoneNumberAsync(email);
         }
 
-        public async Task<IEnumerable<string>> GetPermissionsByUserIdAsync([NotNull] string userId)
+
+        public virtual async Task<IList<string>> GetRolesAsync(string userId)
         {
-            Check.NotNullOrWhiteSpace(userId, nameof(userId));
-
-            var user = await this.FindByIdAsync(userId);
-
-            return (await this.GetClaimsAsync(user)).Select(o => o.Value);
-        }
-
-        public async Task<IEnumerable<string>> GetPermissionsByUserNameAsync([NotNull] string userName)
-        {
-            Check.NotNullOrWhiteSpace(userName, nameof(userName));
-
-            var user = await this.FindByNameAsync(userName);
-
-            return (await this.GetClaimsAsync(user)).Select(o => o.Value);
-        }
-
-        public async Task<IEnumerable<string>> GetRolesByUserIdAsync([NotNull] string userId)
-        {
-            Check.NotNullOrWhiteSpace(userId, nameof(userId));
-
-            var user = await this.FindByIdAsync(userId);
-
-            return await this.GetRolesAsync(user);
-        }
-
-        public async Task<IEnumerable<string>> GetRolesByUserNameAsync([NotNull] string userName)
-        {
-            Check.NotNullOrWhiteSpace(userName, nameof(userName));
-
-            var user = await this.FindByNameAsync(userName);
-
-            return await this.GetRolesAsync(user);
+            var userRoleFinder = this.Store as IIdentityUserRoleFinder;
+            return (await userRoleFinder.GetRolesByUserIdAsync(userId)).ToList();
         }
     }
 }

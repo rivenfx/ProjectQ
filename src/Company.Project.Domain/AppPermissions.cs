@@ -1,15 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-using Riven.Application;
-using Riven.Modular;
-
 using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Linq;
-using Riven.Identity.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Company.Project.Authorization.Permissions;
 
 namespace Company.Project
