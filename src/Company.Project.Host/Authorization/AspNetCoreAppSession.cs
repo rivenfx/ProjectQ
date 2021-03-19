@@ -7,14 +7,15 @@ using Microsoft.Extensions.Options;
 using Riven.MultiTenancy;
 using Riven.Extensions;
 using Riven.Localization;
+using Riven.Identity;
 
 namespace Company.Project.Authorization
 {
     public class AspNetCoreAppSession : IAppSession
     {
-        public Guid? UserId => this.GetUserId();
+        public Guid? UserId => GetUserId();
 
-        public string UserName => _httpContextAccessor?.HttpContext?.User.GetUserName(_options.Value);
+        public string UserName => _currentUser.UserName;
 
         public string TenantName => _multiTenancyProvider.CurrentTenantNameOrNull();
 
@@ -24,14 +25,14 @@ namespace Company.Project.Authorization
 
         public LanguageInfo CurrentLanguage => _currentLanguage.GetCurrentLanguage();
 
-        readonly IHttpContextAccessor _httpContextAccessor;
+        readonly ICurrentUser _currentUser;
         readonly IOptions<IdentityOptions> _options;
         readonly ICurrentLanguage _currentLanguage;
         readonly IMultiTenancyProvider _multiTenancyProvider;
 
-        public AspNetCoreAppSession(IHttpContextAccessor httpContextAccessor, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage, IMultiTenancyProvider multiTenancyProvider)
+        public AspNetCoreAppSession(ICurrentUser currentUser, IOptions<IdentityOptions> options, ICurrentLanguage currentLanguage, IMultiTenancyProvider multiTenancyProvider)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _currentUser = currentUser;
             _options = options;
             _currentLanguage = currentLanguage;
             _multiTenancyProvider = multiTenancyProvider;
@@ -42,7 +43,7 @@ namespace Company.Project.Authorization
 
         Guid? GetUserId()
         {
-            var userIdString = _httpContextAccessor?.HttpContext?.User.GetUserId(_options.Value);
+            var userIdString = _currentUser.UserId;
             if (userIdString.IsNullOrWhiteSpace())
             {
                 return null;
@@ -59,7 +60,7 @@ namespace Company.Project.Authorization
 
         Guid? GetImpersonatedUserId()
         {
-            var userIdString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(IdentityClaimTypes.ImpersonatedUserIdNameIdentifier);
+            var userIdString = _currentUser.CurrentPrincipalAccessor.Principal.FindFirstValue(IdentityClaimTypes.ImpersonatedUserIdNameIdentifier);
             if (userIdString.IsNullOrWhiteSpace())
             {
                 return null;
@@ -76,7 +77,7 @@ namespace Company.Project.Authorization
 
         string GetImpersonatedTenantNameString()
         {
-            var tenantNameString = _httpContextAccessor?.HttpContext?.User.FindFirstValue(IdentityClaimTypes.ImpersonatedTenantNameIdentifier);
+            var tenantNameString = _currentUser.CurrentPrincipalAccessor.Principal.FindFirstValue(IdentityClaimTypes.ImpersonatedTenantNameIdentifier);
 
             if (!tenantNameString.IsNullOrWhiteSpace())
             {
