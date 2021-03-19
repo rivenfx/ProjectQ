@@ -10,6 +10,9 @@ using Riven.Authorization;
 using Company.Project.Database;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
+using Company.Project.Authorization.Permissions;
+using Riven.Identity;
+using Company.Project.Identity;
 
 namespace Company.Project.Authorization
 {
@@ -22,11 +25,11 @@ namespace Company.Project.Authorization
         /// <returns></returns>
         public static IdentityBuilder IdentityRegister(this IServiceCollection services)
         {
+            // 用户密码加密器
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
-            services.AddTransient<UserPasswordHasher>();
 
             // 添加 Identity
-            var identityBuilder = services.AddIdentity<User, Role>((options) =>
+            var identityBuilder = services.AddRivenIdentity<User, Role, Permission>((options) =>
             {
                 options.ConfigurationClaimsIdentity();
                 options.ConfigurationLockout();
@@ -36,19 +39,27 @@ namespace Company.Project.Authorization
                 options.ConfigurationUser();
             });
             identityBuilder
+                // 用户管理器
                 .AddUserManager<UserManager>()
+                // 角色管理器
                 .AddRoleManager<RoleManager>()
-                .AddUserStore<UserStore<AppDbContext>>()
-                .AddRoleStore<RoleStore<AppDbContext>>()
+                // 登录管理器
                 .AddSignInManager<SignInManager>()
+                // 用户存储器
+                .AddUserStore<UserStore>()
+                // 角色存储器
+                .AddRoleStore<RoleStore>()
+                // 权限存储器
+                .AddPermissionStore<PermissionStore>()
+                // ClaimsPrincipal 创建器
                 .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role, Guid>>()
-                .AddDefaultTokenProviders();
-
-            // 添加 Riven.Identity User and Role PermissionAccessor
-            services.AddRivenIdentityPermissionAccesssor<RoleManager, UserManager>();
-
-            // 添加 Permission 授权方式
-            services.AddRivenAspNetCorePermissionAuthorization();
+                // 添加 DbContext 访问器
+                .AddDbContextAccessor<UowIDbContextAccessor>()
+                // token提供者
+                .AddDefaultTokenProviders()
+                // 使用 Riven 实现的权限校验
+                .AddRivenAspNetCorePermissionAuthorization()
+                ;
 
             return identityBuilder;
         }
