@@ -43,6 +43,8 @@ namespace Company.Project.Authorization
                 .AddUserManager<UserManager>()
                 // 角色管理器
                 .AddRoleManager<RoleManager>()
+                // 权限管理器
+                .AddPermissionManager<PermissionManager>()
                 // 登录管理器
                 .AddSignInManager<SignInManager>()
                 // 用户存储器
