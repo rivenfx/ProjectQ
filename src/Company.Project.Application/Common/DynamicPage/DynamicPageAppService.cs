@@ -1,4 +1,4 @@
-﻿using Company.Project.Common.DynamicPage.Dtos;
+using Company.Project.Common.DynamicPage.Dtos;
 using Company.Project.Dtos;
 
 using Microsoft.Extensions.Hosting;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 using Riven.Application;
-using Riven.Identity.Authorization;
+using Riven.Authorization;
 
 using System;
 using System.Collections.Generic;

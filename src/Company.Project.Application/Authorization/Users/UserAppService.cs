@@ -8,7 +8,7 @@ using Riven.Application;
 using Company.Project.Authorization.Users.Dtos;
 using Riven.Exceptions;
 using Riven.Extensions;
-using Riven.Identity.Authorization;
+using Riven.Authorization;
 using Company.Project.Dtos;
 using Mapster;
 
@@ -59,7 +59,7 @@ namespace Company.Project.Authorization.Users
             var entity = await _userManager.QueryAsNoTracking
                 .FirstOrDefaultAsync(o => o.Id == input);
 
-            var roles = await _userManager.GetRolesByUserIdAsync(entity?.Id.ToString());
+            var roles = await _userManager.GetRolesAsync(entity?.Id.ToString());
 
             return new UserEditDto()
             {

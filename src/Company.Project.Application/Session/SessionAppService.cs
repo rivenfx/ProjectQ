@@ -12,6 +12,9 @@ using Nito.AsyncEx;
 
 using Riven;
 using Riven.Application;
+using Riven.Authorization;
+using Riven.Identity.Permissions;
+using Riven.Identity.Users;
 using Riven.Localization;
 using Riven.MultiTenancy;
 
@@ -26,18 +29,14 @@ namespace Company.Project.Session
 {
     public class SessionAppService : AppServiceBase
     {
-        readonly UserManager _userManager;
-        readonly RoleManager _roleManager;
+
         readonly IPermissionManager _permissionManager;
         readonly IMultiTenancyOptions _multiTenancyOptions;
-
 
         public SessionAppService(
             IServiceProvider serviceProvider
             ) : base(serviceProvider)
         {
-            _userManager = GetService<UserManager>();
-            _roleManager = GetService<RoleManager>();
             _permissionManager = GetService<IPermissionManager>();
             _multiTenancyOptions = GetService<IMultiTenancyOptions>();
         }
@@ -95,7 +94,7 @@ namespace Company.Project.Session
             if (!string.IsNullOrWhiteSpace(AppSession.TenantName) && _multiTenancyOptions.IsEnabled)
             {
                 authDto.AllPermissions = all
-                    .Where(o => o.Scope != Riven.Identity.Authorization.PermissionAuthorizeScope.Host)
+                    .Where(o => o.Scope != PermissionAuthorizeScope.Host)
                     .Select(o => o.Name)
                     .ToList();
             }
@@ -110,10 +109,15 @@ namespace Company.Project.Session
             {
                 var userIdString = AppSession.UserId.Value.ToString();
 
-                var userPermissions = await _userManager.GetPermissionsByUserIdAsync(userIdString);
+                var permissionFinder = this.GetService<IIdentityPermissionFinder>();
+                var userRoleFinder = this.GetService<IIdentityUserRoleFinder>();
 
-                var userRoleNames = await _userManager.GetRolesByUserIdAsync(userIdString);
-                var rolePermissions = await _roleManager.GetPermissionsByRoleNamesAsync(userRoleNames.ToArray());
+
+
+                var userPermissions = await permissionFinder.FindPermissions(IdentityPermissionType.User, userIdString);
+
+                var userRoleNames = await userRoleFinder.GetRolesByUserIdAsync(userIdString);
+                var rolePermissions = await permissionFinder.FindPermissions(IdentityPermissionType.Role, userRoleNames.ToArray());
 
                 authDto.GrantedPermissions = userPermissions.Union(rolePermissions).Distinct().ToList();
 

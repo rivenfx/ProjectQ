@@ -1,14 +1,10 @@
 using Riven.Application;
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Riven;
-using Riven.Extensions;
-using Riven.Identity.Authorization;
 using Company.Project.Authorization.Permissions.Dtos;
+using Riven.Authorization;
 
 namespace Company.Project.Authorization.Permissions
 {

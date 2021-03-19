@@ -9,7 +9,7 @@ using Riven.Exceptions;
 using Riven.Extensions;
 using Company.Project.Authorization.Roles.Dtos;
 using System.Security.Claims;
-using Riven.Identity.Authorization;
+using Riven.Authorization;
 using Company.Project.Authorization.Users.Dtos;
 using Company.Project.Dtos;
 using Mapster;

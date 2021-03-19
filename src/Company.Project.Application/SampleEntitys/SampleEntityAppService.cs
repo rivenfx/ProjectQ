@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Riven.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using Riven.Identity.Authorization;
+using Riven.Authorization;
 
 namespace Company.Project.SampleEntitys
 {
