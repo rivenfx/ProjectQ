@@ -8,11 +8,13 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Riven;
 
 namespace Company.Project.SeedData
 {
     public class PermissionDataSeeder : IDataSeedExecutor
     {
+        readonly IGuidGenerator _guidGenerator;
         readonly IPermissionManager _permissionManager;
         readonly IdentityPermissionStore<Permission> _permissionStore;
 
@@ -39,6 +41,7 @@ namespace Company.Project.SeedData
                     rolePermissionDict[name] = string.Empty;
                     await _permissionStore.CreateAsync(new Permission()
                     {
+                        Id = _guidGenerator.Create().ToString().Replace("-", string.Empty),
                         Name = name,
                         Type = IdentityPermissionType.Role,
                         Provider = AppConsts.Authorization.SystemRoleName,
