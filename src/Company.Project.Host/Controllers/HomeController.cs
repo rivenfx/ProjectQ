@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Company.Project.Models;
 using Microsoft.AspNetCore.Authorization;
-using Riven.Identity.Authorization;
+using Riven.Authorization;
 
 namespace Company.Project.Controllers
 {

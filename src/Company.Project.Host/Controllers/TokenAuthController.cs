@@ -20,7 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 using Riven.Exceptions;
-using Riven.Identity.Authorization;
+using Riven.Authorization;
 using Riven.Identity.Users;
 using Riven.Security;
 
