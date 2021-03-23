@@ -8,34 +8,37 @@ using Riven.MultiTenancy;
 using Company.Project.Authorization.Users;
 using Riven.Extensions;
 using Company.Project.Authorization.Roles;
+using System;
+using Riven.Repositories;
 
 namespace Company.Project.SeedData
 {
     /// <summary>
-    /// ÓÃ»§½ÇÉ«ÖÖ×ÓÊı¾İ´´½¨Æ÷
+    /// ç”¨æˆ·è§’è‰²ç§å­æ•°æ®åˆ›å»ºå™¨
     /// </summary>
     public class UserRoleDataSeeder : IDataSeedExecutor
     {
-        protected readonly IGuidGenerator _guidGenerator;
         protected readonly UserManager _userManager;
         protected readonly RoleManager _roleManager;
+        protected readonly IRepository<UserRole, Guid> _userRoleRepo;
 
-        public UserRoleDataSeeder(IGuidGenerator guidGenerator, UserManager userManager, RoleManager roleManager)
+
+        public UserRoleDataSeeder(UserManager userManager, RoleManager roleManager, IRepository<UserRole, Guid> userRoleRepo)
         {
-            _guidGenerator = guidGenerator;
             _userManager = userManager;
             _roleManager = roleManager;
+            _userRoleRepo = userRoleRepo;
         }
 
         public async Task Run(DataSeedContext dataSeedContext)
         {
-            // ´´½¨ÓÃ»§
+            // åˆ›å»ºç”¨æˆ·
             var user = await _userManager.FindByNameAsync(AppConsts.Authorization.SystemUserName);
             if (user == null)
             {
                 user = new User()
                 {
-                    Id = this._guidGenerator.Create(),
+                    Id = Guid.NewGuid(),
                     UserName = AppConsts.Authorization.SystemUserName,
                     Nickname = AppConsts.Authorization.SystemUserName,
                     PhoneNumber = "13000000007",
@@ -60,13 +63,13 @@ namespace Company.Project.SeedData
                 identityResult.CheckError();
             }
 
-            // ´´½¨½ÇÉ«
+            // åˆ›å»ºè§’è‰²
             var role = await _roleManager.FindByNameAsync(AppConsts.Authorization.SystemRoleName);
             if (role == null)
             {
                 role = new Role()
                 {
-                    Id = this._guidGenerator.Create(),
+                    Id = Guid.NewGuid(),
                     Name = AppConsts.Authorization.SystemRoleName,
                     DisplayName = AppConsts.Authorization.SystemRoleName,
                     Description = AppConsts.Authorization.SystemRoleName,
@@ -79,10 +82,21 @@ namespace Company.Project.SeedData
                 identityResult.CheckError();
             }
 
-            // ¸øÓÃ»§ÉèÖÃ½ÇÉ«
+            // ç»™ç”¨æˆ·è®¾ç½®è§’è‰²
             {
-                var identityResult = await _userManager.AddToRoleAsync(user, role.Name);
-                identityResult.CheckError();
+
+                var userRole = await _userRoleRepo
+                    .FirstOrDefaultAsync(o => o.UserId == user.Id && o.RoleId == role.Id);
+                if (userRole == null)
+                {
+                    userRole = new UserRole()
+                    {
+                        UserId = user.Id,
+                        RoleId = role.Id,
+                        TenantName = dataSeedContext.TenantName
+                    };
+                    await _userRoleRepo.InsertAsync(userRole);
+                }
             }
 
         }

@@ -59,6 +59,12 @@ namespace Company.Project
             #endregion
 
 
+            #region 添加种子数据初始化器
+
+            context.Services.AddRivenDataSeed();
+
+            #endregion
+
         }
 
         public override void OnPostConfigureServices(ServiceConfigurationContext context)
@@ -113,7 +119,7 @@ namespace Company.Project
 
 
             // 种子数据
-            //SeedHelper.SeedDb(context.ServiceProvider);
+            SeedHelper.SeedDb(context.ServiceProvider);
         }
     }
 }

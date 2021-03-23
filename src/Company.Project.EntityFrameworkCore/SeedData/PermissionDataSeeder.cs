@@ -14,9 +14,12 @@ namespace Company.Project.SeedData
 {
     public class PermissionDataSeeder : IDataSeedExecutor
     {
-        readonly IGuidGenerator _guidGenerator;
         readonly PermissionManager _permissionManager;
-        readonly IdentityPermissionStore<Permission> _permissionStore;
+
+        public PermissionDataSeeder(PermissionManager permissionManager)
+        {
+            _permissionManager = permissionManager;
+        }
 
         public async Task Run(DataSeedContext dataSeedContext)
         {
@@ -29,7 +32,7 @@ namespace Company.Project.SeedData
             var systemPermissions = _permissionManager.ItemQuery.Select(o => o.Name);
 
             // admin 角色拥有的权限
-            var rolePermissionDict = (await _permissionStore.FindPermissions(IdentityPermissionType.Role, AppConsts.Authorization.SystemRoleName))
+            var rolePermissionDict = (await _permissionManager.Store.FindPermissions(IdentityPermissionType.Role, AppConsts.Authorization.SystemRoleName))
                 .ToDictionary(o => o, o => string.Empty);
 
 
@@ -39,9 +42,9 @@ namespace Company.Project.SeedData
                 if (!rolePermissionDict.TryGetValue(name, out tmpPermission))
                 {
                     rolePermissionDict[name] = string.Empty;
-                    await _permissionStore.CreateAsync(new Permission()
+                    await _permissionManager.Store.CreateAsync(new Permission()
                     {
-                        Id = _guidGenerator.Create().ToString().Replace("-", string.Empty),
+                        Id = Guid.NewGuid().ToString("N").Replace("-", string.Empty),
                         Name = name,
                         Type = IdentityPermissionType.Role,
                         Provider = AppConsts.Authorization.SystemRoleName,
@@ -55,7 +58,7 @@ namespace Company.Project.SeedData
             if (deletePermissions.Count() > 0)
             {
 
-                await _permissionStore.Remove(deletePermissions.ToArray());
+                await _permissionManager.Store.Remove(deletePermissions.ToArray());
             }
         }
     }

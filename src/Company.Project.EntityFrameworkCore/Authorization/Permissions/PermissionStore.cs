@@ -8,7 +8,7 @@ namespace Company.Project.Authorization.Permissions
 {
     public class PermissionStore : IdentityPermissionStore<Permission>
     {
-        protected PermissionStore(IServiceProvider serviceProvider)
+        public PermissionStore(IServiceProvider serviceProvider)
             : base(serviceProvider)
         {
         }

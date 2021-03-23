@@ -1,4 +1,4 @@
-﻿using Riven.Data;
+using Riven.Data;
 
 using System;
 using System.Threading.Tasks;
@@ -14,12 +14,10 @@ namespace Company.Project.SeedData
     /// </summary>
     public class TenantDataSeeder : IDataSeedExecutor
     {
-        protected readonly IGuidGenerator _guidGenerator;
         protected readonly IRepository<Tenant, Guid> _tenantRepo;
 
-        public TenantDataSeeder(IGuidGenerator guidGenerator, IRepository<Tenant, Guid> tenantRepo)
+        public TenantDataSeeder(IRepository<Tenant, Guid> tenantRepo)
         {
-            _guidGenerator = guidGenerator;
             _tenantRepo = tenantRepo;
         }
 
@@ -38,7 +36,7 @@ namespace Company.Project.SeedData
             {
                 tenant = new Tenant()
                 {
-                    Id = this._guidGenerator.Create(),
+                    //Id = this._guidGenerator.Create(),
                     Name = AppConsts.MultiTenancy.DefaultTenantName,
                     DisplayName = AppConsts.MultiTenancy.DefaultTenantName,
                     Description = AppConsts.MultiTenancy.DefaultTenantName,

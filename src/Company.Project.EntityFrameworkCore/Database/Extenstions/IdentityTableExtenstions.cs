@@ -61,6 +61,10 @@ namespace Company.Project.Database.Extenstions
                 })
                 .IsUnique();
             });
+            modelBuilder.Entity<UserClaim>((entityBuilder) =>
+            {
+                entityBuilder.ToTable($"{nameof(UserClaim)}s");
+            });
             modelBuilder.Entity<UserLogin>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(UserLogin)}s");

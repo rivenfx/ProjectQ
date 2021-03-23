@@ -55,6 +55,8 @@ namespace Company.Project.Authorization
                 .AddPermissionStore<PermissionStore>()
                 // 权限初始化器
                 .AddPermissionInitializer<ModulerPermissionInitializer>()
+                // 用户角色查找器
+                .AddUserRoleFinder<UserStore>()
                 // ClaimsPrincipal 创建器
                 .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role, Guid>>()
                 // 添加 DbContext 访问器
