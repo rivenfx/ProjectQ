@@ -15,7 +15,7 @@ namespace Company.Project.SeedData
     public class PermissionDataSeeder : IDataSeedExecutor
     {
         readonly IGuidGenerator _guidGenerator;
-        readonly IPermissionManager _permissionManager;
+        readonly PermissionManager _permissionManager;
         readonly IdentityPermissionStore<Permission> _permissionStore;
 
         public async Task Run(DataSeedContext dataSeedContext)
@@ -26,7 +26,7 @@ namespace Company.Project.SeedData
             var newPermissionDict = new Dictionary<string, int>();
 
             // 当前系统所有权限
-            var systemPermissions = _permissionManager.GetAll().Select(o => o.Name);
+            var systemPermissions = _permissionManager.ItemQuery.Select(o => o.Name);
 
             // admin 角色拥有的权限
             var rolePermissionDict = (await _permissionStore.FindPermissions(IdentityPermissionType.Role, AppConsts.Authorization.SystemRoleName))

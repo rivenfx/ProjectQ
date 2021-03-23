@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Riven;
 using Company.Project.Authorization.Permissions.Dtos;
 using Riven.Authorization;
+using Riven.Identity.Permissions;
 
 namespace Company.Project.Authorization.Permissions
 {
@@ -12,9 +13,9 @@ namespace Company.Project.Authorization.Permissions
     public class PermissionAppService : IApplicationService
     {
         readonly IAppSession _appSession;
-        readonly IPermissionManager _permissionManager;
+        readonly PermissionManager _permissionManager;
 
-        public PermissionAppService(IAppSession appSession, IPermissionManager permissionManager)
+        public PermissionAppService(IAppSession appSession, PermissionManager permissionManager)
         {
             _appSession = appSession;
             _permissionManager = permissionManager;
@@ -25,7 +26,7 @@ namespace Company.Project.Authorization.Permissions
             await Task.Yield();
 
 
-            return _permissionManager.GetAll().Select(o => o.Name).ToList();
+            return _permissionManager.ItemQuery.Select(o => o.Name).ToList();
         }
 
         public async Task<List<PermissionItemDto>> GetAllPermissionsWithTree()
@@ -33,7 +34,7 @@ namespace Company.Project.Authorization.Permissions
             await Task.Yield();
 
 
-            return _permissionManager.GetAll().ProjectTo<PermissionItemDto>().ToList();
+            return _permissionManager.ItemQuery.ProjectTo<PermissionItemDto>().ToList();
         }
 
     }

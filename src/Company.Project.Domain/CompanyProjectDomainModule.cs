@@ -35,7 +35,7 @@ namespace Company.Project
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-            context.ServiceProvider.RegisterPermissions();
+          
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

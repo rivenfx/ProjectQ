@@ -30,14 +30,14 @@ namespace Company.Project.Session
     public class SessionAppService : AppServiceBase
     {
 
-        readonly IPermissionManager _permissionManager;
+        readonly PermissionManager _permissionManager;
         readonly IMultiTenancyOptions _multiTenancyOptions;
 
         public SessionAppService(
             IServiceProvider serviceProvider
             ) : base(serviceProvider)
         {
-            _permissionManager = GetService<IPermissionManager>();
+            _permissionManager = GetService<PermissionManager>();
             _multiTenancyOptions = GetService<IMultiTenancyOptions>();
         }
 
@@ -90,7 +90,7 @@ namespace Company.Project.Session
 
             // 不同情况返回不同的 Permission
             // 租户不为空时
-            var all = this._permissionManager.GetAll();
+            var all = this._permissionManager.ItemQuery;
             if (!string.IsNullOrWhiteSpace(AppSession.TenantName) && _multiTenancyOptions.IsEnabled)
             {
                 authDto.AllPermissions = all

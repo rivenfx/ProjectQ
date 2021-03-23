@@ -35,19 +35,6 @@ namespace Company.Project
             public const string Edit = "role.edit";
             public const string Delete = "role.delete";
         }
-
-
-        /// <summary>
-        /// 注册 Permission
-        /// </summary>
-        /// <param name="serviceProvider">注入容器</param>
-        /// <returns></returns>
-        public static IServiceProvider RegisterPermissions(this IServiceProvider serviceProvider)
-        {
-            var permissionManager = serviceProvider.GetRequiredService<IPermissionManager>();
-            permissionManager.Init();
-            return serviceProvider;
-        }
     }
 
 }

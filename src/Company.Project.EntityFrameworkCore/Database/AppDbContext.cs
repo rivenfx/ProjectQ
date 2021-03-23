@@ -1,4 +1,5 @@
 using Company.Project.Authorization;
+using Company.Project.Authorization.Permissions;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using Company.Project.Database.Extenstions;
@@ -66,6 +67,15 @@ namespace Company.Project.Database
         {
             ServiceProvider = serviceProvider;
         }
+
+        #region 权限
+
+        /// <summary>
+        /// 权限
+        /// </summary>
+        public virtual DbSet<Permission> Permissions { get; set; }
+
+        #endregion
 
         #region 租户
 

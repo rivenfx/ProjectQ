@@ -1,3 +1,4 @@
+using Company.Project.Authorization.Permissions;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 
@@ -18,6 +19,11 @@ namespace Company.Project.Database.Extenstions
         /// <returns></returns>
         public static ModelBuilder ConfiurationIdentityTables(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Permission>((entityBuilder) =>
+            {
+                entityBuilder.ToTable($"{nameof(Permission)}s");
+            });
+
             modelBuilder.Entity<Role>((entityBuilder) =>
             {
                 entityBuilder.ToTable($"{nameof(Role)}s");
