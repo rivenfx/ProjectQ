@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Company.Project.Configuration;
 using System.Linq;
+using Company.Project.Debugger;
 
 namespace Company.Project.Database
 {
@@ -67,7 +68,11 @@ namespace Company.Project.Database
 
         protected virtual IConfiguration BuildConfiguration()
         {
-            return ConfigurationHelper.GetConfiguration("appsettings");
+            var environmentName = DebugHelper.IsDebug ? "Development" : null;
+            return ConfigurationHelper.GetConfiguration(
+                "appsettings",
+                environmentName: environmentName
+                );
         }
     }
 }
