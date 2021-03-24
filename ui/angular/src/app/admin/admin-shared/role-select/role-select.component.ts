@@ -63,9 +63,11 @@ export class RoleSelectComponent extends ControlComponentBase<string[]> {
   }
 
   onInputChange(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges) {
-    if (changes.value) {
-      this.processDataToCheckBox();
-    }
+
+  }
+  writeValue(obj: any): void {
+    super.writeValue(obj);
+    this.processDataToCheckBox();
   }
 
   onCheckedChange(event: string[]) {
@@ -84,7 +86,7 @@ export class RoleSelectComponent extends ControlComponentBase<string[]> {
           label: role.displayName,
           value: role.name,
           tips: !!role.description ? role.description : role.displayName,
-          checked: !!this.value.find(item => item === role.name),
+          checked: this.value.findIndex(item => item === role.name) !== -1,
         };
       });
     } else {
