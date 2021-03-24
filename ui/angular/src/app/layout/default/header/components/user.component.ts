@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
+import { ReuseTabService } from '@delon/abc';
 import { SettingsService } from '@delon/theme';
 import { AppConsts } from '@shared';
 import { SampleComponentBase } from '@shared/common';
@@ -45,6 +46,7 @@ export class HeaderUserComponent extends SampleComponentBase {
     injector: Injector,
     public settings: SettingsService,
     private router: Router,
+    private reuseTabSrv: ReuseTabService
   ) {
     super(injector);
   }
@@ -53,6 +55,9 @@ export class HeaderUserComponent extends SampleComponentBase {
     this.settings.setData(AppConsts.settings.token, false);
     this.settings.setData(AppConsts.settings.encryptedToken, false);
     this.settings.setData(AppConsts.settings.tokenExpiration, false);
-    this.router.navigateByUrl(AppConsts.urls.loginPage);
+
+    this.router.navigateByUrl(AppConsts.urls.loginPage).then(() => {
+      this.reuseTabSrv.clear(true);
+    });
   }
 }
