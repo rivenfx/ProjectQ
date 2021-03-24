@@ -6,6 +6,7 @@ import { AppConsts } from '@shared';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd/version';
 import { filter } from 'rxjs/operators';
+import { ReuseTabService } from '@delon/abc';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
     renderer: Renderer2,
     private router: Router,
     private titleSrv: TitleService,
+    private reuseTabSrv: ReuseTabService,
     private modalSrv: NzModalService,
     private settingSer: SettingsService,
     private tokenAuthSer: TokenAuthServiceProxy,
@@ -30,10 +32,15 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.events.pipe(filter((evt) => evt instanceof NavigationEnd)).subscribe(() => {
-      this.titleSrv.setTitle();
-      this.modalSrv.closeAll();
-    });
+    this.router.events.pipe(filter((evt) => evt instanceof NavigationEnd))
+      .subscribe((e) => {
+        const event = e as NavigationEnd;
+        if (event.url === AppConsts.urls.loginPage) {
+          this.reuseTabSrv.clear(true);
+        }
+        this.titleSrv.setTitle();
+        this.modalSrv.closeAll();
+      });
 
     this.registerRefreshToken();
 
