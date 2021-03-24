@@ -90,16 +90,8 @@ namespace Company.Project.Authorization.Users
                 IsStatic = isStatic
             };
 
-            var result = await this.CreateAsync(user, password);
-            if (!result.Succeeded)
-            {
-                var detiles = new StringBuilder();
-                foreach (var error in result.Errors)
-                {
-                    detiles.AppendLine($"{error.Code}: {error.Description}");
-                }
-                throw new UserFriendlyException("创建用户时发生错误", detiles.ToString());
-            }
+            (await this.CreateAsync(user, password))
+                .CheckError(true, "创建用户时发生错误!");
 
             return user;
         }
@@ -147,16 +139,8 @@ namespace Company.Project.Authorization.Users
                 user.PasswordHash = this.PasswordHasher.HashPassword(user, password);
             }
 
-            var result = await this.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                var detiles = new StringBuilder();
-                foreach (var error in result.Errors)
-                {
-                    detiles.AppendLine($"{error.Code}: {error.Description}");
-                }
-                throw new UserFriendlyException("修改用户时发生错误", detiles.ToString());
-            }
+            (await this.UpdateAsync(user))
+                .CheckError(true, "修改用户时发生错误!");
 
             return user;
         }
@@ -204,16 +188,12 @@ namespace Company.Project.Authorization.Users
                     throw new UserFriendlyException("不能删除系统用户!");
                 }
 
-                var identityResult = await this.DeleteAsync(user);
-                if (!identityResult.Succeeded)
-                {
-                    var detiles = new StringBuilder();
-                    foreach (var error in identityResult.Errors)
-                    {
-                        detiles.AppendLine($"{error.Code}: {error.Description}");
-                    }
-                    throw new UserFriendlyException("删除用户失败!", detiles.ToString());
-                }
+                (await this.DeleteAsync(user))
+                    .CheckError(true, "删除用户失败!");
+
+                var userRoles = await this.GetRolesAsync(user);
+                (await this.RemoveFromRolesAsync(user, userRoles))
+                    .CheckError(true, "删除用户角色失败!");
             }
 
             return users;
