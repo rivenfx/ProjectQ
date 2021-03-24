@@ -221,18 +221,18 @@ namespace Company.Project
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
             {
                 swaggerUiOption.SwaggerEndpoint(
-                       $"/swagger/{appInfo.Version}/swagger.json",
+                       $"{appInfo.Basehref}swagger/{appInfo.Version}/swagger.json",
                        appInfo.Name
                    );
                 swaggerUiOption.EnableDeepLinking();
                 swaggerUiOption.DocExpansion(DocExpansion.None);
 
                 // 应用公共的js
-                swaggerUiOption.InjectJavascript("/views/app.js");
+                swaggerUiOption.InjectJavascript($"{appInfo.Basehref}views/app.js");
 
                 // swagger 定制的样式和脚本
-                swaggerUiOption.InjectStylesheet("/views/swagger/index.css");
-                swaggerUiOption.InjectJavascript("/views/swagger/index.js");
+                swaggerUiOption.InjectStylesheet($"{appInfo.Basehref}views/swagger/index.css");
+                swaggerUiOption.InjectJavascript($"{appInfo.Basehref}views/swagger/index.js");
 
             });
 
