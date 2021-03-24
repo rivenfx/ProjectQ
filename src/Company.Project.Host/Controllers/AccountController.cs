@@ -42,7 +42,8 @@ namespace Company.Project.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login");
+
+            return Redirect(nameof(Login));
         }
     }
 }

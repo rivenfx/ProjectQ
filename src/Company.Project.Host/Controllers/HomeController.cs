@@ -23,10 +23,5 @@ namespace Company.Project.Controllers
         {
             return View();
         }
-
-        public IActionResult Swagger()
-        {
-            return Redirect("/swagger");
-        }
     }
 }
