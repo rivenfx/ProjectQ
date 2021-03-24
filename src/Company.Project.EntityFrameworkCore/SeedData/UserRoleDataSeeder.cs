@@ -83,20 +83,10 @@ namespace Company.Project.SeedData
             }
 
             // 给用户设置角色
+            if (!await _userManager.IsInRoleAsync(user, role.Name))
             {
-
-                var userRole = await _userRoleRepo
-                    .FirstOrDefaultAsync(o => o.UserId == user.Id && o.RoleId == role.Id);
-                if (userRole == null)
-                {
-                    userRole = new UserRole()
-                    {
-                        UserId = user.Id,
-                        RoleId = role.Id,
-                        TenantName = dataSeedContext.TenantName
-                    };
-                    await _userRoleRepo.InsertAsync(userRole);
-                }
+                var identityResult = await _userManager.AddToRoleAsync(user, role.Name);
+                identityResult.CheckError();
             }
 
         }
