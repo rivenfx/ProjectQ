@@ -26,7 +26,7 @@ namespace Company.Project.Authorization.Permissions
             await Task.Yield();
 
 
-            return _permissionManager.ItemQuery.Select(o => o.Name).ToList();
+            return _permissionManager.GetSystemItem().Select(o => o.Name).ToList();
         }
 
         public async Task<List<PermissionItemDto>> GetAllPermissionsWithTree()
@@ -34,7 +34,7 @@ namespace Company.Project.Authorization.Permissions
             await Task.Yield();
 
 
-            return _permissionManager.ItemQuery.ProjectTo<PermissionItemDto>().ToList();
+            return _permissionManager.GetSystemItem().ProjectTo<PermissionItemDto>().ToList();
         }
 
     }

@@ -90,7 +90,7 @@ namespace Company.Project.Session
 
             // 不同情况返回不同的 Permission
             // 租户不为空时
-            var all = this._permissionManager.ItemQuery;
+            var all = this._permissionManager.GetSystemItem();
             if (!string.IsNullOrWhiteSpace(AppSession.TenantName) && _multiTenancyOptions.IsEnabled)
             {
                 authDto.AllPermissions = all
