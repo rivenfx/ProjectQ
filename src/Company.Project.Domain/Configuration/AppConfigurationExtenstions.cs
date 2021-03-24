@@ -14,6 +14,7 @@ namespace Company.Project.Configuration
             public const string DefaultDatabaseConnectionString = "ConnectionStrings:Default";
             public const string AppName = "App:Name";
             public const string AppVersion = "App:Version";
+            public const string AppBasehref = "App:AppBasehref";
             public const string AppCorsOrigins = "App:CorsOrigins";
 
             public const string MultiTenancyIsEnabled = "MultiTenancy:IsEnabled";
@@ -68,6 +69,7 @@ namespace Company.Project.Configuration
             {
                 Name = configuration[AppConfigurationConsts.AppName],
                 Version = configuration[AppConfigurationConsts.AppVersion],
+                Basehref = configuration[AppConfigurationConsts.AppBasehref],
                 CorsOrigins = configuration[AppConfigurationConsts.AppCorsOrigins],
             };
         }
