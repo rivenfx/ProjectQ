@@ -72,25 +72,26 @@ export class StartupService {
 
     // 订阅会话数据更改
     sessionSer.sessionChange.subscribe((data) => {
-      if (data) {
-
-        const token = this.settingService.getData(AppConsts.settings.token);
-        if (token && !data.userId) {
-          this.settingService.setData(AppConsts.settings.token, false);
-          this.settingService.setData(AppConsts.settings.encryptedToken, false);
-          this.router.navigateByUrl(AppConsts.urls.loginPage);
-          resolve({});
-          return;
-        }
-
-        this.initAppInfo(data);
-
-        this.initAclInfo(data);
-
-        this.initUserInfo(data);
-
-        this.initMenuInfo(data);
+      if (!data) {
+        return;
       }
+
+      const token = this.settingService.getData(AppConsts.settings.token);
+      if (token && !data.auth.userId) {
+        this.settingService.setData(AppConsts.settings.token, false);
+        this.settingService.setData(AppConsts.settings.encryptedToken, false);
+        this.router.navigateByUrl(AppConsts.urls.loginPage);
+        resolve({});
+        return;
+      }
+
+      this.initAppInfo(data);
+
+      this.initAclInfo(data);
+
+      this.initUserInfo(data);
+
+      this.initMenuInfo(data);
     });
 
     // 立即加载会话数据
@@ -123,13 +124,21 @@ export class StartupService {
 
   /** 初始化用户信息 */
   private initUserInfo(input: SessionDto) {
-    const user: any = {
-      name: 'Admin',
+    // 设置登录信息
+    const displayUserName = input.multiTenancy.displayName ?
+      input.multiTenancy.displayName + '/' + input.auth.userNickName : input.auth.userNickName;
+    this.settingService.setUser({
+      name: displayUserName,
       avatar: 'assets/images/avatar.png',
-      email: 'msmadaoe@msn.com',
-      token: '123456789',
-    };
-    this.settingService.setUser(user);
+      // email: 'msmadaoe@msn.com',
+    });
+    // const user: any = {
+    //   name: 'Admin',
+    //   avatar: 'assets/images/avatar.png',
+    //   email: 'msmadaoe@msn.com',
+    //   token: '123456789',
+    // };
+    // this.settingService.setUser(user);
   }
 
   /** 初始化菜单信息 */

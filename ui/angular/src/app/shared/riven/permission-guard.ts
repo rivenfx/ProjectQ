@@ -33,7 +33,7 @@ export class PermissionGuard implements CanActivate, CanActivateChild, CanLoad {
     };
 
     // 未登录返回 false
-    if (!session.userId) {
+    if (!session.auth || !session.auth.userId) {
       this.router.navigateByUrl(data.guard_url);
       return false;
     }
