@@ -45,6 +45,20 @@ namespace Company.Project.MultiTenancy
             return await this.QueryAsNoTracking.FirstOrDefaultAsync(o => o.Name == name);
         }
 
+        public virtual async Task<string> GetDisplayNameByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+
+            return await this.QueryAsNoTracking
+                .Where(o => o.Name == name)
+                .Select(o => o.DisplayName)
+                .FirstOrDefaultAsync();
+        }
+
         public virtual async Task<Tenant> Update(string name, string displayName, string description)
         {
             var tenant = await this.GetByName(name);

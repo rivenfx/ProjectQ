@@ -32,6 +32,13 @@ namespace Company.Project.MultiTenancy
         Task<Tenant> GetByName(string name);
 
         /// <summary>
+        /// 根据租户名称获取租户
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns></returns>
+        Task<string> GetDisplayNameByName(string name);
+
+        /// <summary>
         /// 更新租户
         /// </summary>
         /// <param name="name">租户名称</param>
