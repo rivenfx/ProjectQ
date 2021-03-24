@@ -14,7 +14,7 @@ namespace Company.Project.Configuration
             public const string DefaultDatabaseConnectionString = "ConnectionStrings:Default";
             public const string AppName = "App:Name";
             public const string AppVersion = "App:Version";
-            public const string AppBasehref = "App:AppBasehref";
+            public const string AppBasehref = "App:Basehref";
             public const string AppCorsOrigins = "App:CorsOrigins";
 
             public const string MultiTenancyIsEnabled = "MultiTenancy:IsEnabled";
