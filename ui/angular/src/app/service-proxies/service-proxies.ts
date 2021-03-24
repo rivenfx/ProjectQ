@@ -2554,7 +2554,8 @@ export interface ISampleEntity {
 
 export class MultiTenancyDto implements IMultiTenancyDto {
     isEnabled: boolean;
-    tenantName: string | undefined;
+    name: string | undefined;
+    displayName: string | undefined;
 
     constructor(data?: IMultiTenancyDto) {
         if (data) {
@@ -2568,7 +2569,8 @@ export class MultiTenancyDto implements IMultiTenancyDto {
     init(_data?: any) {
         if (_data) {
             this.isEnabled = _data["isEnabled"];
-            this.tenantName = _data["tenantName"];
+            this.name = _data["name"];
+            this.displayName = _data["displayName"];
         }
     }
 
@@ -2582,7 +2584,8 @@ export class MultiTenancyDto implements IMultiTenancyDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["isEnabled"] = this.isEnabled;
-        data["tenantName"] = this.tenantName;
+        data["name"] = this.name;
+        data["displayName"] = this.displayName;
         return data; 
     }
 
@@ -2596,10 +2599,14 @@ export class MultiTenancyDto implements IMultiTenancyDto {
 
 export interface IMultiTenancyDto {
     isEnabled: boolean;
-    tenantName: string | undefined;
+    name: string | undefined;
+    displayName: string | undefined;
 }
 
 export class AuthDto implements IAuthDto {
+    userId: string | undefined;
+    userName: string | undefined;
+    userNickName: string | undefined;
     allPermissions: string[] | undefined;
     grantedPermissions: string[] | undefined;
 
@@ -2614,6 +2621,9 @@ export class AuthDto implements IAuthDto {
 
     init(_data?: any) {
         if (_data) {
+            this.userId = _data["userId"];
+            this.userName = _data["userName"];
+            this.userNickName = _data["userNickName"];
             if (Array.isArray(_data["allPermissions"])) {
                 this.allPermissions = [] as any;
                 for (let item of _data["allPermissions"])
@@ -2636,6 +2646,9 @@ export class AuthDto implements IAuthDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["userName"] = this.userName;
+        data["userNickName"] = this.userNickName;
         if (Array.isArray(this.allPermissions)) {
             data["allPermissions"] = [];
             for (let item of this.allPermissions)
@@ -2658,6 +2671,9 @@ export class AuthDto implements IAuthDto {
 }
 
 export interface IAuthDto {
+    userId: string | undefined;
+    userName: string | undefined;
+    userNickName: string | undefined;
     allPermissions: string[] | undefined;
     grantedPermissions: string[] | undefined;
 }
@@ -2796,7 +2812,6 @@ export class SessionDto implements ISessionDto {
     name: string | undefined;
     displayName: string | undefined;
     version: string | undefined;
-    userId: string | undefined;
     multiTenancy: MultiTenancyDto;
     auth: AuthDto;
     localization: LocalizationDto;
@@ -2816,7 +2831,6 @@ export class SessionDto implements ISessionDto {
             this.name = _data["name"];
             this.displayName = _data["displayName"];
             this.version = _data["version"];
-            this.userId = _data["userId"];
             this.multiTenancy = _data["multiTenancy"] ? MultiTenancyDto.fromJS(_data["multiTenancy"]) : <any>undefined;
             this.auth = _data["auth"] ? AuthDto.fromJS(_data["auth"]) : <any>undefined;
             this.localization = _data["localization"] ? LocalizationDto.fromJS(_data["localization"]) : <any>undefined;
@@ -2836,7 +2850,6 @@ export class SessionDto implements ISessionDto {
         data["name"] = this.name;
         data["displayName"] = this.displayName;
         data["version"] = this.version;
-        data["userId"] = this.userId;
         data["multiTenancy"] = this.multiTenancy ? this.multiTenancy.toJSON() : <any>undefined;
         data["auth"] = this.auth ? this.auth.toJSON() : <any>undefined;
         data["localization"] = this.localization ? this.localization.toJSON() : <any>undefined;
@@ -2856,7 +2869,6 @@ export interface ISessionDto {
     name: string | undefined;
     displayName: string | undefined;
     version: string | undefined;
-    userId: string | undefined;
     multiTenancy: MultiTenancyDto;
     auth: AuthDto;
     localization: LocalizationDto;

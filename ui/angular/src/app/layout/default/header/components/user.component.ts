@@ -45,8 +45,7 @@ export class HeaderUserComponent extends SampleComponentBase {
   constructor(
     injector: Injector,
     public settings: SettingsService,
-    private router: Router,
-    private reuseTabSrv: ReuseTabService
+    private router: Router
   ) {
     super(injector);
   }
@@ -56,8 +55,6 @@ export class HeaderUserComponent extends SampleComponentBase {
     this.settings.setData(AppConsts.settings.encryptedToken, false);
     this.settings.setData(AppConsts.settings.tokenExpiration, false);
 
-    this.router.navigateByUrl(AppConsts.urls.loginPage).then(() => {
-      this.reuseTabSrv.clear(true);
-    });
+    this.router.navigateByUrl(AppConsts.urls.loginPage);
   }
 }

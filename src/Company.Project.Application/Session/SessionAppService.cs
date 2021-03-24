@@ -4,6 +4,7 @@ using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using Company.Project.Configuration;
 using Company.Project.Localization.Dtos;
+using Company.Project.MultiTenancy;
 using Company.Project.Session.Dtos;
 
 using Microsoft.Extensions.Configuration;
@@ -29,16 +30,19 @@ namespace Company.Project.Session
 {
     public class SessionAppService : AppServiceBase
     {
-
+        readonly ITenantManager _tenantManager;
         readonly PermissionManager _permissionManager;
         readonly IMultiTenancyOptions _multiTenancyOptions;
+        readonly UserManager _userManager;
 
         public SessionAppService(
             IServiceProvider serviceProvider
             ) : base(serviceProvider)
         {
+            _tenantManager = GetService<ITenantManager>();
             _permissionManager = GetService<PermissionManager>();
             _multiTenancyOptions = GetService<IMultiTenancyOptions>();
+            _userManager = GetService<UserManager>();
         }
 
         public async Task<SessionDto> GetCurrentSession()
@@ -53,8 +57,7 @@ namespace Company.Project.Session
             {
                 Name = appInfo.Name,
                 Version = appInfo.Version,
-                UserId = AppSession.UserId?.ToString(),
-                MultiTenancy = this.GetMultiTenancy(),
+                MultiTenancy = await this.GetMultiTenancy(),
                 Auth = await this.GetAuth(),
                 Localization = this.GetLocalization(),
                 Menu = this.GetMenu()
@@ -88,6 +91,23 @@ namespace Company.Project.Session
         {
             var authDto = new AuthDto();
 
+
+            #region 当前登录用户信息
+
+            // 用户信息
+            if (AppSession.UserId.HasValue)
+            {
+                var user = await _userManager.FindByIdAsync(AppSession.UserId.ToString());
+                authDto.UserId = user.Id.ToString();
+                authDto.UserName = user.UserName;
+                authDto.UserNickName = user.Nickname;
+            }
+
+            #endregion
+
+
+            #region 系统所有权限
+
             // 不同情况返回不同的 Permission
             // 租户不为空时
             var all = this._permissionManager.GetSystemItem();
@@ -103,6 +123,11 @@ namespace Company.Project.Session
                 authDto.AllPermissions = all.Select(o => o.Name).ToList();
 
             }
+
+            #endregion
+
+
+            #region 当前登录用户拥有的权限
 
             // 已登录
             if (AppSession.UserId.HasValue)
@@ -127,15 +152,22 @@ namespace Company.Project.Session
                 authDto.GrantedPermissions = new List<string>();
             }
 
+            #endregion
+
+
             return authDto;
         }
 
-        public MultiTenancyDto GetMultiTenancy()
+        public async Task<MultiTenancyDto> GetMultiTenancy()
         {
+            var displayName = await this._tenantManager
+                .GetDisplayNameByName(AppSession.TenantName);
+
             return new MultiTenancyDto()
             {
                 IsEnabled = this._multiTenancyOptions.IsEnabled,
-                TenantName = AppSession.TenantName
+                Name = AppSession.TenantName,
+                DisplayName = displayName
             };
         }
 
