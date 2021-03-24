@@ -56,7 +56,7 @@ namespace Company.Project
             /// <summary>
             /// 系统管理员角色
             /// </summary>
-            public const string SystemRoleName = "Administrator";
+            public const string SystemRoleName = "admin";
         }
     }
 }

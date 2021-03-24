@@ -29,10 +29,10 @@ namespace Company.Project.SeedData
             var newPermissionDict = new Dictionary<string, int>();
 
             // 当前系统所有权限
-            var systemPermissions = _permissionManager.ItemQuery.Select(o => o.Name);
+            var systemPermissions = _permissionManager.GetSystemItem().Select(o => o.Name);
 
             // admin 角色拥有的权限
-            var rolePermissionDict = (await _permissionManager.Store.FindPermissions(IdentityPermissionType.Role, AppConsts.Authorization.SystemRoleName))
+            var rolePermissionDict = (await _permissionManager.FindPermissions(IdentityPermissionType.Role, AppConsts.Authorization.SystemRoleName))
                 .ToDictionary(o => o, o => string.Empty);
 
 
@@ -42,7 +42,7 @@ namespace Company.Project.SeedData
                 if (!rolePermissionDict.TryGetValue(name, out tmpPermission))
                 {
                     rolePermissionDict[name] = string.Empty;
-                    await _permissionManager.Store.CreateAsync(new Permission()
+                    await _permissionManager.CreateAsync(new Permission()
                     {
                         Id = Guid.NewGuid().ToString("N").Replace("-", string.Empty),
                         Name = name,
@@ -58,7 +58,7 @@ namespace Company.Project.SeedData
             if (deletePermissions.Count() > 0)
             {
 
-                await _permissionManager.Store.Remove(deletePermissions.ToArray());
+                await _permissionManager.Remove(deletePermissions.ToArray());
             }
         }
     }

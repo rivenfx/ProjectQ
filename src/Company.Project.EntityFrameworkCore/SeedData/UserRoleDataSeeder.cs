@@ -71,8 +71,7 @@ namespace Company.Project.SeedData
                 {
                     Id = Guid.NewGuid(),
                     Name = AppConsts.Authorization.SystemRoleName,
-                    DisplayName = AppConsts.Authorization.SystemRoleName,
-                    Description = AppConsts.Authorization.SystemRoleName,
+                    DisplayName = "系统管理员",
                     NormalizedName = this._roleManager.NormalizeKey(AppConsts.Authorization.SystemRoleName),
                     IsStatic = true,
                     TenantName = dataSeedContext.TenantName
