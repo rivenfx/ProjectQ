@@ -79,7 +79,7 @@ namespace Company.Project.Authorization.Roles
             var entity = await _roleManager.QueryAsNoTracking
                 .FirstOrDefaultAsync(o => o.Id == input);
 
-            var permissions = await _roleManager.GetPermissionsByRoleIdAsync(entity?.Id.ToString());
+            var permissions = await _roleManager.GetPermissionsAsync(entity.Name);
 
             return new RoleEditDto()
             {

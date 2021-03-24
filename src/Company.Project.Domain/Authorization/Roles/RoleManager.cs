@@ -1,4 +1,5 @@
 using Company.Project.Authorization.Extenstions;
+using Company.Project.Authorization.Permissions;
 
 using JetBrains.Annotations;
 
@@ -11,6 +12,7 @@ using Riven;
 using Riven.Authorization;
 using Riven.Exceptions;
 using Riven.Extensions;
+using Riven.Identity.Permissions;
 
 using System;
 using System.Collections.Generic;
@@ -27,22 +29,25 @@ namespace Company.Project.Authorization.Roles
         static IEnumerable<string> _emptyRolePermissions = new List<string>();
 
 
-        public IQueryable<Role> Query => this.Roles.AsNoTracking();
-        public IQueryable<Role> QueryAsNoTracking => this.Roles.AsNoTracking();
+        public virtual IQueryable<Role> Query => this.Roles.AsNoTracking();
+        public virtual IQueryable<Role> QueryAsNoTracking => this.Roles.AsNoTracking();
+
+        protected readonly IIdentityPermissionStore<Permission> _permissionStore;
 
         public RoleManager(
             IRoleStore<Role> store,
             IEnumerable<IRoleValidator<Role>> roleValidators,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
-            ILogger<RoleManager> logger
+            ILogger<RoleManager> logger,
+            IIdentityPermissionStore<Permission> permissionStore
             ) : base(store,
                 roleValidators,
                 keyNormalizer,
                 errors,
                 logger)
         {
-
+            _permissionStore = permissionStore;
         }
 
         /// <summary>
@@ -65,18 +70,10 @@ namespace Company.Project.Authorization.Roles
                 DisplayName = displayName,
                 Description = description ?? string.Empty
             };
-            var result = await this.CreateAsync(role);
-            if (!result.Succeeded)
-            {
-                var detiles = new StringBuilder();
-                foreach (var error in result.Errors)
-                {
-                    detiles.AppendLine($"{error.Code}: {error.Description}");
-                }
-                throw new UserFriendlyException("创建角色时发生错误", detiles.ToString());
-            }
+            (await this.CreateAsync(role))
+                .CheckError(true, "创建角色时发生错误");
 
-            await this.AddIdentityPermissionsAsync(role, permissions.ToArray());
+            await this.AddPermissionsAsync(role.Name, permissions.ToArray());
 
             return role;
         }
@@ -103,18 +100,10 @@ namespace Company.Project.Authorization.Roles
             role.DisplayName = displayName;
             role.Description = description ?? string.Empty;
 
-            var identityResult = await this.UpdateAsync(role);
-            if (!identityResult.Succeeded)
-            {
-                var detiles = new StringBuilder();
-                foreach (var error in identityResult.Errors)
-                {
-                    detiles.AppendLine($"{error.Code}: {error.Description}");
-                }
-                throw new UserFriendlyException("创建角色时发生错误", detiles.ToString());
-            }
+            (await this.UpdateAsync(role))
+               .CheckError(true, "修改角色时发生错误");
 
-            await this.AddIdentityPermissionsAsync(role, permissions.ToArray());
+            await this.ChangePermissionsAsync(role.Name, permissions.ToArray());
 
             return role;
         }
@@ -152,134 +141,127 @@ namespace Company.Project.Authorization.Roles
             return roles;
         }
 
+
+        /// <summary>
+        /// 获取角色拥有的权限
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<string>> GetPermissionsAsync(string roleName)
+        {
+            Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
+
+            return await this._permissionStore.FindPermissions(
+                 IdentityPermissionType.Role,
+                 roleName
+                 );
+        }
+
         /// <summary>
         /// 给角色添加 identity 的 permission
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="roleName"></param>
         /// <param name="permissions"></param>
         /// <returns></returns>
-        public async Task AddIdentityPermissionsAsync(Role role, params string[] permissions)
+        public async Task AddPermissionsAsync(string roleName, params string[] permissions)
         {
-            if (role == null || permissions == null || permissions.Length == 0)
+            Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
+
+            if (permissions == null || permissions.Length == 0)
             {
                 return;
             }
 
-            var permissionsDistinct = permissions.Distinct().Where(o => !o.IsNullOrWhiteSpace());
+            var permissionsDistinct = permissions.Distinct()
+                .Where(o => !o.IsNullOrWhiteSpace())
+                .Select(o => new Permission()
+                {
+                    Name = o,
+                    Type = IdentityPermissionType.Role,
+                    Provider = roleName
+                });
             if (permissionsDistinct.Count() == 0)
             {
                 return;
             }
+            await _permissionStore.CreateAsync(permissionsDistinct);
+        }
 
-            foreach (var claim in permissionsDistinct.ToClaims())
-            {
-                var identityResult = await this.AddClaimAsync(role, claim);
-                if (!identityResult.Succeeded)
-                {
-                    var detiles = new StringBuilder();
-                    foreach (var error in identityResult.Errors)
-                    {
-                        detiles.AppendLine($"{error.Code}: {error.Description}");
-                    }
-                    throw new UserFriendlyException("角色添加权限失败!", detiles.ToString());
-                }
-            }
+        /// <summary>
+        /// 移除指定的权限
+        /// </summary>
+        /// <param name="roleName"></param>
+        /// <param name="permissions"></param>
+        /// <returns></returns>
+        public async Task RemovePermissionsAsync(string roleName, params string[] permissions)
+        {
+            Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
+
+            await this._permissionStore.Remove(IdentityPermissionType.Role, roleName, permissions);
         }
 
         /// <summary>
         /// 修改角色拥有的 Permission
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="roleName"></param>
         /// <param name="permissions"></param>
         /// <returns></returns>
-        public async Task ChangeIdentityPermissionsAsync(Role role, params string[] permissions)
+        public async Task ChangePermissionsAsync(string roleName, params string[] permissions)
         {
-            if (role == null)
+            Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
+
+            // 当前拥有的权限
+            var currrentPermissions = await GetPermissionsAsync(roleName);
+
+            // 当前权限数量为0
+            if (currrentPermissions.Count() == 0)
             {
+                // 输入权限数量不等于空
+                if (!permissions.IsNullOrEmpty())
+                {
+                    await this.AddPermissionsAsync(roleName, permissions);
+                }
                 return;
             }
 
-            // 移除角色当前拥有的 identity permission
-            await this.ClearIdentityPermissionsAsync(role);
 
 
-            // 输入的 permission 为空, 移除角色当前拥有的 identity permission
-            if (permissions != null && permissions.Length > 0)
+            // 当前用户角色数量大于0
+
+            // 输入角色数据为空,删除用户当前拥有的角色
+            if (permissions.IsNullOrEmpty())
             {
-                // 添加角色拥有的 identity permissions
-                await this.AddIdentityPermissionsAsync(role, permissions);
+                await this.ClearPermissionsAsync(roleName);
+                return;
+            }
+
+
+            // 新增的权限
+            var addPermissions = permissions.Except(currrentPermissions);
+            if (addPermissions.Count() > 0)
+            {
+                await this.AddPermissionsAsync(roleName, addPermissions.ToArray());
+            }
+
+            // 删除的权限
+            var removePermissions = currrentPermissions.Except(currrentPermissions);
+            if (removePermissions.Count() > 0)
+            {
+                await this.RemovePermissionsAsync(roleName, removePermissions.ToArray());
             }
         }
 
         /// <summary>
         /// 移除角色拥有的所有 Permissions
         /// </summary>
-        /// <param name="role"></param>
+        /// <param name="roleName">
+        /// 角色名称
+        /// </param>
         /// <returns></returns>
-        public async Task ClearIdentityPermissionsAsync(Role role)
+        public async Task ClearPermissionsAsync([NotNull] string roleName)
         {
-            Check.NotNull(role, nameof(role));
-
-
-            // 角色当前拥有的 claims
-            var currentlyHasPermissions = await this.GetIdentityPermissionsAsync(role);
-
-            if (currentlyHasPermissions == null || currentlyHasPermissions.Count == 0)
-            {
-                return;
-            }
-
-
-            foreach (var permission in currentlyHasPermissions)
-            {
-                await this.RemoveClaimAsync(role, permission);
-            }
-        }
-
-        public async Task<IList<Claim>> GetIdentityPermissionsAsync(Role role)
-        {
-            return await this.GetClaimsAsync(role);
-        }
-
-        public async Task<IEnumerable<string>> GetPermissionsByRoleIdAsync([NotNull] string roleId)
-        {
-            Check.NotNullOrWhiteSpace(roleId, nameof(roleId));
-
-            var role = await this.FindByIdAsync(roleId);
-
-            return (await this.GetIdentityPermissionsAsync(role)).Select(o => o.Value);
-
-        }
-
-        public async Task<IEnumerable<string>> GetPermissionsByRoleNameAsync([NotNull] string roleName)
-        {
-            Check.NotNullOrWhiteSpace(roleName, nameof(roleName));
-
-            var role = await this.FindByNameAsync(roleName);
-
-            return (await this.GetIdentityPermissionsAsync(role)).Select(o => o.Value);
-        }
-
-        public async Task<IEnumerable<string>> GetPermissionsByRoleNamesAsync([NotNull] string[] roleNames)
-        {
-            Check.NotNull(roleNames, nameof(roleNames));
-            if (roleNames.Length == 0)
-            {
-                return _emptyRolePermissions;
-            }
-
-            var result = new List<string>();
-
-
-
-            foreach (var roleName in roleNames)
-            {
-                var rolePermissions = (await this.GetPermissionsByRoleNameAsync(roleName));
-
-                result.AddRange(rolePermissions);
-            }
-
-            return result;
+            Check.NotNull(roleName, nameof(roleName));
+            await this._permissionStore.Remove(IdentityPermissionType.Role, roleName);
         }
     }
 }
