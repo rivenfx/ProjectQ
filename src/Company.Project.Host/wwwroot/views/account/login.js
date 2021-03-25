@@ -28,7 +28,7 @@ $(function () {
             type: 'POST',// 方法类型
             dataType: 'json',// 预期服务器返回的数据类型
             contentType: 'application/json; charset=utf-8',
-            url: 'api/TokenAuth/Authenticate',//url
+            url: '../api/TokenAuth/Authenticate',//url
             data: $loginForm.serializeObjectStr(),
             beforeSend: function (request) {
                 if (tenant && tenant !== '') {
@@ -46,7 +46,7 @@ $(function () {
                     app.multiTenancy.setTenant(tenant);
 
                     // 跳转到首页
-                    window.location.href = 'Home/Index';
+                    window.location.href = '../Home/Index';
                 } else {
                     alert('登录失败');
                 }

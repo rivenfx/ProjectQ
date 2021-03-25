@@ -43,7 +43,7 @@ namespace Company.Project.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            return Redirect(nameof(Login));
+            return Redirect("../Account/Login");
         }
     }
 }
