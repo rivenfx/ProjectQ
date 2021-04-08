@@ -10,32 +10,32 @@ namespace Company.Project.MultiTenancy
     public class Tenant : Entity<Guid>, IFullAudited, IPassivable
     {
         /// <summary>
-        /// ×â»§Ãû³Æ Î¨Ò»
+        /// ç§Ÿæˆ·åç§° å”¯ä¸€
         /// </summary>
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// ×â»§ÏÔÊ¾Ãû³Æ
+        /// ç§Ÿæˆ·æ˜¾ç¤ºåç§°
         /// </summary>
         public virtual string DisplayName { get; set; }
 
         /// <summary>
-        /// ÃèÊö
+        /// æè¿°
         /// </summary>
         public virtual string Description { get; set; }
 
         /// <summary>
-        /// Êı¾İ¿âÁ¬½Ó×Ö·û´®
+        /// æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²
         /// </summary>
         public virtual string ConnectionString { get; set; }
 
         /// <summary>
-        /// ÊÇ·ñÎªÄÚÖÃ
+        /// æ˜¯å¦ä¸ºå†…ç½®
         /// </summary>
         public virtual bool IsStatic { get; set; }
 
         /// <summary>
-        /// ÊÇ·ñÒÑ¼¤»î
+        /// æ˜¯å¦å·²æ¿€æ´»
         /// </summary>
         public virtual bool IsActive { get; set; }
 

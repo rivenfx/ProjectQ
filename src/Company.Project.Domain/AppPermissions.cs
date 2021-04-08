@@ -35,6 +35,19 @@ namespace Company.Project
             public const string Edit = "role.edit";
             public const string Delete = "role.delete";
         }
+
+
+        /// <summary>
+        /// 租户
+        /// </summary>
+        public static class Tenant
+        {
+            public const string Node = "tenant.node";
+            public const string Query = "tenant.query";
+            public const string Create = "tenant.create";
+            public const string Edit = "tenant.edit";
+            public const string Delete = "tenant.delete";
+        }
     }
 
 }

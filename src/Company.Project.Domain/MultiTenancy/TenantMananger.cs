@@ -19,7 +19,7 @@ namespace Company.Project.MultiTenancy
         {
         }
 
-        public virtual async Task<Tenant> Create(string name, string displayName, string description = null, string connectionString = null, bool isStatic = false)
+        public virtual async Task<Tenant> Create(string name, string displayName, string description = null, string connectionString = null, bool isStatic = false, bool isActive = false)
         {
             var tenant = new Tenant()
             {
@@ -27,10 +27,11 @@ namespace Company.Project.MultiTenancy
                 DisplayName = displayName,
                 Description = description,
                 ConnectionString = connectionString,
-                IsStatic = isStatic
+                IsStatic = isStatic,
+                IsActive = isActive
             };
 
-            await this.Create(tenant);
+            await this.Create(tenant, true);
 
             return tenant;
         }
