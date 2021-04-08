@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
+using Riven;
 using Riven.Dependency;
 using Riven.Repositories;
 
@@ -54,5 +55,11 @@ namespace Company.Project.MultiTenancy
         /// <param name="name"></param>
         /// <returns></returns>
         Task Delete(string name);
+
+        /// <summary>
+        /// 加载租户连接字符串信息
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IConnectionStringProvider> LoadConnectionStringProviders();
     }
 }

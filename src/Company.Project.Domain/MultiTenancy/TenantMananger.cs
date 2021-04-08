@@ -9,6 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using Riven;
 using Riven.Repositories;
 using Riven.Uow;
+using Riven.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Company.Project.MultiTenancy
 {
@@ -33,12 +37,34 @@ namespace Company.Project.MultiTenancy
 
             await this.Create(tenant, true);
 
+            // 如果使用数据库链接字符串,那么将数据库链接字符串加入访问器中
+            if (!connectionString.IsNullOrWhiteSpace())
+            {
+                var connectionStringStorage = this._serviceProvider.GetService<IConnectionStringStorage>();
+                connectionStringStorage.AddOrUpdate(
+                    new ConnectionStringProvider(tenant.Name, tenant.ConnectionString)
+                    );
+            }
+
             return tenant;
         }
 
         public virtual async Task Delete(string name)
         {
-            await this.Delete(o => o.Name == name);
+            var tenant = await this.GetByName(name);
+            if (tenant == null)
+            {
+                return;
+            }
+
+            // 清除连接字符串
+            if (!tenant.ConnectionString.IsNullOrWhiteSpace())
+            {
+                var connectionStringStorage = this._serviceProvider.GetService<IConnectionStringStorage>();
+                connectionStringStorage.Remove(tenant.Name);
+            }
+
+            await this.Delete(tenant.Id);
         }
 
         public virtual async Task<Tenant> GetByName(string name)
@@ -73,6 +99,20 @@ namespace Company.Project.MultiTenancy
             await this.Update(tenant);
 
             return tenant;
+        }
+
+        public virtual IEnumerable<IConnectionStringProvider> LoadConnectionStringProviders()
+        {
+            var queryResult = this.QueryAsNoTracking.Where(o => o.ConnectionString != null)
+                 .Select(o => new
+                 {
+                     Name = o.Name,
+                     ConnStr = o.ConnectionString
+                 })
+                 .ToList();
+
+            return queryResult.Where(o => !o.ConnStr.IsNullOrWhiteSpace())
+                 .Select(o => new ConnectionStringProvider(o.Name, o.ConnStr));
         }
     }
 }
