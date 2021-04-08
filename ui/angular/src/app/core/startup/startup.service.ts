@@ -32,7 +32,8 @@ export class StartupService {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
 
     // 重写 setData 函数实现
-    this.settingService.setData = function(key: string, value: any) {
+    // tslint:disable-next-line:space-before-function-paren
+    this.settingService.setData = function (key: string, value: any) {
       if (!this.platform.isBrowser) {
         return;
       }
@@ -109,8 +110,8 @@ export class StartupService {
   /** 初始化应用信息 */
   private initAppInfo(input: SessionDto) {
     const app: any = {
-      name: `ProjectQ`,
-      description: `ProjectQ admin panel front-end framework`,
+      name: input.name,
+      description: input.name,
     };
     this.settingService.setApp(app);
     this.titleService.suffix = this.settingService.app.name;
@@ -125,20 +126,15 @@ export class StartupService {
   /** 初始化用户信息 */
   private initUserInfo(input: SessionDto) {
     // 设置登录信息
-    const displayUserName = input.multiTenancy.displayName ?
-      input.multiTenancy.displayName + '/' + input.auth.userNickName : input.auth.userNickName;
+    let displayUserName = input.auth.userNickName;
+    if (input.multiTenancy.isEnabled && input.multiTenancy.displayName) {
+      displayUserName = input.multiTenancy.displayName + '/' + input.auth.userNickName;
+    }
     this.settingService.setUser({
       name: displayUserName,
       avatar: 'assets/images/avatar.png',
       // email: 'msmadaoe@msn.com',
     });
-    // const user: any = {
-    //   name: 'Admin',
-    //   avatar: 'assets/images/avatar.png',
-    //   email: 'msmadaoe@msn.com',
-    //   token: '123456789',
-    // };
-    // this.settingService.setUser(user);
   }
 
   /** 初始化菜单信息 */
