@@ -32,18 +32,49 @@ namespace Company.Project.SeedData
 
         public async Task Run(DataSeedContext dataSeedContext)
         {
+            var userName = AppConsts.Authorization.SystemUserName;
+            var userPassword = AppConsts.Authorization.SystemUserPassword;
+            var userEmail = "msmadaoe@msn.com";
+            var userPhoneNumber = "13000000007";
+
+
+            #region 从上下文中获取参数
+
+            if (dataSeedContext.Properties.TryGetValue(AppConsts.Authorization.AdminUserName, out var val) && val != null)
+            {
+                userName = val.ToString();
+            }
+
+            if (dataSeedContext.Properties.TryGetValue(AppConsts.Authorization.AdminUserPassword, out val) && val != null)
+            {
+                userPassword = val.ToString();
+            }
+
+            if (dataSeedContext.Properties.TryGetValue(AppConsts.Authorization.AdminUserEmail, out val) && val != null)
+            {
+                userEmail = val.ToString();
+            }
+
+            if (dataSeedContext.Properties.TryGetValue(AppConsts.Authorization.AdminUserPhoneNumber, out val) && val != null)
+            {
+                userPhoneNumber = val.ToString();
+            } 
+
+            #endregion
+
+
             // 创建用户
-            var user = await _userManager.FindByNameAsync(AppConsts.Authorization.SystemUserName);
+            var user = await _userManager.FindByNameAsync(userName);
             if (user == null)
             {
                 user = new User()
                 {
                     Id = Guid.NewGuid(),
-                    UserName = AppConsts.Authorization.SystemUserName,
-                    Nickname = AppConsts.Authorization.SystemUserName,
-                    PhoneNumber = "13000000007",
+                    UserName = userName,
+                    Nickname = userName,
+                    PhoneNumber = userPhoneNumber,
                     PhoneNumberConfirmed = true,
-                    Email = "msmadaoe@msn.com",
+                    Email = userEmail,
                     EmailConfirmed = true,
                     IsActive = true,
                     IsStatic = true,
@@ -56,7 +87,7 @@ namespace Company.Project.SeedData
                 user.NormalizedEmail = _userManager.NormalizeEmail(user.Email);
 
                 user.PasswordHash = _userManager.PasswordHasher
-                    .HashPassword(user, AppConsts.Authorization.SystemUserPassword);
+                    .HashPassword(user, userPassword);
 
 
                 var identityResult = await _userManager.CreateAsync(user);

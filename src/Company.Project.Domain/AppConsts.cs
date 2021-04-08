@@ -57,6 +57,27 @@ namespace Company.Project
             /// 系统管理员角色
             /// </summary>
             public const string SystemRoleName = "admin";
+
+
+            /// <summary>
+            /// 管理员用户名称
+            /// </summary>
+            public const string AdminUserName = nameof(AdminUserName);
+
+            /// <summary>
+            /// 管理员用户密码
+            /// </summary>
+            public const string AdminUserPassword = nameof(AdminUserPassword);
+
+            /// <summary>
+            /// 管理员用户邮箱
+            /// </summary>
+            public const string AdminUserEmail = nameof(AdminUserEmail);
+
+            /// <summary>
+            /// 管理员手机号
+            /// </summary>
+            public const string AdminUserPhoneNumber = nameof(AdminUserPhoneNumber);
         }
     }
 }
