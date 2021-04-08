@@ -31,15 +31,16 @@ export class StartupService {
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
 
-    // 重写 setData 函数实现
-    // tslint:disable-next-line:space-before-function-paren
-    this.settingService.setData = function (key: string, value: any) {
+    // 自定义setData函数
+    function setData(key: string, value: any) {
       if (!this.platform.isBrowser) {
         return;
       }
       localStorage.setItem(key, JSON.stringify(value));
       this.notify$.next({ type: key, name: key, value } as any);
-    };
+    }
+    // 重写 setData 函数实现
+    this.settingService.setData = setData;
   }
 
   load(): Promise<any> {
