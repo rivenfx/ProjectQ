@@ -28,6 +28,16 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzCascaderModule } from 'ng-zorro-antd/cascader';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 
 export const SHARED_ZORRO_MODULES = [
   NzFormModule,
@@ -59,5 +69,15 @@ export const SHARED_ZORRO_MODULES = [
   NzCheckboxModule,
   NzTreeModule,
   NzTreeSelectModule,
-  NzNotificationModule
+  NzNotificationModule,
+  NzBackTopModule,
+  NzLayoutModule,
+  NzSliderModule,
+  NzUploadModule,
+  NzTagModule,
+  NzListModule,
+  NzDatePickerModule,
+  NzEmptyModule,
+  NzCascaderModule,
+  NzTimePickerModule,
 ];
