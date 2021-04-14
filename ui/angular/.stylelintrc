@@ -28,7 +28,8 @@
           "ng-deep"
         ]
       }
-    ]
+    ],
+    "no-empty-source": null
   },
   "ignoreFiles": [
     "src/assets/**/*"
