@@ -5,7 +5,9 @@
   ],
   "rulesDirectory": [
     "codelyzer",
-    "ng-alain-codelyzer"
+    "ng-alain-codelyzer",
+    "nz-tslint-rules",
+    "node_modules/ng-alain-codelyzer"
   ],
   "rules": {
     "align": {
@@ -14,7 +16,6 @@
         "statements"
       ]
     },
-    "radix": false,
     "array-type": false,
     "arrow-return-shorthand": true,
     "curly": true,
@@ -25,36 +26,14 @@
     "contextual-lifecycle": true,
     "directive-class-suffix": true,
     "directive-selector": [
-      true,
-      "attribute",
-      [
-        "app",
-        "passport",
-        "exception",
-        "layout",
-        "header",
-        ""
-      ],
-      "kebab-case",
-      "camelCase"
+      false
     ],
     "component-selector": [
-      true,
-      "element",
-      [
-        "app",
-        "passport",
-        "exception",
-        "layout",
-        "header",
-        ""
-      ],
-      "kebab-case",
-      "camelCase"
+      false
     ],
-    "eofline": false,
+    "eofline": true,
     "import-blacklist": [
-      false,
+      true,
       "rxjs/Rx",
       "ng-zorro-antd",
       "@delon/abc",
@@ -84,7 +63,7 @@
     ],
     "no-console": [
       true,
-      // "debug",
+      "debug",
       "info",
       "time",
       "timeEnd",
@@ -100,10 +79,9 @@
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
     "object-literal-key-quotes": [
-      false,
+      true,
       "as-needed"
     ],
-    "object-literal-shorthand": false,
     "quotemark": [
       true,
       "single"
@@ -143,7 +121,6 @@
     "variable-name": {
       "options": [
         "ban-keywords",
-        // "check-format",
         "allow-pascal-case"
       ]
     },
@@ -158,7 +135,7 @@
       ]
     },
     "no-conflicting-lifecycle": true,
-    "no-host-metadata-property": true,
+    "no-host-metadata-property": false,
     "no-input-rename": true,
     "no-inputs-metadata-property": true,
     "no-output-native": true,
@@ -175,6 +152,31 @@
         "import-sources-order": "case-insensitive",
         "named-imports-order": "case-insensitive"
       }
+    ],
+    "use-path-mapping": [
+      true,
+      [
+        "@core",
+        "@shared",
+        "@brand"
+      ]
+    ],
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "typedef": [
+      false,
+      "call-signature",
+      "parameter",
+      "property-declaration"
+    ],
+    "use-isnan": true,
+    "unified-signatures": true,
+    "nz-secondary-entry-imports": true,
+    "radix": false,
+    "no-string-literal": [
+      false
     ]
   }
 }
