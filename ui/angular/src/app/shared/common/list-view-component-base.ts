@@ -1,4 +1,4 @@
-import { Injector, OnInit, ViewChild, Directive } from '@angular/core';
+import { Injector, OnInit, ViewChild, Directive, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
 import { ColumnItemDto, DynamicPageServiceProxy, PageFilterItemDto, QueryCondition, SortCondition } from '@service-proxies/service-proxies';
@@ -61,6 +61,10 @@ export interface IPagedResultDto {
   total: number;
 }
 
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class ListViewComponentBase<T> extends AppComponentBase implements OnInit {
   /** 自动计算表格高度 */
   protected autoTableHeight = true;

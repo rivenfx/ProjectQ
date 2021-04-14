@@ -1,8 +1,12 @@
-import { Injector, Input, ViewChild, Directive } from '@angular/core';
+import { Injector, Input, ViewChild, Directive, Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class ModalComponentBase<T> extends AppComponentBase {
   private _modalInput: T;
   private _readonly: boolean;

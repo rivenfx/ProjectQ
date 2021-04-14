@@ -1,8 +1,12 @@
-import { Injector, Input, Directive } from '@angular/core';
+import { Injector, Input, Directive, Component } from '@angular/core';
 import { I18nService } from '@core/i18n';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { PermissionCheckerService } from '@shared/riven/permission-checker.service';
 
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class SampleComponentBase {
   @Input() loading: boolean;
 

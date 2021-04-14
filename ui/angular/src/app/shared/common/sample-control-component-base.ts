@@ -11,12 +11,17 @@ import {
   SimpleChange,
   SimpleChanges,
   Directive,
+  Component,
 } from '@angular/core';
 import { SampleComponentBase } from './sample-component-base';
 
 /***
  * 简单控件基类
  */
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class SampleControlComponentBase<T> extends SampleComponentBase implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   /** 占位符 */
   @Input()

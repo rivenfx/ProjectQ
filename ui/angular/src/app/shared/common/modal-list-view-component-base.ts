@@ -1,7 +1,11 @@
-import { Injector, Input, Directive } from '@angular/core';
+import { Injector, Input, Directive, Component } from '@angular/core';
 import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class ModalListViewComponentBase<TModal, TList> extends ListViewComponentBase<TList> {
   private _modalInput: TModal;
   private _readonly: boolean;

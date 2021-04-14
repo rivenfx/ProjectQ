@@ -1,8 +1,23 @@
-import { ChangeDetectorRef, EventEmitter, Injector, Input, OnChanges, Output, SimpleChange, SimpleChanges, Directive } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  EventEmitter,
+  Injector,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChange,
+  SimpleChanges,
+  Directive,
+  Component,
+} from '@angular/core';
 import { ControlComponentBase } from '@shared/common/control-component-base';
 import { SampleDataSourceService } from '@shared/components/sample-components/sample-data-source.service';
 
 /** page filter 组件的基类 */
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T> implements OnChanges {
   /** 配置文件中的参数 */
   @Input() args: string;

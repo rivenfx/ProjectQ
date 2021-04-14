@@ -11,6 +11,7 @@ import {
   SimpleChange,
   SimpleChanges,
   Directive,
+  Component,
 } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { SampleControlComponentBase } from './sample-control-component-base';
@@ -18,6 +19,10 @@ import { SampleControlComponentBase } from './sample-control-component-base';
 /***
  * 表单控件基类
  */
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class ControlComponentBase<T> extends SampleControlComponentBase<T> implements OnChanges, ControlValueAccessor {
   /** 控件名称 */
   @Input()
