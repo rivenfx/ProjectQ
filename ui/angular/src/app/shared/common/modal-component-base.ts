@@ -3,9 +3,7 @@ import { NgForm } from '@angular/forms';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
-@Directive()
 export abstract class ModalComponentBase<T> extends AppComponentBase {
-
   private _modalInput: T;
   private _readonly: boolean;
 
@@ -22,7 +20,7 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   @Input()
   set modalInput(val: T) {
     this._modalInput = val;
-    if (typeof (val) !== 'undefined') {
+    if (typeof val !== 'undefined') {
       this.isEdit = true;
     }
     if (!!val && !this.readonly) {
@@ -52,16 +50,12 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   /** 页面表单 */
   @ViewChild('pageForm') pageForm: NgForm;
 
-
   constructor(injector: Injector) {
     super(injector);
     try {
       this.modalRef = injector.get(NzModalRef);
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
-
 
   /** 关闭模态框-成功 */
   success(res: boolean | any = true) {

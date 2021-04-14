@@ -3,10 +3,7 @@ import { ControlComponentBase } from '@shared/common/control-component-base';
 import { SampleDataSourceService } from '@shared/components/sample-components/sample-data-source.service';
 
 /** page filter 组件的基类 */
-@Directive()
-export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T>
-  implements OnChanges {
-
+export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T> implements OnChanges {
   /** 配置文件中的参数 */
   @Input() args: string;
 
@@ -25,9 +22,7 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
   /** 控件加载完成 */
   @Output() readyChange = new EventEmitter<string>();
 
-  constructor(
-    injector: Injector,
-  ) {
+  constructor(injector: Injector) {
     super(injector);
 
     this.cdr = injector.get(ChangeDetectorRef);
@@ -37,7 +32,7 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
     super.ngOnChanges(changes);
     if (changes.args && changes.args.currentValue) {
-      if (typeof (changes.args.currentValue) === 'string') {
+      if (typeof changes.args.currentValue === 'string') {
         this.onArgsChange(JSON.parse(changes.args.currentValue));
       } else {
         this.onArgsChange(changes.args.currentValue);
@@ -65,4 +60,3 @@ export abstract class PageFilterItemComponentBase<T> extends ControlComponentBas
   /** 外部组件传递的参数发生过更改 */
   abstract onExternalArgsChange(externalArgs: any);
 }
-

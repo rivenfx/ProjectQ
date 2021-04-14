@@ -1,18 +1,12 @@
 import { Injector, OnInit, ViewChild, Directive } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
-import {
-  ColumnItemDto,
-  DynamicPageServiceProxy,
-  PageFilterItemDto,
-  QueryCondition,
-  SortCondition
-} from '@service-proxies/service-proxies';
+import { ColumnItemDto, DynamicPageServiceProxy, PageFilterItemDto, QueryCondition, SortCondition } from '@service-proxies/service-proxies';
 import { ISampleTableAction } from '@shared/components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from './app-component-base';
-import { ReuseTabService } from '@delon/abc';
+import { ReuseTabService } from '@delon/abc/reuse-tab';
 
 /** 页面信息 */
 export interface IPageInfo<T> {
@@ -37,7 +31,7 @@ export interface IPageInfo<T> {
   /** 虚拟项高度 */
   virtualItemSize?: number;
   /** 滚动 */
-  scroll?: { y?: string; x?: string; };
+  scroll?: { y?: string; x?: string };
   // ==========================================
   /** 是否显示分页 */
   show?: boolean;
@@ -50,7 +44,6 @@ export interface IPageInfo<T> {
   /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
   pageSizes?: number[];
 }
-
 
 /** 查询分页数据 */
 export interface IFetchPageData {
@@ -69,9 +62,7 @@ export interface IPagedResultDto {
 }
 
 @Directive()
-export abstract class ListViewComponentBase<T> extends AppComponentBase
-  implements OnInit {
-
+export abstract class ListViewComponentBase<T> extends AppComponentBase implements OnInit {
   /** 自动计算表格高度 */
   protected autoTableHeight = true;
   /** 表格高度 */
@@ -133,7 +124,6 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     return this.pageInfo.name;
   }
 
-
   /** 页面表格组件实例 */
   // @ts-ignore
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
@@ -173,7 +163,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
       const permissions = activatedRoute.snapshot.data.permissions;
       if (Array.isArray(permissions) && permissions.length > 0) {
         this.pageName = permissions[0];
-      } else if (typeof (permissions) === 'string') {
+      } else if (typeof permissions === 'string') {
         this.pageName = permissions;
       }
     }
@@ -184,9 +174,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
     }, 500);
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   /** 当触发操作事件 */
   onAction(event: ISampleTableAction) {
@@ -202,7 +190,6 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
       console.debug(`action没有此函数 ${event.name}`);
     }
   }
-
 
   /** 页码发生更改 */
   onPageIndexChange(pageIndex: number) {
@@ -277,10 +264,13 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
 
   /** 获取动态页面信息 pageFilter和columns */
   protected fetchDynamicPageInfo(name: string, callback?: () => void) {
-    this.dynamicPageSer.getDynamicPageInfo(name)
-      .pipe(finalize(() => {
-        this.loading = false;
-      }))
+    this.dynamicPageSer
+      .getDynamicPageInfo(name)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+      )
       .subscribe((res) => {
         this.pageInfo.pageFilters = res.pageFilters;
         this.pageInfo.columns = res.columns;
@@ -293,10 +283,13 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 获取pageFilterList */
   protected fetchPageFilter(name: string, callback?: () => void) {
     this.loading = true;
-    this.dynamicPageSer.getPageFilters(name)
-      .pipe(finalize(() => {
-        this.loading = false;
-      }))
+    this.dynamicPageSer
+      .getPageFilters(name)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+      )
       .subscribe((res) => {
         if (!res || !res.items) {
           this.pageInfo.pageFilters = [];
@@ -312,10 +305,13 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
   /** 获取列表配置 */
   protected fetchColumn(name: string, callback?: () => void) {
     this.loading = true;
-    this.dynamicPageSer.getColumns(name)
-      .pipe(finalize(() => {
-        this.loading = false;
-      }))
+    this.dynamicPageSer
+      .getColumns(name)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+      )
       .subscribe((res) => {
         if (!res || !res.items) {
           this.pageInfo.columns = [];
@@ -339,9 +335,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase
         y: this.tableHeight + 'px',
       };
     }
-
   }
-
 
   /** 加载列表数据 */
   abstract fetchData(fetch: IFetchPageData);
