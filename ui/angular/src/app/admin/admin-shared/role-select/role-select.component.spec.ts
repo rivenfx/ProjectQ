@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RoleSelectComponent } from './role-select.component';
 
@@ -6,7 +6,7 @@ describe('RoleSelectComponent', () => {
   let component: RoleSelectComponent;
   let fixture: ComponentFixture<RoleSelectComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RoleSelectComponent ]
     })
