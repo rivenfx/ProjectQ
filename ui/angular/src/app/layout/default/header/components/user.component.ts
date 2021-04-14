@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { ReuseTabService } from '@delon/abc';
 import { SettingsService } from '@delon/theme';
 import { AppConsts } from '@shared';
 import { SampleComponentBase } from '@shared/common';
@@ -8,12 +7,7 @@ import { SampleComponentBase } from '@shared/common';
 @Component({
   selector: 'header-user',
   template: `
-    <div
-      class="alain-default__nav-item d-flex align-items-center px-sm"
-      nz-dropdown
-      nzPlacement="bottomRight"
-      [nzDropdownMenu]="userMenu"
-    >
+    <div class="alain-default__nav-item d-flex align-items-center px-sm" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="userMenu">
       <nz-avatar [nzSrc]="settings.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
       {{ settings.user.name }}
     </div>
@@ -42,11 +36,7 @@ import { SampleComponentBase } from '@shared/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderUserComponent extends SampleComponentBase {
-  constructor(
-    injector: Injector,
-    public settings: SettingsService,
-    private router: Router
-  ) {
+  constructor(injector: Injector, public settings: SettingsService, private router: Router) {
     super(injector);
   }
 
