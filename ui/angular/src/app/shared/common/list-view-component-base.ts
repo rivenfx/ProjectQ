@@ -61,7 +61,6 @@ export interface IPagedResultDto {
   total: number;
 }
 
-@Directive()
 export abstract class ListViewComponentBase<T> extends AppComponentBase implements OnInit {
   /** 自动计算表格高度 */
   protected autoTableHeight = true;

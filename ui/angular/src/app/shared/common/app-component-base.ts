@@ -5,10 +5,7 @@ import { MessageService } from '@shared/riven/message.service';
 import { NotifyService } from '@shared/riven/notify.service';
 import { SampleComponentBase } from './sample-component-base';
 
-
-@Directive()
 export abstract class AppComponentBase extends SampleComponentBase {
-
   titleSer: TitleService;
 
   appConsts = AppConsts;
@@ -16,10 +13,7 @@ export abstract class AppComponentBase extends SampleComponentBase {
   message: MessageService;
   notify: NotifyService;
 
-
-  constructor(
-    public injector: Injector,
-  ) {
+  constructor(public injector: Injector) {
     super(injector);
 
     this.titleSer = injector.get(TitleService);
