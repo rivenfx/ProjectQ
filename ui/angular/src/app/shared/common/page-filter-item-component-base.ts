@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, EventEmitter, Injector, Input, OnChanges, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, EventEmitter, Injector, Input, OnChanges, Output, SimpleChange, SimpleChanges, Directive } from '@angular/core';
 import { ControlComponentBase } from '@shared/common/control-component-base';
 import { SampleDataSourceService } from '@shared/components/sample-components/sample-data-source.service';
 
 /** page filter 组件的基类 */
+@Directive()
 export abstract class PageFilterItemComponentBase<T> extends ControlComponentBase<T>
   implements OnChanges {
 

@@ -36,7 +36,7 @@ export class ServiceProxyModule {
     throwIfAlreadyLoaded(parentModule, 'ServiceProxyModule');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<ServiceProxyModule> {
     return {
       ngModule: ServiceProxyModule,
       providers: [

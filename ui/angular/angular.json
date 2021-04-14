@@ -163,10 +163,10 @@
     },
     "@schematics/angular:module": {
       "routing": true,
-      "spec": false
+      "skipTests": true
     },
     "@schematics/angular:component": {
-      "spec": false,
+      "skipTests": true,
       "flat": false,
       "inlineStyle": false,
       "inlineTemplate": false,
@@ -174,11 +174,11 @@
       "prefix": ""
     },
     "@schematics/angular:directive": {
-      "spec": false,
+      "skipTests": true,
       "prefix": ""
     },
     "@schematics/angular:service": {
-      "spec": false
+      "skipTests": true
     }
   }
 }

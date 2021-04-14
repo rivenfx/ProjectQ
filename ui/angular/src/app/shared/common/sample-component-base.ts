@@ -1,8 +1,9 @@
-import { Injector, Input } from '@angular/core';
+import { Injector, Input, Directive } from '@angular/core';
 import { I18nService } from '@core/i18n';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { PermissionCheckerService } from '@shared/riven/permission-checker.service';
 
+@Directive()
 export abstract class SampleComponentBase {
 
   @Input() loading: boolean;

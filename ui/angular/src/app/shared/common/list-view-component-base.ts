@@ -1,4 +1,4 @@
-import { Injector, OnInit, ViewChild } from '@angular/core';
+import { Injector, OnInit, ViewChild, Directive } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
 import {
@@ -68,6 +68,7 @@ export interface IPagedResultDto {
   total: number;
 }
 
+@Directive()
 export abstract class ListViewComponentBase<T> extends AppComponentBase
   implements OnInit {
 

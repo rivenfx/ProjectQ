@@ -1,20 +1,10 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  EventEmitter,
-  Injector,
-  Input, OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChange,
-  SimpleChanges,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, SimpleChanges, Directive } from '@angular/core';
 import { SampleComponentBase } from './sample-component-base';
 
 /***
  * 简单控件基类
  */
+@Directive()
 export abstract class SampleControlComponentBase<T> extends SampleComponentBase
   implements OnInit, AfterViewInit, OnDestroy, OnChanges {
 

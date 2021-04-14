@@ -34,13 +34,13 @@ const DIRECTIVES = [
 })
 export class RivenModule {
 
-  static forChild(): ModuleWithProviders {
+  static forChild(): ModuleWithProviders<RivenModule> {
     return {
       ngModule: RivenModule,
     };
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<RivenModule> {
     return {
       ngModule: RivenModule,
       providers: [

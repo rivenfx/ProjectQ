@@ -13,7 +13,7 @@ import { I18nService } from './i18n.service';
   ],
 })
 export class I18nModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<I18nModule> {
     return {
       ngModule: I18nModule,
       providers: [
