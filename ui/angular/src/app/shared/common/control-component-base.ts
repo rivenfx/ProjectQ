@@ -1,14 +1,29 @@
-import { AfterViewInit, ChangeDetectorRef, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, SimpleChanges, Directive } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  EventEmitter,
+  Injector,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChange,
+  SimpleChanges,
+  Directive,
+  Component,
+} from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 import { SampleControlComponentBase } from './sample-control-component-base';
 
 /***
  * 表单控件基类
  */
-@Directive()
-export abstract class ControlComponentBase<T> extends SampleControlComponentBase<T>
-  implements OnChanges, ControlValueAccessor {
-
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
+export abstract class ControlComponentBase<T> extends SampleControlComponentBase<T> implements OnChanges, ControlValueAccessor {
   /** 控件名称 */
   @Input()
   name: string;
@@ -30,8 +45,7 @@ export abstract class ControlComponentBase<T> extends SampleControlComponentBase
     this.valueChange.emit = fn;
   }
 
-  registerOnTouched(fn: any): void {
-  }
+  registerOnTouched(fn: any): void {}
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;

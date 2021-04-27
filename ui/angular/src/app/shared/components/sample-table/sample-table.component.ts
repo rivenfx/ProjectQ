@@ -1,16 +1,20 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
-  Injector, Input,
+  Injector,
+  Input,
   OnChanges,
-  OnDestroy, OnInit, Output,
+  OnDestroy,
+  OnInit,
+  Output,
   SimpleChange,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { STChange, STColumn, STComponent, STMultiSort, STPage } from '@delon/abc';
+import { STChange, STColumn, STComponent, STMultiSort, STPage } from '@delon/abc/st';
 import { ColumnItemDto, SortCondition, SortType } from '@service-proxies';
 import { AppComponentBase } from '@shared/common';
 import * as _ from 'lodash';
@@ -24,9 +28,7 @@ import { ISampleTableAction } from './interfaces';
   styleUrls: ['./sample-table.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SampleTableComponent extends AppComponentBase
-  implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-
+export class SampleTableComponent extends AppComponentBase implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() loading: boolean;
 
   /** 列表列配置 */
@@ -48,7 +50,7 @@ export class SampleTableComponent extends AppComponentBase
   @Input() virtual = true;
 
   /** 滚动宽高 */
-  @Input() scroll: { y?: string; x?: string; } = { x: '1800px', y: '240px' };
+  @Input() scroll: { y?: string; x?: string } = { x: '1800px', y: '240px' };
 
   /** 项高度 */
   @Input() virtualItemSize = 31;
@@ -109,21 +111,13 @@ export class SampleTableComponent extends AppComponentBase
   private destroy$ = new Subject();
   @ViewChild('st') stRef: STComponent;
 
-  constructor(
-    injector: Injector,
-    private cdr: ChangeDetectorRef,
-    private tableDataProcessor: SampleTableDataProcessorService,
-  ) {
+  constructor(injector: Injector, private cdr: ChangeDetectorRef, private tableDataProcessor: SampleTableDataProcessorService) {
     super(injector);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
-  }
-
-  ngAfterViewInit(): void {
-
-  }
+  ngAfterViewInit(): void {}
 
   ngOnChanges(changes: { [P in keyof this]?: SimpleChange } & SimpleChanges): void {
     if (changes.columns && changes.columns.currentValue) {
@@ -145,7 +139,6 @@ export class SampleTableComponent extends AppComponentBase
         }
       }, 800);
     }
-
   }
 
   ngOnDestroy(): void {
@@ -234,13 +227,15 @@ export class SampleTableComponent extends AppComponentBase
     //   "statistical": null, // 统计类型
     //   "fixed": "left" // 固定列 left或right,必须指定width
     // },
-    this.tableColumns = [{
-      index: '',
-      title: 'No',
-      type: 'no',
-      width: 40,
-      fixed: 'left',
-    }];
+    this.tableColumns = [
+      {
+        index: '',
+        title: 'No',
+        type: 'no',
+        width: 40,
+        fixed: 'left',
+      },
+    ];
     if (!input || input.length === 0) {
       this.cdr.detectChanges();
       return;

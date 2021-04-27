@@ -1,11 +1,7 @@
 // 请参考：https://ng-alain.com/docs/i18n
 import { registerLocaleData } from '@angular/common';
 import { Injectable } from '@angular/core';
-import {
-  AlainI18NService,
-  DelonLocaleService,
-  SettingsService,
-} from '@delon/theme';
+import { AlainI18NService, DelonLocaleService, SettingsService } from '@delon/theme';
 
 import { AppConsts } from '@shared/app-consts';
 import { SessionService } from '@shared/riven/session.service';
@@ -15,18 +11,19 @@ import { filter } from 'rxjs/operators';
 import { LanguageInfoDto, LocalizationDto } from '../../service-proxies';
 import { I18nCommon } from './i18n-common';
 
-
 @Injectable({ providedIn: 'root' })
 export class I18nService implements AlainI18NService {
-
   private _replaceSearchValue = /[.*+?^${}()|[\]\\]/g;
   private _replaceValue = '\\$&';
   private _relaceFlags = 'g';
 
-
   private change$ = new BehaviorSubject<string | null>(null);
   private _localization: LocalizationDto;
   private _curLang: LanguageInfoDto;
+
+  [key: string]: any;
+  defaultLang = 'zh-Hans';
+  currentLang: string;
 
   constructor(
     private settings: SettingsService,
@@ -34,17 +31,17 @@ export class I18nService implements AlainI18NService {
     private delonLocaleService: DelonLocaleService,
     private sessionSer: SessionService,
   ) {
-    this.sessionSer.localizationChange
-      .subscribe((result) => {
-        if (result) {
-          this._localization = result;
-          this._curLang = result.languages.find(o => o.culture === result.currentCulture);
-        }
-      });
+    this.sessionSer.localizationChange.subscribe((result) => {
+      if (result) {
+        this._localization = result;
+        this._curLang = result.languages.find((o) => o.culture === result.currentCulture);
+      }
+    });
   }
 
   /** 更新语言数据 */
   private updateLangData(lang: string) {
+    this.currentLang = lang;
     const item = I18nCommon.LANG_MAP[lang];
     registerLocaleData(item.ng, item.abbr);
     this.nzI18nService.setLocale(item.zorro);
@@ -77,11 +74,10 @@ export class I18nService implements AlainI18NService {
       return;
     }
 
-    this.sessionSer.loadLocalization()
-      .subscribe(() => {
-        this.updateLangData(lang);
-        this.change$.next(lang);
-      });
+    this.sessionSer.loadLocalization().subscribe(() => {
+      this.updateLangData(lang);
+      this.change$.next(lang);
+    });
   }
 
   /**
@@ -93,7 +89,6 @@ export class I18nService implements AlainI18NService {
     if (!this._localization) {
       return key;
     }
-
 
     let value = this.curLang.texts[key];
     if (!value) {
@@ -117,7 +112,6 @@ export class I18nService implements AlainI18NService {
       return inputStr;
     }
 
-
     for (let i = 0; i < args.length; i++) {
       const placeHolder = '{' + i + '}';
       const fix = placeHolder.replace(this._replaceSearchValue, this._replaceValue);
@@ -126,5 +120,4 @@ export class I18nService implements AlainI18NService {
 
     return inputStr;
   }
-
 }

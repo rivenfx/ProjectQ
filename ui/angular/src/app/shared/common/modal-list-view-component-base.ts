@@ -1,8 +1,11 @@
-import { Injector, Input, Directive } from '@angular/core';
+import { Injector, Input, Directive, Component } from '@angular/core';
 import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
-@Directive()
+@Component({
+  template: '',
+})
+// tslint:disable-next-line:component-class-suffix
 export abstract class ModalListViewComponentBase<TModal, TList> extends ListViewComponentBase<TList> {
   private _modalInput: TModal;
   private _readonly: boolean;
@@ -20,7 +23,7 @@ export abstract class ModalListViewComponentBase<TModal, TList> extends ListView
   @Input()
   set modalInput(val: TModal) {
     this._modalInput = val;
-    if (typeof (val) !== 'undefined') {
+    if (typeof val !== 'undefined') {
       this.isEdit = true;
     }
     if (!!val && !this.readonly) {
@@ -50,11 +53,8 @@ export abstract class ModalListViewComponentBase<TModal, TList> extends ListView
     super(injector);
     try {
       this.modalRef = injector.get(NzModalRef);
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
-
 
   success(res: boolean | any = true) {
     if (this.modalRef) {
