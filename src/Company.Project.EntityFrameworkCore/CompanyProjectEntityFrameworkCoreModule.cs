@@ -115,16 +115,27 @@ namespace Company.Project
             #region 添加数据库连接字符串,在这里添加的优先级高于前面注册的
 
             //context.ServiceProvider.AddConnectionString("TenantA", "null");
-            var connectionStringStorage = context.ServiceProvider
-                .GetRequiredService<IConnectionStringStorage>();
 
 
-            // 加载租户的连接字符串到存储器
-            var tenantManager = context.ServiceProvider.GetRequiredService<ITenantManager>();
-            foreach (var item in tenantManager.LoadConnectionStringProviders())
+            var unitOfWorkManager = context.ServiceProvider
+                .GetRequiredService<IUnitOfWorkManager>();
+            using (var uow = unitOfWorkManager.Begin())
             {
-                connectionStringStorage.AddOrUpdate(item);
+                var connectionStringStorage = context
+                    .ServiceProvider
+                    .GetRequiredService<IConnectionStringStorage>();
+
+                // 加载租户的连接字符串到存储器
+                var tenantManager = context.ServiceProvider.GetRequiredService<ITenantManager>();
+                foreach (var item in tenantManager.LoadConnectionStringProviders())
+                {
+                    connectionStringStorage.AddOrUpdate(item);
+                }
+
+                // 
+                uow.Complete();
             }
+
 
             #endregion
 
