@@ -39,6 +39,7 @@ export class StartupService {
       localStorage.setItem(key, JSON.stringify(value));
       this.notify$.next({ type: key, name: key, value } as any);
     }
+
     // 重写 setData 函数实现
     this.settingService.setData = setData;
   }
@@ -127,11 +128,13 @@ export class StartupService {
   /** 初始化用户信息 */
   private initUserInfo(input: SessionDto) {
     // 设置登录信息
+    const userName = input.auth.userName;
     let displayUserName = input.auth.userNickName;
     if (input.multiTenancy.isEnabled && input.multiTenancy.displayName) {
       displayUserName = input.multiTenancy.displayName + '/' + input.auth.userNickName;
     }
     this.settingService.setUser({
+      'userName': userName,
       name: displayUserName,
       avatar: 'assets/images/avatar.png',
       // email: 'msmadaoe@msn.com',
