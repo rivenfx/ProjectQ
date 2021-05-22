@@ -29,10 +29,12 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
     { // 名称
       title: this.l('tenant.name'),
       index: 'name',
+      sort: true,
     },
     { // 显示名称
       title: this.l('tenant.display-name'),
       index: 'displayName',
+      sort: true,
     },
     { // 是否为内置
       title: this.l('common.is-static'),
@@ -42,6 +44,7 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
         'true': { text: this.l('label.yes'), color: 'success' },
         'false': { text: this.l('label.no'), color: 'error' },
       },
+      sort: true,
     },
     { // 是否激活
       title: this.l('common.is-active'),
@@ -51,6 +54,61 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
         'true': { text: this.l('label.yes'), color: 'success' },
         'false': { text: this.l('label.no'), color: 'error' },
       },
+      sort: true,
+    },
+    {
+      title: '操作区',
+      buttons: [
+        {
+          tooltip: this.l('common.edit'),
+          icon: 'edit',
+          type: 'none',
+          acl: 'tenant.edit',
+          iif: record => !record.isStatic,
+          iifBehavior: 'disabled',
+          click: (record) => this.createOrEdit(record),
+        },
+        {
+          tooltip: this.l('common.delete'),
+          icon: 'delete',
+          type: 'del',
+          // acl: 'tenant.delete',
+          iif: record => !record.isStatic,
+          iifBehavior: 'disabled',
+          pop: {
+            title: this.l('message.confirm.operation'),
+            okType: 'danger',
+          },
+          click: (record, _modal, comp) => {
+            this.message.success(`成功删除【${record.name}】`);
+            comp!.removeRow(record);
+          },
+        },
+        // {
+        //   text: '更多',
+        //   children: [
+        //     {
+        //       text: record => (record.id === 1 ? `过期` : `正常`),
+        //       click: record => this.message.error(`${record.id === 1 ? `过期` : `正常`}【${record.name}】`),
+        //     },
+        //     {
+        //       text: `审核`,
+        //       click: record => this.message.info(`check-${record.name}`),
+        //       iif: record => record.id % 2 === 0,
+        //       iifBehavior: 'disabled',
+        //       tooltip: 'This is tooltip',
+        //     },
+        //     {
+        //       type: 'divider',
+        //     },
+        //     {
+        //       text: `重新开始`,
+        //       icon: 'edit',
+        //       click: record => this.message.success(`重新开始【${record.name}】`),
+        //     },
+        //   ],
+        // },
+      ],
     },
   ];
 
