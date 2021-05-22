@@ -4,47 +4,7 @@
     "operator": "Contains",
     "skipValueIsNull": true,
     "order": 0,
-    "label": "role.name",
-    "componentName": "sample-input",
-    "args": {
-      "type": "text"
-    },
-    "valueChange": [],
-    "enabled": true,
-    "width": 6,
-    "xsWidth": null,
-    "smWidth": null,
-    "mdWidth": null,
-    "lgWidth": null,
-    "xlWidth": null,
-    "xxlWidth": null
-  },
-  {
-    "field": "displayName",
-    "operator": "Contains",
-    "skipValueIsNull": true,
-    "order": 1,
-    "label": "role.display-name",
-    "componentName": "sample-input",
-    "args": {
-      "type": "text"
-    },
-    "valueChange": [],
-    "enabled": true,
-    "width": 6,
-    "xsWidth": null,
-    "smWidth": null,
-    "mdWidth": null,
-    "lgWidth": null,
-    "xlWidth": null,
-    "xxlWidth": null
-  },
-  {
-    "field": "description",
-    "operator": "Contains",
-    "skipValueIsNull": true,
-    "order": 2,
-    "label": "role.description",
+    "label": "tenant.name",
     "componentName": "sample-input",
     "args": {
       "type": "text"
