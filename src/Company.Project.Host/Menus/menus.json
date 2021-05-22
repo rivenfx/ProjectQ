@@ -13,6 +13,14 @@
         "hideInBreadcrumb": true
       },
       {
+        "text": "租户",
+        "i18n": "Tenant",
+        "link": "/admin/tenant",
+        "icon": "icon iconfont icon-role",
+        "acl": "tenant.query",
+        "hideInBreadcrumb": true
+      },
+      {
         "text": "角色",
         "i18n": "role",
         "link": "/admin/role",
