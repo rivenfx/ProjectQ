@@ -1,12 +1,20 @@
 import { Injector, OnInit, ViewChild, Directive, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
-import { ColumnItemDto, DynamicPageServiceProxy, PageFilterItemDto, QueryCondition, SortCondition } from '@service-proxies/service-proxies';
+import {
+  ColumnItemDto,
+  DynamicPageServiceProxy,
+  PageFilterItemDto,
+  QueryCondition,
+  SortCondition,
+  SortType,
+} from '@service-proxies/service-proxies';
 import { ISampleTableAction } from '@shared/components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from './app-component-base';
 import { ReuseTabService } from '@delon/abc/reuse-tab';
+import { STChange } from '@delon/abc/st';
 
 /** 页面信息 */
 export interface IPageInfo<T> {
@@ -43,6 +51,10 @@ export interface IPageInfo<T> {
   showSize?: boolean;
   /** 页面数据量组,默认 [10, 20, 30, 40, 50] */
   pageSizes?: number[];
+  /** 显示边框 */
+  bordered?: boolean;
+  /** 表格大小 */
+  tableSize?: 'small' | 'middle' | 'default';
 }
 
 /** 查询分页数据 */
@@ -112,6 +124,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
     showQuickJumper: true,
     showSize: true,
     pageSizes: [10, 20, 30, 40, 50],
+    //
+    bordered: true,
+    tableSize: 'small',
   };
 
   /** 筛选条件/列表 配置名称 */
@@ -128,7 +143,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
   }
 
   /** 页面表格组件实例 */
-  // @ts-ignore
+    // @ts-ignore
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
 
   /** 模态框帮助类 */
@@ -177,7 +192,9 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
     }, 500);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.calculatedHeight();
+  }
 
   /** 当触发操作事件 */
   onAction(event: ISampleTableAction) {
@@ -243,8 +260,8 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
       // tslint:disable-next-line: object-literal-shorthand
       skipCount: skipCount,
       pageSize: this.pageInfo.size,
-      queryConditions: this.queryConditions,
-      sortConditions: this.sortConditions,
+      queryConditions: this.queryConditions ?? [],
+      sortConditions: this.sortConditions ?? [],
       finishedCallback: () => {
         this.loading = false;
       },
@@ -259,6 +276,65 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
       },
     });
   }
+
+  /** st change事件 */
+  stChange(e: STChange): void {
+    switch (e.type) {
+      case 'checkbox': // 多选
+        const checked = e.checkbox;
+        this.onCheckChange(checked);
+        break;
+      case 'radio': // 单选
+        this.onCheckChange([e.radio]);
+        break;
+      case 'sort': // 排序
+        this.onSortChange(
+          this.toSortConditions(e),
+        );
+        break;
+      case 'pi': // page index 修改
+        this.onPageIndexChange(e.pi);
+        break;
+      case 'ps': // page size 修改
+        this.onPageSizeChange(e.ps);
+        break;
+    }
+  }
+
+  /** STChange 转 sort cond */
+  protected toSortConditions(e: STChange): SortCondition[] {
+    if (e.type !== 'sort') {
+      return;
+    }
+
+    const sortConditions: SortCondition[] = [];
+    const sorts = e.sort.map.sort.split('-');
+    let sortField: string;
+    let sortType: SortType = SortType.None;
+    let index = 0;
+    for (const sort of sorts) {
+      const lastIndex = sort.lastIndexOf('.');
+      sortField = sort.substring(0, lastIndex);
+      if (sortField.trim() === '') {
+        continue;
+      }
+
+      if (sort.endsWith('.descend')) {
+        sortType = SortType.Desc;
+      } else if (sort.endsWith('.ascend')) {
+        sortType = SortType.Asc;
+      }
+
+      sortConditions.push(
+        new SortCondition({
+          field: sortField,
+          order: index++,
+          type: sortType,
+        }),
+      );
+    }
+  }
+
 
   /** 当 pageName 发生修改 */
   protected onPageNameChange(name: string) {
@@ -330,7 +406,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
   /** 计算列表高度 */
   protected calculatedHeight() {
     // TODO: 动态计算高度需要兼容移动端
-    this.tableHeight = window.innerHeight - 64 - 41.6 - 101.8 - 32 - 32 - 120 - this.errorHeight;
+    this.tableHeight = window.innerHeight - 64 - 41 - 101.8 - 32 - 32 - 120 - this.errorHeight;
     if (this.autoTableHeight) {
       const oldScroll = this.pageInfo.scroll;
       this.pageInfo.scroll = {
