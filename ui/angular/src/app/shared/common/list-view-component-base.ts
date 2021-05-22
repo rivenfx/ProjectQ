@@ -304,35 +304,31 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
   /** STChange 转 sort cond */
   protected toSortConditions(e: STChange): SortCondition[] {
     if (e.type !== 'sort') {
-      return;
+      return [];
     }
 
     const sortConditions: SortCondition[] = [];
-    const sorts = e.sort.map.sort.split('-');
-    let sortField: string;
     let sortType: SortType = SortType.None;
     let index = 0;
-    for (const sort of sorts) {
-      const lastIndex = sort.lastIndexOf('.');
-      sortField = sort.substring(0, lastIndex);
-      if (sortField.trim() === '') {
-        continue;
-      }
-
-      if (sort.endsWith('.descend')) {
-        sortType = SortType.Desc;
-      } else if (sort.endsWith('.ascend')) {
-        sortType = SortType.Asc;
+    for (const key in e.sort.map) {
+      switch (e.sort.map[key]){
+        case 'descend':
+          sortType= SortType.Desc;
+          break;
+        case 'ascend':
+          sortType= SortType.Asc;
+          break;
       }
 
       sortConditions.push(
         new SortCondition({
-          field: sortField,
+          field: key,
           order: index++,
           type: sortType,
         }),
       );
     }
+    return sortConditions;
   }
 
 
