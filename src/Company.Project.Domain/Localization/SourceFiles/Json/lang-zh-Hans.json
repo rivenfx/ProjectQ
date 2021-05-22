@@ -19,6 +19,7 @@
 
     // permission
     "root": "所有权限",
+    "tenant": "租户",
     "user": "用户",
     "role": "角色",
 
@@ -96,6 +97,7 @@
 
     // entity
     "tenant.name": "租户名称",
+    "tenant.display-name": "租户显示名称",
     "user.user-name": "账号",
     "user.nick-name": "昵称",
     "user.phone-number": "电话号码",

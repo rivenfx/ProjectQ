@@ -17,6 +17,7 @@
 
     // permission
     "root": "All Permission",
+    "tenant": "Tenant",
     "user": "User",
     "role": "Role",
 
@@ -71,9 +72,21 @@
 
     // entity
     "tenant.name": "tenant name",
+    "tenant.display-name": "tenant display name",
     "user.user-name": "account",
     "user.nick-name": "nick name",
+    "user.phone-number": "phone number",
+    "user.phone-number-confirmed": "phone number checked",
+    "user.email": "email",
+    "user.email-confirmed": "email checked",
+    "user.lockout-enabled": "lockout enabled",
+    "user.is-active": "active",
+    "user.two-factor-enabled": "two factor enabled",
+    "user.is-static": "static",
     "role.name": "role name",
-    "role.display-name": "role display name"
+    "role.display-name": "role display name",
+    "role.description": "description",
+    "role.is-static": "static"
+
   }
 }
