@@ -8,9 +8,14 @@ using Riven.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Riven.Data;
 using Company.Project.Dtos;
+using Riven.Linq;
+using Riven.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Mapster;
 
 namespace Company.Project.MultiTenancy
 {
@@ -56,8 +61,20 @@ namespace Company.Project.MultiTenancy
         [PermissionAuthorize(AppPermissions.Tenant.Node, Scope = PermissionAuthorizeScope.Host)]
         public virtual async Task<PageResultDto<TenantDto>> GetPage(QueryInput input)
         {
+            var query = this._tenantManager.QueryAsNoTracking
+                .Where(input.QueryConditions)
+                ;
 
-            return null;
+            var total = await query.LongCountAsync();
+
+            var dtoList = await query.OrderBy(input.SortConditions)
+                .Skip(input.SkipCount)
+                .Take(input.PageSize)
+                .ProjectToType<TenantDto>()
+                .ToListAsync();
+
+
+            return new PageResultDto<TenantDto>(dtoList, total);
 
         }
 
