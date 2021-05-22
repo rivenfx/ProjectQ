@@ -1,0 +1,42 @@
+<page-header [title]="l('tenant')" [breadcrumb]="breadcrumb" [action]="action">
+  <ng-template #breadcrumb></ng-template>
+  <ng-template #action>
+    <button nz-button (click)="createOrEdit()" [title]="l('common.create')">
+      <i class="icon iconfont icon-add"></i>
+    </button>
+    <button nz-button (click)="refresh()" [title]="l('common.refresh')">
+      <i class="icon iconfont icon-refresh"></i>
+    </button>
+  </ng-template>
+</page-header>
+
+
+<div class="page-body">
+
+  <page-filter [pageFilters]="pageInfo.pageFilters" [displayLabel]="true" (readyChange)="onFilterReady($event)"
+               (valueChange)="onFilterChange($event)">
+  </page-filter>
+
+  <st #st [loading]="loading"
+      [page]="pageInfo"
+      [columns]="columns"
+      [data]="pageInfo.viewRecord"
+      [virtualScroll]="pageInfo.virtual"
+      [virtualItemSize]="pageInfo.virtualItemSize"
+      [scroll]="pageInfo.scroll"
+      [pi]="pageInfo.index"
+      [ps]="pageInfo.size"
+      [total]="pageInfo.totalRecord"
+      [bordered]="pageInfo.bordered"
+      [size]="pageInfo.tableSize"
+      (change)="stChange($event)">
+  </st>
+  <!--  <sample-table [loading]="loading" [page]="pageInfo" [columns]="pageInfo.columns" [data]="pageInfo.viewRecord"-->
+  <!--                [virtual]="pageInfo.virtual" [virtualItemSize]="pageInfo.virtualItemSize" [scroll]="pageInfo.scroll"-->
+  <!--                [pageIndex]="pageInfo.index" [pageSize]="pageInfo.size" [total]="pageInfo.totalRecord" (action)="onAction($event)"-->
+  <!--                (check)="onCheckChange($event)" (sort)="onSortChange($event)" (pageIndexChange)="onPageIndexChange($event)"-->
+  <!--                (pageSizeChange)="onPageSizeChange($event)">-->
+  <!--  </sample-table>-->
+</div>
+
+

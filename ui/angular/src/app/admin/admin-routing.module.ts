@@ -3,8 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { PermissionGuard } from '@shared/riven';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { DashboardComponent } from './dashboard';
+import { TenantComponent } from './tenant';
 import { RoleComponent } from './role';
 import { UserComponent } from './user';
+
 
 
 const routes: Routes = [
@@ -17,6 +19,11 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+      },
+      {
+        path: 'tenant',
+        component: TenantComponent,
+        data: { permissions: 'tenant.query' },
       },
       {
         path: 'role',

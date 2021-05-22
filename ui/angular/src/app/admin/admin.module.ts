@@ -14,10 +14,22 @@ import { CreateOrEditRoleComponent } from './role/create-or-edit-role';
 import { UserComponent } from './user';
 import { CreateOrEditUserComponent } from './user/create-or-edit-user';
 import { SampleTableModule } from '@shared/components/sample-table';
+import { TenantComponent } from './tenant';
 
-const entryComponents = [
+
+/** entry的组件 */
+const ENTRY_COMPONENTS = [
   CreateOrEditRoleComponent,
   CreateOrEditUserComponent,
+];
+
+/** 所有组件 */
+const ALL_COMPONENTS = [
+  DashboardComponent,
+  TenantComponent,
+  RoleComponent,
+  UserComponent,
+  ...ENTRY_COMPONENTS,
 ];
 
 @NgModule({
@@ -33,13 +45,10 @@ const entryComponents = [
     SampleTableModule,
   ],
   declarations: [
-    DashboardComponent,
-    RoleComponent,
-    UserComponent,
-    ...entryComponents,
+    ...ALL_COMPONENTS,
   ],
   entryComponents: [
-    ...entryComponents,
+    ...ENTRY_COMPONENTS,
   ],
 })
 export class AdminModule {
