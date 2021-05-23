@@ -22,7 +22,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
   }
 
   ngOnInit(): void {
-
+    super.ngOnInit();
   }
 
   fetchData(fetch: IFetchPageData) {
