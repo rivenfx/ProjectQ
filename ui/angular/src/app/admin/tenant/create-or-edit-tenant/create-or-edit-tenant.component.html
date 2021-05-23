@@ -9,9 +9,11 @@
 </ng-template>
 
 <div class="modal-body">
-  <sf #validateForm [schema]="schema"
-      [formData]="tmp"
+  <sf #validateForm
+      autocomplete="off"
       button="none"
+      [schema]="schema"
+      [formData]="tmp"
       (formChange)="formChange($event)"
       (formValueChange)="formValueChange($event)"
       (keyup.enter)="sfSubmit(validateForm.valid,validateForm.value)">
