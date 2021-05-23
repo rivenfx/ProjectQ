@@ -84,5 +84,13 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   }
 
   /** 提交表单 */
+  sfSubmit(valid: boolean, event?: any) {
+    if (this.readonly || !valid) {
+      return;
+    }
+    this.submitForm(event);
+  }
+
+  /** 提交表单 */
   abstract submitForm(event?: any);
 }
