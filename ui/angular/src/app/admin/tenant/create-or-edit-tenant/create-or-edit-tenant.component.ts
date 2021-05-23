@@ -81,7 +81,7 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
       adminUserPhoneNumber: {
         title: this.l('管理员电话号码'),
         type: 'string',
-        format: 'email',
+        format: 'mobile',
         minLength: 3,
         maxLength: 32,
       },
