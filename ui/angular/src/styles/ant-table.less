@@ -1,35 +1,67 @@
-nz-table-inner-scroll {
+nz-table {
 
-  .ant-table-header {
-    /** 修正滚动误差 */
-    margin-right: -13px;
+  nz-table-inner-scroll {
+
+    .ant-table-header {
+      /** 修正滚动误差 */
+      margin-right: -13px;
+    }
+
+    .ant-table-body {
+
+      &::-webkit-scrollbar {
+        width: 0.5px;
+        height: 1px;
+        margin: 0;
+        padding: 0;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #bfbfbf;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: #333;
+      }
+
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    }
   }
 
-  .ant-table-body {
+  // 虚拟滚动表头滚动条样式
+  .nz-table-hide-scrollbar::-webkit-scrollbar {
+    width: 20px;
+    height: 8px;
+  }
 
-    &::-webkit-scrollbar {
-      width: 0.5px;
-      height: 1px;
-      margin: 0;
-      padding: 0;
-    }
+  .nz-table-hide-scrollbar::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+    -webkit-border-radius: 6px;
+  }
 
-    &::-webkit-scrollbar-track {
-      background: transparent;
-      border-radius: 10px;
-    }
+  .nz-table-hide-scrollbar::-webkit-scrollbar-thumb:vertical {
+    height: 8px;
+    background-color: transparent;
+    -webkit-border-radius: 6px;
+  }
 
-    &::-webkit-scrollbar-thumb {
-      background: #bfbfbf;
-      border-radius: 10px;
-    }
+  .nz-table-hide-scrollbar::-webkit-scrollbar-thumb:horizontal {
+    width: 20px;
+    background-color: transparent;
+    -webkit-border-radius: 6px;
+  }
 
-    &::-webkit-scrollbar-thumb:hover {
-      background: #333;
-    }
-
-    &::-webkit-scrollbar-corner {
-      background: transparent;
-    }
+  // 右侧阴影
+  .ant-table-ping-right:not(.ant-table-has-fix-right) .ant-table-container::after {
+    box-shadow: inset -10px 0 8px -8px transparent;
   }
 }
+
