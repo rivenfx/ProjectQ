@@ -1,12 +1,18 @@
 <page-header [title]="l('tenant')" [breadcrumb]="breadcrumb" [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
-    <button nz-button (click)="createOrEdit()" [title]="l('common.create')">
-      <i class="icon iconfont icon-add"></i>
-    </button>
-    <button nz-button (click)="refresh()" [title]="l('common.refresh')">
-      <i class="icon iconfont icon-refresh"></i>
-    </button>
+    <div nz-row [nzGutter]="2">
+      <nz-col>
+        <button nz-button (click)="createOrEdit()" [title]="l('common.create')">
+          <i class="icon iconfont icon-add"></i>
+        </button>
+      </nz-col>
+      <nz-col>
+        <button nz-button (click)="refresh()" [title]="l('common.refresh')">
+          <i class="icon iconfont icon-refresh"></i>
+        </button>
+      </nz-col>
+    </div>
   </ng-template>
 </page-header>
 
@@ -29,6 +35,7 @@
       [total]="pageInfo.totalRecord"
       [bordered]="pageInfo.bordered"
       [size]="pageInfo.tableSize"
+      responsiveHideHeaderFooter
       (change)="stChange($event)">
   </st>
   <!--  <sample-table [loading]="loading" [page]="pageInfo" [columns]="pageInfo.columns" [data]="pageInfo.viewRecord"-->

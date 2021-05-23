@@ -21,10 +21,19 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
   implements OnInit {
 
   columns: STColumn[] = [
-    {
+    { // no 列
+      index: '',
       title: 'No',
-      index: 'id',
+      type: 'no',
+      fixed: 'left',
+      width: 40,
+    },
+    { // checkbox 列
+      title: '',
+      index: '',
       type: 'checkbox',
+      fixed: 'left',
+      width: 30
     },
     { // 名称
       title: this.l('tenant.name'),
