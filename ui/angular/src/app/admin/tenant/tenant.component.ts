@@ -1,16 +1,13 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { IFetchPageData, ListViewComponentBase } from '@shared/common';
 import {
-  QueryCondition,
   QueryInput,
-  SortCondition,
-  SortType,
   TenantDto,
   TenantServiceProxy,
-  UserDto,
 } from '@service-proxies';
-import { STChange, STColumn, STData } from '@delon/abc/st';
+import { STColumn } from '@delon/abc/st';
 import { finalize } from 'rxjs/operators';
+import { CreateOrEditTenantComponent } from './create-or-edit-tenant';
 
 @Component({
   selector: 'tenant',
@@ -33,7 +30,7 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
       index: '',
       type: 'checkbox',
       fixed: 'left',
-      width: 30
+      width: 30,
     },
     { // 名称
       title: this.l('tenant.name'),
@@ -159,5 +156,25 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
 
   /** 创建或编辑 */
   createOrEdit(entity?: TenantDto) {
+    this.onClickCreateOrEdit(entity);
+  }
+
+  onClickCreateOrEdit(data?: TenantDto, readonly?: boolean) {
+    let input;
+    if (data) {
+      input = data.id;
+    }
+
+    this.modalHelper.createStatic(
+      CreateOrEditTenantComponent,
+      {
+        modalInput: input,
+        readonly: readonly,
+      },
+    ).subscribe((res) => {
+      if (res) {
+        this.refresh();
+      }
+    });
   }
 }

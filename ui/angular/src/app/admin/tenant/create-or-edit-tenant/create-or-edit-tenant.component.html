@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <div class="modal-title">{{titlePrefix}} - {{title}}</div>
+</div>
+
+<!-- 表单输入错误模板 -->
+<ng-template #errorTpl
+             let-control>
+  <validation-messages [formCtrl]="control"></validation-messages>
+</ng-template>
+
+<div class="modal-body">
+  <sf #validateForm [schema]="schema"
+      [formData]="tmp"
+      button="none"
+      (keyup.enter)="submit(validateForm.valid,validateForm.value)">
+  </sf>
+</div>
+
+<div class="modal-footer">
+  <button nz-button
+          [nzType]="'default'"
+          (click)="close()">
+    {{l('label.cancel')}}
+  </button>
+  <button nz-button
+          *ngIf="!readonly"
+          [nzType]="'primary'"
+          [nzLoading]="loading"
+          [disabled]="!validateForm.valid"
+          (click)="submitForm(validateForm.value)">
+    {{l('label.ok')}}
+  </button>
+</div>
+
+<!--<sf #validateForm [schema]="schema" button="none" class="modal-sf">-->
+
+<!--  &lt;!&ndash;  <div class="modal-footer">&ndash;&gt;-->
+<!--  &lt;!&ndash;    <button nz-button&ndash;&gt;-->
+<!--  &lt;!&ndash;            [nzType]="'default'"&ndash;&gt;-->
+<!--  &lt;!&ndash;            (click)="close()">&ndash;&gt;-->
+<!--  &lt;!&ndash;      {{l('label.cancel')}}&ndash;&gt;-->
+<!--  &lt;!&ndash;    </button>&ndash;&gt;-->
+<!--  &lt;!&ndash;    <button nz-button&ndash;&gt;-->
+<!--  &lt;!&ndash;            *ngIf="!readonly"&ndash;&gt;-->
+<!--  &lt;!&ndash;            [nzType]="'primary'"&ndash;&gt;-->
+<!--  &lt;!&ndash;            [nzLoading]="loading"&ndash;&gt;-->
+<!--  &lt;!&ndash;            [disabled]="!validateForm.valid"&ndash;&gt;-->
+<!--  &lt;!&ndash;            (click)="submitForm(validateForm.value)">&ndash;&gt;-->
+<!--  &lt;!&ndash;      {{l('label.ok')}}&ndash;&gt;-->
+<!--  &lt;!&ndash;    </button>&ndash;&gt;-->
+<!--  &lt;!&ndash;  </div>&ndash;&gt;-->
+<!--</sf>-->
+
+
