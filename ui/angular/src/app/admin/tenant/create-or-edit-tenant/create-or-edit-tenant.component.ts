@@ -10,15 +10,18 @@ import { AppConsts } from '@shared';
   templateUrl: './create-or-edit-tenant.component.html',
   styleUrls: ['./create-or-edit-tenant.component.less'],
 })
-export class CreateOrEditTenantComponent extends ModalComponentBase<string>
+export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpdateTenantInput>
   implements OnInit {
 
   schema: SFSchema = {
-    required: [
-      'name',
-      'displayName',
+    required: [ // 校验字段
+      'adminUser',
+      'adminUserPassword',
+      'adminUserPasswordConfirm',
+      'adminUserEmail',
+      'adminUserPhoneNumber',
     ],
-    ui: {
+    ui: { // 全局错误
       errors: {
         'minLength': this.l('validation.minlength'),
         'maxLength': this.l('validation.maxlength'),
@@ -26,42 +29,70 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<string>
       },
     },
     properties: {
-      name: {
-        title: this.l('tenant.name'),
-        type: 'string',
-        minLength: 3,
-        maxLength: 32,
-      },
-      displayName: {
-        title: this.l('tenant.display-name'),
-        type: 'string',
-        minLength: 3,
-        maxLength: 32,
-      },
-      // 'entity.name': {
-      //   title: this.l('tenant.display-name'),
-      //   type: 'string',
-      //   minLength: 4,
-      //   maxLength: 32,
-      // },
-      test: {
+      entityDto: { //
         type: 'object',
+        required: [ // 校验字段
+          'name',
+          'displayName',
+        ],
         properties: {
           name: {
-            title: 'test-name',
+            title: this.l('tenant.name'),
             type: 'string',
+            minLength: 3,
+            maxLength: 32,
+          },
+          displayName: {
+            title: this.l('tenant.display-name'),
+            type: 'string',
+            minLength: 3,
+            maxLength: 32,
           },
         },
       },
+      adminUser: {
+        title: this.l('管理员账号'),
+        type: 'string',
+        minLength: 3,
+        maxLength: 32,
+      },
+      adminUserPassword: {
+        title: this.l('管理员密码'),
+        type: 'string',
+        minLength: 6,
+        maxLength: 32,
+      },
+      adminUserPasswordConfirm: {
+        title: this.l('确认管理员密码'),
+        type: 'string',
+        minLength: 6,
+        maxLength: 32,
+        ui: {
+          validator: (a, b) => {
+            if (b.root && b.root._value && b.root._value['adminUserPassword'] !== a) {
+              return [
+                { keyword: 'confirm', message: this.l('validation.confirm') },
+              ];
+            }
+            return [];
+          },
+        },
+      },
+      adminUserPhoneNumber: {
+        title: this.l('管理员电话号码'),
+        type: 'string',
+        format: 'email',
+        minLength: 3,
+        maxLength: 32,
+      },
+      adminUserEmail: {
+        title: this.l('管理员邮箱'),
+        type: 'string',
+        format: 'email',
+      },
     },
   };
-  tmp = {
-    name: 'default',
-    displayName: 'default',
-    test: {
-      name: 'test',
-    },
-  };
+  tmp = {};
 
   constructor(
     injector: Injector,
@@ -74,8 +105,16 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<string>
     this.title = this.l('tenant');
   }
 
+  formChange(e: any) {
+    // debugger
+  }
+
+  formValueChange(e: any) {
+    // debugger
+  }
+
   submitForm(event?: any) {
-    const input = new CreateOrUpdateTenantInput();
+    const input = new CreateOrUpdateTenantInput(event);
     debugger
     return;
     this.loading = true;

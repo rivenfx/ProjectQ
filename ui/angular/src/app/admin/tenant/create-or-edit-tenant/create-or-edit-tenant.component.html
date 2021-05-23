@@ -12,6 +12,8 @@
   <sf #validateForm [schema]="schema"
       [formData]="tmp"
       button="none"
+      (formChange)="formChange($event)"
+      (formValueChange)="formValueChange($event)"
       (keyup.enter)="submit(validateForm.valid,validateForm.value)">
   </sf>
 </div>
