@@ -19,6 +19,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GlobalConfigModule } from './global-config.module';
 import { LayoutModule } from './layout/layout.module';
+import { JsonSchemaModule } from '@shared/json-schema';
 
 
 // #region default language
@@ -65,6 +66,7 @@ const APPINIT_PROVIDES = [
     I18nModule.forRoot(),
     CoreModule,
     SharedModule,
+    JsonSchemaModule,
     LayoutModule,
     //
     AppRoutingModule,

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DelonACLModule } from '@delon/acl';
+import { DelonFormModule } from '@delon/form';
 import { AlainThemeModule } from '@delon/theme';
 
 import { PageFilterModule } from '@shared/components/page-filter';
@@ -33,6 +34,7 @@ const DIRECTIVES = [];
     ReactiveFormsModule,
     AlainThemeModule.forChild(),
     DelonACLModule,
+    DelonFormModule,
     ...SHARED_DELON_MODULES,
     ...SHARED_ZORRO_MODULES,
     // third libs
@@ -50,6 +52,7 @@ const DIRECTIVES = [];
     RouterModule,
     AlainThemeModule,
     DelonACLModule,
+    DelonFormModule,
     ...SHARED_DELON_MODULES,
     ...SHARED_ZORRO_MODULES,
     // third libs
