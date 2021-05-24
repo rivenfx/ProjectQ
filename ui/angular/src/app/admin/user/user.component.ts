@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
 import { AppConsts } from '@shared';
+import { STColumn } from '@delon/abc/st';
 
 @Component({
   selector: 'user',
@@ -19,6 +20,82 @@ import { AppConsts } from '@shared';
 })
 export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
+
+  columns: STColumn[] = [
+    { // no 列
+      index: '',
+      title: 'No',
+      type: 'no',
+      fixed: 'left',
+      width: 40,
+    },
+    { // checkbox 列
+      title: '',
+      index: '',
+      type: 'checkbox',
+      fixed: 'left',
+      width: 30,
+    },
+    { // 名称
+      title: this.l('user.user-name'),
+      index: 'userName',
+      sort: true,
+    },
+    { // 昵称
+      title: this.l('user.nick-name'),
+      index: 'nickname',
+      sort: true,
+    },
+    { // 是否为内置
+      title: this.l('common.is-static'),
+      type: 'badge',
+      index: 'isStatic',
+      badge: {
+        'true': { text: this.l('label.yes'), color: 'success' },
+        'false': { text: this.l('label.no'), color: 'error' },
+      },
+      sort: true,
+    },
+    { // 是否激活
+      title: this.l('common.is-active'),
+      type: 'badge',
+      index: 'isActive',
+      badge: {
+        'true': { text: this.l('label.yes'), color: 'success' },
+        'false': { text: this.l('label.no'), color: 'error' },
+      },
+      sort: true,
+    },
+    {
+      title: '操作区',
+      buttons: [
+        {
+          tooltip: this.l('common.edit'),
+          icon: 'edit',
+          type: 'none',
+          acl: 'user.edit',
+          iif: record => !record.isStatic,
+          iifBehavior: 'disabled',
+          click: (record) => this.createOrEdit(record),
+        },
+        {
+          tooltip: this.l('common.delete'),
+          icon: 'delete',
+          type: 'del',
+          acl: 'user.delete',
+          iif: record => !record.isStatic,
+          iifBehavior: 'disabled',
+          pop: {
+            title: this.l('message.confirm.operation'),
+            okType: 'danger',
+          },
+          click: (record, _modal, comp) => {
+            this.delete(record);
+          },
+        },
+      ],
+    },
+  ];
 
 
   constructor(
@@ -49,14 +126,6 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       });
   }
 
-  create() {
-    this.onClickCreateOrEdit();
-  }
-
-  edit(data: UserDto) {
-    this.onClickCreateOrEdit(data);
-  }
-
   delete(data: UserDto) {
     if (data.isStatic) {
       this.message.warn(this.l('不能删除系统用户'));
@@ -79,10 +148,10 @@ export class UserComponent extends ListViewComponentBase<UserDto>
   }
 
   view(data: UserDto) {
-    this.onClickCreateOrEdit(data, true);
+    this.createOrEdit(data, true);
   }
 
-  onClickCreateOrEdit(data?: UserDto, readonly?: boolean) {
+  createOrEdit(data?: UserDto, readonly?: boolean) {
     let input;
     if (data) {
       input = data.id;
@@ -93,7 +162,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       {
         modalInput: input,
         // tslint:disable-next-line: object-literal-shorthand
-        readonly: readonly
+        readonly: readonly,
       },
     ).subscribe((res) => {
       if (res) {
