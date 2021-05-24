@@ -16,6 +16,13 @@
         "statements"
       ]
     },
+    "object-literal-shorthand": [
+      false
+    ],
+    "forin": [
+      false
+    ],
+    "no-debugger": false,
     "array-type": false,
     "arrow-return-shorthand": true,
     "curly": true,
@@ -63,7 +70,6 @@
     ],
     "no-console": [
       true,
-      "debug",
       "info",
       "time",
       "timeEnd",
