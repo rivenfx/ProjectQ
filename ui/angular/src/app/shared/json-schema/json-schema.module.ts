@@ -2,21 +2,13 @@ import { NgModule } from '@angular/core';
 import { DelonFormModule, WidgetRegistry } from '@delon/form';
 
 import { SharedModule } from '@shared/shared.module';
-
-export const SCHEMA_THIRDS_COMPONENTS = [
-
-];
+import { SfWidgetModule } from './sf-widgets';
+import { StWidgetModule } from './st-widgets/st-widgets.module';
 
 @NgModule({
-  declarations: SCHEMA_THIRDS_COMPONENTS,
-  entryComponents: SCHEMA_THIRDS_COMPONENTS,
   imports: [SharedModule, DelonFormModule.forRoot()],
-  exports: [...SCHEMA_THIRDS_COMPONENTS],
+  exports: [SfWidgetModule, StWidgetModule],
 })
 export class JsonSchemaModule {
-  constructor(widgetRegistry: WidgetRegistry) {
-    // widgetRegistry.register(TinymceWidget.KEY, TinymceWidget);
-    // widgetRegistry.register(UeditorWidget.KEY, UeditorWidget);
-    // widgetRegistry.register(MarkdownWidget.KEY, MarkdownWidget);
-  }
+  constructor() {}
 }

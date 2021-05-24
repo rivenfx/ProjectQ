@@ -5,17 +5,13 @@ import { RouterModule } from '@angular/router';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 import { AlainThemeModule } from '@delon/theme';
-
-import { PageFilterModule } from '@shared/components/page-filter';
-import { TableBarModule } from '@shared/components/table-bar';
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
+import { PipeModule } from './pipes';
 
 // #region third libs
 
-const THIRDMODULES = [
-
-];
+const THIRDMODULES = [PipeModule];
 
 // #endregion
 
@@ -62,6 +58,4 @@ const DIRECTIVES = [];
     ...DIRECTIVES,
   ],
 })
-export class SharedModule {
-
-}
+export class SharedModule {}
