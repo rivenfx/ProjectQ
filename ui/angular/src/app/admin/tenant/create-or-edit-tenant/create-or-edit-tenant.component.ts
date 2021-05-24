@@ -23,9 +23,9 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
     ],
     ui: { // 全局错误
       errors: {
-        'minLength': this.l('validation.minlength'),
-        'maxLength': this.l('validation.maxlength'),
-        'required': this.l('validation.required'),
+        minLength: this.l('validation.minlength'),
+        maxLength: this.l('validation.maxlength'),
+        required: this.l('validation.required'),
       },
     },
     properties: {
@@ -115,7 +115,7 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
 
   submitForm(event?: any) {
     const input = new CreateOrUpdateTenantInput(event);
-    debugger
+    debugger;
     return;
     this.loading = true;
     this.tenantSer.createOrUpdate(input)

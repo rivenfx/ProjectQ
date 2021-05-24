@@ -51,8 +51,8 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       type: 'badge',
       index: 'isStatic',
       badge: {
-        'true': { text: this.l('label.yes'), color: 'success' },
-        'false': { text: this.l('label.no'), color: 'error' },
+        true: { text: this.l('label.yes'), color: 'success' },
+        false: { text: this.l('label.no'), color: 'error' },
       },
       sort: true,
     },
@@ -61,8 +61,8 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       type: 'badge',
       index: 'isActive',
       badge: {
-        'true': { text: this.l('label.yes'), color: 'success' },
-        'false': { text: this.l('label.no'), color: 'error' },
+        true: { text: this.l('label.yes'), color: 'success' },
+        false: { text: this.l('label.no'), color: 'error' },
       },
       sort: true,
     },

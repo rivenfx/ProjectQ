@@ -313,10 +313,10 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
     for (const key in e.sort.map) {
       switch (e.sort.map[key]){
         case 'descend':
-          sortType= SortType.Desc;
+          sortType = SortType.Desc;
           break;
         case 'ascend':
-          sortType= SortType.Asc;
+          sortType = SortType.Asc;
           break;
       }
 

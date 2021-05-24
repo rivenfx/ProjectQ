@@ -53,8 +53,8 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
       type: 'badge',
       index: 'isStatic',
       badge: {
-        'true': { text: this.l('label.yes'), color: 'success' },
-        'false': { text: this.l('label.no'), color: 'error' },
+        true: { text: this.l('label.yes'), color: 'success' },
+        false: { text: this.l('label.no'), color: 'error' },
       },
       sort: true,
     },

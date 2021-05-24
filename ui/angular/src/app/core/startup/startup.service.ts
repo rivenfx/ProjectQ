@@ -134,7 +134,7 @@ export class StartupService {
       displayUserName = input.multiTenancy.displayName + '/' + input.auth.userNickName;
     }
     this.settingService.setUser({
-      'userName': userName,
+      userName: userName,
       name: displayUserName,
       avatar: 'assets/images/avatar.png',
       // email: 'msmadaoe@msn.com',
