@@ -83,7 +83,6 @@
     "ng-alain-sts": "^0.0.1",
     "nswag": "13.3.0",
     "nz-tslint-rules": "^0.901.2",
-    //    "husky": "^4.2.3",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
     "protractor": "~7.0.0",
