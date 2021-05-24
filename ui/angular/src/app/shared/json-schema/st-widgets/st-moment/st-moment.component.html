@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="!!date">
+  <ng-container *ngSwitchCase="true">
+    {{ date | _moment: format }}
+  </ng-container>
+  <ng-container *ngSwitchDefault> </ng-container>
+</ng-container>
