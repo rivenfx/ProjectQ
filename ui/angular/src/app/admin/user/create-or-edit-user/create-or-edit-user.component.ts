@@ -20,7 +20,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
   passwordConfimd: string;
 
   schema: SFSchema = {
-    properties: {
+    "properties": {
       "userName": {
         "type": "string",
         "title": "账号",
@@ -50,29 +50,50 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
         "title": "邮箱",
         "format": "email"
       },
-      "phoneNumberConfimd": {
+      "phoneNumberConfirmed": {
         "title": "电话号码确认",
-        "type": "boolean"
+        "type": "boolean",
+        "ui": {
+          "grid": {
+            "span": 6
+          }
+        }
       },
-      "phoneNumberConfimd2": {
-        "title": "电话号码确认",
-        "type": "boolean"
+      "emailConfirmed": {
+        "title": "邮箱确认",
+        "type": "boolean",
+        "ui": {
+          "grid": {
+            "span": 6
+          }
+        }
       },
-      "phoneNumberConfimd3": {
-        "title": "电话号码确认",
-        "type": "boolean"
+      "lockoutEnabled": {
+        "title": "登录锁定",
+        "type": "boolean",
+        "ui": {
+          "grid": {
+            "span": 6
+          }
+        }
+
       },
-      "phoneNumberConfimd4": {
-        "title": "电话号码确认",
-        "type": "boolean"
+      "isActive": {
+        "title": "激活",
+        "type": "boolean",
+        "ui": {
+          "grid": {
+            "span": 6
+          }
+        }
       }
     },
     "required": ["email", "name"],
     "ui": {
       "errors": {
-        minLength: this.l("validation.minlength"),
-        maxLength: this.l("validation.maxlength"),
-        required: this.l("validation.required")
+        "minLength": this.l("validation.minlength"),
+        "maxLength": this.l("validation.maxlength"),
+        "required": this.l("validation.required")
       },
       "spanLabelFixed": 100,
       "grid": {
@@ -80,7 +101,6 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
       }
     }
   };
-
 
   constructor(
     injector: Injector,
