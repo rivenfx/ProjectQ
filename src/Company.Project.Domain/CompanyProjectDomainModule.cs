@@ -35,7 +35,7 @@ namespace Company.Project
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
         {
-          
+
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -59,25 +59,21 @@ namespace Company.Project
         protected void InitLocalization(ApplicationInitializationContext context)
         {
             // 如果是迁移工具调用,则会跳过这一步
-            var languageManager = context.ServiceProvider.GetService<ILanguageManager>();
-            if (languageManager == null)
+            if (!context.ServiceProvider.RivenLocalizationEnabled())
             {
                 return;
             }
 
-
+            // 读取语言信息
             var assemblyPath = Path.GetDirectoryName(this.GetType().Assembly.Location);
             var sourceFilePath = Path.Combine(assemblyPath, "Localization", "SourceFiles", "Json");
             var languageInfos = LanguageLoaderWithFile.FromFolderWithJson(sourceFilePath);
 
+            // 添加语言信息
             context.ServiceProvider.AddOrUpdateLanguages(languageInfos);
 
-            if (languageManager.GetEnabledLanguages().Count == 0)
-            {
-                throw new ArgumentException($"启用语言数量为0");
-            }
-
-            languageManager.ChangeDefaultLanguage(AppConsts.Settings.DefaultLanguage);
+            // 设置默认语言
+            context.ServiceProvider.SetDefaultLanguage(AppConsts.Settings.DefaultLanguage);
         }
 
         #endregion
