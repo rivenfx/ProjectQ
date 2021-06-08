@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Riven;
+using Riven.Extensions;
 using Company.Project.Authorization.Permissions.Dtos;
 using Riven.Authorization;
 using Riven.Identity.Permissions;
