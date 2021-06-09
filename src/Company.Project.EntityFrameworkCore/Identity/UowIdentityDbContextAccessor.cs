@@ -10,13 +10,13 @@ using Riven.Extensions;
 
 namespace Company.Project.Identity
 {
-    public class UowIDbContextAccessor : IIdentityDbContextAccessor
+    public class UowIdentityDbContextAccessor : IIdentityDbContextAccessor
     {
         public virtual DbContext Context => _currentUnitOfWorkProvider.Current?.GetDbContext();
 
         protected readonly ICurrentUnitOfWorkProvider _currentUnitOfWorkProvider;
 
-        public UowIDbContextAccessor(ICurrentUnitOfWorkProvider currentUnitOfWorkProvider)
+        public UowIdentityDbContextAccessor(ICurrentUnitOfWorkProvider currentUnitOfWorkProvider)
         {
             _currentUnitOfWorkProvider = currentUnitOfWorkProvider;
         }
