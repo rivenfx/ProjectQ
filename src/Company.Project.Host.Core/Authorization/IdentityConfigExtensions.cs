@@ -58,13 +58,11 @@ namespace Company.Project.Authorization
                 // 用户角色查找器
                 .AddUserRoleFinder<UserStore>()
                 // ClaimsPrincipal 创建器
-                .AddClaimsPrincipalFactory<IdentityUserClaimsPrincipalFactory<User, Role, Guid>>()
+                .AddRivenClaimsPrincipalFactory<User, Role, Guid>()
                 // 添加 DbContext 访问器
-                .AddDbContextAccessor<UowIDbContextAccessor>()
+                .AddDbContextAccessor<UowIdentityDbContextAccessor>()
                 // token提供者
                 .AddDefaultTokenProviders()
-                // 使用 Riven 实现的权限校验
-                .AddRivenAspNetCorePermissionAuthorization()
                 ;
 
             return identityBuilder;
