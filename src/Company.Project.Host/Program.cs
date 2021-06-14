@@ -25,11 +25,11 @@ namespace Company.Project.Host
 
             try
             {
-                Log.Information("Configuring web host ({ApplicationName})...");
+                Log.Information("Configuring ({ApplicationName})...");
 
                 var host = CreateHostBuilder(args).Build();
 
-                Log.Information("Starting web host ({ApplicationName})...");
+                Log.Information("Starting ({ApplicationName})...");
 
                 host.Run();
 
