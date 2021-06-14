@@ -88,7 +88,14 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
         }
       }
     },
-    required: ['email', 'name'],
+    required: [
+      'userName',
+      'nickname',
+      'name',
+      'password',
+      'passwordConfimd',
+      'phoneNumber'
+    ],
     ui: {
       errors: {
         minLength: this.l('validation.minlength'),
