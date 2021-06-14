@@ -17,9 +17,9 @@
         @appInfo.Name @ViewBag.Title
     </title>
 
-    @*<base href="@appInfo.Basehref">*@
+    <base href="@appInfo.Basehref">
 
-    <link href="../libs/bootstrap/4.4.1/dist/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="libs/bootstrap/4.4.1/dist/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
 
     @if (IsSectionDefined("Styles"))
     {
@@ -40,11 +40,11 @@
         </footer>
     </div>
 
-    <script src="../libs/jquery/3.4.1/dist/jquery-3.4.1.min.js" type="text/javascript" asp-append-version="true"></script>
-    <script src="../libs/popper/1.16.0/dist/popper.min.js" type="text/javascript" asp-append-version="true"></script>
-    <script src="../libs/bootstrap/4.4.1/dist/bootstrap.min.js" type="text/javascript" asp-append-version="true"></script>
-    <script src="../libs/jquery-validation/1.19.1/dist/jquery.validate.min.js" type="text/javascript" asp-append-version="true"></script>
-    <script src="../scripts/form-extensions.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="libs/jquery/3.4.1/dist/jquery-3.4.1.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="libs/popper/1.16.0/dist/popper.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="libs/bootstrap/4.4.1/dist/bootstrap.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="libs/jquery-validation/1.19.1/dist/jquery.validate.min.js" type="text/javascript" asp-append-version="true"></script>
+    <script src="scripts/form-extensions.js" type="text/javascript" asp-append-version="true"></script>
 
     @if (IsSectionDefined("Scripts"))
     {
