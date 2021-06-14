@@ -10,7 +10,6 @@ using Riven.Exceptions;
 using Riven.Extensions;
 using Riven.Authorization;
 using Company.Project.Dtos;
-using Mapster;
 
 namespace Company.Project.Authorization.Users
 {
@@ -41,7 +40,7 @@ namespace Company.Project.Authorization.Users
                 .OrderBy(input.SortConditions)
                 .Skip(input.SkipCount)
                 .Take(input.PageSize)
-                .ProjectToType<UserDto>()
+                .ProjectTo<UserDto>()
                 .ToListAsync();
 
             return new PageResultDto<UserDto>(entityList, entityTotal);
@@ -63,7 +62,7 @@ namespace Company.Project.Authorization.Users
 
             return new UserEditDto()
             {
-                EntityDto = entity.Adapt<UserDto>(),
+                EntityDto = entity.MapTo<UserDto>(),
                 Roles = roles.ToList()
             };
 

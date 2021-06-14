@@ -12,7 +12,7 @@ using System.Security.Claims;
 using Riven.Authorization;
 using Company.Project.Authorization.Users.Dtos;
 using Company.Project.Dtos;
-using Mapster;
+using Riven;
 using JetBrains.Annotations;
 
 namespace Company.Project.Authorization.Roles
@@ -46,7 +46,7 @@ namespace Company.Project.Authorization.Roles
                 .OrderBy(input.SortConditions)
                 .Skip(input.SkipCount)
                 .Take(input.PageSize)
-                .ProjectToType<RoleDto>()
+                .ProjectTo<RoleDto>()
                 .ToListAsync();
 
             return new PageResultDto<RoleDto>(entityList, entityTotal);
@@ -61,7 +61,7 @@ namespace Company.Project.Authorization.Roles
         public virtual async Task<ListResultDto<RoleDto>> GetAll()
         {
             var entityList = await _roleManager.QueryAsNoTracking
-                .ProjectToType<RoleDto>()
+                .ProjectTo<RoleDto>()
                 .ToListAsync();
 
             return new ListResultDto<RoleDto>(entityList);
@@ -83,7 +83,7 @@ namespace Company.Project.Authorization.Roles
 
             return new RoleEditDto()
             {
-                EntityDto = entity.Adapt<RoleDto>(),
+                EntityDto = entity.MapTo<RoleDto>(),
                 Permissions = permissions.ToList()
             };
 

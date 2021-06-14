@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Nito.AsyncEx;
 
 using Riven;
+using Riven.Extensions;
 using Riven.Application;
 using Riven.Authorization;
 using Riven.Identity.Permissions;
