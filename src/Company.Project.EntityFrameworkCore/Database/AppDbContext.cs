@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 using Riven;
+using Riven.Identity;
 using Riven.Identity.Roles;
 using Riven.Identity.Users;
 using Riven.MultiTenancy;
@@ -43,16 +44,16 @@ namespace Company.Project.Database
 
         [NotMapped] public virtual bool AuditSuppressAutoSetTenantName => true;
 
-        [NotMapped] public string CurrentUserId => AppSession?.UserId?.ToString();
+        [NotMapped] public string CurrentUserId => CurrentUser.UserId;
 
 
 
         #endregion
 
-        #region AppSession 实例
+        #region CurrentUser 实例
 
         [NotMapped]
-        protected virtual IAppSession AppSession => Self.GetT<IAppSession>();
+        protected virtual ICurrentUser CurrentUser => Self.GetT<ICurrentUser>();
 
         #endregion
 
