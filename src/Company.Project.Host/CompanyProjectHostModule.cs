@@ -260,14 +260,7 @@ namespace Company.Project
 
             app.UseEndpoints(endpoints =>
                {
-                   endpoints.MapControllerRoute(
-                           "defaultWithArea",
-                           "{area}/{controller=Home}/{action=Index}/{id?}"
-                       );
-                   endpoints.MapControllerRoute(
-                           "default",
-                           "{controller=Home}/{action=Index}/{id?}"
-                       );
+                   endpoints.MapDefaultControllerRoute();
 
                    endpoints.MapRazorPages();
 
