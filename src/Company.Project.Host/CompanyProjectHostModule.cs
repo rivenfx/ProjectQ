@@ -194,6 +194,7 @@ namespace Company.Project
 
             app.UseStaticFiles();
 
+            // basehref 不等于 / 时需要映射 wwwroot 到 basehref 地址
             if (!string.IsNullOrWhiteSpace(appInfo.Basehref)
                 && appInfo.Basehref != "/")
             {
