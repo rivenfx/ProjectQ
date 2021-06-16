@@ -67,7 +67,7 @@ namespace Company.Project.Seeder
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
     }
