@@ -1,0 +1,20 @@
+@page "/"
+@model Company.Project.Pages.Home.IndexModel
+@inject IStringLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["page.home"];
+}
+@section Styles{
+
+}
+
+@section Scripts{
+
+}
+
+
+
+
+<a href="Account/Logout" style="display:inline-block;float:right;">Logout</a>
+
+<a href="swagger" target="_blank">Swagger UI</a>

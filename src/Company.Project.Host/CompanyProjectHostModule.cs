@@ -46,11 +46,20 @@ namespace Company.Project
             #region AspNetCore - Mvc
 
             // aspnet core mvc
-            var mvcBuilder = context.Services.AddControllersWithViews();
+            var mvcBuilder = context.Services.AddMvc();
+
+            // mvc options
             mvcBuilder.AddNewtonsoftJson((options) =>
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
             });
+
+            // razor pages options
+            mvcBuilder.AddRazorPagesOptions((options) =>
+                 {
+
+                 });
+
 #if DEBUG
             mvcBuilder.AddRazorRuntimeCompilation();
 #endif
@@ -184,6 +193,7 @@ namespace Company.Project
 
 
             app.UseStaticFiles();
+
             if (!string.IsNullOrWhiteSpace(appInfo.Basehref)
                 && appInfo.Basehref != "/")
             {
@@ -258,6 +268,8 @@ namespace Company.Project
                            "default",
                            "{controller=Home}/{action=Index}/{id?}"
                        );
+
+                   endpoints.MapRazorPages();
 
                    // 自定义路由
 
