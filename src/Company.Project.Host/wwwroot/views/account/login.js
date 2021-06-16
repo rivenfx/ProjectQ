@@ -46,7 +46,7 @@ $(function () {
                     app.multiTenancy.setTenant(tenant);
 
                     // 跳转到首页
-                    window.location.href = 'Home/Index';
+                    window.location.href = '';
                 } else {
                     alert('登录失败');
                 }
