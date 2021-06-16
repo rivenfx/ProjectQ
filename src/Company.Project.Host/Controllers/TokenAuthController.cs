@@ -34,15 +34,13 @@ namespace Company.Project.Controllers
         readonly IConfiguration _configuration;
         readonly SignInManager _signInManager;
         readonly IHttpClientFactory _httpClientFactory;
-        readonly IAppSession _appSession;
 
 
-        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory, IAppSession appSession)
+        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _httpClientFactory = httpClientFactory;
-            _appSession = appSession;
         }
 
         /// <summary>
@@ -88,7 +86,8 @@ namespace Company.Project.Controllers
         {
             var result = new AuthenticateResultDto();
 
-            var userId = _appSession.UserId.Value.ToString();
+            // TODO
+            var userId = "";
 
             var loginResult = await _signInManager.LoginByUserIdAsync(userId);
 

@@ -13,12 +13,10 @@ namespace Company.Project.Authorization.Permissions
     [PermissionAuthorize]
     public class PermissionAppService : IApplicationService
     {
-        readonly IAppSession _appSession;
         readonly PermissionManager _permissionManager;
 
-        public PermissionAppService(IAppSession appSession, PermissionManager permissionManager)
+        public PermissionAppService(PermissionManager permissionManager)
         {
-            _appSession = appSession;
             _permissionManager = permissionManager;
         }
 
