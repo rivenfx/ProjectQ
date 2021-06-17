@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Company.Project.Pages.Account
 {
@@ -18,11 +21,11 @@ namespace Company.Project.Pages.Account
         readonly CookieAuthenticationOptions _cookieAuthenticationOptions;
 
         public LogoutModel(SignInManager signInManager,
-            IOptions<CookieAuthenticationOptions> cookieAuthenticationOptions
+             IOptionsSnapshot<CookieAuthenticationOptions> cookieAuthenticationOptions
             )
         {
             this._signInManager = signInManager;
-            this._cookieAuthenticationOptions = cookieAuthenticationOptions.Value;
+            this._cookieAuthenticationOptions = cookieAuthenticationOptions.Get(IdentityConstants.ApplicationScheme);
         }
 
         public async Task<IActionResult> OnGet()
