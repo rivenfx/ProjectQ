@@ -13,6 +13,8 @@ using Company.Project.Authorization.Users;
 using Company.Project.Authorization.Permissions;
 using Riven.Identity;
 using Company.Project.Identity;
+using Microsoft.Extensions.Configuration;
+using Company.Project.Configuration;
 
 namespace Company.Project.Authorization
 {
@@ -22,9 +24,12 @@ namespace Company.Project.Authorization
         /// 注册配置Identiy基础服务
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IdentityBuilder IdentityRegister(this IServiceCollection services)
+        public static IdentityBuilder IdentityRegister(this IServiceCollection services, IConfiguration configuration)
         {
+            var appInfo = configuration.GetAppInfo();
+
             // 用户密码加密器
             services.AddScoped<IPasswordHasher<User>, UserPasswordHasher>();
 
@@ -64,6 +69,18 @@ namespace Company.Project.Authorization
                 // token提供者
                 .AddDefaultTokenProviders()
                 ;
+
+            // identity cookie 配置
+            services.ConfigureApplicationCookie((options) =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                options.SlidingExpiration = true;
+                // 登录界面
+                options.LoginPath = $"{appInfo.Basehref}/Account/Login";
+                options.AccessDeniedPath = $"{appInfo.Basehref}/Account/AccessDenied";
+            });
+
 
             return identityBuilder;
         }

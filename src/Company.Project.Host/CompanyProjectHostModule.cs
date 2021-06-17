@@ -106,7 +106,7 @@ namespace Company.Project
             #region AspNetCore - Identity And Auth
 
             // 注册 asp.net core identity
-            context.Services.IdentityRegister();
+            context.Services.IdentityRegister(configuration);
             // 配置校验
             context.Services.AuthenticationConfiguration(configuration);
 
@@ -140,6 +140,7 @@ namespace Company.Project
                         Version = appInfo.Version
                     };
                     options.SwaggerDoc(apiInfo.Version, apiInfo);
+                    options.DocumentFilter<BaseHrefDocumentFilter>(appInfo.Basehref);
                 },
                 (options) =>
                 {
@@ -198,7 +199,7 @@ namespace Company.Project
             if (!string.IsNullOrWhiteSpace(appInfo.Basehref)
                 && appInfo.Basehref != "/")
             {
-                app.UseStaticFiles(appInfo.Basehref.TrimEnd('/'));
+                app.UseStaticFiles(appInfo.Basehref);
             }
 
             app.UseRouting();
@@ -238,18 +239,18 @@ namespace Company.Project
             app.UseRivenAspNetCoreSwashbuckle((swaggerUiOption) =>
             {
                 swaggerUiOption.SwaggerEndpoint(
-                       $"{appInfo.Basehref}swagger/{appInfo.Version}/swagger.json",
+                       $"{appInfo.Basehref}/swagger/{appInfo.Version}/swagger.json",
                        appInfo.Name
                    );
                 swaggerUiOption.EnableDeepLinking();
                 swaggerUiOption.DocExpansion(DocExpansion.None);
 
                 // 应用公共的js
-                swaggerUiOption.InjectJavascript($"{appInfo.Basehref}views/app.js");
+                swaggerUiOption.InjectJavascript($"{appInfo.Basehref}/views/app.js");
 
                 // swagger 定制的样式和脚本
-                swaggerUiOption.InjectStylesheet($"{appInfo.Basehref}views/swagger/index.css");
-                swaggerUiOption.InjectJavascript($"{appInfo.Basehref}views/swagger/index.js");
+                swaggerUiOption.InjectStylesheet($"{appInfo.Basehref}/views/swagger/index.css");
+                swaggerUiOption.InjectJavascript($"{appInfo.Basehref}/views/swagger/index.js");
 
             });
 
