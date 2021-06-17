@@ -16,7 +16,7 @@
         @ViewData["Title"] - @appInfo.Name
     </title>
 
-    <base href="@appInfo.Basehref">
+    <base href="@appInfo.Basehref/">
 
     <link href="libs/bootstrap/4.4.1/dist/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
 
@@ -34,7 +34,7 @@
         <footer class="text-center mt-3  ">
             <p>
                 Copyright &copy; @DateTime.Now.Year - 当前版本 @appInfo.Version
-                <a href="@appInfo.Basehref" class="text-primary" target="_blank"> @_env.EnvironmentName </a>
+                <a href="@appInfo.Basehref/" class="text-primary" target="_blank"> @_env.EnvironmentName </a>
             </p>
         </footer>
     </div>
