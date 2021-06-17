@@ -69,7 +69,7 @@ namespace Company.Project.Configuration
             {
                 Name = configuration[AppConfigurationConsts.AppName],
                 Version = configuration[AppConfigurationConsts.AppVersion],
-                Basehref = configuration[AppConfigurationConsts.AppBasehref],
+                Basehref = configuration[AppConfigurationConsts.AppBasehref]?.TrimEnd('/')?.Trim(),
                 CorsOrigins = configuration[AppConfigurationConsts.AppCorsOrigins],
             };
         }
