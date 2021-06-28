@@ -4,34 +4,34 @@
 
 <!-- 表单输入错误模板 -->
 <ng-template #errorTpl
-             let-control>
+  let-control>
   <validation-messages [formCtrl]="control"></validation-messages>
 </ng-template>
 
 <div class="modal-body">
   <sf #validateForm
-      autocomplete="off"
-      button="none"
-      [schema]="schema"
-      [formData]="tmp"
-      (formChange)="formChange($event)"
-      (formValueChange)="formValueChange($event)"
-      (keyup.enter)="sfSubmit(validateForm.valid,validateForm.value)">
+    autocomplete="off"
+    button="none"
+    [schema]="schema"
+    [formData]="tmp"
+    (formChange)="formChange($event)"
+    (formValueChange)="formValueChange($event)"
+    (keyup.enter)="sfSubmit(validateForm)">
   </sf>
 </div>
 
 <div class="modal-footer">
   <button nz-button
-          [nzType]="'default'"
-          (click)="close()">
+    [nzType]="'default'"
+    (click)="close()">
     {{l('label.cancel')}}
   </button>
   <button nz-button
-          *ngIf="!readonly"
-          [nzType]="'primary'"
-          [nzLoading]="loading"
-          [disabled]="!validateForm.valid"
-          (click)="submitForm(validateForm.value)">
+    *ngIf="!readonly"
+    [nzType]="'primary'"
+    [nzLoading]="loading"
+    [disabled]="!validateForm.valid"
+    (click)="submitForm(validateForm.value)">
     {{l('label.ok')}}
   </button>
 </div>
@@ -54,5 +54,3 @@
 <!--  &lt;!&ndash;    </button>&ndash;&gt;-->
 <!--  &lt;!&ndash;  </div>&ndash;&gt;-->
 <!--</sf>-->
-
-

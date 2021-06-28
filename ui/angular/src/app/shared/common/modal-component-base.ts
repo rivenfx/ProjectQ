@@ -1,5 +1,6 @@
 import { Injector, Input, ViewChild, Directive, Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { SFComponent } from '@delon/form';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
@@ -52,13 +53,13 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
   }
 
   /** 页面表单 */
-  @ViewChild('pageForm') pageForm: NgForm;
+  @ViewChild('pageForm', { static: false }) pageFormRef: SFComponent;
 
   constructor(injector: Injector) {
     super(injector);
     try {
       this.modalRef = injector.get(NzModalRef);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   /** 关闭模态框-成功 */
@@ -75,22 +76,24 @@ export abstract class ModalComponentBase<T> extends AppComponentBase {
 
   /** 当页面状态为只读, 修改表单控件状态为禁用 */
   disableFormControls() {
-    if (this.readonly) {
-      // tslint:disable-next-line: forin
-      for (const key in this.pageForm.controls) {
-        this.pageForm.controls[key].disable();
-      }
-    }
+    // if (this.readonly) {
+    //   // tslint:disable-next-line: forin
+    //   for (const key in this.pageForm.controls) {
+    //     this.pageForm.controls[key].disable();
+    //   }
+    // }
   }
 
   /** 提交表单 */
-  sfSubmit(valid: boolean, event?: any) {
+  sfSubmit(...event: SFComponent[]) {
+    const valid = event.findIndex(o => !o.valid) === -1;
+
     if (this.readonly || !valid) {
       return;
     }
-    this.submitForm(event);
+    this.submitForm(event.map(o => o.value));
   }
 
   /** 提交表单 */
-  abstract submitForm(event?: any);
+  abstract submitForm(...event: any[]);
 }

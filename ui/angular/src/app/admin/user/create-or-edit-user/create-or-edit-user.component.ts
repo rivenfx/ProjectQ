@@ -1,92 +1,94 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { CreateOrEditUserInput, CreateOrUpdateRoleInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { AppConsts } from '@shared';
 import { ModalComponentBase } from '@shared/common';
 import { finalize } from 'rxjs/operators';
-import { SFSchema } from '@delon/form';
+import { SFComponent, SFSchema } from '@delon/form';
 
 @Component({
   selector: 'create-or-edit-user',
   templateUrl: './create-or-edit-user.component.html',
-  styleUrls: ['./create-or-edit-user.component.less']
+  styleUrls: ['./create-or-edit-user.component.less'],
 })
 export class CreateOrEditUserComponent extends ModalComponentBase<string>
   implements OnInit {
 
-  user = new UserDto();
-  roles: string[] = [];
+  @ViewChild('roleForm', { static: false }) roleFormRef: SFComponent;
+
+  input = new CreateOrEditUserInput();
 
   password: string;
   passwordConfimd: string;
 
-  schema: SFSchema = {
+  /** 基本表单配置 */
+  pageFormSchema: SFSchema = {
     properties: {
       userName: {
         type: 'string',
-        title: '账号',
-        minLength: 5
+        title: this.l('user.user-name'),
+        minLength: 5,
       },
       nickname: {
+        title: this.l('user.nick-name'),
         type: 'string',
-        title: '昵称',
-        minLength: 5
+        minLength: 5,
       },
       password: {
-        title: '密码',
+        title: this.l('label.password'),
         type: 'string',
-        minLength: 5
+        minLength: 5,
       },
       passwordConfimd: {
-        title: '确认密码',
+        title: this.l('label.password-confirm'),
         type: 'string',
-        minLength: 5
+        minLength: 5,
       },
       phoneNumber: {
+        title: this.l('user.phone-number'),
         type: 'string',
-        title: '电话号码'
       },
       email: {
+        title: this.l('user.email'),
         type: 'string',
-        title: '邮箱',
-        format: 'email'
+        format: 'email',
       },
       phoneNumberConfirmed: {
-        title: '电话号码确认',
+        title: this.l('user.phone-number-confirmed'),
         type: 'boolean',
         ui: {
           grid: {
-            span: 6
-          }
-        }
+            span: 6,
+          },
+        },
       },
       emailConfirmed: {
-        title: '邮箱确认',
+        title: this.l('user.email-confirmed'),
         type: 'boolean',
         ui: {
           grid: {
-            span: 6
-          }
-        }
+            span: 6,
+          },
+        },
       },
       lockoutEnabled: {
-        title: '登录锁定',
+        title: this.l('user.lockout-enabled'),
         type: 'boolean',
         ui: {
           grid: {
-            span: 6
-          }
-        }
+            span: 6,
+          },
+        },
 
       },
       isActive: {
-        title: '激活',
+        title: this.l('user.is-active'),
         type: 'boolean',
         ui: {
           grid: {
-            span: 6
-          }
-        }
-      }
+            span: 6,
+          },
+        },
+      },
     },
     required: [
       'userName',
@@ -94,30 +96,57 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
       'name',
       'password',
       'passwordConfimd',
-      'phoneNumber'
+      'phoneNumber',
     ],
     ui: {
       errors: {
         minLength: this.l('validation.minlength'),
         maxLength: this.l('validation.maxlength'),
-        required: this.l('validation.required')
+        required: this.l('validation.required'),
       },
       spanLabelFixed: 100,
       grid: {
-        span: 12
-      }
-    }
+        span: 12,
+      },
+    },
+  };
+
+  /** 角色表单配置 */
+  roleFormSchema: SFSchema = {
+    properties: {
+      roles: {
+        type: 'array',
+        title: '',
+        ui: {
+          widget: 'custom',
+          disabled: this.readonly,
+        },
+      },
+    },
+    required: [],
+    ui: {
+      errors: {
+        minLength: this.l('validation.minlength'),
+        maxLength: this.l('validation.maxlength'),
+        required: this.l('validation.required'),
+      },
+      spanLabelFixed: 1,
+      grid: {
+        span: 24,
+      },
+    },
   };
 
   constructor(
     injector: Injector,
-    private userSer: UserServiceProxy
+    private userSer: UserServiceProxy,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.title = this.l('user');
+
     if (this.modalInput) {
       this.loading = true;
       this.userSer.getEditById(this.modalInput)
@@ -129,27 +158,28 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
             return;
           }
           if (res.entityDto) {
-            this.user = res.entityDto;
+            this.input.entityDto = res.entityDto;
           }
 
           if (Array.isArray(res.roles)) {
-            this.roles = res.roles;
+            this.input.roles = res.roles;
+            this.input = this.input.clone();
           }
 
           if (!this.readonly) {
-            this.readonly = this.user.isStatic;
+            this.readonly = this.input.entityDto.isStatic;
+            this.pageFormRef.disabled = this.readonly;
           }
           this.disableFormControls();
         });
     }
   }
 
-  submitForm(event?: any) {
-    const input = new CreateOrEditUserInput({
-      entityDto: this.user,
-      password: this.password,
-      roles: this.roles
-    });
+  submitForm(...event: any[]) {
+    debugger
+    const input = CreateOrEditUserInput.fromJS(Object.assign({}, ...event));
+    return;
+
 
     this.loading = true;
     if (this.modalInput) {
@@ -162,7 +192,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
           this.success();
         });
     } else {
-      this.userSer.create(input)
+      this.userSer.create(this.input)
         .pipe(finalize(() => {
           this.loading = false;
         }))

@@ -9,12 +9,39 @@
 </ng-template>
 
 <div class="modal-body">
-  <sf #validateForm
-      autocomplete="off"
-      button="none"
-      [schema]="schema"
-      (keyup.enter)="sfSubmit(validateForm.valid,validateForm.value)">
-  </sf>
+  <nz-tabset>
+    <nz-tab [nzTitle]="l('label.user-info')">
+      <sf #pageForm
+          autocomplete="off"
+          button="none"
+          [schema]="pageFormSchema"
+          [formData]="input.entityDto"
+          (keyup.enter)="sfSubmit(pageForm,roleForm)">
+      </sf>
+    </nz-tab>
+    <nz-tab [nzTitle]="l('label.roles')">
+      <sf #roleForm
+          autocomplete="off"
+          button="none"
+          [schema]="roleFormSchema"
+          [formData]="input"
+          (keyup.enter)="sfSubmit(pageForm,roleForm)">
+
+        <ng-template sf-template="roles" let-me let-ui="ui" let-schema="schema">
+          <role-select  [attr.id]="me.id"
+                        [attr.disabled]="me.disabled"
+                        [disabled]="me.disabled"
+                        [ngModel]="me.formProperty.value"
+                        (ngModelChange)="me.setValue($event)"
+                >
+          </role-select>
+        </ng-template>
+
+      </sf>
+    </nz-tab>
+  </nz-tabset>
+
+
 </div>
 
 <div class="modal-footer">
@@ -27,8 +54,8 @@
           *ngIf="!readonly"
           [nzType]="'primary'"
           [nzLoading]="loading"
-          [disabled]="!validateForm.valid"
-          (click)="submitForm(validateForm.value)">
+          [disabled]="!(pageForm.valid)"
+          (click)="submitForm(pageForm.value,roleForm.value)">
     {{l('label.ok')}}
   </button>
 </div>
