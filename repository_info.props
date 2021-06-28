@@ -1,0 +1,8 @@
+<Project>
+
+  <PropertyGroup>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/rivenfx/ProjectQ</RepositoryUrl>
+  </PropertyGroup>
+    
+</Project>

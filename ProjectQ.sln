@@ -17,10 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		azure-pipelines.yml = azure-pipelines.yml
+		common.props = common.props
 		global.json = global.json
 		LICENSE = LICENSE
 		Nuget.config = Nuget.config
 		README.md = README.md
+		repository_info.props = repository_info.props
+		version.props = version.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{0E1D2208-0B07-4CB2-9001-348C8635209B}"

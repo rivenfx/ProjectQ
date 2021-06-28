@@ -17,7 +17,7 @@ namespace Company.Project.MigratorModules
         public override void OnConfigureServices(ServiceConfigurationContext context)
         {
             // 模块依赖了 asp.net core identiy 相关
-            context.Services.IdentityRegister();
+            context.Services.IdentityRegister(context.Configuration);
 
             // 添加迁移服务
             context.Services.AddHostedService<MigratorHostedService>();
