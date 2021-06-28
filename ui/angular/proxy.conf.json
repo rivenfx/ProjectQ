@@ -1,0 +1,15 @@
+{
+  "/api": {
+    "target": "http://localhost:22306",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/signalr/*": {
+    "target": "http://localhost:22306",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "ws": true
+  }
+}
