@@ -144,12 +144,6 @@ namespace Company.Project
                 },
                 (options) =>
                 {
-                    // 不删除结尾
-                    options.RemoveActionPostfixes.Clear();
-                    // 处理ActionName
-                    options.GetRestFulActionName = (actionName) => actionName;
-                    // 指定默认的 api 前缀
-                    options.DefaultApiPrefix = "apis";
                     // 注册指定程序集对应的 url 和 http 请求方式
                     options.AddAssemblyOptions(typeof(CompanyProjectApplicationModule).Assembly, options.DefaultApiPrefix, "POST");
                 });
