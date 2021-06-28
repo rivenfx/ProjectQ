@@ -14,7 +14,6 @@ using Serilog.Events;
 using System.IO;
 using Company.Project.Configuration;
 using Company.Project.Debugger;
-using AspectCore.Extensions.Hosting;
 
 namespace Company.Project.Host
 {
@@ -70,8 +69,7 @@ namespace Company.Project.Host
                                 logging
                                   .ClearProviders()
                                   .AddSerilog();
-                            })
-                            .UseServiceContext();
+                            });
         }
 
 
