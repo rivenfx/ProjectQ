@@ -38,7 +38,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
             this.readonly = this.role.isStatic;
           }
 
-          this.disableFormControls();
+          // this.disableFormControls();
         });
     }
   }
