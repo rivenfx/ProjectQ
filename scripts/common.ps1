@@ -17,7 +17,7 @@ function ReplaceCsproj($dirName) {
     # 遍历替换csproj文件内容
     foreach ($file in $fileList) {
         # 读取csporj的内容
-        $projContent = Get-Content "$file" -Raw
+        $projContent = Get-Content  -Encoding "UTF8NoBOM" -Path "$file" -Raw
         $resultProjContent = $projContent.Clone()
         # 正则匹配
         $matches = [System.Text.RegularExpressions.Regex]::Matches($projContent, $reg)
