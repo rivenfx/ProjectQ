@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 using Riven;
+using Riven.Database;
 using Riven.Identity;
 using Riven.Identity.Roles;
 using Riven.Identity.Users;
@@ -33,41 +34,20 @@ using System.Threading.Tasks;
 namespace Company.Project.Database
 {
     public class AppDbContext
-        : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>,
-            IRivenDbContext
+        : RivenDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        #region IRivenDbContext 属性实现
-
-        [NotMapped] public virtual IServiceProvider ServiceProvider { get; }
-
-        [NotMapped] public virtual IRivenDbContext Self => this;
-
-        [NotMapped] public virtual bool AuditSuppressAutoSetTenantName => true;
-
-        [NotMapped] public string CurrentUserId => CurrentUser.UserId;
-
-
-
-        #endregion
-
-        #region CurrentUser 实例
-
-        [NotMapped]
-        protected virtual ICurrentUser CurrentUser => Self.GetT<ICurrentUser>();
-
-        #endregion
-
 
         /// <summary>
-        /// 
+        /// 构造函数
         /// </summary>
         /// <param name="options"></param>
         /// <param name="serviceProvider"></param>
         public AppDbContext(DbContextOptions options, IServiceProvider serviceProvider = null)
-            : base(options)
+            : base(options, serviceProvider)
         {
-            ServiceProvider = serviceProvider;
+
         }
+
 
         #region 权限
 
@@ -77,6 +57,7 @@ namespace Company.Project.Database
         public virtual DbSet<Permission> Permissions { get; set; }
 
         #endregion
+
 
         #region 租户
 
@@ -89,6 +70,7 @@ namespace Company.Project.Database
 
         public DbSet<SampleEntity> SampleEntitys { get; set; }
 
+
         #endregion
 
 
@@ -96,6 +78,7 @@ namespace Company.Project.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            // 启用 Filter
             modelBuilder.ConfigureGlobalFilters(this);
 
             modelBuilder.ConfiurationIdentityTables();
@@ -107,39 +90,29 @@ namespace Company.Project.Database
 
         public override int SaveChanges()
         {
-            this.Self.ApplyAudit(ChangeTracker);
+            this.ApplyAudit(ChangeTracker);
             return base.SaveChanges();
         }
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            this.Self.ApplyAudit(ChangeTracker);
+            this.ApplyAudit(ChangeTracker);
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            this.Self.ApplyAudit(ChangeTracker);
+            this.ApplyAudit(ChangeTracker);
             return base.SaveChangesAsync(cancellationToken);
         }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
             CancellationToken cancellationToken = default)
         {
-            this.Self.ApplyAudit(ChangeTracker);
+            this.ApplyAudit(ChangeTracker);
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
 
         #endregion
-
-        #region IRivenDbContext 接口函数实现
-
-        public virtual EntityEntry ConvertToEntry(object obj)
-        {
-            return Entry(obj);
-        }
-
-        #endregion
-
     }
 }
