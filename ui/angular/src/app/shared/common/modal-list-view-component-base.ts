@@ -1,4 +1,6 @@
-import { Injector, Input, Directive, Component } from '@angular/core';
+import { Injector, Input, Directive, Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { SFComponent } from '@delon/form';
 import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
@@ -49,22 +51,51 @@ export abstract class ModalListViewComponentBase<TModal, TList> extends ListView
     return this._readonly;
   }
 
+  /** 页面表单 */
+  @ViewChild('pageForm', { static: false }) pageFormRef: SFComponent;
+
   constructor(injector: Injector) {
     super(injector);
     try {
       this.modalRef = injector.get(NzModalRef);
-    } catch (e) {}
+    } catch (e) { }
   }
 
+  /** 关闭模态框-成功 */
   success(res: boolean | any = true) {
     if (this.modalRef) {
       this.modalRef.close(res);
     }
   }
 
+  /** 关闭模态框-直接关闭 */
   close(res: boolean | any = false) {
     this.success(res);
   }
 
-  abstract submitForm(event?: any);
+  /** 当页面状态为只读, 修改表单控件状态为禁用 */
+  disableFormControls(form: NgForm) {
+    if (this.readonly) {
+      // tslint:disable-next-line: forin
+      for (const key in form.controls) {
+        form.controls[key].disable();
+      }
+    }
+  }
+
+  /** 提交表单 */
+  sfSubmit(...event: SFComponent[]) {
+    for (const item of event) {
+      item.validator({ emitError: true });
+    }
+    const valid = event.findIndex(o => !o.valid) === -1;
+    if (this.readonly || !valid) {
+      return;
+    }
+
+    this.submitForm(...event.filter(o => o.value).map(o => o.value));
+  }
+
+  /** 提交表单 */
+  abstract submitForm(...event: any[]);
 }
