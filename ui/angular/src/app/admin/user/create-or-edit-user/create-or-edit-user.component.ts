@@ -38,11 +38,23 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
         title: this.l('label.password'),
         type: 'string',
         minLength: 5,
+        ui: {
+          type: 'password',
+        }
       },
       passwordConfimd: {
         title: this.l('label.password-confirm'),
         type: 'string',
         minLength: 5,
+        ui: {
+          type: 'password',
+          validator: (val, fp, f) => {
+            if (val !== f.getProperty('password').value) {
+              return [{ keyword: 'confirm', message: this.l('validation.confirm') }];
+            }
+            return [];
+          }
+        }
       },
       phoneNumber: {
         title: this.l('user.phone-number'),
@@ -95,15 +107,15 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
       'userName',
       'nickname',
       'name',
-      'password',
-      'passwordConfimd',
       'phoneNumber',
+      'email'
     ],
     ui: {
       errors: {
         minLength: this.l('validation.minlength'),
         maxLength: this.l('validation.maxlength'),
         required: this.l('validation.required'),
+        confirm: this.l('validation.confirm')
       },
       spanLabelFixed: 100,
       grid: {
@@ -170,12 +182,13 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
             this.readonly = res.entityDto.isStatic;
           }
         });
+    } else {
+      this.pageFormSchema.required.push('password');
+      this.pageFormSchema.required.push('passwordConfimd');
     }
   }
 
   submitForm(...event: any[]) {
-    debugger
-
     // 构建数据
     const input = new CreateOrEditUserInput({
       entityDto: UserDto.fromJS(event[0]),
