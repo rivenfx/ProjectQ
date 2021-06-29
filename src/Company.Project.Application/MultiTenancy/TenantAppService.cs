@@ -80,42 +80,24 @@ namespace Company.Project.MultiTenancy
 
 
         [PermissionAuthorize(AppPermissions.Tenant.Query, Scope = PermissionAuthorizeScope.Host)]
-        public virtual async Task<object> GetEditById(Guid input)
+        public virtual async Task<TenantEditDto> GetEditById(Guid input)
         {
             var tenant = await this._tenantManager.FindById(input);
 
+            var tenantDto = tenant.MapTo<TenantDto>();
+            tenantDto.ConnectionString = null;
 
-            new TenantDto()
+
+            return new TenantEditDto()
             {
-                Id = tenant.Id,
-                Name = tenant.Name,
-                DisplayName = tenant.DisplayName,
-                Description = tenant.Description,
-                IsActive = tenant.IsActive,
-                IsStatic = tenant.IsStatic
+                EntityDto = tenantDto
             };
-
-
-            return null;
         }
 
-
-        [PermissionAuthorize(AppPermissions.Tenant.Create, AppPermissions.Tenant.Edit, Scope = PermissionAuthorizeScope.Host)]
-        public virtual async Task CreateOrUpdate(CreateOrUpdateTenantInput input)
-        {
-            if (!input.EntityDto.Id.HasValue)
-            {
-                await this.Create(input);
-            }
-            else
-            {
-                await this.Update(input);
-            }
-        }
 
 
         [PermissionAuthorize(AppPermissions.Tenant.Create, Scope = PermissionAuthorizeScope.Host)]
-        protected virtual async Task Create(CreateOrUpdateTenantInput input)
+        public virtual async Task Create(CreateTenantInput input)
         {
             // 创建租户
             var tenant = await this._tenantManager.Create(
@@ -142,8 +124,7 @@ namespace Company.Project.MultiTenancy
             }
         }
 
-        [PermissionAuthorize(AppPermissions.Tenant.Edit, Scope = PermissionAuthorizeScope.Host)]
-        protected virtual async Task Update(CreateOrUpdateTenantInput input)
+        public virtual async Task Update(TenantEditDto input)
         {
             await this._tenantManager.Update(
                 input.EntityDto.Name,

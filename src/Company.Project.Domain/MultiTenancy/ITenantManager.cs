@@ -47,7 +47,7 @@ namespace Company.Project.MultiTenancy
         /// <param name="displayName">显示名称</param>
         /// <param name="description">明细</param>
         /// <returns></returns>
-        Task<Tenant> Update(string name, string displayName, string description);
+        Task<Tenant> Update(string name, string displayName, string description, bool isActive);
 
         /// <summary>
         /// 根据名称删除租户

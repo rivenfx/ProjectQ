@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Company.Project.MultiTenancy.Dtos
 {
-    public class CreateOrUpdateTenantInput : TenantEditDto
+    public class CreateTenantInput : TenantEditDto
     {
         /// <summary>
         /// 管理员用户名

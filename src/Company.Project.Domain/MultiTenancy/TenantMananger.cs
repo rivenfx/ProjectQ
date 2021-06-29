@@ -86,7 +86,7 @@ namespace Company.Project.MultiTenancy
                 .FirstOrDefaultAsync();
         }
 
-        public virtual async Task<Tenant> Update(string name, string displayName, string description)
+        public virtual async Task<Tenant> Update(string name, string displayName, string description, bool isActive)
         {
             var tenant = await this.GetByName(name);
             if (tenant == null)
@@ -95,6 +95,7 @@ namespace Company.Project.MultiTenancy
             }
             tenant.DisplayName = displayName;
             tenant.Description = description;
+            tenant.IsActive = isActive;
 
             await this.Update(tenant);
 
