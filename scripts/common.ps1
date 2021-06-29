@@ -67,7 +67,7 @@ function RemoveCsproj ($slnFilePath, $libName) {
     foreach ($project in $projects) {
         if ($project.StartsWith("$libName")) {
             # 删除库引用
-            dotnet sln $slnFilePath remove ("../" + $project)
+            dotnet sln $slnFilePath remove $project
         }
     }
 }
