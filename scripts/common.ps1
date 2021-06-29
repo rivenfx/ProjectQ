@@ -2,15 +2,17 @@
 # 替换csproj类库引用
 function ReplaceCsproj($dirName) {
     # 获取库版本号
-    [xml]$versionPropsXml = Get-Content "../../$dirName/version.props"
+    [xml]$versionPropsXml = Get-Content "../$dirName/version.props"
     $version = $versionPropsXml.Project.PropertyGroup.Version
     $versionStr = $version.Trim()
 
     # 正则表达式
-    $reg = 'ProjectReference Include=""..\\..\\..\\$dirName\\.*\\(.*?)(.)csproj"'
+    $reg = 'ProjectReference Include="..\\..\\..\\' + $dirName + '\\.*\\(.*?)(.)csproj"'
+
+    Write-Host $reg
 
     # 所有的csproj文件
-    $fileList = Get-ChildItem  '../src/' -recurse *.csproj | % { $_.FullName }
+    $fileList = Get-ChildItem  './src/' -recurse *.csproj | % { $_.FullName }
 
     # 遍历替换csproj文件内容
     foreach ($file in $fileList) {
@@ -46,13 +48,13 @@ function ReplaceCsproj($dirName) {
 # 替换类库版本
 function ReplaceVersion ($dirName, $version) {
     # 版本文件路径
-    $file = "../version.props"
+    $file = "./version.props"
 
     ## 获取当前的版本
     [xml]$versionPropsXml = Get-Content -Encoding "UTF8NoBOM" -Path "$file"
 
     # 版本配置名称
-    $name = '$(Riven' + $dirName + 'Version)' + '"'
+    $name = 'Riven' + $dirName + 'Version'
 
     # 设置新版本
     $versionPropsXml.Project.PropertyGroup[$name].InnerText = $version
