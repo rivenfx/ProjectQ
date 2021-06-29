@@ -1163,7 +1163,7 @@ export class TenantServiceProxy {
      * @param input (optional) 
      * @return Success
      */
-    getEditById(input: string | undefined): Observable<void> {
+    getEditById(input: string | undefined): Observable<TenantEditDto> {
         let url_ = this.baseUrl + "/apis/Tenant/GetEditById?";
         if (input === null)
             throw new Error("The parameter 'input' cannot be null.");
@@ -1175,6 +1175,7 @@ export class TenantServiceProxy {
             observe: "response",
             responseType: "blob",			
             headers: new HttpHeaders({
+                "Accept": "text/plain"
             })
         };
 
@@ -1185,6 +1186,61 @@ export class TenantServiceProxy {
                 try {
                     return this.processGetEditById(<any>response_);
                 } catch (e) {
+                    return <Observable<TenantEditDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<TenantEditDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processGetEditById(response: HttpResponseBase): Observable<TenantEditDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TenantEditDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<TenantEditDto>(<any>null);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    create(body: CreateTenantInput | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/apis/Tenant/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",			
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json", 
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
             } else
@@ -1192,7 +1248,7 @@ export class TenantServiceProxy {
         }));
     }
 
-    protected processGetEditById(response: HttpResponseBase): Observable<void> {
+    protected processCreate(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -1215,8 +1271,8 @@ export class TenantServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createOrUpdate(body: CreateOrUpdateTenantInput | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/apis/Tenant/CreateOrUpdate";
+    update(body: TenantEditDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/apis/Tenant/Update";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1231,11 +1287,11 @@ export class TenantServiceProxy {
         };
 
         return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processCreateOrUpdate(response_);
+            return this.processUpdate(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCreateOrUpdate(<any>response_);
+                    return this.processUpdate(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>_observableThrow(e);
                 }
@@ -1244,7 +1300,7 @@ export class TenantServiceProxy {
         }));
     }
 
-    protected processCreateOrUpdate(response: HttpResponseBase): Observable<void> {
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob = 
             response instanceof HttpResponse ? response.body : 
@@ -3253,14 +3309,57 @@ export interface ITenantDtoPageResultDto {
     total: number;
 }
 
-export class CreateOrUpdateTenantInput implements ICreateOrUpdateTenantInput {
+export class TenantEditDto implements ITenantEditDto {
+    entityDto: TenantDto;
+
+    constructor(data?: ITenantEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.entityDto = _data["entityDto"] ? TenantDto.fromJS(_data["entityDto"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TenantEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TenantEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["entityDto"] = this.entityDto ? this.entityDto.toJSON() : <any>undefined;
+        return data; 
+    }
+
+    clone(): TenantEditDto {
+        const json = this.toJSON();
+        let result = new TenantEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITenantEditDto {
+    entityDto: TenantDto;
+}
+
+export class CreateTenantInput implements ICreateTenantInput {
     adminUser: string | undefined;
     adminUserPassword: string | undefined;
     adminUserEmail: string | undefined;
     adminUserPhoneNumber: string | undefined;
     entityDto: TenantDto;
 
-    constructor(data?: ICreateOrUpdateTenantInput) {
+    constructor(data?: ICreateTenantInput) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3279,9 +3378,9 @@ export class CreateOrUpdateTenantInput implements ICreateOrUpdateTenantInput {
         }
     }
 
-    static fromJS(data: any): CreateOrUpdateTenantInput {
+    static fromJS(data: any): CreateTenantInput {
         data = typeof data === 'object' ? data : {};
-        let result = new CreateOrUpdateTenantInput();
+        let result = new CreateTenantInput();
         result.init(data);
         return result;
     }
@@ -3296,15 +3395,15 @@ export class CreateOrUpdateTenantInput implements ICreateOrUpdateTenantInput {
         return data; 
     }
 
-    clone(): CreateOrUpdateTenantInput {
+    clone(): CreateTenantInput {
         const json = this.toJSON();
-        let result = new CreateOrUpdateTenantInput();
+        let result = new CreateTenantInput();
         result.init(json);
         return result;
     }
 }
 
-export interface ICreateOrUpdateTenantInput {
+export interface ICreateTenantInput {
     adminUser: string | undefined;
     adminUserPassword: string | undefined;
     adminUserEmail: string | undefined;

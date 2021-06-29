@@ -124,6 +124,7 @@ namespace Company.Project.MultiTenancy
             }
         }
 
+        [PermissionAuthorize(AppPermissions.Tenant.Edit, Scope = PermissionAuthorizeScope.Host)]
         public virtual async Task Update(TenantEditDto input)
         {
             await this._tenantManager.Update(
