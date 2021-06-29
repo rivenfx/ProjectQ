@@ -1,3 +1,6 @@
+# 路径
+$currentPath = $(Get-Location).Path # 当前启动目录
+$rootPath = Join-Path  $currentPath '../' # 项目根目录
 
 # 替换csproj类库引用
 function ReplaceCsproj($dirName) {
@@ -38,6 +41,10 @@ function ReplaceCsproj($dirName) {
 
         # 写入csproj
         Set-Content -Encoding "UTF8NoBOM" -Path "$file" -Value $resultProjContent
+
+        # xml 格式化读写
+        [xml]$xmlFile = Get-Content -Encoding "UTF8NoBOM" -Path "$file" -Raw
+        $xmlFile.Save($file)
     }
   
 
@@ -48,7 +55,7 @@ function ReplaceCsproj($dirName) {
 # 替换类库版本
 function ReplaceVersion ($dirName, $version) {
     # 版本文件路径
-    $file = "./version.props"
+    $file = Join-Path $rootPath 'version.props'
 
     ## 获取当前的版本
     [xml]$versionPropsXml = Get-Content -Encoding "UTF8NoBOM" -Path "$file"

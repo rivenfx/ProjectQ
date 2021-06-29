@@ -2,7 +2,7 @@
 . ".\common.ps1"
 
 # 切换到上级目录
-Set-Location ".."
+Set-Location $rootPath
 
 
 # 移除 ProjectQ.sln 中对 Riven Framework 库的引用
