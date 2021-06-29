@@ -59,8 +59,15 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
       sort: true,
     },
     {
-      title: '操作区',
+      title: this.l('common.action'),
       buttons: [
+        {
+          tooltip: this.l('common.view'),
+          icon: 'eye',
+          type: 'none',
+          acl: 'user.query',
+          click: (record) => this.view(record),
+        },
         {
           tooltip: this.l('common.edit'),
           icon: 'edit',
@@ -117,8 +124,11 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
       });
   }
 
+  view(data: RoleDto) {
+    this.createOrEdit(data, true);
+  }
 
-  createOrEdit(data?: RoleDto) {
+  createOrEdit(data?: RoleDto, readonly?: boolean) {
     let input;
     if (data) {
       input = data.id;
@@ -128,6 +138,7 @@ export class RoleComponent extends ListViewComponentBase<RoleDto>
       CreateOrEditRoleComponent,
       {
         modalInput: input,
+        readonly: readonly,
       },
     ).subscribe((res) => {
       if (res) {
