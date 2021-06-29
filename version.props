@@ -2,7 +2,7 @@
   
   <PropertyGroup>
     <RivenFrameworkVersion>0.1.8</RivenFrameworkVersion>
-    <RivenModuleVersion>0.0.1</RivenModuleVersion>
+    <RivenModulesVersion>0.0.1</RivenModulesVersion>
   </PropertyGroup>
 
 </Project>
