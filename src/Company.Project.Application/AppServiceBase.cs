@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Riven;
 using Riven.Application;
+using Riven.Authorization;
 using Riven.Localization;
 using Riven.Uow;
 
@@ -17,9 +18,8 @@ namespace Company.Project
         protected AppServiceBase(IServiceProvider serviceProvider)
             :base(serviceProvider)
         {
-            this.AppSession = this.GetService<IAppSession>();
+
         }
 
-         protected virtual IAppSession AppSession { get; }
     }
 }

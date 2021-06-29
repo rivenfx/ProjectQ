@@ -70,7 +70,7 @@ namespace Company.Project.Session
             var localzation = new LocalizationDto();
 
             localzation.DefaultCulture = this.LanguageManager.GetDefaultLanguage().Culture;
-            localzation.CurrentCulture = AppSession.CurrentLanguage.Culture;
+            localzation.CurrentCulture = this.CurrentLanguage.Culture;
 
             localzation.Languages = this.LanguageManager.GetEnabledLanguages()
                 .Select(o =>
@@ -91,12 +91,13 @@ namespace Company.Project.Session
         public async Task<AuthDto> GetAuth()
         {
             var authDto = new AuthDto();
+            var hasLogin = !AppSession.UserId.IsNullOrWhiteSpace();
 
 
             #region 当前登录用户信息
 
             // 用户信息
-            if (AppSession.UserId.HasValue)
+            if (hasLogin)
             {
                 var user = await _userManager.FindByIdAsync(AppSession.UserId.ToString());
                 authDto.UserId = user.Id.ToString();
@@ -131,9 +132,9 @@ namespace Company.Project.Session
             #region 当前登录用户拥有的权限
 
             // 已登录
-            if (AppSession.UserId.HasValue)
+            if (hasLogin)
             {
-                var userIdString = AppSession.UserId.Value.ToString();
+                var userIdString = AppSession.UserId;
 
                 var permissionFinder = this.GetService<IIdentityPermissionFinder>();
                 var userRoleFinder = this.GetService<IIdentityUserRoleFinder>();

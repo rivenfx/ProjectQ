@@ -21,6 +21,7 @@ using Company.Project.MultiTenancy;
 namespace Company.Project
 {
     [DependsOn(
+        typeof(RivenEntityFrameworkCoreSharedModule),
         typeof(CompanyProjectDomainModule)
         )]
     public class CompanyProjectEntityFrameworkCoreModule : AppModule

@@ -16,7 +16,7 @@ using Riven.MultiTenancy;
 namespace Company.Project
 {
     [DependsOn(
-
+        typeof(RivenDomainSharedModule)
         )]
     public class CompanyProjectDomainModule : AppModule
     {

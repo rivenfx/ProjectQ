@@ -10,6 +10,7 @@ using Company.Project.Authorization.Users.Dtos;
 namespace Company.Project
 {
     [DependsOn(
+        typeof(RivenApplicationSharedModule),
         typeof(CompanyProjectDomainModule)
         )]
     public class CompanyProjectApplicationModule : AppModule
@@ -18,7 +19,7 @@ namespace Company.Project
         {
             context.Services.RegisterAssemblyOf<CompanyProjectApplicationModule>();
 
-            // ×¢²á
+            // æ³¨å†Œ
             this.GetType().Assembly.RegisterGlobalObjectMapper();
         }
 
