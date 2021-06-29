@@ -128,28 +128,27 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
       entityDto: RoleDto.fromJS(event[0]),
       permissions: event[1].permissions
     });
-    debugger
 
-    // this.loading = true;
-    // if (this.modalInput) {
-    //   this.roleSer.update(input)
-    //     .pipe(finalize(() => {
-    //       this.loading = false;
-    //     }))
-    //     .subscribe(() => {
-    //       this.notify.success(this.l(AppConsts.message.success));
-    //       this.success();
-    //     });
-    // } else {
-    //   this.roleSer.create(input)
-    //     .pipe(finalize(() => {
-    //       this.loading = false;
-    //     }))
-    //     .subscribe(() => {
-    //       this.notify.success(this.l(AppConsts.message.success));
-    //       this.success();
-    //     });
-    // }
+    this.loading = true;
+    if (this.modalInput) {
+      this.roleSer.update(input)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
+        .subscribe(() => {
+          this.notify.success(this.l(AppConsts.message.success));
+          this.success();
+        });
+    } else {
+      this.roleSer.create(input)
+        .pipe(finalize(() => {
+          this.loading = false;
+        }))
+        .subscribe(() => {
+          this.notify.success(this.l(AppConsts.message.success));
+          this.success();
+        });
+    }
 
   }
 }
