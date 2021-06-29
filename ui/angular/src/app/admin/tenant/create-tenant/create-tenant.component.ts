@@ -4,13 +4,12 @@ import { SFSchema } from '@delon/form';
 import { CreateOrUpdateTenantInput, TenantServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';
 import { AppConsts } from '@shared';
-
 @Component({
-  selector: 'create-or-edit-tenant',
-  templateUrl: './create-or-edit-tenant.component.html',
-  styleUrls: ['./create-or-edit-tenant.component.less'],
+  selector: 'create-tenant',
+  templateUrl: './create-tenant.component.html',
+  styleUrls: ['./create-tenant.component.less']
 })
-export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpdateTenantInput>
+export class CreateTenantComponent extends ModalComponentBase<CreateOrUpdateTenantInput>
   implements OnInit {
 
   pageFormSchema: SFSchema = {
@@ -166,16 +165,14 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
 
   submitForm(...event: any[]) {
     const input = CreateOrUpdateTenantInput.fromJS(event[0]);
-    debugger;
-    return;
-    // this.loading = true;
-    // this.tenantSer.createOrUpdate(input)
-    //   .pipe(finalize(() => {
-    //     this.loading = false;
-    //   }))
-    //   .subscribe(() => {
-    //     this.notify.success(this.l(AppConsts.message.success));
-    //     this.success();
-    //   });
+    this.loading = true;
+    this.tenantSer.createOrUpdate(input)
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
+      .subscribe(() => {
+        this.notify.success(this.l(AppConsts.message.success));
+        this.success();
+      });
   }
 }

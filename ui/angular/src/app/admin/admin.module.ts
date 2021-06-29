@@ -15,14 +15,16 @@ import { UserComponent } from './user';
 import { CreateOrEditUserComponent } from './user/create-or-edit-user';
 import { SampleTableModule } from '@shared/components/sample-table';
 import { TenantComponent } from './tenant';
-import { CreateOrEditTenantComponent } from './tenant/create-or-edit-tenant';
+import { EditTenantComponent } from './tenant/edit-tenant';
+import { CreateTenantComponent } from './tenant/create-tenant';
 
 
 /** entry的组件 */
 const ENTRY_COMPONENTS = [
-  CreateOrEditTenantComponent,
   CreateOrEditRoleComponent,
   CreateOrEditUserComponent,
+  CreateTenantComponent,
+  EditTenantComponent,
 ];
 
 /** 所有组件 */

@@ -7,7 +7,8 @@ import {
 } from '@service-proxies';
 import { STColumn } from '@delon/abc/st';
 import { finalize } from 'rxjs/operators';
-import { CreateOrEditTenantComponent } from './create-or-edit-tenant';
+import { CreateTenantComponent } from './create-tenant';
+import { EditTenantComponent } from './edit-tenant';
 
 @Component({
   selector: 'tenant',
@@ -72,7 +73,7 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
           acl: 'tenant.edit',
           iif: record => !record.isStatic,
           iifBehavior: 'disabled',
-          click: (record) => this.createOrEdit(record),
+          click: (record) => this.edit(record),
         },
         {
           tooltip: this.l('common.delete'),
@@ -154,27 +155,38 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
       });
   }
 
-  /** 创建或编辑 */
-  createOrEdit(entity?: TenantDto) {
-    this.onClickCreateOrEdit(entity);
+
+  create() {
+
+    this.modalHelper.createStatic(
+      CreateTenantComponent,
+    ).subscribe((res) => {
+      if (res) {
+        this.refresh();
+      }
+    });
   }
 
-  onClickCreateOrEdit(data?: TenantDto, readonly?: boolean) {
+  edit(data: TenantDto, readonly?: boolean) {
     let input;
     if (data) {
       input = data.id;
     }
 
     this.modalHelper.createStatic(
-      CreateOrEditTenantComponent,
+      EditTenantComponent,
       {
         modalInput: input,
-        readonly,
+        readonly: readonly,
       },
     ).subscribe((res) => {
       if (res) {
         this.refresh();
       }
     });
+  }
+
+  view(data: TenantDto) {
+    this.edit(data, true);
   }
 }
