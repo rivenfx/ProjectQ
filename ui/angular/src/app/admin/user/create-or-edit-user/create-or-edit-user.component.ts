@@ -15,10 +15,11 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
 
   @ViewChild('roleForm', { static: false }) roleFormRef: SFComponent;
 
-  input = new CreateOrEditUserInput();
+  user = new UserDto();
 
-  password: string;
-  passwordConfimd: string;
+  role = {
+    roles: []
+  };
 
   /** 基本表单配置 */
   pageFormSchema: SFSchema = {
@@ -118,8 +119,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
         type: 'array',
         title: '',
         ui: {
-          widget: 'custom',
-          disabled: this.readonly,
+          widget: 'custom'
         },
       },
     },
@@ -146,7 +146,6 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
 
   ngOnInit(): void {
     this.title = this.l('user');
-
     if (this.modalInput) {
       this.loading = true;
       this.userSer.getEditById(this.modalInput)
@@ -158,29 +157,33 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
             return;
           }
           if (res.entityDto) {
-            this.input.entityDto = res.entityDto;
+            this.user = res.entityDto;
           }
 
           if (Array.isArray(res.roles)) {
-            this.input.roles = res.roles;
-            this.input = this.input.clone();
+            this.role = {
+              roles: res.roles
+            };
           }
 
           if (!this.readonly) {
-            this.readonly = this.input.entityDto.isStatic;
-            this.pageFormRef.disabled = this.readonly;
+            this.readonly = res.entityDto.isStatic;
           }
-          this.disableFormControls();
         });
     }
   }
 
   submitForm(...event: any[]) {
     debugger
-    const input = CreateOrEditUserInput.fromJS(Object.assign({}, ...event));
-    return;
 
+    // 构建数据
+    const input = new CreateOrEditUserInput({
+      entityDto: UserDto.fromJS(event[0]),
+      password: event[0].password,
+      roles: event[1].roles
+    });
 
+    // 发送请求
     this.loading = true;
     if (this.modalInput) {
       this.userSer.update(input)
@@ -192,7 +195,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
           this.success();
         });
     } else {
-      this.userSer.create(this.input)
+      this.userSer.create(input)
         .pipe(finalize(() => {
           this.loading = false;
         }))
