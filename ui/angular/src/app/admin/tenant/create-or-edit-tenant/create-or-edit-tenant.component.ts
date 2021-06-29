@@ -27,15 +27,30 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
         maxLength: this.l('validation.maxlength'),
         required: this.l('validation.required'),
       },
-      spanLabelFixed: 100,
+      spanLabelFixed: 120,
     },
     properties: {
       entityDto: { //
         type: 'object',
         required: [ // 校验字段
           'name',
-          'displayName',
+          'displayName'
         ],
+        if: {
+          properties: {
+            useConnectionString: { enum: [false] }
+          }
+        },
+        then: {
+          required: [
+
+          ]
+        },
+        else: {
+          required: [
+            'connectionString'
+          ]
+        },
         properties: {
           name: {
             title: this.l('tenant.name'),
@@ -48,6 +63,34 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
             type: 'string',
             minLength: 3,
             maxLength: 32,
+          },
+          useConnectionString: {
+            title: this.l('指定数据库'),
+            type: 'boolean',
+            enum: [
+              { label: this.l('label.no'), value: false },
+              { label: this.l('label.yes'), value: true }
+            ],
+            ui: {
+              widget: 'radio',
+              styleType: 'button'
+            },
+            default: false
+          },
+          connectionString: {
+            title: this.l('数据库连接字符串'),
+            type: 'string',
+            minLength: 3,
+            maxLength: 32,
+          },
+          isActive: {
+            title: this.l('common.is-active'),
+            type: 'boolean',
+            ui: {
+              grid: {
+                span: 6,
+              },
+            },
           },
         },
         ui: {
@@ -75,9 +118,7 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
         minLength: 6,
         maxLength: 32,
         ui: {
-          ui: {
-            type: 'password'
-          },
+          type: 'password',
           validator: (val, fp, f) => {
             if (val !== f.getProperty('adminUserPassword').value) {
               return [
