@@ -67,6 +67,13 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
       title: this.l('common.action'),
       buttons: [
         {
+          tooltip: this.l('common.view'),
+          icon: 'eye',
+          type: 'none',
+          acl: 'tenant.query',
+          click: (record) => this.view(record),
+        },
+        {
           tooltip: this.l('common.edit'),
           icon: 'edit',
           type: 'none',
