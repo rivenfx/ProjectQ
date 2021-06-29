@@ -30,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Modules\src\Riven.EntityFrameworkCore.Shared\Riven.EntityFrameworkCore.Shared.csproj" />
 		<ProjectReference Include="..\Company.Project.Domain\Company.Project.Domain.csproj" />
 	</ItemGroup>
 

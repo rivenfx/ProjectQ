@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\..\Framework\src\Riven.Identity\Riven.Identity.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.Mapster\Riven.Mapster.csproj" />
     <ProjectReference Include="..\..\..\Framework\src\Riven.UnitOfWork.EntityFrameworkCore\Riven.UnitOfWork.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\Modules\src\Riven.Domain.Shared\Riven.Domain.Shared.csproj" />
   </ItemGroup>
 
 

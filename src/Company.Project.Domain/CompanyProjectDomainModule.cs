@@ -23,9 +23,6 @@ namespace Company.Project
         public override void OnPreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.RegisterAssemblyOf<CompanyProjectDomainModule>();
-
-            context.Services.AddScoped(typeof(ISampleDomainService<,>), typeof(SampleDomainService<,>));
-            context.Services.AddScoped(typeof(ISampleDomainService<>), typeof(SampleDomainService<>));
         }
 
         public override void OnConfigureServices(ServiceConfigurationContext context)

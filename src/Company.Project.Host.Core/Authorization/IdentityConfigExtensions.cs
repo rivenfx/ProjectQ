@@ -12,7 +12,6 @@ using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
 using Company.Project.Authorization.Permissions;
 using Riven.Identity;
-using Company.Project.Identity;
 using Microsoft.Extensions.Configuration;
 using Company.Project.Configuration;
 
