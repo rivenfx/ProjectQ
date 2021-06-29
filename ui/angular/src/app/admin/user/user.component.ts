@@ -70,6 +70,13 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       title: '操作区',
       buttons: [
         {
+          tooltip: this.l('common.view'),
+          icon: 'eye',
+          type: 'none',
+          acl: 'user.query',
+          click: (record) => this.view(record),
+        },
+        {
           tooltip: this.l('common.edit'),
           icon: 'edit',
           type: 'none',
