@@ -2,21 +2,16 @@
   <div class="modal-title">{{titlePrefix}} - {{title}}</div>
 </div>
 
-<!-- 表单输入错误模板 -->
-<ng-template #errorTpl
-  let-control>
-  <validation-messages [formCtrl]="control"></validation-messages>
-</ng-template>
 
 <div class="modal-body">
-  <sf #validateForm
+  <sf #pageForm
     autocomplete="off"
     button="none"
-    [schema]="schema"
+    [schema]="pageFormSchema"
     [formData]="tmp"
     (formChange)="formChange($event)"
     (formValueChange)="formValueChange($event)"
-    (keyup.enter)="sfSubmit(validateForm)">
+    (keyup.enter)="sfSubmit(pageForm)">
   </sf>
 </div>
 
@@ -30,27 +25,8 @@
     *ngIf="!readonly"
     [nzType]="'primary'"
     [nzLoading]="loading"
-    [disabled]="!validateForm.valid"
-    (click)="submitForm(validateForm.value)">
+    [disabled]="!pageForm.valid"
+    (click)="sfSubmit(pageForm)">
     {{l('label.ok')}}
   </button>
 </div>
-
-<!--<sf #validateForm [schema]="schema" button="none" class="modal-sf">-->
-
-<!--  &lt;!&ndash;  <div class="modal-footer">&ndash;&gt;-->
-<!--  &lt;!&ndash;    <button nz-button&ndash;&gt;-->
-<!--  &lt;!&ndash;            [nzType]="'default'"&ndash;&gt;-->
-<!--  &lt;!&ndash;            (click)="close()">&ndash;&gt;-->
-<!--  &lt;!&ndash;      {{l('label.cancel')}}&ndash;&gt;-->
-<!--  &lt;!&ndash;    </button>&ndash;&gt;-->
-<!--  &lt;!&ndash;    <button nz-button&ndash;&gt;-->
-<!--  &lt;!&ndash;            *ngIf="!readonly"&ndash;&gt;-->
-<!--  &lt;!&ndash;            [nzType]="'primary'"&ndash;&gt;-->
-<!--  &lt;!&ndash;            [nzLoading]="loading"&ndash;&gt;-->
-<!--  &lt;!&ndash;            [disabled]="!validateForm.valid"&ndash;&gt;-->
-<!--  &lt;!&ndash;            (click)="submitForm(validateForm.value)">&ndash;&gt;-->
-<!--  &lt;!&ndash;      {{l('label.ok')}}&ndash;&gt;-->
-<!--  &lt;!&ndash;    </button>&ndash;&gt;-->
-<!--  &lt;!&ndash;  </div>&ndash;&gt;-->
-<!--</sf>-->

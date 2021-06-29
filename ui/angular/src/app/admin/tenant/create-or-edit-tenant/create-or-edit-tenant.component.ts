@@ -13,7 +13,7 @@ import { AppConsts } from '@shared';
 export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpdateTenantInput>
   implements OnInit {
 
-  schema: SFSchema = {
+  pageFormSchema: SFSchema = {
     required: [ // 校验字段
       'adminUser',
       'adminUserPassword',
@@ -27,6 +27,7 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
         maxLength: this.l('validation.maxlength'),
         required: this.l('validation.required'),
       },
+      spanLabelFixed: 100,
     },
     properties: {
       entityDto: { //
@@ -49,27 +50,36 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
             maxLength: 32,
           },
         },
+        ui: {
+
+        }
       },
       adminUser: {
-        title: this.l('管理员账号'),
+        title: this.l('user.user-name'),
         type: 'string',
         minLength: 3,
         maxLength: 32,
       },
       adminUserPassword: {
-        title: this.l('管理员密码'),
-        type: 'string',
-        minLength: 6,
-        maxLength: 32,
-      },
-      adminUserPasswordConfirm: {
-        title: this.l('确认管理员密码'),
+        title: this.l('label.password'),
         type: 'string',
         minLength: 6,
         maxLength: 32,
         ui: {
-          validator: (a, b) => {
-            if (b.root && b.root._value && b.root._value['adminUserPassword'] !== a) {
+          type: 'password'
+        }
+      },
+      adminUserPasswordConfirm: {
+        title: this.l('label.password-confirm'),
+        type: 'string',
+        minLength: 6,
+        maxLength: 32,
+        ui: {
+          ui: {
+            type: 'password'
+          },
+          validator: (val, fp, f) => {
+            if (val !== f.getProperty('adminUserPassword').value) {
               return [
                 { keyword: 'confirm', message: this.l('validation.confirm') },
               ];
@@ -79,14 +89,14 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
         },
       },
       adminUserPhoneNumber: {
-        title: this.l('管理员电话号码'),
+        title: this.l('user.phone-number'),
         type: 'string',
         // format: 'mobile',
         minLength: 3,
         maxLength: 32,
       },
       adminUserEmail: {
-        title: this.l('管理员邮箱'),
+        title: this.l('user.email'),
         type: 'string',
         format: 'email',
       },
@@ -113,18 +123,18 @@ export class CreateOrEditTenantComponent extends ModalComponentBase<CreateOrUpda
     // debugger
   }
 
-  submitForm(event?: any) {
-    const input = new CreateOrUpdateTenantInput(event);
+  submitForm(...event: any[]) {
+    const input = CreateOrUpdateTenantInput.fromJS(event[0]);
     debugger;
     return;
-    this.loading = true;
-    this.tenantSer.createOrUpdate(input)
-      .pipe(finalize(() => {
-        this.loading = false;
-      }))
-      .subscribe(() => {
-        this.notify.success(this.l(AppConsts.message.success));
-        this.success();
-      });
+    // this.loading = true;
+    // this.tenantSer.createOrUpdate(input)
+    //   .pipe(finalize(() => {
+    //     this.loading = false;
+    //   }))
+    //   .subscribe(() => {
+    //     this.notify.success(this.l(AppConsts.message.success));
+    //     this.success();
+    //   });
   }
 }

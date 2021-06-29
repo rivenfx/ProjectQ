@@ -63,7 +63,7 @@ export class TenantComponent extends ListViewComponentBase<TenantDto>
       sort: true,
     },
     {
-      title: '操作区',
+      title: this.l('common.action'),
       buttons: [
         {
           tooltip: this.l('common.edit'),
