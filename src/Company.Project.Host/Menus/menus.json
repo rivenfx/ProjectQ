@@ -14,7 +14,7 @@
       },
       {
         "text": "租户",
-        "i18n": "Tenant",
+        "i18n": "tenant",
         "link": "/admin/tenant",
         "icon": "icon iconfont icon-role",
         "acl": "tenant.query",
