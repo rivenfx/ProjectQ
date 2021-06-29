@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ModalComponentBase } from '@shared/common';
 import { SFSchema } from '@delon/form';
-import { CreateOrUpdateTenantInput, TenantServiceProxy } from '@service-proxies';
+import { CreateTenantInput, TenantServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';
 import { AppConsts } from '@shared';
 @Component({
@@ -9,7 +9,7 @@ import { AppConsts } from '@shared';
   templateUrl: './create-tenant.component.html',
   styleUrls: ['./create-tenant.component.less']
 })
-export class CreateTenantComponent extends ModalComponentBase<CreateOrUpdateTenantInput>
+export class CreateTenantComponent extends ModalComponentBase<string>
   implements OnInit {
 
   pageFormSchema: SFSchema = {
@@ -33,7 +33,8 @@ export class CreateTenantComponent extends ModalComponentBase<CreateOrUpdateTena
         type: 'object',
         required: [ // 校验字段
           'name',
-          'displayName'
+          'displayName',
+          'description'
         ],
         if: {
           properties: {
@@ -56,12 +57,35 @@ export class CreateTenantComponent extends ModalComponentBase<CreateOrUpdateTena
             type: 'string',
             minLength: 3,
             maxLength: 32,
+            ui: {
+              grid: {
+                span: 12,
+              },
+            }
           },
           displayName: {
             title: this.l('tenant.display-name'),
             type: 'string',
             minLength: 3,
             maxLength: 32,
+            ui: {
+              grid: {
+                span: 12,
+              },
+            }
+          },
+          description: {
+            title: this.l('label.description'),
+            type: 'string',
+            minLength: 5,
+            maxLength: 512,
+            ui: {
+              widget: 'textarea',
+              autosize: { minRows: 2, maxRows: 6 },
+              grid: {
+                span: 24,
+              },
+            }
           },
           useConnectionString: {
             title: this.l('指定数据库'),
@@ -155,18 +179,11 @@ export class CreateTenantComponent extends ModalComponentBase<CreateOrUpdateTena
     this.title = this.l('tenant');
   }
 
-  formChange(e: any) {
-    // debugger
-  }
-
-  formValueChange(e: any) {
-    // debugger
-  }
 
   submitForm(...event: any[]) {
-    const input = CreateOrUpdateTenantInput.fromJS(event[0]);
+    const input = CreateTenantInput.fromJS(event[0]);
     this.loading = true;
-    this.tenantSer.createOrUpdate(input)
+    this.tenantSer.create(input)
       .pipe(finalize(() => {
         this.loading = false;
       }))

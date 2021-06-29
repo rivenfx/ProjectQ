@@ -1,1 +1,31 @@
-<p>edit-tenant works!</p>
+<div class="modal-header">
+  <div class="modal-title">{{titlePrefix}} - {{title}}</div>
+</div>
+
+
+<div class="modal-body">
+  <sf #pageForm
+    autocomplete="off"
+    button="none"
+    [disabled]="readonly"
+    [schema]="pageFormSchema"
+    [formData]="tenant"
+    (keyup.enter)="sfSubmit(pageForm)">
+  </sf>
+</div>
+
+<div class="modal-footer">
+  <button nz-button
+    [nzType]="'default'"
+    (click)="close()">
+    {{l('label.cancel')}}
+  </button>
+  <button nz-button
+    *ngIf="!readonly"
+    [nzType]="'primary'"
+    [nzLoading]="loading"
+    [disabled]="!pageForm.valid"
+    (click)="sfSubmit(pageForm)">
+    {{l('label.ok')}}
+  </button>
+</div>
