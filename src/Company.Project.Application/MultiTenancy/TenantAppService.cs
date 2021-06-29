@@ -129,7 +129,8 @@ namespace Company.Project.MultiTenancy
             await this._tenantManager.Update(
                 input.EntityDto.Name,
                 input.EntityDto.DisplayName,
-                input.EntityDto.Description
+                input.EntityDto.Description,
+                input.EntityDto.IsActive
                 );
         }
     }
