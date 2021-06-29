@@ -96,7 +96,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
 
       },
       isActive: {
-        title: this.l('user.is-active'),
+        title: this.l('common.is-active'),
         type: 'boolean',
         ui: {
           grid: {
