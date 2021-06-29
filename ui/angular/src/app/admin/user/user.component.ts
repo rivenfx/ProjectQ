@@ -67,7 +67,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
       sort: true,
     },
     {
-      title: '操作区',
+      title: this.l('common.action'),
       buttons: [
         {
           tooltip: this.l('common.view'),
