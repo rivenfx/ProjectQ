@@ -2,12 +2,6 @@
   <div class="modal-title">{{titlePrefix}} - {{title}}</div>
 </div>
 
-<!-- 表单输入错误模板 -->
-<ng-template #errorTpl
-  let-control>
-  <validation-messages [formCtrl]="control"></validation-messages>
-</ng-template>
-
 <div class="modal-body">
   <nz-tabset>
     <nz-tab [nzTitle]="l('label.user-info')">
