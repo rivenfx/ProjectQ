@@ -128,7 +128,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
   roleFormSchema: SFSchema = {
     properties: {
       roles: {
-        type: 'array',
+        type: 'string',
         title: '',
         ui: {
           widget: 'custom'
