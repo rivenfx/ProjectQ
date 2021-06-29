@@ -17,7 +17,8 @@ using Riven.MultiTenancy;
 using Company.Project.Authorization;
 using Company.Project.Configuration;
 using Company.Project.Debugger;
-
+using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Configuration;
 
 namespace Company.Project
 {
@@ -113,6 +114,16 @@ namespace Company.Project
             #endregion
 
 
+
+            #region 配置AOP
+
+            context.Services.ConfigureDynamicProxy(config =>
+               {
+                   // UnitOfWork 拦截器
+                   config.AddRivenUnitOfWork();
+               });
+
+            #endregion
         }
 
         public override void OnPostConfigureServices(ServiceConfigurationContext context)
