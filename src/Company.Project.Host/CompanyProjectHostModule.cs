@@ -198,14 +198,7 @@ namespace Company.Project
             #region AspNetCore - UseStaticFiles / UseRouting /UseCors
 
 
-            app.UseStaticFiles();
-
-            // basehref 不等于 / 时需要映射 wwwroot 到 basehref 地址
-            if (!string.IsNullOrWhiteSpace(appInfo.Basehref)
-                && appInfo.Basehref != "/")
-            {
-                app.UseStaticFiles(appInfo.Basehref);
-            }
+            app.UseStaticFilesWithBaseHref(appInfo.Basehref);
 
             app.UseRouting();
             app.UseCors(CorsPolicyName);
