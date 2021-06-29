@@ -38,6 +38,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
         title: this.l('label.password'),
         type: 'string',
         minLength: 5,
+        maxLength: 32,
         ui: {
           type: 'password',
         }
@@ -46,6 +47,7 @@ export class CreateOrEditUserComponent extends ModalComponentBase<string>
         title: this.l('label.password-confirm'),
         type: 'string',
         minLength: 5,
+        maxLength: 32,
         ui: {
           type: 'password',
           validator: (val, fp, f) => {
