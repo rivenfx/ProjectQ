@@ -2,114 +2,59 @@
   <div class="modal-title">{{titlePrefix}} - {{title}}</div>
 </div>
 
-<!-- 表单输入错误模板 -->
-<ng-template #errorTpl
-             let-control>
-  <validation-messages [formCtrl]="control"></validation-messages>
-</ng-template>
-
 <div class="modal-body">
-  <form #pageForm="ngForm"
-        nz-form
-        (ngSubmit)="submitForm()"
-        novalidate
-        autocomplete="off">
-    <nz-tabset>
-      <!-- 基本信息 -->
-      <nz-tab [nzTitle]="l('label.role-info')">
+  <nz-tabset>
+    <nz-tab [nzTitle]="l('label.role-info')">
+      <sf #pageForm
+        autocomplete="off"
+        button="none"
+        [disabled]="readonly"
+        [schema]="pageFormSchema"
+        [formData]="role"
+        (keyup.enter)="sfSubmit(pageForm,permissionForm)">
+      </sf>
+    </nz-tab>
+    <nz-tab [nzTitle]="l('label.permission')">
+      <sf #permissionForm
+        autocomplete="off"
+        button="none"
+        [disabled]="readonly"
+        [schema]="permissionFormSchema"
+        [formData]="permission"
+        (keyup.enter)="sfSubmit(pageForm,permissionForm)">
 
-        <!-- 角色名称/显示名称 -->
-        <div nz-row [nzGutter]="24">
-          <!-- 角色名称 -->
-          <div nz-col [nzSm]="12" [nzXs]="24">
-            <nz-form-item>
-              <nz-form-label nzFor="roleNameInput" nzRequired>
-                {{ l('role.name') }}
-              </nz-form-label>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <nz-input-group nzPrefixIcon="user">
-                  <input name="roleNameInput"
-                         #roleNameInput="ngModel"
-                         type="text"
-                         nz-input
-                         [(ngModel)]="role.name"
-                         [placeholder]="l('role.name')"
-                         [disabled]="isEdit"
-                         required
-                         minlength="3"
-                         maxlength="32"/>
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <!-- 显示名称 -->
-          <div nz-col [nzSm]="12" [nzXs]="24">
-            <nz-form-item>
-              <nz-form-label nzFor="roleDisplayNameInput" nzRequired>
-                {{ l('role.display-name') }}
-              </nz-form-label>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <nz-input-group nzPrefixIcon="user">
-                  <input name="roleDisplayNameInput"
-                         #roleDisplayNameInput="ngModel"
-                         type="text"
-                         nz-input
-                         [(ngModel)]="role.displayName"
-                         [placeholder]="l('role.display-name')"
-                         required
-                         minlength="3"
-                         maxlength="32"/>
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
+        <ng-template sf-template="permissions"
+          let-me
+          let-ui="ui"
+          let-schema="schema">
+
+          <permission-tree [attr.id]="me.id"
+            [attr.disabled]="me.disabled"
+            [disabled]="me.disabled"
+            [ngModel]="me.formProperty.value"
+            (ngModelChange)="me.setValue($event)">
+          </permission-tree>
+        </ng-template>
+
+      </sf>
+    </nz-tab>
+  </nz-tabset>
 
 
-        <!-- 角色描述 -->
-        <div nz-row [nzGutter]="24">
-          <!-- 角色描述 -->
-          <div nz-col [nzSm]="24" [nzXs]="24">
-            <nz-form-item>
-              <nz-form-label nzFor="roleDescriptionInput" nzRequired>
-                {{ l('role.description') }}
-              </nz-form-label>
-              <nz-form-control [nzErrorTip]="errorTpl">
-                <textarea rows="4"
-                          name="roleDescriptionInput"
-                          #roleDescriptionInput="ngModel"
-                          nz-input
-                          [(ngModel)]="role.description"
-                          [placeholder]="l('role.description')"
-                          maxlength="512">
-                </textarea>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-      </nz-tab>
-
-      <!-- 权限选择 -->
-      <nz-tab [nzTitle]="l('label.permission')">
-        <permission-tree name="rolePermissionInput"
-                         #rolePermissionInput="ngModel"
-                         [(ngModel)]="permissions"></permission-tree>
-      </nz-tab>
-    </nz-tabset>
-
-  </form>
 </div>
 
 <div class="modal-footer">
   <button nz-button
-          [nzType]="'default'"
-          (click)="close()">
+    [nzType]="'default'"
+    (click)="close()">
     {{l('label.cancel')}}
   </button>
   <button nz-button
-          *ngIf="!readonly"
-          [nzType]="'primary'"
-          (click)="submitForm()">
+    *ngIf="!readonly"
+    [nzType]="'primary'"
+    [nzLoading]="loading"
+    [disabled]="!(pageForm.valid)"
+    (click)="sfSubmit(pageForm,permissionForm)">
     {{l('label.ok')}}
   </button>
 </div>
