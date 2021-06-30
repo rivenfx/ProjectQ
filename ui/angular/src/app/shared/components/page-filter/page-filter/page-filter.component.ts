@@ -1,17 +1,17 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Injector, Input,
-  OnChanges,
-  OnInit,
   Output,
   SimpleChange,
   SimpleChanges,
 } from '@angular/core';
-import { PageFilterItemDto, QueryCondition } from '@service-proxies';
+import { SFSchema } from '@delon/form';
+import { QueryCondition } from '@service-proxies';
 import { SampleControlComponentBase } from '@shared/common';
 import * as _ from 'lodash';
+import { IPageFilterItem } from './interfaces';
 
 @Component({
   selector: 'page-filter',
@@ -21,8 +21,25 @@ import * as _ from 'lodash';
 })
 export class PageFilterComponent extends SampleControlComponentBase<QueryCondition[]> {
 
+
+  schema: SFSchema = {
+    properties: {
+      email: {
+        type: 'string',
+        title: '邮箱',
+        format: 'email',
+        maxLength: 20
+      },
+      name: {
+        type: 'string',
+        title: '姓名',
+        minLength: 3
+      }
+    }
+  };
+
   /** 筛选条件 */
-  @Input() pageFilters: PageFilterItemDto[] = [];
+  @Input() pageFilters: IPageFilterItem[] = [];
 
   /** 显示标签 */
   @Input() displayLabel: boolean;
@@ -34,10 +51,10 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
   @Output() readyChange = new EventEmitter<QueryCondition[]>();
 
   /** 基本筛选条件 */
-  basicFilters: PageFilterItemDto[] = [];
+  basicFilters: IPageFilterItem[] = [];
 
   /** 高级筛选条件 */
-  advancedFilters: PageFilterItemDto[] = [];
+  advancedFilters: IPageFilterItem[] = [];
 
   /** 筛选条件的数据 */
   pageFilterData: { [P in string]: QueryCondition } = {};
@@ -102,7 +119,7 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
 
 
   /** page-filter-item 组件数据发生改变 */
-  onValueChange(event: any, item: PageFilterItemDto) {
+  onValueChange(event: any, item: IPageFilterItem) {
     if (item.valueChange) {
       // 更新触发的组件的数据
       for (const key of item.valueChange) {
@@ -198,7 +215,7 @@ export class PageFilterComponent extends SampleControlComponentBase<QueryConditi
       }
       this.pageFilterData[item.field] = new QueryCondition({
         field: item.field,
-        operator: item.operator,
+        operator: item.operator as any,
         value: undefined,
         skipValueIsNull: item.skipValueIsNull === true,
       });

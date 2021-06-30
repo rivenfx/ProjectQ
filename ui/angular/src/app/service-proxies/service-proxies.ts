@@ -1831,8 +1831,29 @@ export class UserServiceProxy {
     }
 }
 
+export enum QueryOperator {
+    Equal = <any>"Equal",
+    NotEqual = <any>"NotEqual",
+    Greater = <any>"Greater",
+    GreaterEqual = <any>"GreaterEqual",
+    Less = <any>"Less",
+    LessEqual = <any>"LessEqual",
+    StartsWith = <any>"StartsWith",
+    EndsWith = <any>"EndsWith",
+    In = <any>"In",
+    NotIn = <any>"NotIn",
+    Contains = <any>"Contains",
+    Between = <any>"Between",
+    BetweenEqualStart = <any>"BetweenEqualStart",
+    BetweenEqualEnd = <any>"BetweenEqualEnd",
+    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
+}
+
 export class PageFilterItemDto implements IPageFilterItemDto {
     field: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+    valueChange: string[] | undefined;
     order: number | undefined;
     hidden: boolean;
     width: number;
@@ -1855,6 +1876,13 @@ export class PageFilterItemDto implements IPageFilterItemDto {
     init(_data?: any) {
         if (_data) {
             this.field = _data["field"];
+            this.operator = _data["operator"];
+            this.skipValueIsNull = _data["skipValueIsNull"];
+            if (Array.isArray(_data["valueChange"])) {
+                this.valueChange = [] as any;
+                for (let item of _data["valueChange"])
+                    this.valueChange.push(item);
+            }
             this.order = _data["order"];
             this.hidden = _data["hidden"];
             this.width = _data["width"];
@@ -1877,6 +1905,13 @@ export class PageFilterItemDto implements IPageFilterItemDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["field"] = this.field;
+        data["operator"] = this.operator;
+        data["skipValueIsNull"] = this.skipValueIsNull;
+        if (Array.isArray(this.valueChange)) {
+            data["valueChange"] = [];
+            for (let item of this.valueChange)
+                data["valueChange"].push(item);
+        }
         data["order"] = this.order;
         data["hidden"] = this.hidden;
         data["width"] = this.width;
@@ -1899,6 +1934,9 @@ export class PageFilterItemDto implements IPageFilterItemDto {
 
 export interface IPageFilterItemDto {
     field: string | undefined;
+    operator: QueryOperator;
+    skipValueIsNull: boolean;
+    valueChange: string[] | undefined;
     order: number | undefined;
     hidden: boolean;
     width: number;
@@ -2187,24 +2225,6 @@ export interface IPermissionItemDto {
     parent: string | undefined;
     name: string | undefined;
     sort: number;
-}
-
-export enum QueryOperator {
-    Equal = <any>"Equal",
-    NotEqual = <any>"NotEqual",
-    Greater = <any>"Greater",
-    GreaterEqual = <any>"GreaterEqual",
-    Less = <any>"Less",
-    LessEqual = <any>"LessEqual",
-    StartsWith = <any>"StartsWith",
-    EndsWith = <any>"EndsWith",
-    In = <any>"In",
-    NotIn = <any>"NotIn",
-    Contains = <any>"Contains",
-    Between = <any>"Between",
-    BetweenEqualStart = <any>"BetweenEqualStart",
-    BetweenEqualEnd = <any>"BetweenEqualEnd",
-    BetweenEqualStartAndEnd = <any>"BetweenEqualStartAndEnd",
 }
 
 export class QueryCondition implements IQueryCondition {

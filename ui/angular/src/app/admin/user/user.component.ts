@@ -1,5 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import {
+  PageFilterItemDto,
   QueryCondition,
   QueryInput,
   SortCondition,
@@ -12,6 +13,7 @@ import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
 import { AppConsts } from '@shared';
 import { STColumn } from '@delon/abc/st';
+import { PageFilterItem } from '@shared/components/page-filter/page-filter/interfaces';
 
 @Component({
   selector: 'user',
@@ -21,7 +23,16 @@ import { STColumn } from '@delon/abc/st';
 export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
 
+  pageFilter: PageFilterItem[] = [
+    PageFilterItem.fromJS({
+
+    })
+  ];
+
   columns: STColumn[] = [
+
+  ];
+  templateColumns: STColumn[] = [
     { // no 列
       index: '',
       title: 'No',
