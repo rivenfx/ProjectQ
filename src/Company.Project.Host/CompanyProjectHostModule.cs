@@ -158,6 +158,8 @@ namespace Company.Project
                 {
                     // 注册指定程序集对应的 url 和 http 请求方式
                     options.AddAssemblyOptions(typeof(CompanyProjectApplicationModule).Assembly, options.DefaultApiPrefix, "POST");
+
+                    // 添加 listview 模块
                     options.UseRivenListViewInfo();
                 });
 

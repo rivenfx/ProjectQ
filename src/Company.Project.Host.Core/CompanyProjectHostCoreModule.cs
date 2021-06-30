@@ -25,7 +25,8 @@ namespace Company.Project
 {
     [DependsOn(
         typeof(CompanyProjectApplicationModule),
-        typeof(CompanyProjectEntityFrameworkCoreModule)
+        typeof(CompanyProjectEntityFrameworkCoreModule),
+        typeof(RivenAspNetCoreHostSharedModule)
         )]
     public class CompanyProjectHostCoreModule : AppModule
     {

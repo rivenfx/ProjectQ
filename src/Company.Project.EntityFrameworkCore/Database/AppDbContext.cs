@@ -84,6 +84,8 @@ namespace Company.Project.Database
             modelBuilder.ConfiurationIdentityTables();
 
             modelBuilder.ConfiurationTenantTable();
+
+            modelBuilder.ConfiurationRivenListViewInfo();
         }
 
         #region 重写SaveChange函数

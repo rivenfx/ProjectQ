@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Modules\src\Riven.AspNetCoreHost.Shared\Riven.AspNetCoreHost.Shared.csproj" />
 		<ProjectReference Include="..\Company.Project.Application\Company.Project.Application.csproj" />
 		<ProjectReference Include="..\Company.Project.EntityFrameworkCore\Company.Project.EntityFrameworkCore.csproj" />
 	</ItemGroup>
