@@ -13,7 +13,6 @@ import { RoleComponent } from './role';
 import { CreateOrEditRoleComponent } from './role/create-or-edit-role';
 import { UserComponent } from './user';
 import { CreateOrEditUserComponent } from './user/create-or-edit-user';
-import { SampleTableModule } from '@shared/components/sample-table';
 import { TenantComponent } from './tenant';
 import { EditTenantComponent } from './tenant/edit-tenant';
 import { CreateTenantComponent } from './tenant/create-tenant';
@@ -45,8 +44,7 @@ const ALL_COMPONENTS = [
     RivenModule.forChild(),
     PageFilterModule,
     TableBarModule,
-    SampleComponentsModule,
-    SampleTableModule,
+    SampleComponentsModule
   ],
   declarations: [
     ...ALL_COMPONENTS,

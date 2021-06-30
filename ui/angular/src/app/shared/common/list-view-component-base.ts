@@ -2,14 +2,13 @@ import { Injector, OnInit, ViewChild, Directive, Component } from '@angular/core
 import { ActivatedRoute } from '@angular/router';
 import { ModalHelper } from '@delon/theme';
 import {
-  ColumnItemDto,
-  DynamicPageServiceProxy,
+  ListViewInfoServiceProxy,
+  PageColumnItemDto,
   PageFilterItemDto,
   QueryCondition,
   SortCondition,
   SortType,
 } from '@service-proxies/service-proxies';
-import { ISampleTableAction } from '@shared/components/sample-table';
 import { NzTableComponent } from 'ng-zorro-antd/table';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from './app-component-base';
@@ -29,7 +28,7 @@ export interface IPageInfo<T> {
   /** 筛选条件数据 */
   pageFilters?: PageFilterItemDto[];
   /** 列表列配置 */
-  columns?: ColumnItemDto[];
+  columns?: PageColumnItemDto[];
   /** 列表数据 */
   viewRecord?: T[];
   /** 总数据量 */
@@ -143,14 +142,14 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
   }
 
   /** 页面表格组件实例 */
-    // @ts-ignore
+  // @ts-ignore
   @ViewChild('pageTable') pageTableRef: NzTableComponent;
 
   /** 模态框帮助类 */
   modalHelper: ModalHelper;
 
   /** 动态页面服务 */
-  dynamicPageSer: DynamicPageServiceProxy;
+  dynamicPageSer: ListViewInfoServiceProxy;
 
   /** 激活路由 */
   activatedRoute: ActivatedRoute;
@@ -171,7 +170,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
     super(injector);
 
     this.modalHelper = injector.get(ModalHelper);
-    this.dynamicPageSer = injector.get(DynamicPageServiceProxy);
+    this.dynamicPageSer = injector.get(ListViewInfoServiceProxy);
     this.activatedRoute = injector.get(ActivatedRoute);
     this.reuseTabSer = injector.get(ReuseTabService);
 
@@ -196,20 +195,6 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
     this.calculatedHeight();
   }
 
-  /** 当触发操作事件 */
-  onAction(event: ISampleTableAction) {
-    if (!event) {
-      return;
-    }
-
-    const eventFunc = (this as any)[event.name];
-    if (eventFunc) {
-      eventFunc.apply(this, [event.record]);
-    } else {
-      // tslint:disable-next-line: no-console
-      console.debug(`action没有此函数 ${event.name}`);
-    }
-  }
 
   /** 页码发生更改 */
   onPageIndexChange(pageIndex: number) {
@@ -311,7 +296,7 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
     let sortType: SortType = SortType.None;
     let index = 0;
     for (const key in e.sort.map) {
-      switch (e.sort.map[key]){
+      switch (e.sort.map[key]) {
         case 'descend':
           sortType = SortType.Desc;
           break;
@@ -340,14 +325,14 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
   /** 获取动态页面信息 pageFilter和columns */
   protected fetchDynamicPageInfo(name: string, callback?: () => void) {
     this.dynamicPageSer
-      .getDynamicPageInfo(name)
+      .getListViewInfo(name)
       .pipe(
         finalize(() => {
           this.loading = false;
         }),
       )
       .subscribe((res) => {
-        this.pageInfo.pageFilters = res.pageFilters;
+        this.pageInfo.pageFilters = res.filters;
         this.pageInfo.columns = res.columns;
         if (callback) {
           callback();
@@ -359,17 +344,17 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
   protected fetchPageFilter(name: string, callback?: () => void) {
     this.loading = true;
     this.dynamicPageSer
-      .getPageFilters(name)
+      .getFilters(name)
       .pipe(
         finalize(() => {
           this.loading = false;
         }),
       )
       .subscribe((res) => {
-        if (!res || !res.items) {
+        if (!res || !res) {
           this.pageInfo.pageFilters = [];
         } else {
-          this.pageInfo.pageFilters = res.items;
+          this.pageInfo.pageFilters = res;
         }
         if (callback) {
           callback();
@@ -388,10 +373,10 @@ export abstract class ListViewComponentBase<T> extends AppComponentBase implemen
         }),
       )
       .subscribe((res) => {
-        if (!res || !res.items) {
+        if (!res || !res) {
           this.pageInfo.columns = [];
         } else {
-          this.pageInfo.columns = res.items;
+          this.pageInfo.columns = res;
         }
         if (callback) {
           callback();
