@@ -11,11 +11,11 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Riven.Data;
-using Company.Project.Dtos;
 using Riven.Linq;
 using Riven.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
+using Riven.Dtos;
 
 namespace Company.Project.MultiTenancy
 {

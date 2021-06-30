@@ -9,7 +9,7 @@ using Company.Project.Authorization.Users.Dtos;
 using Riven.Exceptions;
 using Riven.Extensions;
 using Riven.Authorization;
-using Company.Project.Dtos;
+using Riven.Dtos;
 
 namespace Company.Project.Authorization.Users
 {
