@@ -10,8 +10,8 @@ using Company.Project.Authorization.Users.Dtos;
 namespace Company.Project
 {
     [DependsOn(
-        typeof(RivenApplicationSharedModule),
-        typeof(CompanyProjectDomainModule)
+        typeof(CompanyProjectDomainModule),
+        typeof(RivenApplicationSharedModule)
         )]
     public class CompanyProjectApplicationModule : AppModule
     {

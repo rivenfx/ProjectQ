@@ -24,6 +24,7 @@ namespace Company.Project
 {
     [DependsOn(
         typeof(CompanyProjectHostCoreModule),
+        typeof(RivenListViewInfoAspNetCoreHostModule),
         typeof(EasyCachingModule)
         )]
     public class CompanyProjectHostModule : AppModule
@@ -157,6 +158,7 @@ namespace Company.Project
                 {
                     // 注册指定程序集对应的 url 和 http 请求方式
                     options.AddAssemblyOptions(typeof(CompanyProjectApplicationModule).Assembly, options.DefaultApiPrefix, "POST");
+                    options.UseRivenListViewInfo();
                 });
 
             context.Services.AddSwaggerGenNewtonsoftSupport();
