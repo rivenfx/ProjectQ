@@ -34,7 +34,7 @@ namespace Company.Project.Database
                 case DatabaseType.PostgreSQL:
                     builder.UseRivenPostgreSQL(connectionString, (options) =>
                     {
-                        options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
+                        options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName.ToLower());
                     });
                     break;
                 case DatabaseType.MySql:
