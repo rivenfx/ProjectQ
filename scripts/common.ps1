@@ -18,12 +18,6 @@ function ReplaceCsproj($dirName) {
 
     # 遍历替换csproj文件内容
     foreach ($file in $fileList) {
-
-        # 切换到此目录
-        $fileDir = ([System.IO.FileInfo]$file).Directory.FullName
-        Set-Location $fileDir
-
-
         # 读取csporj的内容
         $projContent = Get-Content  -Encoding "UTF8NoBOM" -Path "$file" -Raw
         $resultProjContent = $projContent.Clone()
