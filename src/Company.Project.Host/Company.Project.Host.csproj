@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Modules\src\Riven.ListViewInfo.AspNetCoreHost\Riven.ListViewInfo.AspNetCoreHost.csproj" />
 		<ProjectReference Include="..\Company.Project.Host.Core\Company.Project.Host.Core.csproj" />
 	</ItemGroup>
 
