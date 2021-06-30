@@ -11,7 +11,6 @@ function ReplaceCsproj($dirName) {
 
     # 正则表达式
     $reg = 'ProjectReference Include="..\\..\\..\\' + $dirName + '\\.*\\(.*?)(.)csproj"'
-
     Write-Host $reg
 
     # 所有的csproj文件
@@ -19,6 +18,12 @@ function ReplaceCsproj($dirName) {
 
     # 遍历替换csproj文件内容
     foreach ($file in $fileList) {
+
+        # 切换到此目录
+        $fileDir = ([System.IO.FileInfo]$file).Directory.FullName
+        Set-Location $fileDir
+
+
         # 读取csporj的内容
         $projContent = Get-Content  -Encoding "UTF8NoBOM" -Path "$file" -Raw
         $resultProjContent = $projContent.Clone()
@@ -27,12 +32,12 @@ function ReplaceCsproj($dirName) {
 
         # 循环正则匹配替换引用
         foreach ($match in $matches) {
-            # 库名
-            $libName = $match.Groups[1].Value.ToString()
-            # 要替换的内容
-            $newVal = 'ProjectReference Include=' + '"' + "$libName" + '"' + ' Version=' + '"' + '$(Riven' + $dirName + 'Version)' + '"'
             # 被替换csproj的内容
             $matchVal = $match.Value.ToString()
+            # 库名
+            $libName = GetPackageId -csprojPath  $file -projectReferenceContent $matchVal
+            # 要替换的内容
+            $newVal = 'ProjectReference Include=' + '"' + "$libName" + '"' + ' Version=' + '"' + '$(Riven' + $dirName + 'Version)' + '"'
             # 替换csproj内容
             $resultProjContent = $resultProjContent.Replace("$matchVal", "$newVal")
             # 打印类库信息
@@ -70,6 +75,7 @@ function ReplaceVersion ($dirName, $version) {
     $versionPropsXml.Save($file)
 }
 
+
 # 移除项目
 function RemoveCsproj ($slnFilePath, $libName) {
     $projects = (dotnet sln $slnFilePath list)
@@ -79,4 +85,27 @@ function RemoveCsproj ($slnFilePath, $libName) {
             dotnet sln $slnFilePath remove $project
         }
     }
+}
+
+# 获取包id
+function GetPackageId ($csprojPath, $projectReferenceContent) {
+    # 获取包的csproj所在相对路径
+    ## 正则
+    $reg = 'ProjectReference Include="(.*?)"'
+    ## 匹配
+    $match = [System.Text.RegularExpressions.Regex]::Match($projectReferenceContent, $reg)
+    ## 包的csproj相对路径
+    $libCsprojPath = $match.Groups[1].Value.ToString()
+
+    # 引用包的csproj所在目录
+    $csProjDir = ([System.IO.FileInfo]$csprojPath).Directory.FullName
+
+    # 包csproj全路径
+    $libCsprojFullPath = Join-Path $csProjDir $libCsprojPath
+
+    # 包csproj内容
+    [xml]$csprojXml = Get-Content -Encoding "UTF8NoBOM" -Path "$libCsprojFullPath"
+
+    # 包名称
+    return $csprojXml.Project.PropertyGroup.PackageId
 }
