@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 import { SettingsService } from '@delon/theme';
-import { SampleComponentBase } from '@shared/common';
+import { SampleComponentBase } from '@rivenfx/ng-common';
 import { Router } from '@angular/router';
 import { AppConsts } from '@shared';
 

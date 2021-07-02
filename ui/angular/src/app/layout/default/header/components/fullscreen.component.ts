@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, Injector } from '@angular/core';
-import { SampleComponentBase } from '@shared/common';
+import { SampleComponentBase } from '@rivenfx/ng-common';
 import * as screenfull from 'screenfull';
 
 @Component({

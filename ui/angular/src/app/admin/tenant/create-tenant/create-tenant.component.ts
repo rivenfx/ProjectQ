@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ModalComponentBase } from '@shared/common';
+import { ModalComponentBase } from '@rivenfx/ng-common';
 import { SFSchema } from '@delon/form';
 import { CreateTenantInput, TenantServiceProxy } from '@service-proxies';
 import { finalize } from 'rxjs/operators';

@@ -9,18 +9,19 @@ import {
   UserDto,
   UserServiceProxy,
 } from '@service-proxies';
-import { IFetchPageData, ListViewComponentBase } from '@shared/common';
+import { IFetchPage, ListComponentBase } from '@rivenfx/ng-common';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditRoleComponent } from './create-or-edit-role';
 import { AppConsts } from '@shared';
 import { STColumn } from '@delon/abc/st';
+import { ListComponentBase2 } from '@rivenfx/ng-page-filter';
 
 @Component({
   selector: 'role',
   templateUrl: './role.component.html',
   styleUrls: ['./role.component.less'],
 })
-export class RoleComponent extends ListViewComponentBase<RoleDto>
+export class RoleComponent extends ListComponentBase2<RoleDto>
   implements OnInit {
 
   columns: STColumn[] = [

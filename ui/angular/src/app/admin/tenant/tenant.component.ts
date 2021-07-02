@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { IFetchPageData, ListViewComponentBase } from '@shared/common';
+import { IFetchPageData, ListComponentBaserom '@rivenfx/ng-common';
 import {
   QueryInput,
   TenantDto,
@@ -15,7 +15,7 @@ import { EditTenantComponent } from './edit-tenant';
   templateUrl: './tenant.component.html',
   styleUrls: ['./tenant.component.less'],
 })
-export class TenantComponent extends ListViewComponentBase<TenantDto>
+export class TenantComponent extends ListComponentBase<TenantDto>
   implements OnInit {
 
   columns: STColumn[] = [

@@ -5,7 +5,7 @@ import { InputBoolean } from '@delon/util';
 
 import { I18nService } from '@core/i18n';
 import { AppConsts } from '@shared';
-import { SampleComponentBase } from '@shared/common';
+import { SampleComponentBase } from '@rivenfx/ng-common';
 
 @Component({
   selector: 'header-i18n',

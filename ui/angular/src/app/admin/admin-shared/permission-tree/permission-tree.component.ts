@@ -11,7 +11,7 @@ import {
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ArrayService } from '@delon/util';
 import { PermissionServiceProxy } from '@service-proxies';
-import { ControlComponentBase } from '@shared/common';
+import { ControlComponentBase } from '@rivenfx/ng-common';
 import * as _ from 'loadsh';
 import { NzSafeAny } from 'ng-zorro-antd/core/types/any';
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';

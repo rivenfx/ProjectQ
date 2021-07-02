@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Injector, SimpleChange, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { PageFilterItemComponentBase } from '@shared/common';
+import { PageFilterItemComponentBase } from '@rivenfx/ng-page-filter';
+import { SampleDataSourceService } from '../sample-data-source.service';
+
 
 @Component({
   selector: 'sample-input',
@@ -13,7 +15,7 @@ import { PageFilterItemComponentBase } from '@shared/common';
     multi: true,
   }],
 })
-export class SampleInputComponent extends PageFilterItemComponentBase<any> {
+export class SampleInputComponent extends PageFilterItemComponentBase {
 
   argsObject: {
     type: undefined,
@@ -23,10 +25,13 @@ export class SampleInputComponent extends PageFilterItemComponentBase<any> {
     step: undefined,
   };
 
+  sampleDataSourceSer: SampleDataSourceService;
+
   constructor(
     injector: Injector,
   ) {
     super(injector);
+    this.sampleDataSourceSer = injector.get(SampleDataSourceService);
   }
 
   onAfterViewInit(): void {

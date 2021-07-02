@@ -1,9 +1,9 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { SFSchema } from '@delon/form';
 import { CreateOrUpdateRoleInput, RoleDto, RoleServiceProxy } from '@service-proxies';
-import { AppConsts } from '@shared';
-import { AppComponentBase, ModalComponentBase } from '@shared/common';
+import { ModalComponentBase } from '@rivenfx/ng-common';
 import { finalize } from 'rxjs/operators';
+import { AppConsts } from '@shared';
 
 @Component({
   selector: 'create-or-edit-role',

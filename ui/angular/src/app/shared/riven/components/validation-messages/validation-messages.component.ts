@@ -8,7 +8,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { SampleComponentBase } from '@shared/common';
 import { IErrorDef } from './interfaces';
 import standartErrors from './standart-errors';
 

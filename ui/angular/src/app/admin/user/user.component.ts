@@ -7,7 +7,7 @@ import {
   UserDto,
   UserServiceProxy,
 } from '@service-proxies';
-import { IFetchPageData, ListViewComponentBase } from '@shared/common';
+import { IFetchPageData, ListComponentBase } from '@rivenfx/ng-common';
 import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
@@ -20,7 +20,7 @@ import { PageFilterItem } from '@shared/components/page-filter/page-filter/inter
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less'],
 })
-export class UserComponent extends ListViewComponentBase<UserDto>
+export class UserComponent extends ListComponentBase<UserDto>
   implements OnInit {
 
   pageFilter: PageFilterItem[] = [

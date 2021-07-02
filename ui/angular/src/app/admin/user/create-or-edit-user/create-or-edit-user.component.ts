@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { CreateOrEditUserInput, CreateOrUpdateRoleInput, UserDto, UserServiceProxy } from '@service-proxies';
 import { AppConsts } from '@shared';
-import { ModalComponentBase } from '@shared/common';
+import { ModalComponentBase } from '@rivenfx/ng-common';
 import { finalize } from 'rxjs/operators';
 import { SFComponent, SFSchema } from '@delon/form';
 

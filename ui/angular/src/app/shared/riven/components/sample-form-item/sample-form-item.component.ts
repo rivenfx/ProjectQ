@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector, Input, OnInit } from '@angular/core';
-import { SampleComponentBase } from '@shared/common';
+import { SampleComponentBase } from '@rivenfx/ng-common';
 
 @Component({
   selector: 'sample-form-item,[sample-form-item]',

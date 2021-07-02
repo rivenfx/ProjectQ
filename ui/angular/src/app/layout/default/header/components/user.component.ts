@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/c
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { AppConsts } from '@shared';
-import { SampleComponentBase } from '@shared/common';
+import { SampleComponentBase } from '@rivenfx/ng-common';
 
 @Component({
   selector: 'header-user',

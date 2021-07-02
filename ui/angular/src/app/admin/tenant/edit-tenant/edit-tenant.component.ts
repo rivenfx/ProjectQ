@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { SFSchema } from '@delon/form';
 import { TenantEditDto, TenantDto, TenantServiceProxy } from '@service-proxies';
 import { AppConsts } from '@shared';
-import { ModalComponentBase } from '@shared/common';
+import { ModalComponentBase } from '@rivenfx/ng-common';
 import { finalize } from 'rxjs/operators';
 
 @Component({

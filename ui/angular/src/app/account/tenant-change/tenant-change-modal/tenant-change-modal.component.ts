@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { SettingsService } from '@delon/theme';
 import { IsTenantAvailableInput, TenantAvailabilityState, TenantServiceProxy } from '@service-proxies';
-import { ModalComponentBase } from '@shared/common';
+import { ModalComponentBase } from '@rivenfx/ng-common';
 import { RequestHelper } from '@shared/riven/helper';
 import { finalize } from 'rxjs/operators';
 

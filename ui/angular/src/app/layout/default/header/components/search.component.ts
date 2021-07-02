@@ -7,7 +7,7 @@ import {
   Injector,
   Input,
 } from '@angular/core';
-import { SampleComponentBase } from '@shared/common';
+import { SampleComponentBase } from '@rivenfx/ng-common';
 
 @Component({
   selector: 'header-search',
