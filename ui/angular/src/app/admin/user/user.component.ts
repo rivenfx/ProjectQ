@@ -52,16 +52,17 @@ export class UserComponent extends ListViewComponentBase<UserDto>
           type: 'text',
         },
       },
-      // {
-      //   field: 'isActive',
-      //   operator: QueryOperator.Equal,
-      //   label: 'user.is-active',
-      //   component: 's-select',
-      //   width: 6,
-      //   args: {
-      //     type: 'text',
-      //   }
-      // },
+      {
+        field: 'isActive',
+        operator: QueryOperator.Equal,
+        label: 'user.is-active',
+        component: 'pf-select',
+        width: 6,
+        args: {
+          "type": "default",
+          "dataSource": "yesOrNo"
+        }
+      },
     ];
 
     this.templateColumns = [
