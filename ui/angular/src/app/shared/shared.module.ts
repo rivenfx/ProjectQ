@@ -8,10 +8,16 @@ import { AlainThemeModule } from '@delon/theme';
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
 import { PipeModule } from './pipes';
+import { RivenCommonModule } from '@rivenfx/ng-common';
+import { RivenPageFilterModule } from '@rivenfx/ng-page-filter';
 
 // #region third libs
 
-const THIRDMODULES = [PipeModule];
+const THIRDMODULES = [
+  PipeModule,
+  RivenCommonModule,
+  RivenPageFilterModule,
+];
 
 // #endregion
 

@@ -54,8 +54,18 @@ const zorroProvides = [{ provide: NZ_CONFIG, useValue: ngZorroConfig }];
 
 // #endregion
 
+// #region rivenfx
+
+import { NG_ZORRO_MSG_SER, NG_ZORRO_NOTIFY_SER } from '@rivenfx/ng-common';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { CommonModule } from '@angular/common';
+
+// #endregion
+
 @NgModule({
-  imports: [...alainModules],
+  imports: [
+    ...alainModules
+  ],
 })
 export class GlobalConfigModule {
   constructor(@Optional() @SkipSelf() parentModule: GlobalConfigModule) {
@@ -65,7 +75,12 @@ export class GlobalConfigModule {
   static forRoot(): ModuleWithProviders<GlobalConfigModule> {
     return {
       ngModule: GlobalConfigModule,
-      providers: [...alainProvides, ...zorroProvides],
+      providers: [
+        ...alainProvides,
+        ...zorroProvides,
+        NG_ZORRO_MSG_SER,
+        NG_ZORRO_NOTIFY_SER,
+      ],
     };
   }
 }

@@ -20,6 +20,7 @@ import { AppComponent } from './app.component';
 import { GlobalConfigModule } from './global-config.module';
 import { LayoutModule } from './layout/layout.module';
 import { JsonSchemaModule } from '@shared/json-schema';
+import { RivenPageFilterModule } from '@rivenfx/ng-page-filter';
 
 
 // #region default language
@@ -71,6 +72,7 @@ const APPINIT_PROVIDES = [
     //
     AppRoutingModule,
     //
+    RivenPageFilterModule.forRoot(),
     ...GLOBAL_THIRD_MODULES,
   ],
   providers: [
