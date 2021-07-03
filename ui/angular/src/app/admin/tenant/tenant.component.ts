@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { IFetchPageData, ListComponentBaserom '@rivenfx/ng-common';
 import {
-  QueryInput,
+  QueryCondition,
+  QueryInput, SortCondition,
   TenantDto,
   TenantServiceProxy,
 } from '@service-proxies';
@@ -9,13 +9,15 @@ import { STColumn } from '@delon/abc/st';
 import { finalize } from 'rxjs/operators';
 import { CreateTenantComponent } from './create-tenant';
 import { EditTenantComponent } from './edit-tenant';
+import { IFetchPage2 } from '@rivenfx/ng-page-filter';
+import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 
 @Component({
   selector: 'tenant',
   templateUrl: './tenant.component.html',
   styleUrls: ['./tenant.component.less'],
 })
-export class TenantComponent extends ListComponentBase<TenantDto>
+export class TenantComponent extends ListViewComponentBase<TenantDto>
   implements OnInit {
 
   columns: STColumn[] = [
@@ -112,13 +114,18 @@ export class TenantComponent extends ListComponentBase<TenantDto>
     super.ngOnInit();
   }
 
-  fetchData(fetch: IFetchPageData) {
+
+  fetchData(fetch: IFetchPage2): void {
     const queryInput = new QueryInput();
     queryInput.skipCount = fetch.skipCount;
     queryInput.pageSize = fetch.pageSize;
 
-    queryInput.queryConditions = fetch.queryConditions;
-    queryInput.sortConditions = fetch.sortConditions;
+    queryInput.queryConditions = fetch.queryConditions.map(o => {
+      return QueryCondition.fromJS(o);
+    });
+    queryInput.sortConditions = fetch.sortConditions.map(o => {
+      return SortCondition.fromJS(o);
+    });
 
     // displayName 字段筛选条件
     const nameCond = queryInput.queryConditions.find(o => o.field === 'name');

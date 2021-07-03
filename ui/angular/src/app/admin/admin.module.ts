@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared';
-import { PageFilterModule } from '@shared/components/page-filter';
 import { SampleComponentsModule } from '@shared/components/sample-components';
 import { TableBarModule } from '@shared/components/table-bar';
 import { RivenModule } from '@shared/riven';
@@ -42,7 +41,6 @@ const ALL_COMPONENTS = [
     SharedModule,
     AdminSharedModule,
     RivenModule.forChild(),
-    PageFilterModule,
     TableBarModule,
     SampleComponentsModule
   ],

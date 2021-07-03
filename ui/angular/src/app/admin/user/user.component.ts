@@ -7,31 +7,24 @@ import {
   UserDto,
   UserServiceProxy,
 } from '@service-proxies';
-import { IFetchPageData, ListComponentBase } from '@rivenfx/ng-common';
-import * as _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditUserComponent } from './create-or-edit-user';
 import { AppConsts } from '@shared';
 import { STColumn } from '@delon/abc/st';
-import { PageFilterItem } from '@shared/components/page-filter/page-filter/interfaces';
+import { ListViewComponentBase } from '@shared/common/list-view-component-base';
+import { IFetchPage2 } from '@rivenfx/ng-page-filter';
+
 
 @Component({
   selector: 'user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.less'],
 })
-export class UserComponent extends ListComponentBase<UserDto>
+export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
 
-  pageFilter: PageFilterItem[] = [
-    PageFilterItem.fromJS({
 
-    })
-  ];
-
-  columns: STColumn[] = [
-
-  ];
+  columns: STColumn[] = [];
   templateColumns: STColumn[] = [
     { // no 列
       index: '',
@@ -127,13 +120,17 @@ export class UserComponent extends ListComponentBase<UserDto>
     super.ngOnInit();
   }
 
-  fetchData(fetch: IFetchPageData) {
+  fetchData(fetch: IFetchPage2): void {
     const queryInput = new QueryInput();
     queryInput.skipCount = fetch.skipCount;
     queryInput.pageSize = fetch.pageSize;
 
-    queryInput.queryConditions = fetch.queryConditions;
-    queryInput.sortConditions = fetch.sortConditions;
+    queryInput.queryConditions = fetch.queryConditions.map(o => {
+      return QueryCondition.fromJS(o);
+    });
+    queryInput.sortConditions = fetch.sortConditions.map(o => {
+      return SortCondition.fromJS(o);
+    });
 
     this.userSer.getPage(queryInput)
       .pipe(finalize(() => {
@@ -143,6 +140,7 @@ export class UserComponent extends ListComponentBase<UserDto>
         fetch!.successCallback(res);
       });
   }
+
 
   delete(data: UserDto) {
     if (data.isStatic) {

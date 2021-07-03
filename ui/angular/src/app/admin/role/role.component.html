@@ -1,4 +1,4 @@
-<page-header [title]="l('role')" [breadcrumb]="breadcrumb" [action]="action">
+<page-header [title]="l('user')" [breadcrumb]="breadcrumb" [action]="action">
   <ng-template #breadcrumb></ng-template>
   <ng-template #action>
     <button nz-button (click)="createOrEdit()" [title]="l('common.create')">
@@ -13,23 +13,22 @@
 
 <div class="page-body">
 
-
-  <page-filter [pageFilters]="pageInfo.pageFilters" [displayLabel]="true" (readyChange)="onFilterReady($event)"
+  <page-filter [schema]="viewInfo.filterSchema"  (readyChange)="onFilterReady($event)"
                (valueChange)="onFilterChange($event)">
   </page-filter>
 
   <st #st [loading]="loading"
-      [page]="pageInfo"
+      [page]="viewInfo"
       [columns]="columns"
-      [data]="pageInfo.viewRecord"
-      [virtualScroll]="pageInfo.virtual"
-      [virtualItemSize]="pageInfo.virtualItemSize"
-      [scroll]="pageInfo.scroll"
-      [pi]="pageInfo.index"
-      [ps]="pageInfo.size"
-      [total]="pageInfo.totalRecord"
-      [bordered]="pageInfo.bordered"
-      [size]="pageInfo.tableSize"
+      [data]="viewInfo.viewRecord"
+      [virtualScroll]="viewInfo.virtual"
+      [virtualItemSize]="viewInfo.virtualItemSize"
+      [scroll]="viewInfo.scroll"
+      [pi]="viewInfo.index"
+      [ps]="viewInfo.size"
+      [total]="viewInfo.totalRecord"
+      [bordered]="viewInfo.bordered"
+      [size]="viewInfo.tableSize"
       responsiveHideHeaderFooter
       (change)="stChange($event)">
   </st>
@@ -41,6 +40,4 @@
   <!--    (pageSizeChange)="onPageSizeChange($event)">-->
 
   <!--  </sample-table>-->
-
-
 </div>

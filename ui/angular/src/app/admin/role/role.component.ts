@@ -14,14 +14,15 @@ import { finalize } from 'rxjs/operators';
 import { CreateOrEditRoleComponent } from './create-or-edit-role';
 import { AppConsts } from '@shared';
 import { STColumn } from '@delon/abc/st';
-import { ListComponentBase2 } from '@rivenfx/ng-page-filter';
+import { IFetchPage2, ListComponentBase2 } from '@rivenfx/ng-page-filter';
+import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 
 @Component({
   selector: 'role',
   templateUrl: './role.component.html',
   styleUrls: ['./role.component.less'],
 })
-export class RoleComponent extends ListComponentBase2<RoleDto>
+export class RoleComponent extends ListViewComponentBase<RoleDto>
   implements OnInit {
 
   columns: STColumn[] = [
@@ -108,22 +109,7 @@ export class RoleComponent extends ListComponentBase2<RoleDto>
     super.ngOnInit();
   }
 
-  fetchData(fetch: IFetchPageData) {
-    const queryInput = new QueryInput();
-    queryInput.skipCount = fetch.skipCount;
-    queryInput.pageSize = fetch.pageSize;
 
-    queryInput.queryConditions = fetch.queryConditions;
-    queryInput.sortConditions = fetch.sortConditions;
-
-    this.roleSer.getPage(queryInput)
-      .pipe(finalize(() => {
-        fetch!.finishedCallback();
-      }))
-      .subscribe((res) => {
-        fetch!.successCallback(res);
-      });
-  }
 
   view(data: RoleDto) {
     this.createOrEdit(data, true);
@@ -167,6 +153,27 @@ export class RoleComponent extends ListComponentBase2<RoleDto>
           });
       }
     });
+  }
+
+  fetchData(fetch: IFetchPage2): void {
+    const queryInput = new QueryInput();
+    queryInput.skipCount = fetch.skipCount;
+    queryInput.pageSize = fetch.pageSize;
+
+    queryInput.queryConditions = fetch.queryConditions.map(o => {
+      return QueryCondition.fromJS(o);
+    });
+    queryInput.sortConditions = fetch.sortConditions.map(o => {
+      return SortCondition.fromJS(o);
+    });
+
+    this.roleSer.getPage(queryInput)
+      .pipe(finalize(() => {
+        fetch!.finishedCallback();
+      }))
+      .subscribe((res) => {
+        fetch!.successCallback(res);
+      });
   }
 
 }
