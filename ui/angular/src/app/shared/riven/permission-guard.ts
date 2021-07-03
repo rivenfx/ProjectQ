@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
@@ -9,26 +9,36 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { ACLCanType, ACLService } from '@delon/acl';
-import { AlainACLConfig } from '@delon/util';
+import { ACLService } from '@delon/acl';
+import {
+  IPermissionCheckerService,
+  PERMISSION_CHECKER_SER,
+  IRivenCommonConfig,
+  RIVEN_COMMON_CONFIG,
+} from '@rivenfx/ng-common';
 import { SessionService } from '@shared/riven/session.service';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 
 
 @Injectable({ providedIn: 'root' })
 export class PermissionGuard implements CanActivate, CanActivateChild, CanLoad {
+
+  permissionCheckerSer: IPermissionCheckerService;
+
+  config: IRivenCommonConfig;
+
   constructor(
-    private srv: ACLService,
-    private router: Router,
-    private sessionSrv: SessionService,
+    injector: Injector,
+    public router: Router,
+    public sessionSrv: SessionService,
   ) {
+    this.permissionCheckerSer = injector.get<IPermissionCheckerService>(PERMISSION_CHECKER_SER);
+    this.config = injector.get<IRivenCommonConfig>(RIVEN_COMMON_CONFIG);
   }
 
   private process(data?: Data): boolean {
     const { session } = this.sessionSrv;
     data = {
-      guard_url: this.srv.guard_url,
+      loginPage: this.config.routes.loginPage,
       ...data,
     };
 
@@ -44,27 +54,19 @@ export class PermissionGuard implements CanActivate, CanActivateChild, CanLoad {
     }
 
     // 有权限则进行判断，
-    if (Array.isArray(data.permissions)) {
-      for (const permission of data.permissions) {
-        if (!this.srv.can(permission)) {
-          if (data.mode === 'allOf') {
-            this.router.navigateByUrl(data.guard_url);
-            return false;
-          }
-        } else {
-          if (data.mode !== 'allOf') {
-            return true;
-          }
-        }
+    if (data.mode === 'allOf') {
+      if (!this.permissionCheckerSer.isGranted(data.permissions)) {
+        this.router.navigateByUrl(data.guard_url);
+        return false;
       }
-      return true;
+    } else {
+      if (!this.permissionCheckerSer.isGrantedAny(data.permissions)) {
+        this.router.navigateByUrl(data.guard_url);
+        return false;
+      }
     }
 
-    if (this.srv.can(data.permissions)) {
-      return true;
-    }
-    this.router.navigateByUrl(data.guard_url);
-    return false;
+    return true;
   }
 
   // lazy loading

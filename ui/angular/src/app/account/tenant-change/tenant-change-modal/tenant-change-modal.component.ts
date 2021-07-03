@@ -2,7 +2,6 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { SettingsService } from '@delon/theme';
 import { IsTenantAvailableInput, TenantAvailabilityState, TenantServiceProxy } from '@service-proxies';
 import { ModalComponentBase } from '@rivenfx/ng-common';
-import { RequestHelper } from '@shared/riven/helper';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -26,7 +25,7 @@ export class TenantChangeModalComponent extends ModalComponentBase<any> implemen
 
   ngOnInit(): void {
     this.title = this.l('label.change-tenant');
-    this.beforeTenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
+    this.beforeTenantName = this.settingsSer.getData(this.config.settings.multiTenancy);
     this.input.tenantName = this.beforeTenantName;
   }
 
@@ -38,7 +37,7 @@ export class TenantChangeModalComponent extends ModalComponentBase<any> implemen
     }
 
     if (!this.input.tenantName || this.input.tenantName === '') {
-      this.settingsSer.setData(RequestHelper.multiTenancy.key, '');
+      this.settingsSer.setData(this.config.settings.multiTenancy, '');
       this.success();
       return;
     }
@@ -52,7 +51,7 @@ export class TenantChangeModalComponent extends ModalComponentBase<any> implemen
       .subscribe((res) => {
         switch (res.state) {
           case TenantAvailabilityState.Available:
-            this.settingsSer.setData(RequestHelper.multiTenancy.key, this.input.tenantName);
+            this.settingsSer.setData(this.config.settings.multiTenancy, this.input.tenantName);
             this.success();
             break;
           case TenantAvailabilityState.InActive:

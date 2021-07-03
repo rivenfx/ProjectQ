@@ -136,7 +136,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
           this.loading = false;
         }))
         .subscribe(() => {
-          this.notify.success(this.l(AppConsts.message.success));
+          this.notify.success(this.l(this.config.message.success));
           this.success();
         });
     } else {
@@ -145,7 +145,7 @@ export class CreateOrEditRoleComponent extends ModalComponentBase<string>
           this.loading = false;
         }))
         .subscribe(() => {
-          this.notify.success(this.l(AppConsts.message.success));
+          this.notify.success(this.l(this.config.message.success));
           this.success();
         });
     }

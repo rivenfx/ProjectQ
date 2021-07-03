@@ -1,8 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ModalHelper, SettingsService } from '@delon/theme';
-import { TenantServiceProxy } from '@service-proxies';
 import { AppComponentBase } from '@shared/common';
-import { RequestHelper } from '@shared/riven/helper';
 import { TenantChangeModalComponent } from './tenant-change-modal';
 
 @Component({
@@ -24,7 +22,7 @@ export class TenantChangeComponent extends AppComponentBase
   }
 
   ngOnInit(): void {
-    this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
+    this.tenantName = this.settingsSer.getData(this.config.settings.multiTenancy);
   }
 
   openChangeModal() {
@@ -34,12 +32,12 @@ export class TenantChangeComponent extends AppComponentBase
         size: 'sm',
       })
       .subscribe((res) => {
-        this.tenantName = this.settingsSer.getData(RequestHelper.multiTenancy.key);
+        this.tenantName = this.settingsSer.getData(this.config.settings.multiTenancy);
       });
   }
 
   resetMultiTenancy() {
     this.tenantName = '';
-    this.settingsSer.setData(RequestHelper.multiTenancy.key, this.tenantName);
+    this.settingsSer.setData(this.config.settings.multiTenancy,'');
   }
 }

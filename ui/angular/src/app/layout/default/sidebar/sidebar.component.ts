@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/core';
 import { SettingsService } from '@delon/theme';
-import { SampleComponentBase } from '@rivenfx/ng-common';
+import { IRivenCommonConfig, RIVEN_COMMON_CONFIG, SampleComponentBase } from '@rivenfx/ng-common';
 import { Router } from '@angular/router';
 import { AppConsts } from '@shared';
 
@@ -12,16 +12,17 @@ import { AppConsts } from '@shared';
 export class SidebarComponent extends SampleComponentBase {
   constructor(
     injector: Injector,
-    private router: Router,
+    public router: Router,
     public settings: SettingsService,
+    @Inject(RIVEN_COMMON_CONFIG) public config: IRivenCommonConfig,
   ) {
     super(injector);
   }
 
   logout() {
-    this.settings.setData(AppConsts.settings.token, false);
-    this.settings.setData(AppConsts.settings.encryptedToken, false);
-    this.settings.setData(AppConsts.settings.tokenExpiration, false);
-    this.router.navigateByUrl(AppConsts.urls.loginPage);
+    this.settings.setData(this.config.settings.token, false);
+    this.settings.setData(this.config.settings.encryptedToken, false);
+    this.settings.setData(this.config.settings.tokenExpiration, false);
+    this.router.navigateByUrl(this.config.routes.loginPage);
   }
 }

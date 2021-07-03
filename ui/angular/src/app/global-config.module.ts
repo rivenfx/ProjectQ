@@ -56,15 +56,27 @@ const zorroProvides = [{ provide: NZ_CONFIG, useValue: ngZorroConfig }];
 
 // #region rivenfx
 
-import { NG_ZORRO_MSG_SER, NG_ZORRO_NOTIFY_SER } from '@rivenfx/ng-common';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { CommonModule } from '@angular/common';
+import {
+  NG_ZORRO_MSG_SER,
+  NG_ZORRO_NOTIFY_SER,
+  NG_ALAIN_PERMISSION_CHECKER_SER,
+  RIVEN_REQUEST_HELPER,
+  RIVEN_RESPONSE_HELPER,
+} from '@rivenfx/ng-common';
+
+const rivenfxProvides = [
+  NG_ZORRO_MSG_SER,
+  NG_ZORRO_NOTIFY_SER,
+  NG_ALAIN_PERMISSION_CHECKER_SER,
+  RIVEN_REQUEST_HELPER,
+  RIVEN_RESPONSE_HELPER,
+];
 
 // #endregion
 
 @NgModule({
   imports: [
-    ...alainModules
+    ...alainModules,
   ],
 })
 export class GlobalConfigModule {
@@ -78,8 +90,7 @@ export class GlobalConfigModule {
       providers: [
         ...alainProvides,
         ...zorroProvides,
-        NG_ZORRO_MSG_SER,
-        NG_ZORRO_NOTIFY_SER,
+        ...rivenfxProvides,
       ],
     };
   }

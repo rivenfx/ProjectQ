@@ -2,11 +2,10 @@ import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import {
-  LanguageInfoDto,
   LocalizationDto,
   SessionDto,
   SessionServiceProxy,
-} from '../../service-proxies/service-proxies';
+} from '@service-proxies';
 import { LazyInit } from '@shared/utils';
 
 @Injectable()

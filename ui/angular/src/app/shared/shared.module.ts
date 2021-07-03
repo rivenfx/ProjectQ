@@ -7,14 +7,15 @@ import { DelonFormModule } from '@delon/form';
 import { AlainThemeModule } from '@delon/theme';
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
-import { PipeModule } from './pipes';
+import { RivenModule } from '@shared/riven';
 import { RivenCommonModule } from '@rivenfx/ng-common';
 import { RivenPageFilterModule } from '@rivenfx/ng-page-filter';
+
 
 // #region third libs
 
 const THIRDMODULES = [
-  PipeModule,
+  RivenModule,
   RivenCommonModule,
   RivenPageFilterModule,
 ];
@@ -64,4 +65,5 @@ const DIRECTIVES = [];
     ...DIRECTIVES,
   ],
 })
-export class SharedModule {}
+export class SharedModule {
+}

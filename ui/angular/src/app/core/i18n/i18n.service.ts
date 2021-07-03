@@ -1,15 +1,15 @@
 // 请参考：https://ng-alain.com/docs/i18n
 import { registerLocaleData } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AlainI18NService, DelonLocaleService, SettingsService } from '@delon/theme';
 
-import { AppConsts } from '@shared/app-consts';
 import { SessionService } from '@shared/riven/session.service';
 import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LanguageInfoDto, LocalizationDto } from '../../service-proxies';
+import { LanguageInfoDto, LocalizationDto } from '@service-proxies';
 import { I18nCommon } from './i18n-common';
+import { IRivenCommonConfig, RIVEN_COMMON_CONFIG } from '@rivenfx/ng-common';
 
 @Injectable({ providedIn: 'root' })
 export class I18nService implements AlainI18NService {
@@ -26,10 +26,11 @@ export class I18nService implements AlainI18NService {
   currentLang: string;
 
   constructor(
-    private settings: SettingsService,
-    private nzI18nService: NzI18nService,
-    private delonLocaleService: DelonLocaleService,
-    private sessionSer: SessionService,
+    public settings: SettingsService,
+    public nzI18nService: NzI18nService,
+    public delonLocaleService: DelonLocaleService,
+    public sessionSer: SessionService,
+    @Inject(RIVEN_COMMON_CONFIG) public config: IRivenCommonConfig,
   ) {
     this.sessionSer.localizationChange.subscribe((result) => {
       if (result) {
@@ -69,7 +70,7 @@ export class I18nService implements AlainI18NService {
 
   /** 修改使用的语言 */
   use(lang: string): void {
-    this.settings.setLayout(AppConsts.settings.lang, lang);
+    this.settings.setLayout(this.config.settings.lang, lang);
     if (lang === this._localization.currentCulture) {
       return;
     }

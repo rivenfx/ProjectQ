@@ -201,7 +201,7 @@ export class UserComponent extends ListViewComponentBase<UserDto>
             this.loading = false;
           }))
           .subscribe(() => {
-            this.notify.success(this.l(AppConsts.message.success));
+            this.notify.success(this.l(this.config.message.success));
             this.refresh();
           });
       }

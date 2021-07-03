@@ -2,9 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared';
-import { SampleComponentsModule } from '@shared/components/sample-components';
-import { TableBarModule } from '@shared/components/table-bar';
-import { RivenModule } from '@shared/riven';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminSharedModule } from './admin-shared';
 import { DashboardComponent } from './dashboard';
@@ -39,10 +36,7 @@ const ALL_COMPONENTS = [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
-    AdminSharedModule,
-    RivenModule.forChild(),
-    TableBarModule,
-    SampleComponentsModule
+    AdminSharedModule
   ],
   declarations: [
     ...ALL_COMPONENTS,

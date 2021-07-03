@@ -11,6 +11,7 @@ import { SessionService } from '@shared/riven';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { ICONS } from '../../../style-icons';
 import { ICONS_AUTO } from '../../../style-icons-auto';
+import { IRivenCommonConfig, RIVEN_COMMON_CONFIG } from '@rivenfx/ng-common';
 
 /**
  * Used for application startup
@@ -20,14 +21,15 @@ import { ICONS_AUTO } from '../../../style-icons-auto';
 export class StartupService {
   constructor(
     iconSrv: NzIconService,
-    private menuService: MenuService,
-    @Inject(ALAIN_I18N_TOKEN) private i18n: I18nService,
-    private settingService: SettingsService,
-    private aclService: ACLService,
-    private titleService: TitleService,
-    private httpClient: HttpClient,
-    private injector: Injector,
-    private router: Router,
+    public menuService: MenuService,
+    @Inject(ALAIN_I18N_TOKEN) public i18n: I18nService,
+    @Inject(RIVEN_COMMON_CONFIG) public config: IRivenCommonConfig,
+    public settingService: SettingsService,
+    public aclService: ACLService,
+    public titleService: TitleService,
+    public httpClient: HttpClient,
+    public injector: Injector,
+    public router: Router,
   ) {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
 
@@ -61,6 +63,8 @@ export class StartupService {
           const result = response as any;
           AppConsts.remoteServiceUrl = result.remoteServiceUrl;
           AppConsts.appUrl = result.appUrl;
+          this.config.remoteServiceUrl = AppConsts.remoteServiceUrl;
+          this.config.appUrl = AppConsts.appUrl;
 
           this.getAppSession(resolve, reject);
         },
@@ -79,11 +83,11 @@ export class StartupService {
         return;
       }
 
-      const token = this.settingService.getData(AppConsts.settings.token);
+      const token = this.settingService.getData(this.config.settings.token);
       if (token && !data.auth.userId) {
-        this.settingService.setData(AppConsts.settings.token, false);
-        this.settingService.setData(AppConsts.settings.encryptedToken, false);
-        this.router.navigateByUrl(AppConsts.urls.loginPage);
+        this.settingService.setData(this.config.settings.token, false);
+        this.settingService.setData(this.config.settings.encryptedToken, false);
+        this.router.navigateByUrl(this.config.routes.loginPage);
         resolve({});
         return;
       }

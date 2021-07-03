@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Injector } from '@angular/c
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { AppConsts } from '@shared';
-import { SampleComponentBase } from '@rivenfx/ng-common';
+import { IRivenCommonConfig, RIVEN_COMMON_CONFIG, SampleComponentBase } from '@rivenfx/ng-common';
 
 @Component({
   selector: 'header-user',
@@ -40,15 +40,20 @@ import { SampleComponentBase } from '@rivenfx/ng-common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderUserComponent extends SampleComponentBase {
-  constructor(injector: Injector, public settings: SettingsService, private router: Router) {
+  constructor(
+    injector: Injector,
+    public settings: SettingsService,
+    public router: Router,
+    @Inject(RIVEN_COMMON_CONFIG) public configs: IRivenCommonConfig,
+  ) {
     super(injector);
   }
 
   logout() {
-    this.settings.setData(AppConsts.settings.token, false);
-    this.settings.setData(AppConsts.settings.encryptedToken, false);
-    this.settings.setData(AppConsts.settings.tokenExpiration, false);
+    this.settings.setData(this.configs.settings.token, false);
+    this.settings.setData(this.configs.settings.encryptedToken, false);
+    this.settings.setData(this.configs.settings.tokenExpiration, false);
 
-    this.router.navigateByUrl(AppConsts.urls.loginPage);
+    this.router.navigateByUrl(this.configs.routes.loginPage);
   }
 }

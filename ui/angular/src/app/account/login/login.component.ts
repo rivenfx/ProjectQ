@@ -2,7 +2,6 @@ import { AfterViewInit, Component, Inject, Injector, OnInit, TemplateRef, ViewCh
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { AuthenticateModelInput, IAuthenticateModelInput, TokenAuthServiceProxy } from '@service-proxies';
-import { AppConsts } from '@shared';
 import { AppComponentBase } from '@shared/common';
 import { SessionService } from '@shared/riven';
 import { finalize } from 'rxjs/operators';
@@ -44,13 +43,13 @@ export class LoginComponent extends AppComponentBase
 
   ngOnInit(): void {
     // 重置token过期时间
-    this.settingSer.setData(AppConsts.settings.tokenExpiration, false);
+    this.settingSer.setData(this.config.settings.tokenExpiration, false);
   }
 
   ngAfterViewInit(): void {
     // 重置token
-    this.settingSer.setData(AppConsts.settings.token, false);
-    this.settingSer.setData(AppConsts.settings.encryptedToken, false);
+    this.settingSer.setData(this.config.settings.token, false);
+    this.settingSer.setData(this.config.settings.encryptedToken, false);
   }
 
 
@@ -64,19 +63,19 @@ export class LoginComponent extends AppComponentBase
       }))
       .subscribe((result) => {
         // 更新token
-        this.settingSer.setData(AppConsts.settings.token, result.accessToken);
-        this.settingSer.setData(AppConsts.settings.encryptedToken, result.encryptedAccessToken);
+        this.settingSer.setData(this.config.settings.token, result.accessToken);
+        this.settingSer.setData(this.config.settings.encryptedToken, result.encryptedAccessToken);
         // 更新token过期时间
         const date = new Date();
         date.setSeconds(date.getSeconds() + result.expireInSeconds);
-        this.settingSer.setData(AppConsts.settings.tokenExpiration, date.valueOf());
+        this.settingSer.setData(this.config.settings.tokenExpiration, date.valueOf());
 
         this.sessionSer.loadOrUpdateAppInfo((state, data) => {
           if (state) {
             if (result.returnUrl) {
               window.location.href = result.returnUrl;
             } else {
-              this.router.navigateByUrl(this.appConsts.urls.mainPage)
+              this.router.navigateByUrl(this.config.routes.mainPage)
                 .then(r => {
 
                 });
