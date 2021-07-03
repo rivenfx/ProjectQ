@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import {
   PageFilterItemDto,
   QueryCondition,
-  QueryInput,
+  QueryInput, QueryOperator,
   SortCondition,
   UserDto,
   UserServiceProxy,
@@ -23,97 +23,142 @@ import { IFetchPage2 } from '@rivenfx/ng-page-filter';
 export class UserComponent extends ListViewComponentBase<UserDto>
   implements OnInit {
 
-
-  columns: STColumn[] = [];
-  templateColumns: STColumn[] = [
-    { // no 列
-      index: '',
-      title: 'No',
-      type: 'no',
-      fixed: 'left',
-      width: 40,
-    },
-    { // checkbox 列
-      title: '',
-      index: '',
-      type: 'checkbox',
-      fixed: 'left',
-      width: 30,
-    },
-    { // 名称
-      title: this.l('user.user-name'),
-      index: 'userName',
-      sort: true,
-    },
-    { // 昵称
-      title: this.l('user.nick-name'),
-      index: 'nickname',
-      sort: true,
-    },
-    { // 是否为内置
-      title: this.l('common.is-static'),
-      type: 'badge',
-      index: 'isStatic',
-      badge: {
-        true: { text: this.l('label.yes'), color: 'success' },
-        false: { text: this.l('label.no'), color: 'error' },
-      },
-      sort: true,
-    },
-    { // 是否激活
-      title: this.l('common.is-active'),
-      type: 'badge',
-      index: 'isActive',
-      badge: {
-        true: { text: this.l('label.yes'), color: 'success' },
-        false: { text: this.l('label.no'), color: 'error' },
-      },
-      sort: true,
-    },
-    {
-      title: this.l('common.action'),
-      buttons: [
-        {
-          tooltip: this.l('common.view'),
-          icon: 'eye',
-          type: 'none',
-          acl: 'user.query',
-          click: (record) => this.view(record),
-        },
-        {
-          tooltip: this.l('common.edit'),
-          icon: 'edit',
-          type: 'none',
-          acl: 'user.edit',
-          iif: record => !record.isStatic,
-          iifBehavior: 'disabled',
-          click: (record) => this.createOrEdit(record),
-        },
-        {
-          tooltip: this.l('common.delete'),
-          icon: 'delete',
-          type: 'del',
-          acl: 'user.delete',
-          iif: record => !record.isStatic,
-          iifBehavior: 'disabled',
-          pop: {
-            title: this.l('message.confirm.operation'),
-            okType: 'danger',
-          },
-          click: (record, _modal, comp) => {
-            this.delete(record);
-          },
-        },
-      ],
-    },
-  ];
-
-
   constructor(
     injector: Injector,
     private userSer: UserServiceProxy,
   ) {
     super(injector);
+  }
+
+  initViewConfigs() {
+    this.templateFilterSchema.configs = [
+      {
+        field: 'userName',
+        operator: QueryOperator.Contains,
+        label: 'user.user-name',
+        component: 's-input',
+        width: 6,
+        args: {
+          type: 'text',
+        },
+      },
+      {
+        field: 'nickname',
+        operator: QueryOperator.Contains,
+        label: 'user.nick-name',
+        component: 's-input',
+        width: 6,
+        args: {
+          type: 'text',
+        },
+      },
+      // {
+      //   field: 'isActive',
+      //   operator: QueryOperator.Equal,
+      //   label: 'user.is-active',
+      //   component: 's-select',
+      //   width: 6,
+      //   args: {
+      //     type: 'text',
+      //   }
+      // },
+    ];
+
+    this.templateColumns = [
+
+      { // 名称
+        title: this.l('user.user-name'),
+        index: 'userName',
+        sort: true,
+      },
+      { // 昵称
+        title: this.l('user.nick-name'),
+        index: 'nickname',
+        sort: true,
+      },
+      { // 是否为内置
+        title: this.l('common.is-static'),
+        type: 'badge',
+        index: 'isStatic',
+        badge: {
+          true: { text: this.l('label.yes'), color: 'success' },
+          false: { text: this.l('label.no'), color: 'error' },
+        },
+        sort: true,
+      },
+      { // 是否激活
+        title: this.l('common.is-active'),
+        type: 'badge',
+        index: 'isActive',
+        badge: {
+          true: { text: this.l('label.yes'), color: 'success' },
+          false: { text: this.l('label.no'), color: 'error' },
+        },
+        sort: true,
+      },
+
+    ];
+  }
+
+  processColumns(columns: STColumn<any>[]): STColumn<any>[] {
+    return [
+      // 前置列
+      { // no 列
+        index: '',
+        title: 'No',
+        type: 'no',
+        fixed: 'left',
+        width: 40,
+      },
+      { // checkbox 列
+        title: '',
+        index: '',
+        type: 'checkbox',
+        fixed: 'left',
+        width: 30,
+      },
+
+      // 中间列
+      ...columns,
+
+      // 结束列
+      {
+        title: this.l('common.action'),
+        buttons: [
+          {
+            tooltip: this.l('common.view'),
+            icon: 'eye',
+            type: 'none',
+            acl: 'user.query',
+            click: (record) => this.view(record),
+          },
+          {
+            tooltip: this.l('common.edit'),
+            icon: 'edit',
+            type: 'none',
+            acl: 'user.edit',
+            iif: record => !record.isStatic,
+            iifBehavior: 'disabled',
+            click: (record) => this.createOrEdit(record),
+          },
+          {
+            tooltip: this.l('common.delete'),
+            icon: 'delete',
+            type: 'del',
+            acl: 'user.delete',
+            iif: record => !record.isStatic,
+            iifBehavior: 'disabled',
+            pop: {
+              title: this.l('message.confirm.operation'),
+              okType: 'danger',
+            },
+            click: (record, _modal, comp) => {
+              this.delete(record);
+            },
+          },
+        ],
+      },
+    ];
   }
 
   ngOnInit(): void {

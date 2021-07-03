@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { ModalHelper } from '@delon/theme';
 import {
   QueryCondition,
-  QueryInput,
+  QueryInput, QueryOperator,
   RoleDto,
   RoleServiceProxy,
   SortCondition,
@@ -25,85 +25,133 @@ import { ListViewComponentBase } from '@shared/common/list-view-component-base';
 export class RoleComponent extends ListViewComponentBase<RoleDto>
   implements OnInit {
 
-  columns: STColumn[] = [
-    { // no 列
-      index: '',
-      title: 'No',
-      type: 'no',
-      fixed: 'left',
-      width: 40,
-    },
-    { // checkbox 列
-      title: '',
-      index: '',
-      type: 'checkbox',
-      fixed: 'left',
-      width: 30,
-    },
-    { // 名称
-      title: this.l('role.name'),
-      index: 'name',
-      sort: true,
-    },
-    { // 显示名称
-      title: this.l('role.display-name'),
-      index: 'displayName',
-      sort: true,
-    },
-    { // 是否为内置
-      title: this.l('common.is-static'),
-      type: 'badge',
-      index: 'isStatic',
-      badge: {
-        true: { text: this.l('label.yes'), color: 'success' },
-        false: { text: this.l('label.no'), color: 'error' },
-      },
-      sort: true,
-    },
-    {
-      title: this.l('common.action'),
-      buttons: [
-        {
-          tooltip: this.l('common.view'),
-          icon: 'eye',
-          type: 'none',
-          acl: 'role.query',
-          click: (record) => this.view(record),
-        },
-        {
-          tooltip: this.l('common.edit'),
-          icon: 'edit',
-          type: 'none',
-          acl: 'role.edit',
-          iif: record => !record.isStatic,
-          iifBehavior: 'disabled',
-          click: (record) => this.createOrEdit(record),
-        },
-        {
-          tooltip: this.l('common.delete'),
-          icon: 'delete',
-          type: 'del',
-          acl: 'role.delete',
-          iif: record => !record.isStatic,
-          iifBehavior: 'disabled',
-          pop: {
-            title: this.l('message.confirm.operation'),
-            okType: 'danger',
-          },
-          click: (record, _modal, comp) => {
-            this.delete(record);
-          },
-        },
-      ],
-    },
-  ];
-
   constructor(
     injector: Injector,
     private roleSer: RoleServiceProxy,
   ) {
     super(injector);
   }
+
+
+  initViewConfigs() {
+    this.templateFilterSchema.configs = [
+      {
+        field: 'name',
+        operator: QueryOperator.Contains,
+        label: 'role.name',
+        component: 's-input',
+        width: 6,
+        args: {
+          type: 'text',
+        },
+      },
+      {
+        field: 'displayName',
+        operator: QueryOperator.Contains,
+        label: 'role.display-name',
+        component: 's-input',
+        width: 6,
+        args: {
+          type: 'text',
+        },
+      },
+      {
+        field: 'description',
+        operator: QueryOperator.Contains,
+        label: 'role.description',
+        component: 's-input',
+        width: 6,
+        args: {
+          type: 'text',
+        },
+      }
+    ];
+
+    this.templateColumns = [
+      { // 名称
+        title: this.l('role.name'),
+        index: 'name',
+        sort: true,
+      },
+      { // 显示名称
+        title: this.l('role.display-name'),
+        index: 'displayName',
+        sort: true,
+      },
+      { // 是否为内置
+        title: this.l('common.is-static'),
+        type: 'badge',
+        index: 'isStatic',
+        badge: {
+          true: { text: this.l('label.yes'), color: 'success' },
+          false: { text: this.l('label.no'), color: 'error' },
+        },
+        sort: true,
+      },
+    ];
+  }
+
+  processColumns(columns: STColumn<any>[]): STColumn<any>[] {
+    return [
+      // 前置列
+      { // no 列
+        index: '',
+        title: 'No',
+        type: 'no',
+        fixed: 'left',
+        width: 40,
+      },
+      { // checkbox 列
+        title: '',
+        index: '',
+        type: 'checkbox',
+        fixed: 'left',
+        width: 30,
+      },
+
+      // 中间列
+      ...columns,
+
+      // 结束列
+      {
+        title: this.l('common.action'),
+        buttons: [
+          {
+            tooltip: this.l('common.view'),
+            icon: 'eye',
+            type: 'none',
+            acl: 'role.query',
+            click: (record) => this.view(record),
+          },
+          {
+            tooltip: this.l('common.edit'),
+            icon: 'edit',
+            type: 'none',
+            acl: 'role.edit',
+            iif: record => !record.isStatic,
+            iifBehavior: 'disabled',
+            click: (record) => this.createOrEdit(record),
+          },
+          {
+            tooltip: this.l('common.delete'),
+            icon: 'delete',
+            type: 'del',
+            acl: 'role.delete',
+            iif: record => !record.isStatic,
+            iifBehavior: 'disabled',
+            pop: {
+              title: this.l('message.confirm.operation'),
+              okType: 'danger',
+            },
+            click: (record, _modal, comp) => {
+              this.delete(record);
+            },
+          },
+        ],
+      },
+    ];
+  }
+
 
   ngOnInit(): void {
     super.ngOnInit();
