@@ -16,6 +16,18 @@ namespace Company.Project.Database.Extensions
             {
                 b.HasIndex(o => o.Name)
                     .IsUnique();
+
+                b.Property(o => o.Name)
+                    .HasMaxLength(64);
+
+                b.Property(o => o.DisplayName)
+                    .HasMaxLength(128);
+
+                b.Property(o => o.Description)
+                    .HasMaxLength(512);
+
+                b.Property(o => o.ConnectionString)
+                    .HasMaxLength(1024);
             });
 
             return modelBuilder;
