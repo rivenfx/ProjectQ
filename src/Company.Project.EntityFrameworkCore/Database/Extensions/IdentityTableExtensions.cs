@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Company.Project.Database.Extenstions
+namespace Company.Project.Database.Extensions
 {
     public static class IdentityTableExtensions
     {

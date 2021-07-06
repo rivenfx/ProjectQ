@@ -2,7 +2,7 @@ using Company.Project.Authorization;
 using Company.Project.Authorization.Permissions;
 using Company.Project.Authorization.Roles;
 using Company.Project.Authorization.Users;
-using Company.Project.Database.Extenstions;
+using Company.Project.Database.Extensions;
 using Company.Project.MultiTenancy;
 using Company.Project.Samples;
 
