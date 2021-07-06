@@ -10,6 +10,11 @@ namespace Company.Project.Database.Extensions
 {
     public static class TenantTableExtensions
     {
+        /// <summary>
+        /// 租户表配置
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <returns></returns>
         public static ModelBuilder ConfiurationTenantTable(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Tenant>((b) =>
