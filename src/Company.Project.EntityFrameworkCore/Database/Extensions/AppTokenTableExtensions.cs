@@ -15,6 +15,11 @@ namespace Company.Project.Database.Extensions
 {
     public static class AppTokenTableExtensions
     {
+        /// <summary>
+        /// App Token配置
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <returns></returns>
         public static ModelBuilder ConfiurationAppTokenTable(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AppToken>((b) =>
@@ -53,7 +58,10 @@ namespace Company.Project.Database.Extensions
                     .IsRequired();
 
                 b.Property(o => o.Expiration)
-                   .IsRequired();
+                    .IsRequired();
+
+                b.Property(o => o.TenantName)
+                    .HasMaxLength(64);
             });
 
             return modelBuilder;
