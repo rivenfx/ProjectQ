@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Company.Project.Database.Extenstions
 {
-    public static class TenantTableExtenstions
+    public static class TenantTableExtensions
     {
         public static ModelBuilder ConfiurationTenantTable(this ModelBuilder modelBuilder)
         {

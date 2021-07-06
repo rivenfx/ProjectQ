@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Company.Project.Database.Extenstions
 {
-    public static class IdentityTableExtenstions
+    public static class IdentityTableExtensions
     {
         /// <summary>
         /// 配置 asp.net core identity 表
