@@ -23,6 +23,7 @@ using Riven.Exceptions;
 using Riven.Authorization;
 using Riven.Identity.Users;
 using Riven.Security;
+using AspNetCore.Authentication.ApiToken.Abstractions;
 
 namespace Company.Project.Controllers
 {
@@ -34,13 +35,15 @@ namespace Company.Project.Controllers
         readonly IConfiguration _configuration;
         readonly SignInManager _signInManager;
         readonly IHttpClientFactory _httpClientFactory;
+        readonly IApiTokenOperator _apiTokenOperator;
 
 
-        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory)
+        public TokenAuthController(IConfiguration configuration, SignInManager signInManager, IHttpClientFactory httpClientFactory, IApiTokenOperator apiTokenOperator)
         {
             _configuration = configuration;
             _signInManager = signInManager;
             _httpClientFactory = httpClientFactory;
+            _apiTokenOperator = apiTokenOperator;
         }
 
         /// <summary>
@@ -68,6 +71,8 @@ namespace Company.Project.Controllers
             }
             if (input.UseToken)
             {
+                //var tokenCreateResult = await _apiTokenOperator.CreateAsync(loginResult.User.Id.ToString());
+                
                 result.AccessToken = CreateAccessToken(loginResult.Identity.Claims, expiration);
                 result.EncryptedAccessToken = SimpleStringCipher.Instance.Encrypt(result.AccessToken);
                 result.ExpireInSeconds = expiration.TotalSeconds;

@@ -1,4 +1,7 @@
-﻿using Company.Project.Configuration;
+using AspNetCore.Authentication.ApiToken;
+
+using Company.Project.Authorization.Tokens;
+using Company.Project.Configuration;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -33,7 +36,10 @@ namespace Company.Project.Authorization
             var authenticationBuilder = services
                 .AddAuthentication();
 
-            authenticationBuilder.AddJwt(configuration);
+            authenticationBuilder
+                .AddJwt(configuration)
+                .AddApiToken()
+                ;
 
             return authenticationBuilder;
         }
@@ -105,6 +111,22 @@ namespace Company.Project.Authorization
             return authenticationBuilder;
         }
 
+        /// <summary>
+        /// 添加 Api Token服务
+        /// </summary>
+        /// <param name="authenticationBuilder"></param>
+        /// <returns></returns>
+        static AuthenticationBuilder AddApiToken(this AuthenticationBuilder authenticationBuilder)
+        {
+            authenticationBuilder.AddApiToken(option =>
+                {
+                    option.UseCache = false;
+                })
+                .AddProfileService<AppTokenProfileService>()
+                .AddTokenStore<AppTokenStore>()
+                .AddCleanService();
+            return authenticationBuilder;
+        }
 
 
 
