@@ -45,6 +45,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.Authentication.ApiToken" Version="0.3.2" />
     <PackageReference Include="EasyCaching.InMemory" Version="1.1.0" />
   </ItemGroup>
 
