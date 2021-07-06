@@ -46,8 +46,6 @@
 
   <ItemGroup>
     <PackageReference Include="EasyCaching.InMemory" Version="1.1.0" />
-    <PackageReference Include="Riven.System.Linq.Dynamic.Core.Extensions" Version="0.1.1" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.1" />
   </ItemGroup>
 
 
