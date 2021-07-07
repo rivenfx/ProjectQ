@@ -72,43 +72,42 @@ namespace Company.Project.Authorization
         {
             IdentityModelEventSource.ShowPII = true; //Add this line
 
-            authenticationBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, (options) =>
-            {
-                var jwtBearerInfo = configuration.GetJwtBearerInfo();
+            return authenticationBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, (options) =>
+             {
+                 var jwtBearerInfo = configuration.GetJwtBearerInfo();
 
-                options.RequireHttpsMetadata = false;
-                options.Audience = jwtBearerInfo.Audience;
-                options.Authority = jwtBearerInfo.Authority;
-                options.ClaimsIssuer = jwtBearerInfo.Issuer;
+                 options.RequireHttpsMetadata = false;
+                 options.Audience = jwtBearerInfo.Audience;
+                 options.Authority = jwtBearerInfo.Authority;
+                 options.ClaimsIssuer = jwtBearerInfo.Issuer;
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
 
 
-                    // 签名键必须匹配!
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtBearerInfo.SecurityKey)),
+                     // 签名键必须匹配!
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtBearerInfo.SecurityKey)),
 
-                    // 验证JWT发行者(iss)的 claim
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtBearerInfo.Issuer,
+                     // 验证JWT发行者(iss)的 claim
+                     ValidateIssuer = true,
+                     ValidIssuer = jwtBearerInfo.Issuer,
 
-                    // Validate the JWT Audience (aud) claim
-                    ValidateAudience = true,
-                    ValidAudience = jwtBearerInfo.Audience,
+                     // Validate the JWT Audience (aud) claim
+                     ValidateAudience = true,
+                     ValidAudience = jwtBearerInfo.Audience,
 
-                    // 必须指定过期时间
-                    RequireExpirationTime = true,
+                     // 必须指定过期时间
+                     RequireExpirationTime = true,
 
-                    // 验证过期
-                    ValidateLifetime = true,
+                     // 验证过期
+                     ValidateLifetime = true,
 
-                    // 时间偏移
-                    ClockSkew = TimeSpan.FromSeconds(30)
-                };
-            });
+                     // 时间偏移
+                     ClockSkew = TimeSpan.FromSeconds(30)
+                 };
+             });
 
-            return authenticationBuilder;
         }
 
         /// <summary>
@@ -137,7 +136,7 @@ namespace Company.Project.Authorization
         {
             app.UseDefaultAuthentication();
 
-            app.UseJwtAuthentication();
+            // app.UseRivenAuthentication();
 
             app.UseAuthorization();
 
