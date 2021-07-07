@@ -1,4 +1,4 @@
-﻿using AspNetCore.Authentication.ApiToken.Abstractions;
+using AspNetCore.Authentication.ApiToken.Abstractions;
 
 using System;
 using System.Collections.Generic;
@@ -8,16 +8,20 @@ using AspNetCore.Authentication.ApiToken;
 using Riven.Repositories;
 using Riven.Uow;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Riven.Extensions;
+using Company.Project.MultiTenancy;
 
 namespace Company.Project.Authorization.Tokens
 {
     public class AppTokenStore : IApiTokenStore
     {
+        protected readonly IServiceProvider _serviceProvider;
         protected readonly IRepository<AppToken> _tokenRepo;
 
-        public AppTokenStore(IRepository<AppToken> tokenRepo)
+        public AppTokenStore(IServiceProvider serviceProvider, IRepository<AppToken> tokenRepo)
         {
+            _serviceProvider = serviceProvider;
             _tokenRepo = tokenRepo;
         }
 
@@ -72,11 +76,39 @@ namespace Company.Project.Authorization.Tokens
         [UnitOfWork]
         public virtual async Task<int> RemoveExpirationAsync()
         {
-            var tokens = this._tokenRepo.GetAll().Where(a => a.Expiration < DateTime.Now);
-            var count = await tokens.CountAsync();
-            await this._tokenRepo.DeleteAsync(tokens);
-            return count;
+            var resultCount = 0;
+
+            // 获取当前工作单元
+            var currentUnitOfWork = _serviceProvider.GetService<IActiveUnitOfWork>();
+
+            // 获取所有租户
+            var repo = _serviceProvider.GetService<IRepository<Tenant, Guid>>();
+            var tenants = await repo.GetAll().Select(o => o.Name).ToListAsync();
+
+            var deleteFunc = new Func<Task<int>>(async () =>
+            {
+                var tokens = this._tokenRepo.GetAll().Where(a => a.Expiration < DateTime.Now);
+                var count = await tokens.CountAsync();
+                await this._tokenRepo.DeleteAsync(tokens);
+
+                return count;
+            });
+
+            // 宿主删除
+            resultCount += await deleteFunc();
+
+            // 租户删除
+            foreach (var tenant in tenants)
+            {
+                using (currentUnitOfWork.ChangeTenant(tenant))
+                {
+                    resultCount += await deleteFunc();
+                }
+            }
+
+            return resultCount;
         }
+
 
         [UnitOfWork]
         public virtual async Task RemoveListAsync(string userId, string scheme)
