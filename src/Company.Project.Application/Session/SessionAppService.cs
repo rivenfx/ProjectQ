@@ -100,9 +100,16 @@ namespace Company.Project.Session
             if (hasLogin)
             {
                 var user = await _userManager.FindByIdAsync(AppSession.UserId.ToString());
-                authDto.UserId = user.Id.ToString();
-                authDto.UserName = user.UserName;
-                authDto.UserNickName = user.Nickname;
+                if (user == null)
+                {
+                    hasLogin = false;
+                }
+                else
+                {
+                    authDto.UserId = user.Id.ToString();
+                    authDto.UserName = user.UserName;
+                    authDto.UserNickName = user.Nickname;
+                }
             }
 
             #endregion
