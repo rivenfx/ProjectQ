@@ -123,7 +123,8 @@ namespace Company.Project.Authorization
                 })
                 .AddProfileService<AppTokenProfileService>()
                 .AddTokenStore<AppTokenStore>()
-                .AddCleanService();
+                //.AddCleanService()
+                ;
             return authenticationBuilder;
         }
 
@@ -136,7 +137,7 @@ namespace Company.Project.Authorization
         {
             app.UseDefaultAuthentication();
 
-            // app.UseRivenAuthentication();
+            app.UseRivenAuthentication();
 
             app.UseAuthorization();
 
