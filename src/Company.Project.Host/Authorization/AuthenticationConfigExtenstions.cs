@@ -112,7 +112,7 @@ namespace Company.Project.Authorization
         }
 
         /// <summary>
-        /// 添加 Api Token服务
+        /// 添加 Api Token 认证
         /// </summary>
         /// <param name="authenticationBuilder"></param>
         /// <returns></returns>
@@ -127,9 +127,6 @@ namespace Company.Project.Authorization
                 .AddCleanService();
             return authenticationBuilder;
         }
-
-
-
 
         /// <summary>
         /// 启用系统的Authentication和Authorization
