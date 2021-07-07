@@ -44,7 +44,7 @@ export class PermissionGuard implements CanActivate, CanActivateChild, CanLoad {
 
     // 未登录返回 false
     if (!session.auth || !session.auth.userId) {
-      this.router.navigateByUrl(data.guard_url);
+      this.router.navigateByUrl(data.loginPage);
       return false;
     }
 
@@ -56,12 +56,12 @@ export class PermissionGuard implements CanActivate, CanActivateChild, CanLoad {
     // 有权限则进行判断，
     if (data.mode === 'allOf') {
       if (!this.permissionCheckerSer.isGranted(data.permissions)) {
-        this.router.navigateByUrl(data.guard_url);
+        this.router.navigateByUrl(data.loginPage);
         return false;
       }
     } else {
       if (!this.permissionCheckerSer.isGrantedAny(data.permissions)) {
-        this.router.navigateByUrl(data.guard_url);
+        this.router.navigateByUrl(data.loginPage);
         return false;
       }
     }
