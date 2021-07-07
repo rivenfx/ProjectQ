@@ -97,7 +97,7 @@ namespace Company.Project.Authorization.Tokens
                  var resultCount = 0;
 
                  // 获取当前工作单元
-                 var currentUnitOfWork = _serviceProvider.GetService<IActiveUnitOfWork>();
+                 var currentUnitOfWork = this._uowManager.Current;
 
                  // 获取所有租户
                  var repo = _serviceProvider.GetService<IRepository<Tenant, Guid>>();
@@ -105,7 +105,7 @@ namespace Company.Project.Authorization.Tokens
 
                  var deleteFunc = new Func<Task<int>>(async () =>
                  {
-                     var tokens = this._tokenRepo.GetAll().Where(a => a.Expiration < DateTime.Now);
+                     var tokens = this._tokenRepo.GetAll().Where(a => a.Expiration < DateTime.UtcNow);
                      var count = await tokens.CountAsync();
                      await this._tokenRepo.DeleteAsync(tokens);
 
@@ -169,7 +169,10 @@ namespace Company.Project.Authorization.Tokens
         {
             await this.UowWork(async () =>
             {
-                await this._tokenRepo.InsertAsync(token.MapTo<AppToken>());
+                var entity = token.MapTo<AppToken>();
+                entity.CreateTime = entity.CreateTime.ToUniversalTime();
+                entity.Expiration = entity.Expiration.ToUniversalTime();
+                await this._tokenRepo.InsertAsync(entity);
             });
 
         }
@@ -179,7 +182,14 @@ namespace Company.Project.Authorization.Tokens
         {
             await this.UowWork(async () =>
             {
-                await this._tokenRepo.InsertAsync(token.MapTo<List<AppToken>>());
+                var entitys = token.MapTo<List<AppToken>>();
+                entitys.ForEach(o =>
+                {
+                    o.CreateTime = o.CreateTime.ToUniversalTime();
+                    o.Expiration = o.Expiration.ToUniversalTime();
+                });
+
+                await this._tokenRepo.InsertAsync(entitys);
             });
         }
 
@@ -188,7 +198,12 @@ namespace Company.Project.Authorization.Tokens
         {
             await this.UowWork(async () =>
             {
-                await this._tokenRepo.UpdateAsync(token.MapTo<AppToken>());
+
+                var entity = token.MapTo<AppToken>();
+                entity.CreateTime = entity.CreateTime.ToUniversalTime();
+                entity.Expiration = entity.Expiration.ToUniversalTime();
+
+                await this._tokenRepo.UpdateAsync(entity);
             });
         }
 
@@ -196,7 +211,14 @@ namespace Company.Project.Authorization.Tokens
         {
             await this.UowWork(async () =>
             {
-                await this._tokenRepo.UpdateAsync(token.MapTo<List<AppToken>>());
+                var entitys = token.MapTo<List<AppToken>>();
+                entitys.ForEach(o =>
+                {
+                    o.CreateTime = o.CreateTime.ToUniversalTime();
+                    o.Expiration = o.Expiration.ToUniversalTime();
+                });
+
+                await this._tokenRepo.UpdateAsync(entitys);
             });
         }
 

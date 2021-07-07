@@ -123,7 +123,7 @@ namespace Company.Project.Authorization
                 })
                 .AddProfileService<AppTokenProfileService>()
                 .AddTokenStore<AppTokenStore>()
-                //.AddCleanService()
+                .AddCleanService()
                 ;
             return authenticationBuilder;
         }
