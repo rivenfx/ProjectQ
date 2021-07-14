@@ -40,30 +40,26 @@ namespace Company.Project.Seeder
                 using var scope = serviceProvider.CreateScope();
                 var scopeServiceProvider = scope.ServiceProvider;
 
-                // 工作单元管理器
-                var unitOfWorkManager = scopeServiceProvider.GetService<IUnitOfWorkManager>();
+                // 工作单元工作者
+                var unitOfWorker = scopeServiceProvider.GetService<IUnitOfWorker>();
 
 
-                // 启动工作单元
-                using var uow = unitOfWorkManager.Begin();
-
-                // 当前工作单元
-                var currentUow = unitOfWorkManager.Current;
-
-                // 种子数据初始化器
-                var dataSeeder = scopeServiceProvider.GetService<IDataSeeder>();
-
-                // 初始化宿主数据
-                await dataSeeder.Run(new DataSeedContext());
-
-                // 初始化租户数据
-                using (currentUow.ChangeTenant(AppConsts.MultiTenancy.DefaultTenantName))
+                await unitOfWorker.RunAsync(async (ioc, currentUow) =>
                 {
-                    await dataSeeder.Run(new DataSeedContext(AppConsts.MultiTenancy.DefaultTenantName));
-                }
+                    // 种子数据初始化器
+                    var dataSeeder = ioc.GetService<IDataSeeder>();
 
-                // 提交工作单元
-                await uow.CompleteAsync();
+                    // 初始化宿主数据
+                    await dataSeeder.Run(new DataSeedContext());
+
+                    // 初始化租户数据
+                    using (currentUow.ChangeTenant(AppConsts.MultiTenancy.DefaultTenantName))
+                    {
+                        await dataSeeder.Run(
+                            new DataSeedContext(AppConsts.MultiTenancy.DefaultTenantName)
+                            );
+                    }
+                });
             }
             catch (Exception ex)
             {
