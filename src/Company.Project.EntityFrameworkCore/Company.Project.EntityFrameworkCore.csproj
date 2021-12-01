@@ -9,12 +9,6 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<RootNamespace>Company.Project</RootNamespace>
 	</PropertyGroup>
-  
-  
-	<ItemGroup>
-	  <Compile Remove="Migrations\20210630070657_AddField2.cs" />
-	  <Compile Remove="Migrations\20210630070657_AddField2.Designer.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.18" />

@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Configuration;
 
+using Riven.Common;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,18 +38,7 @@ namespace Company.Project.Configuration
         /// <returns></returns>
         public static DatabaseType GetDatabaseType(this IConfiguration configuration)
         {
-            switch (configuration[AppConfigurationConsts.DatabaseType]?.Trim().ToLowerInvariant())
-            {
-                case "mysql":
-                    return DatabaseType.MySql;
-                case "postgresql":
-                    return DatabaseType.PostgreSQL;
-                case "oracle":
-                    return DatabaseType.Oracle;
-                case "sqlserver":
-                default:
-                    return DatabaseType.SqlServer;
-            }
+            return configuration[AppConfigurationConsts.DatabaseType].ToDatabaseType();
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Text;
 using Company.Project.Configuration;
 using Microsoft.Extensions.Logging;
+using Riven.Common;
 
 namespace Company.Project.Database
 {
