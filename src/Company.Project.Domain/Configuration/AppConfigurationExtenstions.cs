@@ -42,6 +42,8 @@ namespace Company.Project.Configuration
                     return DatabaseType.MySql;
                 case "postgresql":
                     return DatabaseType.PostgreSQL;
+                case "oracle":
+                    return DatabaseType.Oracle;
                 case "sqlserver":
                 default:
                     return DatabaseType.SqlServer;

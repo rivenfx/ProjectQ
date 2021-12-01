@@ -43,6 +43,12 @@ namespace Company.Project.Database
                         options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
                     });
                     break;
+                case DatabaseType.Oracle:
+                    builder.UseOracle(connectionString, (options) =>
+                    {
+                        options.MigrationsHistoryTable(AppConsts.Database.MigrationsHistoryTableName);
+                    });
+                    break;
             }
 
             builder.AddDbLogger();
