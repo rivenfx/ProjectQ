@@ -6,15 +6,30 @@
   </ConfigProvider>
 </template>
 
-<script lang="ts" setup>
-  import { ConfigProvider } from 'ant-design-vue';
-  import { AppProvider } from '/@/components/Application';
-  import { useTitle } from '/@/hooks/web/useTitle';
-  import { useLocale } from '/@/locales/useLocale';
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { ConfigProvider } from 'ant-design-vue';
+import { AppProvider } from '/@/components/Application';
+import { useTitle } from '/@/hooks/web/useTitle';
+import { useLocale } from '/@/locales/useLocale';
 
-  // support Multi-language
-  const { getAntdLocale } = useLocale();
+export default defineComponent({
+  // inheritAttrs: false,
+  components: {
+    ConfigProvider,
+    AppProvider
+  },
+  mixins:[],
+  setup() {
+    // Listening to page changes and dynamically changing site titles
+    useTitle();
 
-  // Listening to page changes and dynamically changing site titles
-  useTitle();
+    // support Multi-language
+    const { getAntdLocale } = useLocale();
+
+    return {
+      getAntdLocale
+    }
+  }
+});
 </script>
