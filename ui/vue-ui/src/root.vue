@@ -1,9 +1,9 @@
 <template>
-  <ConfigProvider :locale="getAntdLocale">
-    <AppProvider>
-      <RouterView />
-    </AppProvider>
-  </ConfigProvider>
+  <config-provider :locale="getAntdLocale">
+    <app-provider>
+      <router-view />
+    </app-provider>
+  </config-provider>
 </template>
 
 <script lang="ts">
@@ -14,7 +14,6 @@ import { useTitle } from '/@/hooks/web/useTitle';
 import { useLocale } from '/@/locales/useLocale';
 
 export default defineComponent({
-
   components: {
     ConfigProvider,
     AppProvider
@@ -35,7 +34,7 @@ export default defineComponent({
   },
   watch: {
     title(val: string, oldVal: string) {
-      console.log("title: "+val, oldVal);
+      console.log("title: " + val, oldVal);
     },
   },
   setup() {
@@ -51,3 +50,6 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="less">
+</style>

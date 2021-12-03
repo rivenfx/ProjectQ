@@ -4,7 +4,6 @@ import 'virtual:windi-components.css';
 import 'virtual:windi-utilities.css';
 // Register icon sprite
 import 'virtual:svg-icons-register';
-import { App } from './App';
 import { createApp } from 'vue';
 import { initAppConfigStore } from '/@/logics/initAppConfig';
 import { setupErrorHandle } from '/@/logics/error-handle';
@@ -15,6 +14,8 @@ import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 
+import Root from './root.vue';
+import { AppRootRouting } from './root.routing';
 // Importing on demand in local development will increase the number of browser requests by around 20%.
 // This may slow down the browser refresh speed.
 // Therefore, only enable on-demand importing in production environments .
@@ -23,7 +24,7 @@ if (import.meta.env.DEV) {
 }
 
 async function bootstrap() {
-  const app = createApp(App);
+  const app = createApp(Root);
 
   // Configure store
   setupStore(app);
@@ -39,7 +40,8 @@ async function bootstrap() {
   await setupI18n(app);
 
   // Configure routing
-  setupRouter(app);
+  app.use(AppRootRouting);
+  // setupRouter(app);
 
   // router-guard
   setupRouterGuard(router);
