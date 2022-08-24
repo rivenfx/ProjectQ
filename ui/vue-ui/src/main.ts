@@ -40,11 +40,13 @@ async function bootstrap() {
   await setupI18n(app);
 
   // Configure routing
+  const aaa = AppRootRouting;
+  debugger
   app.use(AppRootRouting);
   // setupRouter(app);
 
   // router-guard
-  setupRouterGuard(router);
+  // setupRouterGuard(router);
 
   // Register global directive
   setupGlobDirectives(app);

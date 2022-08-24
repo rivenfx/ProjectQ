@@ -1,7 +1,9 @@
 <template>
+  <div>{{ title }}</div>
   <config-provider :locale="getAntdLocale">
     <app-provider>
-      <router-view />
+      <!-- <router-view /> -->
+      <RouterView/>
     </app-provider>
   </config-provider>
 </template>

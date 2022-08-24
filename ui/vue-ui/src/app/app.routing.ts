@@ -1,18 +1,24 @@
 import { RouteRecordRaw } from "vue-router";
-import { LayoutDefault } from "/@/layout";
+import dashboard from "./dashboard/dashboard.vue";
 
 const AppRouting: RouteRecordRaw[] = [
   {
     path: '/app',
-    component: LayoutDefault,
+    name: 'app',
+    component: () => import('./app.vue'),
     redirect: '/app/dashboard',
     children: [
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: import('./dashboard/dashboard.vue')
+        component: () => import('./dashboard/dashboard.vue')
       }
     ]
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: dashboard
   }
 ]
 

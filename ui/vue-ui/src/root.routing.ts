@@ -3,7 +3,7 @@ import { AppRouting } from './app';
 
 
 const AppRootRouting = createRouter({
-  history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH),
+  history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
   routes: [
     ...AppRouting
   ],

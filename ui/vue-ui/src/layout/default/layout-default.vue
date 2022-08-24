@@ -8,7 +8,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 export default defineComponent({
-  name: 'layout-default',
+  // name: 'layout-default',
+  mounted() {
+    debugger
+  }
 })
 </script>
 

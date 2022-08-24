@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>layout-default</h1>
-    <router-view />
+    <h1>dashboard</h1>
   </div>
 </template>
 
@@ -9,6 +8,9 @@
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'dashboard',
+  mounted() {
+    debugger
+  }
 })
 </script>
 
