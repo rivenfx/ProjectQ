@@ -49,7 +49,7 @@
     "@rivenfx/ng-common": "0.0.94",
     "@rivenfx/ng-page-filter": "0.0.94",
     "loadsh": "^0.0.4",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.21",
     "ng-zorro-antd": "^11.4.0",
     "ngx-countdown": "^11.0.3",
